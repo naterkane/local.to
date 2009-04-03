@@ -2,6 +2,7 @@
 
 class Welcome extends App_Controller {
 	
+	
 	function index() {
 		$this->getUserData();
 		$this->load_helpers->load(array('Time'));

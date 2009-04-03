@@ -53,6 +53,21 @@ class Users extends App_Controller {
 		$this->redirect('/');		
 	}
 	
+	function view($username) {
+		$user = $this->User->get($username);
+		$messages = $this->Message->getForUser($username);	
+		$this->load_helpers->load(array('Time'));		
+		if ($user) {
+			$this->getUserData();
+			$this->data['title'] = 'Home';
+			$this->data['username'] = $username;			
+			$this->data['messages'] = $this->Message->getForUser($username);
+			$this->load->view('users/view', $this->data);			
+		} else {
+			show_404();
+		}
+	}
+	
 }
 
 ?>

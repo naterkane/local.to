@@ -15,7 +15,7 @@ class App_Controller extends Controller {
 		}
 	}
 	
-	function App_Controller() {	
+	function __construct() {	
 		parent::Controller();	
 		$this->load->library(array('Redis', 'Cookie', 'Load_helpers'));
 		$this->load->model(array('User', 'Message'));	

@@ -16,6 +16,7 @@ class Message extends App_Model {
 		$message = str_replace("\n", " ", $message);
 		$message = $username . "|" . time(). "|" . $message;
 		$this->redis->set("message:$message_id", $message);
+		//$this->sendToFollowers($message_id, $username);
 		//$followers = $r->smembers("uid:".$User['id'].":followers");
 		//if ($followers === false) $followers = Array();
 		//$followers[] = $User['id']; /* Add the post to our own posts too */
@@ -24,6 +25,7 @@ class Message extends App_Model {
 		//}
 		# Push the post on the timeline, and trim the timeline to the
 		# newest 1000 elements.
+		$this->redis->push('messages:' . $username, $message_id, false);
 		$this->redis->push('global:timeline', $message_id, false);
 		$this->redis->ltrim('global:timeline', 0 , 1000);
 	}
@@ -35,12 +37,8 @@ class Message extends App_Model {
 	 * @return array Messages
 	 */
 	function getTimeline() {
-		$return = array();
-		$posts = $this->redis->lrange('global:timeline', 0, 0+100000);
-		foreach ($posts as $id) {
-			$return[] = $this->getPost($id);
-		}
-		return $return;
+		$messages = $this->redis->lrange('global:timeline', 0, 0+1000);
+		return $this->getMany($messages);
 	}
 	
 	/**
@@ -48,8 +46,25 @@ class Message extends App_Model {
 	 * 
 	 * @return string Message
 	 */	
-	function getPost($id) {
+	function get($id) {
 	    return $this->redis->get("message:$id");
+	}
+	
+	function getMany($messages) {
+		$return = array();		
+		foreach ($messages as $id) {
+			$return[] = $this->get($id);
+		}
+		return $return;
+	}
+
+	function getForUser($username = null) {
+	    $messages =  $this->redis->lrange('messages:' . $username, 0, 0+1000);
+		return $this->getMany($messages);	
+	}
+
+	function sendToFollowers($value='') {
+		$this->redis->push('global:timeline', $message_id, false);		
 	}
 
 }

@@ -8,6 +8,7 @@
 class App_Model extends Model {
 
 	var $modelData = array();
+	var $redisIncrement = 10;
 	var $validationErrors = array();
 	var $mode;
 
@@ -61,7 +62,7 @@ class App_Model extends Model {
 	 * @return boolean
 	 * @access public
 	 */
-	function save($key, $data) {
+	function save($key, $data) {		
 		$this->modelData = $data;
 		if ($this->validate()) {
 			if (is_array($data)) {
