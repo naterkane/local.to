@@ -250,6 +250,11 @@ class Redis {
         return $this->_numeric_response();
     }
    
+	function flush() {
+        $this->connect();
+        $this->_write("FLUSHALL\r\n");
+	}
+
     function _write($s) {
         while ($s) {
             $i = fwrite($this->_sock, $s);

@@ -24,8 +24,7 @@ class App_Model extends Model {
 	 * @todo This needs to behave differently depending on DB type selected. Right now does redis work which should move to redis library extension
 	 * @access public
 	 */
-	function find($key) {		
-		$this->redis->connect();
+	function find($key) {
 		$data = $this->redis->get($key);
 		$this->redis->disconnect();	
 		if ($this->isSerialized($data)) {
@@ -68,7 +67,6 @@ class App_Model extends Model {
 			if (is_array($data)) {
 				$data = serialize($this->modelData);
 			}
-			$this->redis->connect();
 			$this->redis->set($key, $data);
 			$this->redis->disconnect();
 			return true;
