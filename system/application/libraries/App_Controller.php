@@ -9,7 +9,7 @@ class App_Controller extends Controller {
 	var $userData = array();
 	
 	function getUserData() {
-		$this->userData = $this->app_cookie->getUser();
+		$this->userData = $this->cookie->getUser();
 		if (!empty($this->userData)) {
 			$this->data['User'] = $this->userData;
 		}
@@ -17,7 +17,7 @@ class App_Controller extends Controller {
 	
 	function App_Controller() {	
 		parent::Controller();	
-		$this->load->library(array('Redis'));
+		$this->load->library(array('Redis', 'Cookie', 'Load_helpers'));
 		$this->load->model(array('User', 'Message'));	
 		if ($_POST) {
 			$this->postData = $this->input->xss_clean($_POST);

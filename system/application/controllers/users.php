@@ -10,6 +10,7 @@ class Users extends App_Controller {
 	
 	function home() {
 		$this->mustBeSignedIn();
+		$this->load_helpers->load(array('Time'));		
 		$this->data['title'] = 'Home';
 		$this->data['messages'] = $this->Message->getTimeline();
 		$this->load->view('users/home', $this->data);
@@ -24,7 +25,7 @@ class Users extends App_Controller {
 		$this->data['title'] = 'Sign Up';	
 		if ($this->postData) {
 			if ($this->User->signUp($this->postData)) {
-				$this->app_cookie->setUser($this->User->modelData['username']);
+				$this->cookie->setUser($this->User->modelData['username']);
 				$this->redirect('/users/home');
 			}
 		}
@@ -41,7 +42,7 @@ class Users extends App_Controller {
 		if ($this->postData) {
 			$user = $this->User->signIn($this->postData);
 			if (!empty($user)) {
-				$this->app_cookie->setUser($user['username']);
+				$this->cookie->setUser($user['username']);
 				$this->redirect('/users/home');
 			}
 		} 
@@ -52,7 +53,7 @@ class Users extends App_Controller {
 	 * Sign out a user
 	 */
 	function signout() {
-		$this->app_cookie->signOut();
+		$this->cookie->signOut();
 		$this->redirect('/');		
 	}
 	

@@ -1,7 +1,9 @@
 <?php
 class Yielder {
 	
-	function yield() {
+	var $setHelpers = array();
+	
+	function Yield() {
 		$ci= & get_instance();
 		$current_output = $ci->output->get_output();
 		$controller = $ci->uri->segment(1);

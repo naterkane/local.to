@@ -2,7 +2,7 @@
 /**
 * Extended Cookie Class
 */
-class App_Cookie {
+class Cookie {
 	
 	var $name = 'Auth';
 	
@@ -15,7 +15,7 @@ class App_Cookie {
 	 */
 	function __construct() {
 		$this->controller =& get_instance();
-		$this->controller->load->helper('cookie');
+		$this->controller->load->library('Cookie');
 		$this->controller->load->model(array('Cookie_model', 'User'));	
 	}
 
