@@ -47,7 +47,7 @@ class Message extends App_Model {
 	 * @return string Message
 	 */	
 	function get($id) {
-	    return $this->redis->get("message:$id");
+	    return $id."|".$this->redis->get("message:$id");
 	}
 	
 	function getMany($messages) {
