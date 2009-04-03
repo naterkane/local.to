@@ -2,8 +2,7 @@
 /**
 * Load helpes
 */
-class Load_helpers
-{
+class Load_helpers {
 	
 	var $setHelpers = array();
 	

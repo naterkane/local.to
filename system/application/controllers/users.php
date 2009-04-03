@@ -4,10 +4,6 @@
 */
 class Users extends App_Controller {
 	
-	function Users() {
-        parent::App_Controller();
-    }
-	
 	function home() {
 		$this->mustBeSignedIn();
 		$this->load_helpers->load(array('Time'));		

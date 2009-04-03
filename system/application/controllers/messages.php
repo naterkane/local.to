@@ -4,10 +4,6 @@
 */
 class Messages extends App_Controller {
 	
-	function Messages() {
-        parent::App_Controller();
-    }
-	
 	/**
 	 * Add a message
 	 *
