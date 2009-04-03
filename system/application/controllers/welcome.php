@@ -1,9 +1,9 @@
 <?php
 
-class Welcome extends MY_Controller {
+class Welcome extends App_Controller {
 
 	function Welcome() {
-        parent::MY_Controller();
+        parent::App_Controller();
 				
 	}
 	

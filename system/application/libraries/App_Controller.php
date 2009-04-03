@@ -2,7 +2,7 @@
 /**
 * Extended controller
 */
-class MY_Controller extends Controller {
+class App_Controller extends Controller {
 	
 	var $data = array();
 	var $postData = array();
@@ -15,7 +15,7 @@ class MY_Controller extends Controller {
 		}
 	}
 	
-	function MY_Controller() {	
+	function App_Controller() {	
 		parent::Controller();	
 		$this->load->library(array('Redis'));
 		$this->load->model(array('User', 'Message'));	

@@ -5,7 +5,7 @@
 * Allows for app-wide validation in the model and basic CRUD functionality
 *  
 */
-class MY_Model extends Model {
+class App_Model extends Model {
 
 	var $modelData = array();
 	var $validationErrors = array();

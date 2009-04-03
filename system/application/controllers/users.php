@@ -2,10 +2,10 @@
 /**
 * Class for users controller
 */
-class Users extends MY_Controller {
+class Users extends App_Controller {
 	
 	function Users() {
-        parent::MY_Controller();
+        parent::App_Controller();
     }
 	
 	function home() {

@@ -2,7 +2,7 @@
 /**
 * Message Class
 */
-class Message extends MY_Model {
+class Message extends App_Model {
 	
 
 	/**

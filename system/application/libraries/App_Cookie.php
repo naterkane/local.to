@@ -2,7 +2,7 @@
 /**
 * Extended Cookie Class
 */
-class App_cookie {
+class App_Cookie {
 	
 	var $name = 'Auth';
 	

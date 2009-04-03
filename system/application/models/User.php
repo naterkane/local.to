@@ -2,10 +2,10 @@
 /**
 * User Model
 */
-class User extends MY_Model {
+class User extends App_Model {
 
 	/**
-	 * Has a password
+	 * Hash a password
 	 *
 	 * @param array $password 
 	 * @return string 

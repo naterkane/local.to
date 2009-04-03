@@ -2,10 +2,10 @@
 /**
 * Class for users controller
 */
-class Messages extends MY_Controller {
+class Messages extends App_Controller {
 	
 	function Messages() {
-        parent::MY_Controller();
+        parent::App_Controller();
     }
 	
 	/**
