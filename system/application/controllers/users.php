@@ -3,12 +3,37 @@
 * Class for users controller
 */
 class Users extends App_Controller {
+
+	/**
+	 * Follow a user
+	 *
+	 * @todo check if user is not yourself
+	 * @param string $username
+	 */
+	function follow($username = null) {
+		$this->mustBeSignedIn();
+		if ($username) {
+			$user = $this->User->get($username);
+			if ($user) {
+				$this->redis->push('followers:' . $username, $this->userData['username'], false);
+				$this->redis->push('following:' . $this->userData['username'], $username, false);				
+				$this->redirect('/' . $username);
+			} else {
+				show_404();
+			}
+		} else {
+			show_404();			
+		}
+	}
 	
+	/**
+	 * User's home page
+	 */
 	function home() {
 		$this->mustBeSignedIn();
 		$this->load_helpers->load(array('Time'));		
 		$this->data['title'] = 'Home';
-		$this->data['messages'] = $this->Message->getTimeline();
+		$this->data['messages'] = $this->Message->getPrivate($this->userData['username']);
 		$this->load->view('users/home', $this->data);
 	}
 	
@@ -53,15 +78,21 @@ class Users extends App_Controller {
 		$this->redirect('/');		
 	}
 	
+	/**
+	 * View a users public page
+	 * 
+	 * @param string $username
+	 */
 	function view($username) {
 		$user = $this->User->get($username);
 		$messages = $this->Message->getForUser($username);	
-		$this->load_helpers->load(array('Time'));		
+		$this->load_helpers->load(array('Time'));	
 		if ($user) {
 			$this->getUserData();
 			$this->data['title'] = 'Home';
-			$this->data['username'] = $username;			
+			$this->data['username'] = $username;
 			$this->data['messages'] = $this->Message->getForUser($username);
+			$this->data['is_following'] = $this->User->isFollowing($username, $this->userData['username']);
 			$this->load->view('users/view', $this->data);			
 		} else {
 			show_404();

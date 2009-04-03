@@ -17,7 +17,15 @@ class User extends App_Model {
 
 	function getFollowers($username = null) {
 		if ($username) {
-			return $this->find($username . ':followers');
+			return $this->redis->lrange('followers:' . $username, 0, 0+1000);
+		} else {
+			return null;
+		}
+	}
+	
+	function getFollowing($username = null) {
+		if ($username) {
+			return $this->redis->lrange('following:' . $username, 0, 0+1000);
 		} else {
 			return null;
 		}
@@ -31,6 +39,37 @@ class User extends App_Model {
 	 */
 	function hashPassword($password) {
 		return sha1($password  . $this->config->item('salt'));
+	}
+
+	/**
+	 * Check if a user is following another user
+	 *
+	 * @param string $username The user in question
+	 * @param string $my_username The user doing the asking
+	 * @return boolean
+	 */
+	function isFollowing($username, $my_username) {		
+		$isFollowing = $this->getFollowing($my_username);
+		if (in_array($username, $isFollowing)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Send messages to followes
+	 *
+	 * @todo Might need to check to see if any data got returned to followers, that return should be meaningful
+	 * @param int $message_id 
+	 * @return boolean
+	 */	
+	function sendToFollowers($message_id, $username) {		
+		$followers = $this->getFollowers($username);
+		foreach ($followers as $follower) {
+			$this->redis->push('private:' . $follower, $message_id, false);
+		}
+		return true;
 	}
 
 	/**
