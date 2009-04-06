@@ -4,12 +4,17 @@
 */
 class Admin extends App_controller
 {
-
+	
+	/**
+	 * Flushes the database
+	 * @return 
+	 * @todo make private method and require authentication
+	 */
 	function flush() 
 	{
 		$this->redis->flush();
-		echo "DB flushed.";
-		exit;
+		?><script>confirm("DB Flushed");</script><?php
+		$this->redirect('/users/home');
 	}
 
 }
