@@ -3,11 +3,20 @@ class Yielder {
 	
 	var $setHelpers = array();
 	
-	function Yield() {
+	/**
+	 * Determines layout to load for view
+	 *
+	 * @return
+	 */
+	function Yield() 
+	{
 		$ci= & get_instance();
+		if (!$ci->layout) {
+			$ci->layout = 'default';
+		}
+		$layout = BASEPATH ."application/views/layouts/" . $ci->layout . ".php";
 		$current_output = $ci->output->get_output();
 		$controller = $ci->uri->segment(1);
-		$layout = BASEPATH ."application/views/layouts/default.php";
 		if (file_exists($layout)){
 			$output = $ci->load->file($layout, true);
 			$output = str_replace("{yield}", $current_output,$output);

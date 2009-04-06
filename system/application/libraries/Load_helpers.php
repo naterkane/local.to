@@ -1,11 +1,17 @@
 <?php
 /**
-* Load helpes
+* Load helpers
 */
 class Load_helpers {
 	
 	var $setHelpers = array();
 	
+	/**
+	 * Load helpers and instantiate them
+	 *
+	 * @todo Make instance dynamic, $myHelper rather than $this->myHelper
+	 * @param array $helpers array of helpers to load
+	 */
 	function load($helpers = array())
 	{
 		$ci= & get_instance();

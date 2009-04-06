@@ -42,6 +42,8 @@
 
 $route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";
+$route['tests/:any'] = "tests/index";
+$route['testme'] = "tests/testme";
 
 
 /* End of file routes.php */

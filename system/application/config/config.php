@@ -324,7 +324,12 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+//Salt for sha1 hashes
 $config['salt'] = 'dfyvf8dbiu23dm80wquyfe7rksldnshhgar6';	
+
+//layout to display
+$config['layout'] = 'default';	
+
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
 ?>

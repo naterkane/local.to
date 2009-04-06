@@ -4,16 +4,10 @@
  */
 class App_Controller extends Controller {
    
-    var $data = array ();
-    var $postData = array ();
-    var $userData = array ();
-   
-    function getUserData() {
-        $this->userData = $this->cookie->getUser();
-        if (! empty($this->userData)) {
-            $this->data['User'] = $this->userData;
-        }
-    }
+    var $data = array();
+	var $layout;				//leave empty for default
+    var $postData = array();
+    var $userData = array();
    
     function __construct() {
         parent::Controller();
@@ -23,7 +17,19 @@ class App_Controller extends Controller {
             $this->postData = $this->input->xss_clean($_POST);
         }
     }
-   
+  
+    function getUserData() {
+        $this->userData = $this->cookie->getUser();
+        if (! empty($this->userData)) {
+            $this->data['User'] = $this->userData;
+        }
+    }
+
+	function isTesting()
+	{
+		return ini_get('display_errors');
+	}
+ 
     /**
      * Checks to see if a user is signed in
      *

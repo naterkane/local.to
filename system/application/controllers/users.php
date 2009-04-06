@@ -127,6 +127,10 @@ class Users extends App_Controller
         }
     }
    
+	function whatever()
+	{
+		$this->load->view('x');
+	}
 }
 
 ?>
