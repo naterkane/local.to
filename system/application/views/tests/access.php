@@ -4,6 +4,6 @@
 	$this->selenium->caseTitle('Access');
 	//list of pages users must be logged in to view
 	$this->selenium->signOut();	
-	$this->selenium->mustBeLoggedIn('/users/home');	
+	$this->selenium->mustBeLoggedIn('/home');	
 	$this->selenium->openPage('/admin/flush');	
 ?>

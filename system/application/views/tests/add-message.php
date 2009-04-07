@@ -12,7 +12,7 @@
 	$this->selenium->write('verifyTextPresent', $message);	
 	$this->selenium->openPage('/' . $name);	
 	$this->selenium->write('verifyTextPresent', $message);
-	$this->selenium->openPage('/users/home/');
+	$this->selenium->openPage('/home/');
 	$this->selenium->write('verifyTextNotPresent', $message);
 	$this->selenium->openPage('/admin/flush');
 ?>

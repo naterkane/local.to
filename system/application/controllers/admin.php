@@ -14,7 +14,7 @@ class Admin extends App_controller
 	{
 		$this->redis->flush();
 		?><script>confirm("DB Flushed");</script><?php
-		$this->redirect('/users/home');
+		$this->redirect('/home');
 	}
 
 }

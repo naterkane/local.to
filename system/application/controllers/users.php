@@ -63,7 +63,7 @@ class Users extends App_Controller
                 $this->cookie->setUser($this->User->modelData['username']);
                 // follow yourself till we work this out
                 $this->follow($this->User->modelData['username']);
-                $this->redirect('/users/home');
+                $this->redirect('/home');
             }
         }
         $this->load->view('users/signup', $this->data);
@@ -84,7 +84,7 @@ class Users extends App_Controller
             if (! empty($user))
             {
                 $this->cookie->setUser($user['username']);
-                $this->redirect('/users/home');
+                $this->redirect('/home');
             }
         }
         $this->load->view('users/signin', $this->data);
