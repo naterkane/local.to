@@ -121,7 +121,7 @@ class Selenium
 	 */
 	public function click($buttonValue=null) 
 	{
-		$this->write('click', '//input[@value=\'' . $buttonValue . '\']');
+		$this->write('clickAndWait', '//input[@value=\'' . $buttonValue . '\']');
 		$this->checkErrors();
 	}
 
@@ -141,6 +141,39 @@ class Selenium
 			$randstr .= $chars[$random];
 		}
 		return $randstr;
+	}
+
+	/**
+	* Random Alpha-Numeric String
+	* 
+	* @param string $name
+	* @param string $password	
+	* @return
+	* @access public
+	*/
+	public function signIn($name, $password)
+	{
+		$this->write('type', 'username', $name);
+		$this->write('type', 'password', $password);	
+		$this->click('Sign In');
+		$this->write('verifyTextPresent', 'Hello ' . $name);
+	}
+
+	/**
+	* Sign In
+	*
+	* @todo This will expanded into its own test with validation
+	* @param string $name
+	* @param string $password	
+	* @return
+	* @access public
+	*/	
+	public function signUp($name, $password)
+	{
+		$this->openPage('/users/signup');
+		$this->write('type', 'username', $name);
+		$this->write('type', 'password', $password);	
+		$this->click('Sign Up');
 	}
 	
 	/**
