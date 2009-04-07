@@ -126,6 +126,19 @@ class Selenium
 	}
 
 	/**
+	* Used for testing non-public pages
+	*
+	* @access public	
+	* @param string $path
+	* @return
+	*/
+	public function mustBeLoggedIn($path)
+	{
+		$this->write('openAndWait', $path);
+		$this->write('verifyTextPresent', 'Sign In');
+	}
+
+	/**
 	* Random Alpha-Numeric String
 	*
 	* @param int length
@@ -144,6 +157,16 @@ class Selenium
 	}
 
 	/**
+	* Wrapper for signing out
+	*
+	* @access public	
+	*/
+	public function signOut()
+	{
+		$this->openPage('/users/signout');
+	}
+
+	/**
 	* Random Alpha-Numeric String
 	* 
 	* @param string $name
@@ -153,6 +176,7 @@ class Selenium
 	*/
 	public function signIn($name, $password)
 	{
+		$this->openPage('/users/signin');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);	
 		$this->click('Sign In');
