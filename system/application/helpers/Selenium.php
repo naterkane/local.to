@@ -11,7 +11,13 @@ class Selenium
 	private $warningText = 'Warning';
 	private $phpError = 'A PHP Error was encountered';
 	
-	
+	/**
+	 * ie Xpath fix
+	 *
+	 * @access private	
+	 * @param string $value
+	 * @return string $value
+	 */	
 	private function ieXpathFix($value)
     {
 		// Check if the value is ment to be an xpath	    
@@ -32,6 +38,7 @@ class Selenium
 	/**
 	 * Write a test command
 	 *
+	 * @access private	
 	 * @param string $command Command name. Find them here: http://seleniumhq.org/documentation/core/reference.html
 	 * @param string $target Name of object to target
 	 * @param string $value Value to be passed
@@ -46,6 +53,7 @@ class Selenium
 	/**
 	 * Adds a testcase to a suite.
 	 *
+	 * @access public		
 	 * @param string $title Name of suite
 	 * @param string $view View to load
 	 */
@@ -55,15 +63,12 @@ class Selenium
 	}
 	
 	/**
-	 * Open page
+	 * Check all errors
 	 *
-	 * Includes calls to several methods useful to check if a page is loading properly
-	 * 
-	 * @param string $path Relative path to open
+	 * @access public	 
 	 */
-	public function openPage($page)
+	public function checkErrors()
 	{
-		$this->write('open', $page);
 		$this->write('verifyTextNotPresent', $this->noticeText);
 		$this->write('verifyTextNotPresent', $this->warningText);
 		$this->write('verifyTextNotPresent', $this->missingText);
@@ -72,9 +77,24 @@ class Selenium
 	}
 	
 	/**
+	 * Open page
+	 *
+	 * Includes calls to several methods useful to check if a page is loading properly
+	 * 
+	 * @access public	
+	 * @param string $path Relative path to open
+	 */
+	public function openPage($page)
+	{
+		$this->write('open', $page);
+		$this->checkErrors();
+	}
+	
+	/**
 	 * Outputs the title of the test suite. There is no output if the constant ALL_SUITE is defined. 
 	 * 
 	 * @param string $title Title of suite
+	 * @access public	
 	 * @return
 	 */
 	public function suiteTitle($title)
@@ -86,15 +106,47 @@ class Selenium
 	 * Outputs the title of the test case.
 	 *
 	 * @param string $title Title of test case
+	 * @access public	
 	 */
 	public function caseTitle($title)
 	{
 		echo '<tr><td rowspan="1" colspan="3">'.$title.'</td></tr>';
 	}
+
+	/**
+	 * Click a button and wait for response
+	 *
+	 * @access public			
+	 * @param string $buttonValue e.g. 'save'
+	 */
+	public function click($buttonValue=null) 
+	{
+		$this->write('click', '//input[@value=\'' . $buttonValue . '\']');
+		$this->checkErrors();
+	}
+
+	/**
+	* Random Alpha-Numeric String
+	*
+	* @param int length
+	* @return string 
+	* @access public
+	*/
+	public function randomString($length) {
+		$randstr = null;
+		srand((double)microtime()*1000000);
+		$chars = array( 'a','b','c','d','e','f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A','B','C','D','E','F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+		for ($rand = 0; $rand <= $length; $rand++) {
+			$random = rand(0, count($chars) -1);
+			$randstr .= $chars[$random];
+		}
+		return $randstr;
+	}
 	
 	/**
 	 * Write a test command
 	 *
+	 * @access public
 	 * @param string $command Command name. Find them here: http://seleniumhq.org/documentation/core/reference.html
 	 * @param string $target Name of object to target
 	 * @param string $value Value to be passed
