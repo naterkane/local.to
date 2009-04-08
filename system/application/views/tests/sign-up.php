@@ -5,5 +5,6 @@
 	$this->selenium->signOut();	
 	$this->selenium->signUp($name, $password);
 	$this->selenium->signIn($name, $password);
+	$this->selenium->openPage('/' . $name);
 	$this->selenium->openPage('/admin/flush');	
 ?>
