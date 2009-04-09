@@ -12,11 +12,17 @@ class App_Model extends Model {
 	var $validationErrors = array();
 	var $mode;
 
+	function __construct()
+	{
+		$this->mem = new Memcache();
+		$this->mem->connect('localhost', 11211) or die ("Could not connect");
+	}
+
 	/**
 	 * Delete a record
 	 */
 	function delete($key) {
-		return $this->redis->delete($key);
+		return $this->mem->delete($key);
 	}
 
 	/**
@@ -26,8 +32,7 @@ class App_Model extends Model {
 	 * @access public
 	 */
 	function find($key) {
-		$data = $this->redis->get($key);
-		$this->redis->disconnect();	
+		$data = $this->mem->get($key);
 		if ($this->isSerialized($data)) {
 			$data = unserialize($data);
 		}
@@ -53,6 +58,50 @@ class App_Model extends Model {
 	function isSerialized($str) {
 	    return ($str == serialize(false) || @unserialize($str) !== false);
 	}
+
+	/**
+	 * Add a value to the end of a serialized value
+	 * 
+	 * @access public
+	 * @param string $key Key of record to push
+	 * @param string $value Value to push onto data
+	 * @return boolean 		 
+	 */
+	function push($key, $value)
+	{
+		$data = $this->find($key, $value);
+		if (!$data) {
+			$data = array();
+		}
+		if (is_array($data)) {
+			array_unshift($data, $value);
+			$data = serialize($data);
+			return $this->save($key, $data);
+		} else {
+			return false;
+		}	
+	}
+	
+	/**
+	 * Trim down an value to a certain length 
+	 *
+	 * @access public
+	 * @param string $key 
+	 * @param int $offset 	
+	 * @param int $length	
+	 * @return boolean
+	 */
+	function trim($key, $offset, $length)
+	{
+		$data = $this->find($key);
+		if (is_array($data)) {
+			array_slice($data, $offset, $length);
+			$data = serialize($data);
+			return $this->save($key, $data);
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * Save a record
@@ -62,14 +111,17 @@ class App_Model extends Model {
 	 * @return boolean
 	 * @access public
 	 */
-	function save($key, $data) {		
+	function save($key, $data) {
 		$this->modelData = $data;
 		if ($this->validate()) {
 			if (is_array($data)) {
 				$data = serialize($this->modelData);
 			}
-			$this->redis->set($key, $data);
-			$this->redis->disconnect();
+			if ($this->find($key)) {
+				$this->mem->replace($key, $data);				
+			} else {
+				$this->mem->add($key, $data);
+			}
 			return true;
 		} else {
 			return false;

@@ -12,9 +12,18 @@ class Admin extends App_controller
 	 */
 	function flush() 
 	{
-		$this->redis->flush();
-		?><script>confirm("DB Flushed");</script><?php
+		$this->User->mem->flush();
 		$this->redirect('/home');
+	}
+
+	function all()
+	{
+		$stats = $this->User->mem->getStats();
+		echo "<pre>";
+		print_r($stats);
+		echo "</pre>";
+		exit;
+		
 	}
 
 }

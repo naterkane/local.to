@@ -9,6 +9,7 @@ class Messages extends App_Controller
      * Add a message
      *
      * @todo Make ajax
+     * @return
      */
     function add()
     {
@@ -24,19 +25,26 @@ class Messages extends App_Controller
             show_404();
         }
     }
-   
-    /**
-     * View a single message
-     *
-     * @return
-     * @param object $id[optional]
-     */
-    function view($id = null)
-    {
-        $this->load_helpers->load( array ('Time'));
-        $this->data['message'] = $this->Message->get($id);
-        $this->load->view('messages/viewpost', $this->data);
-    }
+
+	/**
+	 * Show a single status
+	 *
+	 * @access public
+	 * @param string $username
+	 * @param int $timestamp	
+	 * @return 
+	 */
+	function view($username, $time)
+	{
+		$message = $this->Message->getOne($username, $time);
+        $this->load_helpers->load( array('Time'));		
+		if ($message) {
+			$this->load->view('messages/view', array('message'=>$message));
+		} else {
+			show_404();
+		}
+	}
+
 }
 
 ?>

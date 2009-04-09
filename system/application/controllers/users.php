@@ -19,9 +19,9 @@ class Users extends App_Controller
             $user = $this->User->get($username);
             if ($user)
             {
-                $this->redis->push('followers:'.$username, $this->userData['username'], false);
-                $this->redis->push('following:'.$this->userData['username'], $username, false);
-                $this->redirect('/'.$username);
+                $this->User->push('followers:' . $username, $this->userData['username']);
+                $this->User->push('following:' . $this->userData['username'], $username);
+                $this->redirect('/' . $username);
             }
             else
             {
@@ -43,7 +43,7 @@ class Users extends App_Controller
         $this->mustBeSignedIn();
         $this->load_helpers->load( array ('Time'));
         $this->data['title'] = 'Home';
-        $this->data['messages'] = $this->Message->getFollowed($this->userData['username']);
+        $this->data['messages'] = $this->Message->getPrivate($this->userData['username']);
         $this->load->view('users/home', $this->data);
     }
    
@@ -60,10 +60,7 @@ class Users extends App_Controller
         {
             if ($this->User->signUp($this->postData))
             {
-                $this->cookie->setUser($this->User->modelData['username']);
-                // follow yourself till we work this out
-                $this->follow($this->User->modelData['username']);
-                $this->redirect('/home');
+                $this->redirect('/users/signin');
             }
         }
         $this->load->view('users/signup', $this->data);
@@ -83,7 +80,7 @@ class Users extends App_Controller
             $user = $this->User->signIn($this->postData);
             if (! empty($user))
             {
-                $this->cookie->setUser($user['username']);
+                $this->cookie->set('user', $user);
                 $this->redirect('/home');
             }
         }
@@ -97,10 +94,10 @@ class Users extends App_Controller
      */
     function signout()
     {
-        $this->cookie->signOut();
+        $this->cookie->delete();
         $this->redirect('/');
     }
-   
+ 
     /**
      * View a users public page
      *
@@ -111,7 +108,7 @@ class Users extends App_Controller
     {
         $user = $this->User->get($username);
         $messages = $this->Message->getForUser($username);
-        $this->load_helpers->load( array ('Time'));
+        $this->load_helpers->load( array('Time'));
         if ($user)
         {
             $this->getUserData();
@@ -127,10 +124,6 @@ class Users extends App_Controller
         }
     }
    
-	function whatever()
-	{
-		$this->load->view('x');
-	}
 }
 
 ?>

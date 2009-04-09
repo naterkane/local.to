@@ -14,32 +14,15 @@ class Message extends App_Model
      */
     function addMessage($message = null, $username)
     {
-        $message_id = $this->redis->incr("global:nextPostId");
+		$time = time();
+		$message_id = 'message:' . $username . ':' . $time;
         $message = str_replace("\n", " ", $message);
-        $message = $username."|".time()."|".$message;
-        $this->redis->set("message:$message_id", $message);
-        $this->redis->push('messages:'.$username, $message_id, false);
-        $this->redis->push('global:timeline', $message_id, false);
-        $this->redis->ltrim('global:timeline', 0, 1000);
+        $message = $username . "|" . $time . "|" . $message;
+        $this->save($message_id, $message);
+        $this->push('messages:' . $username, $message_id);
+        $this->push('global:timeline', $message_id);
+        $this->trim('global:timeline', 0, 1000);
         return $message_id;
-    }
-   
-    /**
-     * Get a single message
-     *
-     * @return
-     * @param object $id
-     */
-    function get($id)
-    {
-        //if ($message = $this->redis->get("message:$id"))
-		//{
-			return $id."|".$this->redis->get("message:$id");
-		//}
-		//else 
-		//{
-		//	trigger_error("Sorry we don't have a message with the ID of '".var_dump($id)."'.", E_USER_ERROR);
-		//}
     }
    
     /**
@@ -51,6 +34,7 @@ class Message extends App_Model
      */
     function getFollowed($username)
     {
+		/*
         $users = $this->redis->lrange('following:'.$username, 0, 0+1000);
 		$messages = array ();
 		$result = array();
@@ -64,7 +48,8 @@ class Message extends App_Model
         }
 		sort($result,SORT_NUMERIC); 
 		$return = array_reverse(array_unique($result));
-        return $this->getMany($return);
+		*/		
+        return null;
     }
    
     /**
@@ -75,7 +60,7 @@ class Message extends App_Model
      */
     function getForUser($username = null)
     {
-        $messages = $this->redis->lrange('messages:'.$username, 0, 0+1000);
+        $messages = $this->find('messages:' . $username);
         return $this->getMany($messages);
     }
    
@@ -87,14 +72,29 @@ class Message extends App_Model
      */
     function getMany($messages)
     {
-        $return = array ();
-        foreach ($messages as $id)
-        {
-            $return[] = $this->get($id);
-        }
+        $return = array();
+		if ($messages) {
+			foreach ($messages as $id)
+	        {
+	            $return[] = $this->find($id);
+	        }
+		}
         return $return;
     }
-   
+
+	/**
+	 * Get one message
+	 *
+	 * @access public
+	 * @param string $username
+	 * @param string $time	
+	 * @return string $message
+	 */
+	function getOne($username, $time)
+	{
+		return $this->find('message:' . $username . ':' . $time);
+	}
+
     /**
      *
      * @return
@@ -102,7 +102,7 @@ class Message extends App_Model
      */
     function getPrivate($username)
     {
-        $messages = $this->redis->lrange('private:'.$username, 0, 0+1000);
+        $messages = $this->find('private:' . $username);
         return $this->getMany($messages);
     }
    
@@ -114,7 +114,7 @@ class Message extends App_Model
      */
     function getTimeline()
     {
-        $messages = $this->redis->lrange('global:timeline', 0, 0+1000);
+        $messages = $this->find('global:timeline');
         return $this->getMany($messages);
     }
    

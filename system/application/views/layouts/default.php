@@ -10,14 +10,17 @@
 	<title><?php if(!empty($title)) echo $title ?></title>
 </head>
 <body>
-	<a href="/">Microblog</a> 
-<?php
-if (!empty($User)) {
-	echo "<a href=\"/home\">Home</a> <a href=\"/{$User['username']}\">Profile</a> <a href=\"/users/signout\">Sign Out</a>";
-} else {
-	echo "<a href=\"/users/signin\">Sign In</a> <a href=\"/users/signup\">Sign Up</a>";
-}
-?>
+	<p>
+		<a href="/">Microblog</a>
+		<?php
+		if (!empty($User)) {
+			echo "<a href=\"/home\">Home</a> <a href=\"/{$User['username']}\">Profile</a> <a href=\"/users/signout\">Sign Out</a>";
+		} else {
+			echo "<a href=\"/users/signin\">Sign In</a> <a href=\"/users/signup\">Sign Up</a>";
+		}
+		?>
+	</p>
+<?php //echo $this->session->show_message(); ?>
 {yield}
 </body>
 </html>

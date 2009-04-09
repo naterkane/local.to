@@ -6,8 +6,9 @@ class User extends App_Model
 {
 	/**
 	 * Get a User's data by username
-	 * @return 
+	 *
 	 * @param object $username[optional]
+	 * @return 	
 	 */
     function get($username = null)
     {
@@ -22,15 +23,16 @@ class User extends App_Model
     }
 	
 	/**
-	 * 
-	 * @return 
-	 * @param object $username[optional]
+	 * Get all of a users followers  
+	 *
+	 * @param object $username
+	 * @return 	
 	 */
-    function getFollowers($username = null)
+    function getFollowers($username)
     {
         if ($username)
         {
-            return $this->redis->lrange('followers:'.$username, 0, 0+1000);
+            return $this->find('followers:' . $username);
         }
         else
         {
@@ -39,15 +41,16 @@ class User extends App_Model
     }
 	
 	/**
-	 * 
-	 * @return 
-	 * @param object $username[optional]
+	 * Get all users following a user 
+	 *
+	 * @param object $username
+	 * @return 	
 	 */
-    function getFollowing($username = null)
+    function getFollowing($username)
     {
         if ($username)
         {
-            return $this->redis->lrange('following:'.$username, 0, 0+1000);
+            return $this->find('following:' . $username);
         }
         else
         {
@@ -63,7 +66,7 @@ class User extends App_Model
      */
     function hashPassword($password)
     {
-        return sha1($password.$this->config->item('salt'));
+        return sha1($password . $this->config->item('salt'));
     }
    
     /**
@@ -76,14 +79,18 @@ class User extends App_Model
     function isFollowing($username, $my_username)
     {
         $isFollowing = $this->getFollowing($my_username);
-        if (in_array($username, $isFollowing))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+		if (!empty($isFollowing)) {
+			if (in_array($username, $isFollowing))
+	        {
+	            return true;
+	        }
+	        else
+	        {
+	            return false;
+	        }
+		} else {
+			return false;
+		}
     }
    
     /**
@@ -96,10 +103,12 @@ class User extends App_Model
     function sendToFollowers($message_id, $username)
     {
         $followers = $this->getFollowers($username);
-        foreach ($followers as $follower)
-        {
-            $this->redis->push('private:'.$follower, $message_id, false);
-        }
+		if ($followers) {
+			foreach ($followers as $follower)
+	        {
+	            $this->push('private:' . $follower, $message_id);
+	        }
+		}
         return true;
     }
    
@@ -128,7 +137,6 @@ class User extends App_Model
             return false;
         }
     }
-   
     
     /**
      * Create a new user
@@ -140,7 +148,7 @@ class User extends App_Model
      */
     function signUp($data = array ())
     {
-        $user = array ();
+        $user = array();
         $now = time();
         $this->mode = 'signup';
         $user['username'] = $data['username'];
@@ -148,31 +156,11 @@ class User extends App_Model
         $user['activated'] = 1;
         $user['created'] = $now;
         $user['modified'] = $now;
-        $message_id = $this->redis->incr("global:nextMessagetId");
         $this->save($data['username'], $user);
-        //$this->redis->push($data['username'] . ':followers', $data['username'], false);
+        $this->push('followers:' . $data['username'], $data['username']);
+		$this->push('private:' . $follower, $message_id);
         return true;
     }
-   
-    /**
-     * Create a new user
-     *
-     * @todo Add more validation rules: length of pass, length of username, allowed characters, etc
-     * @access public
-     * @param array $data Data to validate
-     */
-    /*
-     function validate() {
-     echo "<pre>";
-     print_r($this->data);
-     echo "</pre>";
-     exit;
-     if ($this->mode = 'signup') {
-     
-     } else {
-     return false;
-     }
-     }*/
    
 }
 
