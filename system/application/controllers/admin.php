@@ -12,13 +12,20 @@ class Admin extends App_controller
 	 */
 	function flush() 
 	{
-		$this->User->mem->flush();
+		echo "<pre>";
+		print_r($this->User->mem->get('user:a'));
+		echo "</pre>";
+		exit;
+		
+		exit;
 		$this->redirect('/home');
 	}
 
-	function all()
+	function stats()
 	{
 		$stats = $this->User->mem->getStats();
+		fsockopen($this->host, $this->port, $errno, $errstr);
+		$i = fwrite($this->_sock, $s);
 		echo "<pre>";
 		print_r($stats);
 		echo "</pre>";

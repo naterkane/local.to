@@ -157,16 +157,6 @@ class Selenium
 	}
 
 	/**
-	* Wrapper for signing out
-	*
-	* @access public	
-	*/
-	public function signOut()
-	{
-		$this->openPage('/users/signout');
-	}
-
-	/**
 	* Random Alpha-Numeric String
 	* 
 	* @param string $name
@@ -179,8 +169,19 @@ class Selenium
 		$this->openPage('/users/signin');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);	
-		$this->click('Sign In');
+		$this->click('Sign In');;
 		$this->write('verifyTextPresent', 'Hello ' . $name);
+	}
+
+	/**
+	* Wrapper for signing out
+	*
+	* @access public	
+	*/
+	public function signOut()
+	{
+		$this->openPage('/users/signout');
+		//$this->write('verifyTextPresent', 'You have successfully signed out.');	
 	}
 
 	/**
@@ -196,8 +197,9 @@ class Selenium
 	{
 		$this->openPage('/users/signup');
 		$this->write('type', 'username', $name);
-		$this->write('type', 'password', $password);	
+		$this->write('type', 'password', $password);
 		$this->click('Sign Up');
+		$this->write('verifyTextPresent', 'Your account has been created. Please sign in.');		
 	}
 	
 	/**

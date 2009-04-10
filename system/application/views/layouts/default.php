@@ -20,7 +20,7 @@
 		}
 		?>
 	</p>
-<?php //echo $this->session->show_message(); ?>
+<?php echo $this->cookie->flashMessage(); ?>
 {yield}
 </body>
 </html>

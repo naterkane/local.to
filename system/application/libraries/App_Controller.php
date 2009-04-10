@@ -78,14 +78,8 @@ class App_Controller extends Controller {
      * @param todo Use CakePHP's redirect here
      * @access public
      */
-    function redirect($url, $flashMessage=null, $type = null) {
-		/*
-		if ($flashMessage) {
-			$this->session->set_flashdata(array('message'=>$flashMessage));
-		}
-		if ($type) {
-			$this->session->set_flashdata(array('type'=>$type));
-		}*/
+    function redirect($url, $message=null, $type = null) {
+		$this->cookie->setFlash($message, $type);
         header("Location: http://".$_SERVER['HTTP_HOST'].$url, TRUE, 302);
         exit ;
     }

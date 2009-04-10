@@ -47,25 +47,6 @@ class Users extends App_Controller
     }
    
     /**
-     * Sign up a new user
-     * 
-     * @return
-     * @todo Move those load method calls to one place
-     */
-    function signup()
-    {
-        $this->data['title'] = 'Sign Up';
-        if ($this->postData)
-        {
-            if ($this->User->signUp($this->postData))
-            {
-                $this->redirect('/users/signin');
-            }
-        }
-        $this->load->view('users/signup', $this->data);
-    }
-   
-    /**
      * Sign in a user
      * 
      * @return
@@ -85,6 +66,25 @@ class Users extends App_Controller
         }
         $this->load->view('users/signin', $this->data);
     }
+
+    /**
+     * Sign up a new user
+     * 
+     * @return
+     * @todo Move those load method calls to one place
+     */
+    function signup()
+    {
+        $this->data['title'] = 'Sign Up';
+        if ($this->postData)
+        {
+            if ($this->User->signUp($this->postData))
+            {
+                $this->redirect('/users/signin', 'Your account has been created. Please sign in.');
+            }
+        }
+        $this->load->view('users/signup', $this->data);
+    }
    
     /**
      * Sign out a user
@@ -94,7 +94,7 @@ class Users extends App_Controller
     function signout()
     {
         $this->cookie->delete();
-        $this->redirect('/');
+        $this->redirect('/', 'You have successfully signed out.');
     }
  
     /**

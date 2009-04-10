@@ -38,6 +38,19 @@ class Cookie {
 	}
 
 	/**
+	 * Create a new cookie
+	 *
+	 * @access public	
+	 * @return 
+	 */
+	function create()
+	{
+		$key = sha1(time() . $this->controller->randomString(10) . $this->controller->config->item('salt'));
+		setcookie($this->name, $key, $this->expires, $this->domain);
+		$this->set($this->memPrefix . ':' . $key, null);
+	}
+
+	/**
 	 * Delete a cookie
 	 *
 	 * @access public
@@ -61,6 +74,30 @@ class Cookie {
 	{
 		return isset($_COOKIE[$this->name]);
 	}
+	
+	/**
+	 * Show flash message
+	 *
+	 * @access public
+	 * @return string
+	 */
+	function flashMessage()
+	{
+		$return = null;
+		if ($this->exists()) {
+			$data = $this->getAllData();
+			if (!empty($data['flash_message'])) {
+				$return = "<div id=\"flashMesage\" class=\"" . $data['flash_type'] . "\">" . $data['flash_message'] . "</div>\n";
+				unset($data['flash_message']);
+			}
+			if (!empty($data['flash_type'])) {
+				unset($data['flash_type']);
+			}
+			$this->controller->Cookie_model->save($this->memPrefix . ':' . $_COOKIE[$this->name], $data);
+		}
+		return $return;
+	}
+	
 	
 	/**
 	 * Get a key's data from the cookie array
@@ -95,6 +132,22 @@ class Cookie {
 	}
 
 	/**
+	 * Unset data from a cookie session
+	 *
+	 * @access public
+	 * @param string $key 
+	 * @param mixed $data 	
+	 * @return boolean
+	 */
+	function remove($key)
+	{
+		if ($this->exists()) {
+			$cookie = $this->getAllData();
+			return $this->controller->Cookie_model->save($this->memPrefix . ':' . $_COOKIE[$this->name], $cookie);
+		}
+	}
+	
+	/**
 	 * Set data to a cookie session
 	 *
 	 * @access public
@@ -104,7 +157,7 @@ class Cookie {
 	 */
 	function set($key, $data)
 	{
-		if ($this->exists()) {
+		if ($this->exists()) {	
 			$cookie = $this->getAllData();
 			$cookie[$key] = $data;
 			return $this->controller->Cookie_model->save($this->memPrefix . ':' . $_COOKIE[$this->name], $cookie);
@@ -112,16 +165,22 @@ class Cookie {
 	}
 
 	/**
-	 * Create a new cookie
+	 * Set Flash
 	 *
-	 * @access public	
+	 * @access public
+	 * @param string $message
+	 * @param string $type	
 	 * @return 
 	 */
-	function create()
+	public function setFlash($message, $type = null)
 	{
-		$key = sha1(time() . $this->controller->randomString(10) . $this->controller->config->item('salt'));
-		setcookie($this->name, $key, $this->expires, $this->domain);
-		$this->set($this->memPrefix . ':' . $key, null);
+		if (!$type) {
+			$type = 'success';
+		}
+		$data = $this->getAllData();
+		$this->set('flash_message', $message);
+		$this->set('flash_type', $type);
+		$data = $this->getAllData();
 	}
 
 

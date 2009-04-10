@@ -18,6 +18,7 @@ class App_Model extends Model {
 	function __construct()
 	{
 		$this->mem = new Memcache();
+		shell_exec(APPPATH . "bash/memcachedb");
 		$this->mem->connect($this->memcacheHost, $this->memcachePort) or die ("Could not connect");
 	}
 
@@ -117,15 +118,7 @@ class App_Model extends Model {
 	function save($key, $data) {
 		$this->modelData = $data;
 		if ($this->validate()) {
-			if (is_array($data)) {
-				$data = serialize($this->modelData);
-			}
-			if ($this->find($key)) {
-				$this->mem->replace($key, $data);				
-			} else {
-				$this->mem->add($key, $data);
-			}
-			return true;
+			return $this->mem->set($key, $data);
 		} else {
 			return false;
 		}
