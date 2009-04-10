@@ -12,7 +12,7 @@ class App_Controller extends Controller {
     function __construct() {
         parent::Controller();
         $this->load->library( array ('Load_helpers'));
-        $this->load->model( array ('User', 'Message'));
+        $this->load->model( array ('User', 'Message', 'Group'));
         if ($_POST) {
             $this->postData = $this->input->xss_clean($_POST);
         }

@@ -45,6 +45,7 @@ $route['scaffolding_trigger'] = "";
 $route['tests/:any'] = "tests/index";
 $route['testme'] = "tests/testme";
 $route['home'] = "users/home";
+$route['group/(:any)'] = "groups/view/$1";
 
 
 /* End of file routes.php */
