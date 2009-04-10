@@ -41,7 +41,6 @@ class Users extends App_Controller
     function home()
     {
         $this->mustBeSignedIn();
-        $this->load_helpers->load( array ('Time'));
         $this->data['title'] = 'Home';
         $this->data['messages'] = $this->Message->getPrivate($this->userData['username']);
         $this->load->view('users/home', $this->data);
@@ -108,7 +107,6 @@ class Users extends App_Controller
     {
         $user = $this->User->get($username);
         $messages = $this->Message->getForUser($username);
-        $this->load_helpers->load( array('Time'));
         if ($user)
         {
             $this->getUserData();

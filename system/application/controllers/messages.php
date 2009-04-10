@@ -37,7 +37,6 @@ class Messages extends App_Controller
 	function view($username, $time)
 	{
 		$message = $this->Message->getOne($username, $time);
-        $this->load_helpers->load( array('Time'));		
 		if ($message) {
 			$this->load->view('messages/view', array('message'=>$message));
 		} else {

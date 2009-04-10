@@ -11,11 +11,14 @@ class App_Model extends Model {
 	var $redisIncrement = 10;
 	var $validationErrors = array();
 	var $mode;
+	var $memcacheHost = 'localhost';
+	var $memcachePort = '21201';	
+	
 
 	function __construct()
 	{
 		$this->mem = new Memcache();
-		$this->mem->connect('localhost', 11211) or die ("Could not connect");
+		$this->mem->connect($this->memcacheHost, $this->memcachePort) or die ("Could not connect");
 	}
 
 	/**

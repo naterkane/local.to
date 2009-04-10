@@ -11,8 +11,9 @@ class App_Controller extends Controller {
    
     function __construct() {
         parent::Controller();
-        $this->load->library( array ('Load_helpers'));
-        $this->load->model( array ('User', 'Message', 'Group'));
+        $this->load->library(array('Load_helpers'));
+        $this->load->model(array('User', 'Message', 'Group'));
+		$this->load_helpers->load(array('Html', 'Time', 'Selenium'));
         if ($_POST) {
             $this->postData = $this->input->xss_clean($_POST);
         }

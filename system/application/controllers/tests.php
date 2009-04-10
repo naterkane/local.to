@@ -11,9 +11,8 @@ class Tests extends App_Controller
 	 * Shows 404 if app is not error reporting.
 	 */	
 	function index() 
-	{	
+	{			
         if ($this->isTesting()) {
-        	$this->load_helpers->load(array('Selenium'));		
 			if (strpos($_SERVER['REQUEST_URI'], 'testsuite') !== false) 
 			{
 				$this->layout = 'testsuite';
