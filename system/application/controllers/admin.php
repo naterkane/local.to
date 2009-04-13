@@ -12,12 +12,6 @@ class Admin extends App_controller
 	 */
 	function flush() 
 	{
-		echo "<pre>";
-		print_r($this->User->mem->get('user:a'));
-		echo "</pre>";
-		exit;
-		
-		exit;
 		$this->redirect('/home');
 	}
 

@@ -7,18 +7,27 @@
 */
 class App_Model extends Model {
 
-	var $modelData = array();
-	var $redisIncrement = 10;
-	var $validationErrors = array();
-	var $mode;
-	var $memcacheHost = 'localhost';
-	var $memcachePort = '21201';	
-	
+	private $memcacheHost = 'localhost';
+	private $memcachePort = '21201';
+	private $prefixCookie = 'session';
+	private $prefixFollower = 'followers';
+	private $prefixFollowing = 'following';
+	private $prefixGroup = 'groups';
+	private $prefixGroupMessages = 'groupsmessages';	
+	private $prefixGroupOwner = 'groupsowner';	
+	private $prefixMessage = 'messages';
+	private $prefixPrivate = 'userprivate';
+	private $prefixPublic = 'timeline';
+	private $prefixSeparator = ':';	
+	private $prefixUser = 'users';
+	private $prefixUserMessages = 'userpublic';
+	public $modelData = array();
+	public $validationErrors = array();
+	public $mode;	
 
 	function __construct()
 	{
 		$this->mem = new Memcache();
-		shell_exec(APPPATH . "bash/memcachedb");
 		$this->mem->connect($this->memcacheHost, $this->memcachePort) or die ("Could not connect");
 	}
 
@@ -61,6 +70,154 @@ class App_Model extends Model {
 	 */
 	function isSerialized($str) {
 	    return ($str == serialize(false) || @unserialize($str) !== false);
+	}
+
+	/**
+	 * Load models from controller into model
+	 *
+	 * @access public
+	 * @param array $models
+	 * @return 
+	 */
+	function loadModels($models)
+	{
+		$ci = CI_Base::get_instance();
+		foreach ($models as $model) 
+		{
+			$this->$model = $ci->$model;
+		}
+	}
+
+	/**
+	 * Create a prefix for cookie
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */
+	function prefixCookie($key)
+	{ 
+		return $this->prefixCookie . $this->prefixSeparator . $key; 
+	}
+
+	/**
+	 * Create a prefix for followers
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */
+	function prefixFollower($username)
+	{ 
+		return $this->prefixFollower . $this->prefixSeparator . $username; 
+	}
+	
+	/**
+	 * Create a prefix for followers
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */	
+	function prefixFollowing($username)
+	{ 
+		return $this->prefixFollowing . $this->prefixSeparator . $username; 
+	}
+	
+	/**
+	 * Create a prefix for a group
+	 * 
+	 * @access public
+	 * @param string $groupname
+	 * @return string
+	 */	
+	function prefixGroup($groupname)
+	{ 
+		return $this->prefixGroup . $this->prefixSeparator . $groupname; 
+	}
+
+	/**
+	 * Create a prefix for group messages
+	 * 
+	 * @access public
+	 * @param string $groupname
+	 * @return string
+	 */	
+	function prefixGroupMessages($groupname)
+	{ 
+		return $this->prefixGroupMessages . $this->prefixSeparator . $groupname; 
+	}
+
+	/**
+	 * Create a prefix for a group owner
+	 * 
+	 * @access public
+	 * @param string $groupname
+	 * @return string
+	 */	
+	function prefixGroupOwner($groupname)
+	{ 
+		return $this->prefixGroupOwner . $this->prefixSeparator . $groupname; 
+	}
+	
+	/**
+	 * Create a prefix for a message
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @param string $time	
+	 * @return string
+	 */	
+	function prefixMessage($username, $time)
+	{ 
+		return $this->prefixMessage . $this->prefixSeparator . $username . $this->prefixSeparator . $time; 
+	}
+	
+	/**
+	 * Create a prefix for private messages
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */	
+	function prefixPrivate($username)
+	{ 
+		return $this->prefixPrivate . $this->prefixSeparator . $username; 
+	}
+	
+	/**
+	 * Create a prefix for public messages
+	 * 
+	 * @access public
+	 * @return string
+	 */	
+	function prefixPublic()
+	{ 
+		return $this->prefixPublic . $this->prefixSeparator; 
+	}
+
+	/**
+	 * Create a prefix for a user
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */	
+	function prefixUser($username)
+	{ 
+		return $this->prefixUser . $this->prefixSeparator . $username; 
+	}
+
+	/**
+	 * Create a prefix for user messages
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */
+	function prefixUserMessages($username)
+	{ 
+		return $this->prefixUserMessages . $this->prefixSeparator . $username; 
 	}
 
 	/**

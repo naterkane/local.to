@@ -169,7 +169,7 @@ class Html
 	 */
 	function message($message = null)
 	{
-		$message = preg_replace(MESSAGE_MATCH, "'\\1@' . \$this->link('\\2', '\\2')", $message);		
+		$message = preg_replace(MESSAGE_MATCH, "'\\1@' . \$this->link('\\2', '\\2')", $message);
 		return $message;
 	}
 

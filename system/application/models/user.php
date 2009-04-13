@@ -14,7 +14,7 @@ class User extends App_Model
     {
         if ($username)
         {
-            return $this->find($username);
+            return $this->find($this->prefixUser($username));
         }
         else
         {
@@ -32,7 +32,7 @@ class User extends App_Model
     {
         if ($username)
         {
-            return $this->find('followers:' . $username);
+            return $this->find($this->prefixFollower($username));
         }
         else
         {
@@ -50,7 +50,7 @@ class User extends App_Model
     {
         if ($username)
         {
-            return $this->find('following:' . $username);
+            return $this->find($this->prefixFollowing($username));
         }
         else
         {
@@ -106,7 +106,7 @@ class User extends App_Model
 		if ($followers) {
 			foreach ($followers as $follower)
 	        {
-	            $this->push('private:' . $follower, $message_id);
+	            $this->push($this->prefixPrivate($follower), $message_id);
 	        }
 		}
         return true;
@@ -122,7 +122,7 @@ class User extends App_Model
     {
         if (! empty($data['username']))
         {
-            $user = $this->find($data['username']);
+            $user = $this->get($data['username']);
             if ((! empty($user)) && ($this->hashPassword($data['password']) == $user['password']))
             {
                 return $user;
@@ -156,9 +156,9 @@ class User extends App_Model
         $user['activated'] = 1;
         $user['created'] = $now;
         $user['modified'] = $now;
-        $this->save($data['username'], $user);
-        $this->push('followers:' . $data['username'], $data['username']);
-		$this->push('private:' . $follower, $message_id);
+        $this->save($this->prefixUser($data['username']), $user);
+        $this->push($this->prefixFollower($data['username']), $data['username']);
+		$this->push($this->prefixPrivate($data['username']), $message_id);
         return true;
     }
    

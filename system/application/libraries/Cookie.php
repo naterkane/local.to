@@ -6,7 +6,6 @@ class Cookie {
 	
 	var $domain = '/';
 	var $expires;
-	var $memPrefix = 'cookie';
 	var $name = 'Microblog';
 	
 	
@@ -21,6 +20,7 @@ class Cookie {
 	{
 		$this->controller =& get_instance();
 		$this->controller->load->model(array('Cookie_model'));
+		$this->Cookie_model = $this->controller->Cookie_model;
 		$this->check();
 	}
 
@@ -47,7 +47,7 @@ class Cookie {
 	{
 		$key = sha1(time() . $this->controller->randomString(10) . $this->controller->config->item('salt'));
 		setcookie($this->name, $key, $this->expires, $this->domain);
-		$this->set($this->memPrefix . ':' . $key, null);
+		$this->set($this->controller->Cookie_model->prefixCookie($key), null);
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Cookie {
 	{
 		setcookie($this->name, '', time()-60000, $this->domain);		
 		if ($this->exists()) {
-			$this->controller->Cookie_model->delete($this->memPrefix . ':' . $_COOKIE[$this->name]);
+			$this->controller->Cookie_model->delete($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
 		}
 	}
 	
@@ -93,7 +93,7 @@ class Cookie {
 			if (!empty($data['flash_type'])) {
 				unset($data['flash_type']);
 			}
-			$this->controller->Cookie_model->save($this->memPrefix . ':' . $_COOKIE[$this->name], $data);
+			$this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $data);
 		}
 		return $return;
 	}
@@ -125,7 +125,7 @@ class Cookie {
 	function getAllData()
 	{
 		if ($this->exists()) {
-			return $this->controller->Cookie_model->find($this->memPrefix . ':' . $_COOKIE[$this->name]);
+			return $this->controller->Cookie_model->find($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
 		} else {
 			return;
 		}		
@@ -146,7 +146,7 @@ class Cookie {
 			if (isset($cookie[$key])) {
 				unset($cookie[$key]);
 			}
-			return $this->controller->Cookie_model->save($this->memPrefix . ':' . $_COOKIE[$this->name], $cookie);
+			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
 		}
 	}
 	
@@ -163,7 +163,7 @@ class Cookie {
 		if ($this->exists()) {	
 			$cookie = $this->getAllData();
 			$cookie[$key] = $data;
-			return $this->controller->Cookie_model->save($this->memPrefix . ':' . $_COOKIE[$this->name], $cookie);
+			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
 		}
 	}
 

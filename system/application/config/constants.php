@@ -38,6 +38,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 //App matches
 define('MESSAGE_MATCH', '/(^|\s+)@([A-Za-z0-9]{1,64})/e');
+define('GROUP_MATCH', '/(^|\s)!([A-Za-z0-9]{1,64})/e');
 
 /* End of file constants.php */
 /* Location: ./system/application/config/constants.php */

@@ -21,3 +21,5 @@
 </ul>
 
 <h3>Messages</h3>
+
+<?php echo $this->load->view('messages/viewlist'); ?>

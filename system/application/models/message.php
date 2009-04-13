@@ -5,78 +5,139 @@
 class Message extends App_Model
 {
    
-    
     /**
      * Add a new message
      *
-     * @todo Validation and return value, add transactions
+     * @todo Validation and return value, add transactions, move isAMember to Validation
      * @param string $message
      */
-    function addMessage($message = null, $username)
+    function add($message = null, $username)
     {
+		$this->loadModels(array('Group'));
 		$time = time();
-		$message_id = 'message:' . $username . ':' . $time;
+		$message_id = $this->prefixMessage($username, $time);
         $message = str_replace("\n", " ", $message);
         $message = $username . "|" . $time . "|" . $message;
         $this->save($message_id, $message);
-        $this->push('messages:' . $username, $message_id);
-        $this->push('global:timeline', $message_id);
-        $this->trim('global:timeline', 0, 1000);
+        $this->addToUser($username, $message_id);
+		$groups = $this->Group->getGroups($message);
+		if (!empty($groups)) 
+		{
+			foreach ($groups as $group) 
+			{
+				if ($this->Group->isAMember($group, $username)) 
+				{
+					$this->addToGroup($group, $message_id);
+				} 
+				else 
+				{
+					$this->addToPublicTimeline($message_id);
+				}
+			}
+		} 
+		else 
+		{
+			$this->addToPublicTimeline($message_id);
+		}
         return $message_id;
     }
-   
+
+	/**
+	 * Add to message to user
+	 *
+	 * @access public
+	 * @param string $username
+	 * @param string $message_id
+	 * @return 
+	 */
+	function addToUser($username, $message_id)
+	{
+		return $this->push($this->prefixUserMessages($username), $message_id);
+	}
+  
+	/**
+	 * Add to message to group
+	 *
+	 * @access public
+	 * @param string $groupname
+	 * @param string $message_id
+	 * @return 
+	 */
+	function addToGroup($groupname, $message_id)
+	{
+		$this->push($this->prefixGroupMessages($groupname), $message_id);
+		$members = $this->Group->getMembers($groupname);
+		foreach ($members as $member) {
+			$this->addToUser($member, $message_id);
+		}
+	}
+
+	/**
+	 * Add to public timeline
+	 *
+	 * @access public
+	 * @param string $message_id
+	 * @return 
+	 */
+	function addToPublicTimeline($message_id)
+	{
+		$this->push($this->prefixPublic(), $message_id);
+        $this->trim($this->prefixPublic(), 0, 1000);
+	}
+	
+
     /**
      * Get the messages of the people a user is following
      *
      * @return
      * @param string $username
-     * @todo need to clean this up... there shouldn't be a need to manually aggregate the messages of who a person is following once we push each posted message to the List of each follower.
+     * @todo 
      */
     function getFollowed($username)
-    {
-		/*
-        $users = $this->redis->lrange('following:'.$username, 0, 0+1000);
-		$messages = array ();
-		$result = array();
-        foreach ($users as $user)
-        {
-			$messages[] = $this->redis->lrange('messages:'.$user, 0, 0+1000);
-			$c = count($messages);
-			for ($i=0;$i<count($messages[$c-1]);$i++){
-				array_push($result,$messages[$c-1][$i]);
-			}
-        }
-		sort($result,SORT_NUMERIC); 
-		$return = array_reverse(array_unique($result));
-		*/		
+    {		
         return null;
     }
    
     /**
+     * Get Messages for user
      *
-     *
-     * @return
      * @param string $username[optional]
+     * @return array Messages
      */
     function getForUser($username = null)
     {
-        $messages = $this->find('messages:' . $username);
+        $messages = $this->find($this->prefixUserMessages($username));
         return $this->getMany($messages);
     }
-   
+  
+    /**
+     * Get Messages for user
+     *
+     * @param string $groupname[optional]
+     * @return array Messages
+     */
+    function getForGroup($groupname = null)
+    {
+        $messages = $this->find($this->prefixGroupMessages($groupname));
+        return $this->getMany($messages);
+    }
+
     /**
      * Get more than one message
      *
      * @return
      * @param object $messages
      */
-    function getMany($messages)
+    function getmany($messages)
     {
         $return = array();
 		if ($messages) {
 			foreach ($messages as $id)
 	        {
-	            $return[] = $this->find($id);
+				if ($id) 
+				{
+					$return[] = $this->find($id);
+				}
 	        }
 		}
         return $return;
@@ -92,7 +153,7 @@ class Message extends App_Model
 	 */
 	function getOne($username, $time)
 	{
-		return $this->find('message:' . $username . ':' . $time);
+		return $this->find($this->prefixMessage($username, $time));
 	}
 
     /**
@@ -102,7 +163,7 @@ class Message extends App_Model
      */
     function getPrivate($username)
     {
-        $messages = $this->find('private:' . $username);
+        $messages = $this->find($this->prefixPrivate($username));
         return $this->getMany($messages);
     }
    
@@ -114,10 +175,10 @@ class Message extends App_Model
      */
     function getTimeline()
     {
-        $messages = $this->find('global:timeline');
+        $messages = $this->find($this->prefixPublic());
         return $this->getMany($messages);
-    }
-   
+    }	
+ 
 }
 
 ?>

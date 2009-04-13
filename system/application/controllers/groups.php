@@ -33,7 +33,7 @@ class Groups extends App_Controller
 	function subscribe($name = null)
 	{
 		$this->mustBeSignedIn();
-		$group = $this->Group->find('group:' . $name);
+		$group = $this->Group->find($this->Group->prefixGroup($name));
 		if ($group) {
 			$this->Group->addMember($name, $this->userData['username']);
 			$this->redirect('/group/' . $name);
@@ -52,7 +52,7 @@ class Groups extends App_Controller
 	function unsubscribe($name = null)
 	{
 		$this->mustBeSignedIn();
-		$group = $this->Group->find('group:' . $name);
+		$group = $this->Group->find($this->Group->prefixGroup($name));
 		if ($group) {
 			$this->Group->removeMember($name, $this->userData['username']);
 			$this->redirect('/group/' . $name);
@@ -64,6 +64,7 @@ class Groups extends App_Controller
 	/**
 	 * View a group
 	 *
+	 * @todo Check if group exists
 	 * @access public
 	 * @param string $name	
 	 * @return 
@@ -76,6 +77,7 @@ class Groups extends App_Controller
 			$this->data['name'] = $name;			
 			$this->data['members'] = $this->Group->getMembers($name);
 			$this->data['owner'] = $this->Group->getOwner($name);
+			$this->data['messages'] = $this->Message->getForGroup($name);	
 			$this->data['imAMember'] = $this->Group->isAMember($name, $this->userData['username'], $this->data['members']);
 			if ($this->data['members']) {
 				$this->load->view('groups/view', $this->data);

@@ -14,8 +14,8 @@ class Group extends App_Model
 	 */
 	function add($data = array(), $owner_id)
 	{
-		$this->save('group:' . $data['name'], array(0=>$owner_id));
-		$this->save('groupowner:' . $data['name'], $owner_id);	
+		$this->save($this->prefixGroup($data['name']), array(0 => $owner_id));
+		$this->save($this->prefixGroupOwner($data['name']), $owner_id);	
 		return true;
 	}
 	
@@ -32,11 +32,29 @@ class Group extends App_Model
 		if (!empty($member)) {
 			$previous_members = $this->getMembers($name);
 			$previous_members[] = $member;
-			return $this->save('group:' . $name, $previous_members);
+			return $this->save($this->prefixGroup($name), $previous_members);
 		} else {
 			return true;
 		}		
 	}
+
+	/**
+	 * Get a group names from a message
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return array
+	 */
+	function getGroups($message)
+	{
+		preg_match_all(GROUP_MATCH, $message, $groups);
+		if (isset($groups[2])) {
+			return $groups[2];
+		} else {
+			return array();
+		}
+	}
+	
 	
 	/**
 	 * Get Members
@@ -47,7 +65,7 @@ class Group extends App_Model
 	 */
 	function getMembers($name)
 	{
-		return $this->find('group:' . $name);
+		return $this->find($this->prefixGroup($name));
 	}
 	
 	/**
@@ -59,7 +77,7 @@ class Group extends App_Model
 	 */
 	function getOwner($name)
 	{
-		return $this->find('groupowner:' . $name);
+		return $this->find($this->prefixGroupOwner($name));
 	}
 	
 	/**
@@ -102,7 +120,7 @@ class Group extends App_Model
 					$new_lineup[] = $previous_member;
 				}
 			}
-			return $this->save('group:' . $name, $new_lineup);
+			return $this->save($this->prefixGroup($name), $new_lineup);
 		} else {
 			return true;
 		}		

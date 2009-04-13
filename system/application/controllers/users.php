@@ -104,9 +104,8 @@ class Users extends App_Controller
      * @return
      */
     function view($username)
-    {
-        $user = $this->User->get($username);
-        $messages = $this->Message->getForUser($username);
+    {	
+       	$user = $this->User->get($username);
         if ($user)
         {
             $this->getUserData();
