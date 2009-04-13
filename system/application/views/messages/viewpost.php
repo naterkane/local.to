@@ -1,8 +1,13 @@
 <?php
 	$aux = explode("|", $message);
-	$username = $aux[0];
-	$time = $aux[1];
-	$message = $aux[2];
+	// hack workaround if a user includes a pipe | character in their post
+	$username = array_shift($aux);
+	$time = array_shift($aux);
+	$message = array_shift($aux);
+	while(count($aux)>0)
+	{
+		$message .= "|".array_shift($aux);
+	}
 ?>
 <div class="message">
 <?php
