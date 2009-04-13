@@ -143,6 +143,9 @@ class Cookie {
 	{
 		if ($this->exists()) {
 			$cookie = $this->getAllData();
+			if (isset($cookie[$key])) {
+				unset($cookie[$key]);
+			}
 			return $this->controller->Cookie_model->save($this->memPrefix . ':' . $_COOKIE[$this->name], $cookie);
 		}
 	}

@@ -93,7 +93,7 @@ class Users extends App_Controller
      */
     function signout()
     {
-        $this->cookie->delete();
+        $this->cookie->remove('user');
         $this->redirect('/', 'You have successfully signed out.');
     }
  
