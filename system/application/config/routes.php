@@ -48,6 +48,7 @@ $route['home'] = "users/home";
 $route['group/(:any)'] = "groups/view/$1";
 $route['signout'] = "users/signout";
 $route['signin'] = "users/signin";
+$route['signup'] = "users/signup";
 
 
 /* End of file routes.php */

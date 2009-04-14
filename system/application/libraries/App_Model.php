@@ -312,7 +312,7 @@ class App_Model extends Model {
 		$this->modelData = $data;
 		if ($this->validate) {
 			if ($this->validate()) {
-				return $this->mem->set($key, $data);
+				return $this->mem->set($key, $this->modelData);
 			} else {
 				return false;
 			}
@@ -446,34 +446,29 @@ class App_Model extends Model {
             }
     }*/
 
-	/* Pending
-    function validates_format_of($fieldName,$options=array()) 
+    function validates_format_of($fieldName, $options=array()) 
 	{
-			$fieldValue = $this->getValue($fieldName);
-            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+		$fieldValue = $this->getValue($fieldName);
+		if ( !isset($options['message']) ) 
+		{	
+			$options['message'] = 'Field has an invalid format.';
+		}
+		if ( !isset($options['on']) ) 
+		{
+			$options['on'] = 'save';
+		}
+		if ( !isset($options['with']) ) 
+		{
+			$options['with'] = '//';
+		}
+		if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+		{
+			if ( !preg_match($options['with'],$fieldValue) ) 
 			{
-                    return true;
-            }
-            if ( !isset($options['message']) ) 
-			{	
-                    $options['message'] = Inflector::humanize($fieldName) . ' has an invalid format.';
-            }
-            if ( !isset($options['on']) ) 
-			{
-                    $options['on'] = 'save';
-            }
-            if ( !isset($options['with']) ) 
-			{
-                    $options['with'] = '//';
-            }
-            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
-			{
-                    if ( !preg_match($options['with'],$fieldValue) ) 
-					{
-                            $this->validationErrors[$fieldName] = $options['message'];
-                    }
-            }
-    }*/
+			       $this->validationErrors[$fieldName] = $options['message'];
+			}
+		}
+    }
 
 	/* Pending
     function validates_inclusion_of($fieldName,$options=array()) 
@@ -504,30 +499,25 @@ class App_Model extends Model {
             }
     }*/
 
-	/* Pending
-    function validates_length_of($fieldName,$options=array()) 
+    function validates_length_of($fieldName, $options=array()) 
 	{
-            $fieldValue = $this->getValue($this->data);
-            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+		$fieldValue = $this->getValue($fieldName);
+		if (!isset($options['message'])) 
+		{
+			$options['message'] = 'Field has the wrong length.';
+		}
+		if (!isset($options['on'])) 
+		{
+			$options['on'] = 'save';
+		}
+		if ((($options['on'] == 'save') || ($options['on'] == $this->action))) 
+		{
+			if (( strlen($fieldValue) > $options['max'] ) || ( strlen($fieldValue) < $options['min'] ))
 			{
-                    return true;
-            }
-            if ( !isset($options['message']) ) 
-			{
-                    $options['message'] = 'Field has the wrong length.';
-            }
-            if ( !isset($options['on']) ) 
-			{
-                    $options['on'] = 'save';
-            }
-            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
-			{
-					if (( strlen($fieldValue) > $options['max'] ) || ( strlen($fieldValue) < $options['min'] ))
-					{
-					        $this->validationErrors[$fieldName] = $options['message'];
-					}
-            }
-    }*/
+				$this->validationErrors[$fieldName] = $options['message'];
+			}
+		}
+    }
 
 	/* Pending
     function validates_numericality_of($fieldName,$options=array()) 
@@ -618,32 +608,44 @@ class App_Model extends Model {
             }
     }*/
 
-	/* Pending
-    function validates_uniqueness_of($fieldName, $options=array()) 
+	/**
+	 * Validate the uniqueness of a value
+	 *
+	 * @todo add code for updates, currently only works for creates.
+	 * @todo add code for mysql
+	 * @access public
+	 * @param string $fieldname
+	 * @param array $options
+	 * @return boolean
+	 */
+    function validates_uniqueness_of($fieldName=null, $options = array()) 
 	{
-			$fieldValue = $this->getValue($fieldName);
-            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			if (!isset($options['fieldValue'])) 
 			{
-                    return true;
-            }
+				$fieldValue = $this->input->post($fieldName);
+			} 
+			else 
+			{
+				$fieldValue = $options['fieldValue'];
+			}
             if ( !isset($options['message']) ) 
 			{
-                    $options['message'] = 'The '. strtolower(Inflector::humanize($fieldName)) . ' you entered is already in use by another record. The '. strtolower(Inflector::humanize($fieldName)) . ' must be unique.';
+				$options['message'] = 'The value you entered is already in use by another record.';
             }
             if ( !isset($options['on']) ) 
 			{
-                    $options['on'] = 'save';
+				$options['on'] = 'save';
             }
-			$hasAny_conditions = $this->name . '.' . $fieldName . '=\'' . $fieldValue . '\'';
+			$record = $this->find($fieldValue);
 			if ($this->action != 'create') 
 			{
-				$hasAny_conditions .= ' AND ' . $this->name . '.id !=\'' . $this->id . '\'';
+				//non-create code here
 			}
-			if ( $this->hasAny($hasAny_conditions)) 
+			if ($record) 
 			{
-			       $this->validationErrors[$fieldName] = $options['message'];
+				$this->validationErrors[$fieldName] = $options['message'];
 			}
-    }*/
+    }
 	
 }
 
