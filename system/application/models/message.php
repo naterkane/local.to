@@ -19,7 +19,6 @@ class Message extends App_Model
         $message = str_replace("\n", " ", $message);
         $message = $username . "|" . $time . "|" . $message;
         $this->save($message_id, $message);
-        $this->addToUserPublic($username, $message_id);        
 		$this->addToUserPrivate($username, $message_id);
 		$groups = $this->Group->getGroups($message);
 		if (!empty($groups)) 
@@ -38,6 +37,7 @@ class Message extends App_Model
 		} 
 		else 
 		{
+        	$this->addToUserPublic($username, $message_id);        			
 			$this->addToPublicTimeline($message_id);
 		}
         return $message_id;
@@ -83,7 +83,7 @@ class Message extends App_Model
 		$members = $this->Group->getMembers($groupname);
 		foreach ($members as $member) 
 		{
-			$this->addToUser($member, $message_id);
+			$this->addToUserPrivate($member, $message_id);
 		}
 	}
 
