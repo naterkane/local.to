@@ -116,7 +116,7 @@ class Users extends App_Controller
             $this->getUserData();
             $this->data['title'] = 'Home';
             $this->data['username'] = $username;
-            $this->data['messages'] = $this->Message->getForUser($username);
+            $this->data['messages'] = $this->Message->getPublic($username);
             $this->data['is_following'] = $this->User->isFollowing($username, $this->userData['username']);
             $this->load->view('users/view', $this->data);
         }

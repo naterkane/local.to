@@ -16,11 +16,11 @@ class App_Model extends Model {
 	private $prefixGroupMessages = 'groupsmessages';	
 	private $prefixGroupOwner = 'groupsowner';	
 	private $prefixMessage = 'messages';
-	private $prefixPrivate = 'userprivate';
 	private $prefixPublic = 'timeline';
 	private $prefixSeparator = ':';	
 	private $prefixUser = 'users';
-	private $prefixUserMessages = 'userpublic';
+	private $prefixUserPublic = 'userpublic';
+	private $prefixUserPrivate = 'userprivate';	
 	public $action;
 	public $id;	
 	public $modelData = array();
@@ -250,9 +250,21 @@ class App_Model extends Model {
 	 * @param string $username
 	 * @return string
 	 */
-	function prefixUserMessages($username)
+	function prefixUserPrivate($username)
 	{ 
-		return $this->prefixUserMessages . $this->prefixSeparator . $username; 
+		return $this->prefixUserPrivate . $this->prefixSeparator . $username; 
+	}
+
+	/**
+	 * Create a prefix for user messages
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */
+	function prefixUserPublic($username)
+	{ 
+		return $this->prefixUserPublic . $this->prefixSeparator . $username; 
 	}
 
 	/**

@@ -19,7 +19,8 @@ class Message extends App_Model
         $message = str_replace("\n", " ", $message);
         $message = $username . "|" . $time . "|" . $message;
         $this->save($message_id, $message);
-        $this->addToUser($username, $message_id);
+        $this->addToUserPublic($username, $message_id);        
+		$this->addToUserPrivate($username, $message_id);
 		$groups = $this->Group->getGroups($message);
 		if (!empty($groups)) 
 		{
@@ -43,17 +44,30 @@ class Message extends App_Model
     }
 
 	/**
-	 * Add to message to user
+	 * Add to message to user's private facing list
 	 *
 	 * @access public
 	 * @param string $username
 	 * @param string $message_id
 	 * @return 
 	 */
-	function addToUser($username, $message_id)
+	function addToUserPrivate($username, $message_id)
 	{
-		return $this->push($this->prefixUserMessages($username), $message_id);
+		return $this->push($this->prefixUserPrivate($username), $message_id);
 	}
+
+	/**
+	 * Add to message to user's public facing list
+	 *
+	 * @access public
+	 * @param string $username
+	 * @param string $message_id
+	 * @return 
+	 */
+	function addToUserPublic($username, $message_id)
+	{
+		return $this->push($this->prefixUserPublic($username), $message_id);
+	}	
   
 	/**
 	 * Add to message to group
@@ -98,18 +112,6 @@ class Message extends App_Model
     {		
         return null;
     }
-   
-    /**
-     * Get Messages for user
-     *
-     * @param string $username[optional]
-     * @return array Messages
-     */
-    function getForUser($username = null)
-    {
-        $messages = $this->find($this->prefixUserMessages($username));
-        return $this->getMany($messages);
-    }
   
     /**
      * Get Messages for user
@@ -129,7 +131,7 @@ class Message extends App_Model
      * @return
      * @param object $messages
      */
-    function getmany($messages)
+    function getMany($messages)
     {
         $return = array();
 		if ($messages) {
@@ -158,13 +160,25 @@ class Message extends App_Model
 	}
 
     /**
+     * Get Messages for user
+     *
+     * @param string $username[optional]
+     * @return array Messages
+     */
+    function getPublic($username = null)
+    {
+        $messages = $this->find($this->prefixUserPublic($username));
+        return $this->getMany($messages);
+    }
+
+    /**
      *
      * @return
      * @param object $username
      */
     function getPrivate($username)
     {
-        $messages = $this->find($this->prefixPrivate($username));
+        $messages = $this->find($this->prefixUserPrivate($username));
         return $this->getMany($messages);
     }
    
