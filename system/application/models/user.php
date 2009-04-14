@@ -157,7 +157,7 @@ class User extends App_Model
 		{
 			foreach ($followers as $follower)
 	        {
-	            $this->push($this->prefixPrivate($follower), $message_id);
+	            $this->push($this->prefixUserPrivate($follower), $message_id);
 	        }
 		}
         return true;
@@ -211,7 +211,7 @@ class User extends App_Model
 		if ($this->save($this->prefixUser($data['username']), $user)) 
 		{
 	        $this->push($this->prefixFollower($data['username']), $data['username']);
-			$this->push($this->prefixPrivate($data['username']), $message_id);
+			$this->push($this->prefixUserPrivate($data['username']), $message_id);
         	return true;			
 		} else {
         	return false;

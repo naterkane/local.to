@@ -209,18 +209,6 @@ class App_Model extends Model {
 	}
 	
 	/**
-	 * Create a prefix for private messages
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */	
-	function prefixPrivate($username)
-	{ 
-		return $this->prefixPrivate . $this->prefixSeparator . $username; 
-	}
-	
-	/**
 	 * Create a prefix for public messages
 	 * 
 	 * @access public
