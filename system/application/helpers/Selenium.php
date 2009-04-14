@@ -193,12 +193,13 @@ class Selenium
 	* @return
 	* @access public
 	*/	
-	public function signUp($name, $password)
+	public function signUp($name, $password, $email)
 	{
 		$this->openPage('/signup');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);
 		$this->write('type', 'passwordconfirm', $password);	
+		$this->write('type', 'email', $email);		
 		$this->click('Sign Up');
 		$this->write('verifyTextPresent', 'Your account has been created. Please sign in.');		
 	}

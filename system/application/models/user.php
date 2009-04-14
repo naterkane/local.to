@@ -4,6 +4,7 @@
  */
 class User extends App_Model
 {
+	
 	/**
 	 * Get a User's data by username
 	 *
@@ -202,13 +203,10 @@ class User extends App_Model
         $user = array();
         $now = time();
         $this->mode = 'signup';
-        $user['username'] = $data['username'];	
-        $user['activated'] = 1;
-        $user['password'] = $data['password'];
-        $user['passwordconfirm'] = $data['passwordconfirm'];
-        $user['created'] = $now;
-        $user['modified'] = $now;
-		if ($this->save($this->prefixUser($data['username']), $user)) 
+        $data['activated'] = 1;
+        $data['created'] = $now;
+        $data['modified'] = $now;
+		if ($this->save($this->prefixUser($data['username']), $data)) 
 		{
 	        $this->push($this->prefixFollower($data['username']), $data['username']);
 			$this->push($this->prefixUserPrivate($data['username']), $message_id);
@@ -229,6 +227,8 @@ class User extends App_Model
 		if ($this->mode == 'signup') 
 		{
 			$this->setAction();
+			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required'));
+			$this->validates_presence_of('email', array('message'=>'A valid email is required'));
 			$this->validates_length_of('username', array('min'=>6, 'max'=>25, 'message'=>'A username must be between 6 and 25 characters long'));
 			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken', 'fieldValue'=>$this->prefixUser($this->input->post('username'))));
 			$this->validates_format_of('username', array('with'=>'/^\w+$/', 'message'=>'A username may only be made up of numbers and letters'));
@@ -236,9 +236,9 @@ class User extends App_Model
 			$this->validates_length_of('password', array('min'=>6, 'max'=>25, 'message'=>'A password must be between 6 and 25 characters long'));
 			$this->validates_callback('passwordUsernameDoNotMatch', 'password', array('message'=>'Your password cannot be the same as your username'));
 			$this->validates_callback('passwordsMatch', 'password', array('message'=>'Your password and the confirmation do not match'));
-			$this->validates_format_of('password', array('with'=>'/^\w+$/', 'message'=>'A password may only be made up of numbers and letters'));	
+			$this->validates_format_of('password', array('with'=>'/^\w+$/', 'message'=>'A password may only be made up of numbers and letters'));
 			$this->validates_presence_of('password', array('message'=>'A password is required'));
-			$this->modelData['password'] = $this->hashPassword($this->modelData['password']);	//has here in order not to screw up character counts and matching
+			$this->modelData['password'] = $this->hashPassword($this->modelData['password']);	//has to be here in order not to screw up character counts and matching
 		}
 	    return (count($this->validationErrors) == 0);
 	}

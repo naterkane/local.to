@@ -1,8 +1,10 @@
 <?php
 	$name = $this->selenium->randomString(10);
 	$password = $this->selenium->randomString(10);	
+	$email = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';	
 	$name2 = $this->selenium->randomString(10);
 	$password2 = $this->selenium->randomString(10);	
+	$email2 = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';	
 	$group = $this->selenium->randomString(10);
 	$group_message = "This is a !$group test.";
 	$non_group_message = $this->selenium->randomString(10);	
@@ -10,7 +12,7 @@
 	//create first account and sign out
 	$this->selenium->openPage('/admin/flush');
 	$this->selenium->signOut();	
-	$this->selenium->signUp($name, $password);
+	$this->selenium->signUp($name, $password, $email);
 	$this->selenium->signIn($name, $password);
 	//create a group
 	$this->selenium->openPage('/groups/add');
@@ -21,7 +23,7 @@
 	$this->selenium->write('verifyTextPresent', 'Unsubscribe');	
 	//create second account	
 	$this->selenium->signOut();	
-	$this->selenium->signUp($name2, $password2);
+	$this->selenium->signUp($name2, $password2, $email2);
 	$this->selenium->signIn($name2, $password2);
 	//subscribe to group
 	$this->selenium->openPage('/group/' . $group);	

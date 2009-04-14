@@ -448,7 +448,7 @@ class App_Model extends Model {
 
     function validates_format_of($fieldName, $options=array()) 
 	{
-		$fieldValue = $this->getValue($fieldName);
+		$fieldValue = $this->getValue($fieldName);		
 		if ( !isset($options['message']) ) 
 		{	
 			$options['message'] = 'Field has an invalid format.';

@@ -9,10 +9,15 @@
 		<label for="password">Password</label>
 		<?php echo $this->form->input('password', array('type'=>'password')) ?>
 		<?php echo $this->form->error('password') ?>			
-	</div>
+	</div>	
 	<div class="mod">
 		<label for="password">Password Confirm</label>
 		<?php echo $this->form->input('passwordconfirm', array('type'=>'password')) ?>
 	</div>
+	<div class="mod">
+		<label for="email">Email</label>
+		<?php echo $this->form->input('email') ?>
+		<?php echo $this->form->error('email') ?>			
+	</div>	
 	<p><input type="submit" value="Sign Up"></p>
 </form>
