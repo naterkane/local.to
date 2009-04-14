@@ -82,6 +82,11 @@ class Users extends App_Controller
             {
                 $this->redirect('/users/signin', 'Your account has been created. Please sign in.');
             }
+			else 
+			{
+				$this->setErrors(array('User'));
+                $this->cookie->setFlash('There was an error signing up. Please see below for details.', 'error');
+			}
         }
         $this->load->view('users/signup', $this->data);
     }

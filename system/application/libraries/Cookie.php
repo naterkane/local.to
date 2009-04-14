@@ -32,7 +32,8 @@ class Cookie {
 	 */
 	function check()
 	{
-		if (!$this->exists()) {
+		if (!$this->exists()) 
+		{
 			$this->create();
 		}
 	}
@@ -59,7 +60,8 @@ class Cookie {
 	function delete() 
 	{
 		setcookie($this->name, '', time()-60000, $this->domain);		
-		if ($this->exists()) {
+		if ($this->exists()) 
+		{
 			$this->controller->Cookie_model->delete($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
 		}
 	}
@@ -84,13 +86,16 @@ class Cookie {
 	function flashMessage()
 	{
 		$return = null;
-		if ($this->exists()) {
+		if ($this->exists()) 
+		{
 			$data = $this->getAllData();
-			if (!empty($data['flash_message'])) {
-				$return = "<div id=\"flashMesage\" class=\"" . $data['flash_type'] . "\">" . $data['flash_message'] . "</div>\n";
+			if (!empty($data['flash_message'])) 
+			{
+				$return = "<div id=\"flashMessage\" class=\"" . $data['flash_type'] . "\">" . $data['flash_message'] . "</div>\n";
 				unset($data['flash_message']);
 			}
-			if (!empty($data['flash_type'])) {
+			if (!empty($data['flash_type'])) 
+			{
 				unset($data['flash_type']);
 			}
 			$this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $data);
@@ -109,9 +114,12 @@ class Cookie {
 	function get($key)
 	{		
 		$data = $this->getAllData();
-		if (isset($data[$key])) {
+		if (isset($data[$key])) 
+		{
 			return $data[$key];
-		} else {
+		} 
+		else 
+		{
 			return;
 		}
 	}
@@ -124,7 +132,8 @@ class Cookie {
 	 */
 	function getAllData()
 	{
-		if ($this->exists()) {
+		if ($this->exists()) 
+		{
 			return $this->controller->Cookie_model->find($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
 		} else {
 			return;
@@ -141,9 +150,11 @@ class Cookie {
 	 */
 	function remove($key)
 	{
-		if ($this->exists()) {
+		if ($this->exists()) 
+		{
 			$cookie = $this->getAllData();
-			if (isset($cookie[$key])) {
+			if (isset($cookie[$key])) 
+			{
 				unset($cookie[$key]);
 			}
 			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
@@ -160,7 +171,8 @@ class Cookie {
 	 */
 	function set($key, $data)
 	{
-		if ($this->exists()) {	
+		if ($this->exists()) 
+		{	
 			$cookie = $this->getAllData();
 			$cookie[$key] = $data;
 			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
@@ -177,7 +189,8 @@ class Cookie {
 	 */
 	public function setFlash($message, $type = null)
 	{
-		if (!$type) {
+		if (!$type) 
+		{
 			$type = 'success';
 		}
 		$data = $this->getAllData();

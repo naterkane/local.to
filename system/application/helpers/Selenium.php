@@ -198,6 +198,7 @@ class Selenium
 		$this->openPage('/users/signup');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);
+		$this->write('type', 'passwordconfirm', $password);	
 		$this->click('Sign Up');
 		$this->write('verifyTextPresent', 'Your account has been created. Please sign in.');		
 	}

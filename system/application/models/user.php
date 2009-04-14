@@ -92,7 +92,26 @@ class User extends App_Model
 			return false;
 		}
     }
-   
+ 
+	function passwordsMatch()
+	{
+		if ((isset($this->modelData['password'])) && (isset($this->modelData['passwordconfirm'])))
+		{
+			if ($this->modelData['password'] == $this->modelData['passwordconfirm']) 
+			{
+				return true;
+			} 
+			else 
+			{
+				return false;
+			}		
+		} 
+		else 
+		{
+			return false;
+		}
+	}
+  
     /**
      * Send messages to followes
      *
@@ -103,7 +122,8 @@ class User extends App_Model
     function sendToFollowers($message_id, $username)
     {
         $followers = $this->getFollowers($username);
-		if ($followers) {
+		if ($followers) 
+		{
 			foreach ($followers as $follower)
 	        {
 	            $this->push($this->prefixPrivate($follower), $message_id);
@@ -152,16 +172,46 @@ class User extends App_Model
         $now = time();
         $this->mode = 'signup';
         $user['username'] = $data['username'];
-        $user['password'] = $this->hashPassword($data['password']);
+		if (!empty($data['password'])) 
+		{
+			$user['password'] = $this->hashPassword($data['password']);
+		}
+		if (!empty($data['passwordconfirm'])) 
+		{
+			$user['passwordconfirm'] = $this->hashPassword($data['passwordconfirm']);
+		}		
         $user['activated'] = 1;
         $user['created'] = $now;
         $user['modified'] = $now;
-        $this->save($this->prefixUser($data['username']), $user);
-        $this->push($this->prefixFollower($data['username']), $data['username']);
-		$this->push($this->prefixPrivate($data['username']), $message_id);
-        return true;
+		if ($this->save($this->prefixUser($data['username']), $user)) 
+		{
+	        $this->push($this->prefixFollower($data['username']), $data['username']);
+			$this->push($this->prefixPrivate($data['username']), $message_id);
+        	return true;			
+		} else {
+        	return false;
+		}
     }
    
+	/**
+	 * Validates a user
+	 *
+	 * @access public
+	 * @return 
+	 */	
+	function validate()
+	{
+		if ($this->mode == 'signup') 
+		{
+			$this->setAction();
+			$this->validates_presence_of('username', array('message'=>'A user name is required'));
+			$this->validates_callback('passwordsMatch', 'password', array('message'=>'Your password and the confirmation do not match'));	
+			$this->validates_presence_of('password', array('message'=>'A password is required'));
+		}
+	    return (count($this->validationErrors) == 0);
+	}
+	
+
 }
 
 ?>

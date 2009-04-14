@@ -21,9 +21,12 @@ class App_Model extends Model {
 	private $prefixSeparator = ':';	
 	private $prefixUser = 'users';
 	private $prefixUserMessages = 'userpublic';
+	public $action;
+	public $id;	
 	public $modelData = array();
-	public $validationErrors = array();
 	public $mode;	
+	public $validate = true;
+	public $validationErrors = array();	
 
 	function __construct()
 	{
@@ -34,7 +37,8 @@ class App_Model extends Model {
 	/**
 	 * Delete a record
 	 */
-	function delete($key) {
+	function delete($key) 
+	{
 		return $this->mem->delete($key);
 	}
 
@@ -44,23 +48,53 @@ class App_Model extends Model {
 	 * @todo This needs to behave differently depending on DB type selected. Right now does redis work which should move to redis library extension
 	 * @access public
 	 */
-	function find($key) {
+	function find($key) 
+	{
 		$data = $this->mem->get($key);
-		if ($this->isSerialized($data)) {
+		if ($this->isSerialized($data)) 
+		{
 			$data = unserialize($data);
 		}
 		return $data;
 	}
 
 	/**
-	 * Return the number of validation errors
+	 * Get Value from model data
 	 *
-	 * @return int Number of errors
 	 * @access public
+	 * @param $value
+	 * @return 
 	 */
-	function invalidFields() {
-		return count($this->validationErrors);
+	function getValue($fieldname)
+	{
+		if (isset($this->modelData[$fieldname])) 
+		{
+			return $this->modelData[$fieldname];
+		} 
+		else 
+		{
+			return null;
+		}	
 	}
+
+	/**
+	 * Is there an error>
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	function isValid()
+	{
+		if (count($this->validationErrors) > 0) 
+		{
+			return true;
+		} 
+		else 
+		{
+			return false;
+		}
+	}
+	
 
 	/**
 	 * Is a string serialized?
@@ -68,7 +102,8 @@ class App_Model extends Model {
 	 * @param string
 	 * @return boolean 	
 	 */
-	function isSerialized($str) {
+	function isSerialized($str) 
+	{
 	    return ($str == serialize(false) || @unserialize($str) !== false);
 	}
 
@@ -272,13 +307,28 @@ class App_Model extends Model {
 	 * @return boolean
 	 * @access public
 	 */
-	function save($key, $data) {
+	function save($key, $data) 
+	{
 		$this->modelData = $data;
-		if ($this->validate()) {
-			return $this->mem->set($key, $data);
+		if ($this->validate) {
+			if ($this->validate()) {
+				return $this->mem->set($key, $data);
+			} else {
+				return false;
+			}
 		} else {
-			return false;
+			return $this->mem->set($key, $data);			
 		}
+	}
+
+	function setAction()
+	{
+        if (empty($this->id)) {
+                $this->action = 'create';
+        } else {
+                $this->action = 'update';
+        }
+        return true;
 	}
 	
 	/**
@@ -286,14 +336,314 @@ class App_Model extends Model {
 	 *
 	 * Empty method to be inherited by models. 
 	 *
-	 * @todo Hook up to CI's validation class
 	 * @param array $data
 	 * @return boolean
 	 * @access public
 	 */	
-	function validate() {
+	function validate() 
+	{
 		return true;
 	}
+
+	/**
+	 * Validate by calling a user-created callback
+	 *
+	 * @param string $callback
+	 * @param string $fieldName Name of field to be validated
+	 * @param array $options[optional]
+	 * @return boolean
+	 * @access public
+	 */	
+	function validates_callback ($callback, $fieldName,$options=array()) 
+	{
+        if ( !isset($options['message']) ) 
+		{
+                $options['message'] = 'The field is incorrectly entered.';
+        }		
+		if (!call_user_func(array($this, $callback))) 
+		{
+			$this->validationErrors[$fieldName] = $options['message'];
+		}
+	}
+
+	/* Pending
+    function validates_condition_of($conditions, $fieldName,$options=array()) 
+	{
+			$fieldValue = $this->getValue($fieldName);
+            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			{
+                    return true;
+            }
+            if ( !isset($options['message']) ) 
+			{
+                    $options['message'] = 'The '. strtolower(Inflector::humanize($fieldName)) . ' you entered is already in use by another record. The '. strtolower(Inflector::humanize($fieldName)) . ' must be unique.';
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+			$hasAny_conditions = $conditions;
+			if ($this->id) 
+			{
+				$hasAny_conditions .= ' AND ' . $this->name . '.id!=' . $this->id;				
+			}
+			if ( $this->hasAny($hasAny_conditions)) 
+			{
+				$this->validationErrors[$fieldName] = $options['message'];
+			}
+    }*/
+
+	/* Pending
+	function validates_existence_of($fieldName, $options=array())  
+	{
+		$fieldValue = $this->getValue($fieldName);
+        if ( @$options['allow_null'] && ($fieldValue == null) ) 
+		{
+                return true;
+        }
+        if ( !isset($options['message']) ) 
+		{
+                $options['message'] = 'The '. strtolower(Inflector::humanize($fieldName)) . ' you entered is already in use by another record. The '. strtolower(Inflector::humanize($fieldName)) . ' must be unique.';
+        }
+        if ( !isset($options['on']) ) 
+		{
+                $options['on'] = 'save';
+        }
+		$hasAny_conditions = $this->name . '.' . $fieldName . '=\'' . $fieldValue . '\'';
+		if ($this->action != 'create') 
+		{
+			$hasAny_conditions .= ' AND ' . $this->name . '.id !=\'' . $this->id . '\'';
+		}
+		if ( !$this->hasAny($hasAny_conditions)) 
+		{
+		       $this->validationErrors[$fieldName] = $options['message'];
+		}
+	}*/
+
+	/* Pending
+    function validates_exclusion_of($fieldName,$options=array()) 
+	{
+			$fieldValue = $this->getValue($fieldName);
+            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			{
+                    return true;
+            }
+            if ( !isset($options['in']) ) 
+			{
+                    $options['in'] = array();
+            }
+            if ( !isset($options['message']) ) {
+                    $options['message'] = 'This ' . Inflector::humanize($fieldName) . ' is reserved by the system and can not be used.';
+            }
+            if ( !isset($options['on']) ) {
+                    $options['on'] = 'save';
+            }
+            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+			{
+                    if ( in_array($fieldValue,$options['in']) ) {
+                            $this->validationErrors[$fieldName] = $options['message'];
+                    }
+            }
+    }*/
+
+	/* Pending
+    function validates_format_of($fieldName,$options=array()) 
+	{
+			$fieldValue = $this->getValue($fieldName);
+            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			{
+                    return true;
+            }
+            if ( !isset($options['message']) ) 
+			{	
+                    $options['message'] = Inflector::humanize($fieldName) . ' has an invalid format.';
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+            if ( !isset($options['with']) ) 
+			{
+                    $options['with'] = '//';
+            }
+            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+			{
+                    if ( !preg_match($options['with'],$fieldValue) ) 
+					{
+                            $this->validationErrors[$fieldName] = $options['message'];
+                    }
+            }
+    }*/
+
+	/* Pending
+    function validates_inclusion_of($fieldName,$options=array()) 
+	{
+            $fieldValue = $this->getValue($this->data);
+            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			{
+                    return true;
+            }
+            if ( !isset($options['in']) ) 
+			{
+                    $options['in'] = array();
+            }
+            if ( !isset($options['message']) ) 
+			{
+                    $options['message'] = Inflector::humanize($fieldName) . ' should be one of the following: ' . join(', ' ,$options['in']) . '.';
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+			{
+                    if ( !in_array($fieldValue,$options['in']) ) 
+					{
+                            $this->validationErrors[$fieldName] = $options['message'];
+                    }
+            }
+    }*/
+
+	/* Pending
+    function validates_length_of($fieldName,$options=array()) 
+	{
+            $fieldValue = $this->getValue($this->data);
+            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			{
+                    return true;
+            }
+            if ( !isset($options['message']) ) 
+			{
+                    $options['message'] = 'Field has the wrong length.';
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+			{
+					if (( strlen($fieldValue) > $options['max'] ) || ( strlen($fieldValue) < $options['min'] ))
+					{
+					        $this->validationErrors[$fieldName] = $options['message'];
+					}
+            }
+    }*/
+
+	/* Pending
+    function validates_numericality_of($fieldName,$options=array()) 
+	{
+            $fieldValue = $this->getValue($this->data);
+            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			{
+                    return true;
+            }
+            if ( !isset($options['only_integer']) ) 
+			{
+                    $options['only_integer'] = false;
+            }
+            if ( !isset($options['message']) ) 
+			{
+                    if ( $options['only_integer'] ) 
+					{
+                            $options['message'] = Inflector::humanize($fieldName) . ' should be an integer.';
+                    } else {
+                            $options['message'] = Inflector::humanize($fieldName) . ' should be a number.';
+                    }
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+			{
+                    if (!is_numeric($fieldValue) || ( $options['only_integer'] && !is_int($fieldValue) )) 
+					{
+                            $this->validationErrors[$fieldName] = $options['message'];
+                    }
+            }
+    }*/
+
+	/**
+	 * Validate by checking for field value presence
+	 *
+	 * @param string $fieldName Name of field to be validated
+	 * @param array $options[optional]
+	 * @return boolean
+	 * @access public
+	 */
+    function validates_presence_of($fieldName, $options=array()) 
+	{
+			$fieldValue = $this->getValue($fieldName);
+            if ( !isset($options['message']) ) 
+			{
+				$options['message'] = 'This field is required.';
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+			{	
+				if ($fieldValue == '') 
+				{
+					$this->validationErrors[$fieldName] = $options['message'];
+				}			
+            }
+    }
+
+	/* Pending
+    function validates_quantity_of($fieldName,$options=array()) 
+	{
+	        if ( !isset($options['less_than']) ) 
+			{
+	                $options['less_than'] = 100;
+	        }
+	        if ( !isset($options['more_than']) ) 
+			{
+	                $options['more_than'] = 0;
+	        }	
+            if ( !isset($options['message']) ) 
+			{
+                    $options['message'] = Inflector::humanize($fieldName) . ' must be between ' . $options['more_than'] . ' and ' . $options['less_than'] . '.';
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+            if ( (($options['on'] == 'save') || ($options['on'] == $this->action)) ) 
+			{
+                    if (($this->data[$this->name][$fieldName] > $options['less_than']) || ($this->data[$this->name][$fieldName] < $options['more_than'])) {
+                            $this->validationErrors[$fieldName] = $options['message'];
+                    }
+            }
+    }*/
+
+	/* Pending
+    function validates_uniqueness_of($fieldName, $options=array()) 
+	{
+			$fieldValue = $this->getValue($fieldName);
+            if ( @$options['allow_null'] && ($fieldValue == null) ) 
+			{
+                    return true;
+            }
+            if ( !isset($options['message']) ) 
+			{
+                    $options['message'] = 'The '. strtolower(Inflector::humanize($fieldName)) . ' you entered is already in use by another record. The '. strtolower(Inflector::humanize($fieldName)) . ' must be unique.';
+            }
+            if ( !isset($options['on']) ) 
+			{
+                    $options['on'] = 'save';
+            }
+			$hasAny_conditions = $this->name . '.' . $fieldName . '=\'' . $fieldValue . '\'';
+			if ($this->action != 'create') 
+			{
+				$hasAny_conditions .= ' AND ' . $this->name . '.id !=\'' . $this->id . '\'';
+			}
+			if ( $this->hasAny($hasAny_conditions)) 
+			{
+			       $this->validationErrors[$fieldName] = $options['message'];
+			}
+    }*/
 	
 }
 

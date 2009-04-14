@@ -67,7 +67,8 @@ class Message extends App_Model
 	{
 		$this->push($this->prefixGroupMessages($groupname), $message_id);
 		$members = $this->Group->getMembers($groupname);
-		foreach ($members as $member) {
+		foreach ($members as $member) 
+		{
 			$this->addToUser($member, $message_id);
 		}
 	}

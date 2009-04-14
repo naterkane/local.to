@@ -64,6 +64,18 @@ class Html
 			'li' => '<li%s>%s</li>',
 			'error' => '<div%s>%s</div>'
 		);
+	var $validationErrors = array();
+
+	/**
+	 * Construct
+	 *
+	 */
+	function __construct()
+	{
+		$ci = get_instance();
+		$this->input = $ci->input;
+	}
+	
 
 	/**
 	 * @param  string $key
@@ -84,7 +96,7 @@ class Html
 				$attribute = sprintf($attributeFormat, $key, $key);
 			}
 		} else {
-			$attribute = sprintf($attributeFormat, $key, ($escape ? h($value) : $value));
+			$attribute = sprintf($attributeFormat, $key, ($escape ? $this->encode($value) : $value));
 		}
 		return $attribute;
 	}
@@ -159,6 +171,7 @@ class Html
 		}
 		return htmlspecialchars($text, ENT_QUOTES, $charset);
 	}
+	
 	
 	/**
 	 * Message

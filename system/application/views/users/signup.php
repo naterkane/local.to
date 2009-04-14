@@ -2,15 +2,17 @@
 <form action="/users/signup" method="post" accept-charset="utf-8">
 	<div class="mod">
 		<label for="username">User Name</label>
-		<input type="text" name="username" value="" id="username" />
+		<?php echo $this->form->input('username') ?>
+		<?php echo $this->form->error('username') ?>	
 	</div>
 	<div class="mod">
 		<label for="password">Password</label>
-		<input type="password" name="password" value="" id="password" />
+		<?php echo $this->form->input('password', array('type'=>'password')) ?>
+		<?php echo $this->form->error('password') ?>			
 	</div>
 	<div class="mod">
 		<label for="password">Password Confirm</label>
-		<input type="password" name="passwordconfirm" value="" id="passwordconfirm" />
+		<?php echo $this->form->input('passwordconfirm', array('type'=>'password')) ?>
 	</div>
 	<p><input type="submit" value="Sign Up"></p>
 </form>

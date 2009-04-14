@@ -62,15 +62,20 @@ class App_router extends CI_Router
 			}
 
 			return $segments;
-		} else {
-			if ((isset($segments[1])) && (isset($segments[2])) && ($segments[1] == 'status')) {
+		} 
+		else 
+		{
+			if ((isset($segments[1])) && (isset($segments[2])) && ($segments[1] == 'status')) 
+			{
 				$username = $segments[0];
 				$time = $segments[2];	
 				$segments[0] = 'messages';
 				$segments[1] = 'view';
 				$segments[2] = $username;
 				$segments[3] = $time;				
-			} else {
+			} 
+			else 
+			{
 				$username = $segments[0];
 				$segments[0] = 'users';
 				$segments[1] = 'view';			

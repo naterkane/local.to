@@ -29,11 +29,14 @@ class Group extends App_Model
 	 */
 	function addMember($name, $member)
 	{
-		if (!empty($member)) {
+		if (!empty($member)) 
+		{
 			$previous_members = $this->getMembers($name);
 			$previous_members[] = $member;
 			return $this->save($this->prefixGroup($name), $previous_members);
-		} else {
+		} 
+		else 
+		{
 			return true;
 		}		
 	}
@@ -48,9 +51,12 @@ class Group extends App_Model
 	function getGroups($message)
 	{
 		preg_match_all(GROUP_MATCH, $message, $groups);
-		if (isset($groups[2])) {
+		if (isset($groups[2])) 
+		{
 			return $groups[2];
-		} else {
+		} 
+		else 
+		{
 			return array();
 		}
 	}
@@ -91,12 +97,16 @@ class Group extends App_Model
 	 */
 	function isAMember($name, $user_name, $members = array())
 	{
-		if (empty($members)) {
+		if (empty($members)) 
+		{
 			$members = $this->getMembers($name);
 		}
-		if (is_array($members)) {
+		if (is_array($members)) 
+		{
 			return in_array($user_name, $members);
-		} else {
+		} 
+		else 
+		{
 			return false;
 		}
 	}
@@ -112,11 +122,14 @@ class Group extends App_Model
 	function removeMember($name, $member)
 	{
 		$owner = $this->getOwner($name);
-		if ($member != $owner) {
+		if ($member != $owner) 
+		{
 			$previous_members = $this->getMembers($name);
 			$new_lineup = array();
-			foreach ($previous_members as $previous_member) {
-				if ($previous_member != $member) {
+			foreach ($previous_members as $previous_member) 
+			{
+				if ($previous_member != $member) 
+				{
 					$new_lineup[] = $previous_member;
 				}
 			}
