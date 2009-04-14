@@ -1,5 +1,5 @@
 <h2>Sign Up</h2>
-<form action="/users/signup" method="post" accept-charset="utf-8">
+<form action="/signup" method="post" accept-charset="utf-8">
 	<div class="mod">
 		<label for="username">User Name</label>
 		<?php echo $this->form->input('username') ?>

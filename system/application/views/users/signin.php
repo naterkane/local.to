@@ -1,5 +1,5 @@
 <h2>Sign In</h2>
-<form action="/users/signin" method="post" accept-charset="utf-8">
+<form action="/signin" method="post" accept-charset="utf-8">
 	<div class="mod">
 		<label for="username">User Name</label>
 		<input type="text" name="username" value="" id="username" />

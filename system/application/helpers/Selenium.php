@@ -166,7 +166,7 @@ class Selenium
 	*/
 	public function signIn($name, $password)
 	{
-		$this->openPage('/users/signin');
+		$this->openPage('/signin');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);	
 		$this->click('Sign In');;
@@ -180,7 +180,7 @@ class Selenium
 	*/
 	public function signOut()
 	{
-		$this->openPage('/users/signout');
+		$this->openPage('/signout');
 		//$this->write('verifyTextPresent', 'You have successfully signed out.');	
 	}
 
@@ -195,7 +195,7 @@ class Selenium
 	*/	
 	public function signUp($name, $password)
 	{
-		$this->openPage('/users/signup');
+		$this->openPage('/signup');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);
 		$this->write('type', 'passwordconfirm', $password);	

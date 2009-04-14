@@ -14,9 +14,9 @@
 		<a href="/">Microblog</a>
 		<?php
 		if (!empty($User)) {
-			echo "<a href=\"/home\">Home</a> <a href=\"/{$User['username']}\">Profile</a> <a href=\"/users/signout\">Sign Out</a>";
+			echo "<a href=\"/home\">Home</a> <a href=\"/{$User['username']}\">Profile</a> <a href=\"/signout\">Sign Out</a>";
 		} else {
-			echo "<a href=\"/users/signin\">Sign In</a> <a href=\"/users/signup\">Sign Up</a>";
+			echo "<a href=\"/signin\">Sign In</a> <a href=\"/signup\">Sign Up</a>";
 		}
 		?>
 	</p>

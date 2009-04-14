@@ -63,7 +63,7 @@ class App_Controller extends Controller {
         $this->getUserData();
         if ( empty($this->userData)) 
 		{
-            $this->redirect('/users/signin', 'You must sign in to view this page.', 'error');
+            $this->redirect('/signin', 'You must sign in to view this page.', 'error');
         }
     }
    

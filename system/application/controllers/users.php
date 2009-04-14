@@ -80,7 +80,7 @@ class Users extends App_Controller
         {
             if ($this->User->signUp($this->postData))
             {
-                $this->redirect('/users/signin', 'Your account has been created. Please sign in.');
+                $this->redirect('/signin', 'Your account has been created. Please sign in.');
             }
 			else 
 			{
