@@ -58,11 +58,15 @@ class Users extends App_Controller
         if ($this->postData)
         {
             $user = $this->User->signIn($this->postData);
-            if (! empty($user))
+            if (empty($user))
             {
-                $this->cookie->set('user', $user);
-                $this->redirect('/home');
+				$this->cookie->setFlash('The username and password do not match any in our records.', 'error');
             }
+			else 
+			{
+				$this->cookie->set('user', $user);
+                $this->redirect('/home');
+			}
         }
         $this->load->view('users/signin', $this->data);
     }

@@ -167,9 +167,13 @@ class Selenium
 	public function signIn($name, $password)
 	{
 		$this->openPage('/signin');
+		$this->write('type', 'username', $this->randomString(10));
+		$this->write('type', 'password', $this->randomString(10));		
+		$this->click('Sign In');
+		$this->write('verifyTextPresent', 'The username and password do not match any in our records.');		
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);	
-		$this->click('Sign In');;
+		$this->click('Sign In');
 		$this->write('verifyTextPresent', 'Hello ' . $name);
 	}
 
@@ -199,7 +203,7 @@ class Selenium
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);
 		$this->write('type', 'passwordconfirm', $password);	
-		$this->write('type', 'email', $email);		
+		$this->write('type', 'email', $email);
 		$this->click('Sign Up');
 		$this->write('verifyTextPresent', 'Your account has been created. Please sign in.');		
 	}

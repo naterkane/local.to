@@ -63,7 +63,7 @@
 	$this->selenium->write('type', 'passwordconfirm', $password . '!');	
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);
-	$this->selenium->write('verifyTextPresent', 'A password may only be made up of numbers and letters');
+	$this->selenium->write('verifyTextPresent', 'A password may only be made up of numbers and letters');	
 	//sign up
 	$this->selenium->signUp($name, $password, $email);
 	$this->selenium->signIn($name, $password);
