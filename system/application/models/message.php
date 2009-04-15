@@ -13,34 +13,33 @@ class Message extends App_Model
      */
     function add($message = null, $username)
     {
-		$this->loadModels(array('Group'));
+		$data = array();
 		$time = time();
-		$message_id = $this->prefixMessage($username, $time);
-        $message = str_replace("\n", " ", $message);
-        $message = $username . "|" . $time . "|" . $message;
-        $this->save($message_id, $message);
-		$this->addToUserPrivate($username, $message_id);
-		$groups = $this->Group->getGroups($message);
-		if (!empty($groups)) 
+		$this->mode = 'post';
+		$this->loadModels(array('Group'));
+		$this->id = $this->prefixMessage($username, $time);	
+		$data['time'] = $time;
+		$data['username'] = $username;
+		$data['message'] = str_replace("\n", " ", $message);
+		if ($this->save($this->id, $data)) 
 		{
-			foreach ($groups as $group) 
+			$this->addToUserPrivate($username, $this->id);
+			$groups = $this->Group->getGroups($data['message']);
+			if (!empty($groups)) 
 			{
-				if ($this->Group->isAMember($group, $username)) 
-				{
-					$this->addToGroup($group, $message_id);
-				} 
-				else 
-				{
-					$this->addToPublicTimeline($message_id);
-				}
+				$this->addToGroups($groups, $username, $this->id);
+			} 
+			else 
+			{
+	        	$this->addToUserPublic($username, $this->id);	
+				$this->addToPublicTimeline($this->id);
 			}
+        	return true;			
 		} 
 		else 
 		{
-        	$this->addToUserPublic($username, $message_id);        			
-			$this->addToPublicTimeline($message_id);
+			return false;
 		}
-        return $message_id;
     }
 
 	/**
@@ -88,6 +87,28 @@ class Message extends App_Model
 	}
 
 	/**
+	 * Add to message to many groups
+	 *
+	 * @access public
+	 * @param array $groups
+	 * @return 
+	 */
+	function addToGroups($groups, $username, $message_id)
+	{
+		foreach ($groups as $group) 
+		{
+			if ($this->Group->isAMember($group, $username)) 
+			{
+				$this->addToGroup($group, $message_id);
+			} 
+			else 
+			{
+				$this->addToPublicTimeline($message_id);
+			}
+		}
+	}
+
+	/**
 	 * Add to public timeline
 	 *
 	 * @access public
@@ -99,7 +120,6 @@ class Message extends App_Model
 		$this->push($this->prefixPublic(), $message_id);
         $this->trim($this->prefixPublic(), 0, 1000);
 	}
-	
 
     /**
      * Get the messages of the people a user is following
@@ -192,8 +212,25 @@ class Message extends App_Model
     {
         $messages = $this->find($this->prefixPublic());
         return $this->getMany($messages);
-    }	
- 
-}
+    }
+	
 
+	/**
+	 * Validates a user
+	 *
+	 * @access public
+	 * @return 
+	 */	
+	function validate()
+	{
+		$this->setAction();		
+		if ($this->mode == 'post')
+		{
+			$this->validates_length_of('message', array('min'=>1, 'max'=>140, 'message'=>'A message must be between 1 and 140 characters'));
+			$this->validates_presence_of('message', array('message'=>'A message must be between 1 and 140 characters'));
+		}
+	    return (count($this->validationErrors) == 0);
+	}
+
+}
 ?>

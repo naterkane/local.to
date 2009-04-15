@@ -16,8 +16,10 @@ class Messages extends App_Controller
         $this->mustBeSignedIn();
         if ($this->postData)
         {
-            $message_id = $this->Message->add($this->postData['message'], $this->userData['username']);
-            $this->User->sendToFollowers($message_id, $this->userData['username']);
+			if ($this->Message->add($this->postData['message'], $this->userData['username'])) 
+			{
+            	$this->User->sendToFollowers($this->Message->id, $this->userData['username']);
+			}
             $this->redirect('/home');
         }
         else

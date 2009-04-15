@@ -6,13 +6,30 @@ class Form extends Html
 {
 	
 	/**
+	 * Process form options
+	 *
+	 * @access private
+	 * @param string
+	 * @return 
+	 */
+	private function setOptions($field, $default, $options)
+	{
+		if (!isset($options[$field])) 
+		{
+			$options[$field] = $default;
+		}
+		return $options;
+	}
+	
+
+	/**
 	* Print out an error to the user
 	*
 	* @access public	
 	* @param string $name Name of field
 	* @return string|null Error message
 	*/
-	function error($name)
+	public function error($name)
 	{
 		$return = null;
 		if (isset($this->validationErrors[$name])) 
@@ -29,7 +46,7 @@ class Form extends Html
 	* @param string $name Name of field
 	* @return string|null Value
 	*/
-	function getValue($name)
+	public function getValue($name)
 	{
 		if (isset($this->postValue[$name])) 
 		{
@@ -45,33 +62,37 @@ class Form extends Html
 	* @param array $options[optional] HTML options
 	* @return string
 	*/
-	function input($name, $options = array())
+	public function input($name, $options = array())
 	{
-		if (!isset($options['type'])) 
-		{
-			$options['type'] = 'input';
-		}
-		if (!isset($options['name'])) 
-		{
-			$options['name'] = $name;
-		}
-		if (!isset($options['id'])) 
-		{
-			$options['id'] = $name;
-		}
-		if (!isset($options['id'])) 
-		{
-			$options['id'] = $name;
-		}	
-		if (!isset($options['value'])) 
-		{
-			$options['value'] = $this->input->post($name);
-		}
+		$options = $this->setOptions('type', 'input', $options);
+		$options = $this->setOptions('name', $name, $options);
+		$options = $this->setOptions('id', $name, $options);
 		if ((!isset($options['unsetPassword'])) && ($options['type'] == 'password')) 
 		{
-			$options['value'] = null;
-		}		
+			$options = $this->setOptions('value', null, $options);
+		}
+		else
+		{
+			$options = $this->setOptions('value', $this->input->post($name), $options);
+		}
 		return sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
+	}
+
+	/**
+	 * Creates a textarea 
+	 *
+	 * @param string $fieldName 
+	 * @param array $options Array of HTML attributes.
+	 * @return string An HTML text input element
+	 */
+	public function textarea($name, $options = array()) 
+	{
+		$options = $this->setOptions('name', $name, $options);
+		$options = $this->setOptions('id', $name, $options);		
+		$options = $this->setOptions('rows', 8, $options);		
+		$options = $this->setOptions('cols', 20, $options);	
+		$options = $this->setOptions('value', $this->input->post($name), $options);		
+		return "<textarea name=\"" . $options['name'] . "\" id=\"" . $options['id'] . "\" rows=\"" . $options['rows']  . "\" cols=\"" . $options['cols'] . "\">" . $options['value'] . "</textarea>";
 	}
 
 }
