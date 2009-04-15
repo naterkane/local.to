@@ -28,12 +28,9 @@ class Message extends App_Model
 			if (!empty($groups)) 
 			{
 				$this->addToGroups($groups, $username, $this->id);
-			} 
-			else 
-			{
-	        	$this->addToUserPublic($username, $this->id);	
-				$this->addToPublicTimeline($this->id);
 			}
+	        $this->addToUserPublic($username, $this->id);	
+			$this->addToPublicTimeline($this->id);			
         	return true;			
 		} 
 		else 
@@ -83,6 +80,7 @@ class Message extends App_Model
 		foreach ($members as $member) 
 		{
 			$this->addToUserPrivate($member, $message_id);
+			$this->addToUserPublic($member, $message_id);			
 		}
 	}
 

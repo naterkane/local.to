@@ -11,7 +11,7 @@ class App_Model extends Model {
 	private $memcachePort = '21201';
 	private $prefixCookie = 'session';
 	private $prefixFollower = 'followers';
-	private $prefixFollowing = 'following';
+	private $prefixFollowing = 'following';	
 	private $prefixGroup = 'groups';
 	private $prefixGroupMessages = 'groupsmessages';	
 	private $prefixGroupOwner = 'groupsowner';	

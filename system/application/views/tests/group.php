@@ -45,21 +45,25 @@
 	$this->selenium->openPage('/home');
 	$this->selenium->write('type', 'message', $group_message);	
 	$this->selenium->click('Update');
-	$this->selenium->openPage('/');	
-	$this->selenium->write('verifyTextNotPresent', $group_message);
+	//make sure the message is on the group's page
+	$this->selenium->openPage('/group/' . $group);
+	$this->selenium->write('verifyTextPresent', $group_message);	
 	//make sure message is present in user's private page
 	$this->selenium->openPage('/home');
 	$this->selenium->write('verifyTextPresent', $group_message);
-	//make sure message is not present in user's public page	
+	//make sure message is present in user's public page	
 	$this->selenium->openPage('/' . $name2);
-	$this->selenium->write('verifyTextNotPresent', $group_message);	
-	//make sure message is not present in other user's public page		
+	$this->selenium->write('verifyTextPresent', $group_message);	
+	//make sure message is present in other user's public page		
 	$this->selenium->openPage('/' . $name);	
-	$this->selenium->write('verifyTextNotPresent', $group_message);
+	$this->selenium->write('verifyTextPresent', $group_message);
 	$this->selenium->signOut();	
 	$this->selenium->signIn($name, $password);	
 	$this->selenium->openPage('/home');		
 	//make sure message is present in other user's private page			
+	$this->selenium->write('verifyTextPresent', $group_message);	
+	//make sure message is present timeline		
+	$this->selenium->openPage('/');		
 	$this->selenium->write('verifyTextPresent', $group_message);	
 	$this->selenium->openPage('/admin/flush');	
 ?>
