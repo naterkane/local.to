@@ -220,7 +220,7 @@ class User extends App_Model
 	 * Validates a user
 	 *
 	 * @access public
-	 * @return 
+	 * @return boolean
 	 */	
 	function validate()
 	{
@@ -231,7 +231,7 @@ class User extends App_Model
 			$this->validates_presence_of('email', array('message'=>'A valid email is required'));
 			$this->validates_length_of('username', array('min'=>6, 'max'=>25, 'message'=>'A username must be between 6 and 25 characters long'));
 			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken', 'fieldValue'=>$this->prefixUser($this->input->post('username'))));
-			$this->validates_format_of('username', array('with'=>'/^\w+$/', 'message'=>'A username may only be made up of numbers and letters'));
+			$this->validates_format_of('username', array('with'=>ALPHANUM, 'message'=>'A username may only be made up of numbers, letters, and underscores'));
 			$this->validates_presence_of('username', array('message'=>'A username is required'));
 			$this->validates_length_of('password', array('min'=>6, 'max'=>25, 'message'=>'A password must be between 6 and 25 characters long'));
 			$this->validates_callback('passwordUsernameDoNotMatch', 'password', array('message'=>'Your password cannot be the same as your username'));

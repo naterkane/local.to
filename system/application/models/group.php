@@ -14,9 +14,12 @@ class Group extends App_Model
 	 */
 	function add($data = array(), $owner_id)
 	{
-		$this->save($this->prefixGroup($data['name']), array(0 => $owner_id));
-		$this->save($this->prefixGroupOwner($data['name']), $owner_id);	
-		return true;
+		$data['members'] = array(0 => $owner_id);
+		$data['messages'] = array();		
+		$data['owner_id'] = $owner_id;
+		$data['public'] = 1;
+		$this->mode = 'add';
+		return $this->save($data);
 	}
 	
 	/**
@@ -31,9 +34,9 @@ class Group extends App_Model
 	{
 		if (!empty($member)) 
 		{
-			$previous_members = $this->getMembers($name);
-			$previous_members[] = $member;
-			return $this->save($this->prefixGroup($name), $previous_members);
+			$group = $this->find($name);
+			$group['members'][] = $member;
+			return $this->save($group);
 		} 
 		else 
 		{
@@ -42,25 +45,16 @@ class Group extends App_Model
 	}
 
 	/**
-	 * Get a group names from a message
+	 * Group specific find
 	 *
-	 * @access public
-	 * @param string $message
+	 * @access public 
+	 * @param group $name
 	 * @return array
 	 */
-	function getGroups($message)
-	{
-		preg_match_all(GROUP_MATCH, $message, $groups);
-		if (isset($groups[2])) 
-		{
-			return $groups[2];
-		} 
-		else 
-		{
-			return array();
-		}
+	function find($name)
+	{		
+		return parent::find($this->prefixGroup($name));
 	}
-	
 	
 	/**
 	 * Get Members
@@ -71,7 +65,8 @@ class Group extends App_Model
 	 */
 	function getMembers($name)
 	{
-		return $this->find($this->prefixGroup($name));
+		$group = $this->find($name);
+		return $this->getValue($group, 'members');
 	}
 	
 	/**
@@ -83,7 +78,8 @@ class Group extends App_Model
 	 */
 	function getOwner($name)
 	{
-		return $this->find($this->prefixGroupOwner($name));
+		$group = $this->find($name);
+		return $this->getValue($group, 'owner_id');		
 	}
 	
 	/**
@@ -95,19 +91,52 @@ class Group extends App_Model
 	 * @param array $members[optional] will use this array instead if supplied
 	 * @return boolean
 	 */
-	function isAMember($name, $user_name, $members = array())
+	function isMember($groupname, $username, $members = array())
 	{
 		if (empty($members)) 
 		{
-			$members = $this->getMembers($name);
+			$members = $this->getMembers($groupname);
 		}
 		if (is_array($members)) 
 		{
-			return in_array($user_name, $members);
+			return in_array($username, $members);
 		} 
 		else 
 		{
 			return false;
+		}
+	}
+	
+	/**
+	 * Is a user an owner of a group
+	 *
+	 * @access public
+	 * @param string $name group name
+	 * @param string $user_name user to search for
+	 * @return boolean
+	 */
+	function isOwner($groupname, $user_name)
+	{
+		return ($groupname == $user_name);
+	}
+
+	/**
+	 * Get a group names from a message
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return array
+	 */
+	function matchGroups($message)
+	{
+		preg_match_all(GROUP_MATCH, $message, $groups);
+		if (isset($groups[2])) 
+		{
+			return $groups[2];
+		} 
+		else 
+		{
+			return array();
 		}
 	}
 
@@ -119,25 +148,56 @@ class Group extends App_Model
 	 * @param string $member Member to add
 	 * @return boolean
 	 */
-	function removeMember($name, $member)
+	function removeMember($groupname, $member)
 	{
-		$owner = $this->getOwner($name);
-		if ($member != $owner) 
+		if (!$this->isOwner($groupname, $member)) 
 		{
-			$previous_members = $this->getMembers($name);
+			$group = $this->find($groupname);
 			$new_lineup = array();
-			foreach ($previous_members as $previous_member) 
+			foreach ($group['members'] as $previous_member) 
 			{
 				if ($previous_member != $member) 
 				{
 					$new_lineup[] = $previous_member;
 				}
 			}
-			return $this->save($this->prefixGroup($name), $new_lineup);
+			$group['members'] = $new_lineup;
+			return $this->save($group);
 		} else {
-			return true;
+			return false;
 		}		
-	}	
+	}
+	
+	/**
+	 * Group specific save
+	 *
+	 * @access public 
+	 * @param array $group 
+	 * @return boolean
+	 */
+	function save($group)
+	{		
+		return parent::save($this->prefixGroup($group['name']), $group);
+	}
+	
+	/**
+	 * Validates a group
+	 *
+	 * @access public
+	 * @return boolean
+	 */	
+	function validate()
+	{
+		$this->setAction();		
+		if ($this->mode == 'add')
+		{
+			$this->validates_format_of('name', array('with'=>ALPHANUM, 'message'=>'A group name may only be made up of numbers, letters, and underscores'));
+			$this->validates_length_of('name', array('min'=>6, 'max'=>25, 'message'=>'A group name must be between 6 and 25 characters'));
+			$this->validates_uniqueness_of('name', array('message'=>'Group name has already been taken'));
+			$this->validates_presence_of('name', array('message'=>'A group name is required'));			
+		}
+	    return (count($this->validationErrors) == 0);
+	}
 	
 }
 ?>

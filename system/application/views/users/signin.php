@@ -2,11 +2,11 @@
 <form action="/signin" method="post" accept-charset="utf-8">
 	<div class="mod">
 		<label for="username">User Name</label>
-		<input type="text" name="username" value="" id="username" />
+		<?php echo $this->form->input('username') ?>
 	</div>
 	<div class="mod">
 		<label for="password">Password</label>		
-		<input type="password" name="password" value="" id="password" />
+		<?php echo $this->form->input('password', array('type'=>'password')) ?>
 	</div>
 	<div class="mod">
 		<input type="submit" value="Sign In">

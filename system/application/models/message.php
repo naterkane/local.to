@@ -8,7 +8,7 @@ class Message extends App_Model
     /**
      * Add a new message
      *
-     * @todo Validation and return value, add transactions, move isAMember to Validation
+     * @todo Validation and return value, add transactions, move isMember to Validation
      * @param string $message
      */
     function add($message = null, $username)
@@ -23,14 +23,17 @@ class Message extends App_Model
 		$data['message'] = str_replace("\n", " ", $message);
 		if ($this->save($this->id, $data)) 
 		{
-			$this->addToUserPrivate($username, $this->id);
-			$groups = $this->Group->getGroups($data['message']);
+			$groups = $this->Group->matchGroups($data['message']);
 			if (!empty($groups)) 
 			{
 				$this->addToGroups($groups, $username, $this->id);
 			}
-	        $this->addToUserPublic($username, $this->id);	
-			$this->addToPublicTimeline($this->id);			
+			else 
+			{
+				$this->addToUserPrivate($username, $this->id);			
+		        $this->addToUserPublic($username, $this->id);
+			}
+			$this->addToPublicTimeline($this->id);		
         	return true;			
 		} 
 		else 
@@ -64,24 +67,32 @@ class Message extends App_Model
 	{
 		return $this->push($this->prefixUserPublic($username), $message_id);
 	}	
-  
+
 	/**
-	 * Add to message to group
+	 * Add message to a group
 	 *
 	 * @access public
-	 * @param string $groupname
-	 * @param string $message_id
-	 * @return 
+	 * @param string $name Name of group
+	 * @param string $member Member to add
+	 * @param array $group[option]
+	 * @return boolean
 	 */
-	function addToGroup($groupname, $message_id)
+	function addToGroup($groupname, $message_id, $group = array())
 	{
-		$this->push($this->prefixGroupMessages($groupname), $message_id);
-		$members = $this->Group->getMembers($groupname);
-		foreach ($members as $member) 
+		if (empty($group)) 
 		{
-			$this->addToUserPrivate($member, $message_id);
-			$this->addToUserPublic($member, $message_id);			
+			$group = $this->Group->find($groupname);
 		}
+		if (!empty($group)) 
+		{
+			$group['messages'][] = $message_id;
+			array_unshift($group['messages'], $message_id);
+			return $this->Group->save($group);
+		} 
+		else 
+		{
+			return false;
+		}		
 	}
 
 	/**
@@ -95,13 +106,15 @@ class Message extends App_Model
 	{
 		foreach ($groups as $group) 
 		{
-			if ($this->Group->isAMember($group, $username)) 
+			if ($this->Group->isMember($group, $username)) 
 			{
 				$this->addToGroup($group, $message_id);
-			} 
-			else 
-			{
-				$this->addToPublicTimeline($message_id);
+				$members = $this->Group->getMembers($group);
+				foreach ($members as $member) 
+				{					
+					$this->addToUserPublic($member, $message_id);
+					$this->addToUserPrivate($member, $message_id);
+				}
 			}
 		}
 	}
@@ -129,18 +142,6 @@ class Message extends App_Model
     function getFollowed($username)
     {		
         return null;
-    }
-  
-    /**
-     * Get Messages for user
-     *
-     * @param string $groupname[optional]
-     * @return array Messages
-     */
-    function getForGroup($groupname = null)
-    {
-        $messages = $this->find($this->prefixGroupMessages($groupname));
-        return $this->getMany($messages);
     }
 
     /**
@@ -212,12 +213,11 @@ class Message extends App_Model
         return $this->getMany($messages);
     }
 	
-
 	/**
-	 * Validates a user
+	 * Validates a message
 	 *
 	 * @access public
-	 * @return 
+	 * @return boolean
 	 */	
 	function validate()
 	{

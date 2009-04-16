@@ -13,8 +13,6 @@ class App_Model extends Model {
 	private $prefixFollower = 'followers';
 	private $prefixFollowing = 'following';	
 	private $prefixGroup = 'groups';
-	private $prefixGroupMessages = 'groupsmessages';	
-	private $prefixGroupOwner = 'groupsowner';	
 	private $prefixMessage = 'messages';
 	private $prefixPublic = 'timeline';
 	private $prefixSeparator = ':';	
@@ -62,14 +60,15 @@ class App_Model extends Model {
 	 * Get Value from model data
 	 *
 	 * @access public
-	 * @param $value
-	 * @return 
+	 * @param array $data
+	 * @param string $fieldname
+	 * @return string|null
 	 */
-	function getValue($fieldname)
+	function getValue($data, $fieldname)
 	{
-		if (isset($this->modelData[$fieldname])) 
+		if (isset($data[$fieldname])) 
 		{
-			return $this->modelData[$fieldname];
+			return $data[$fieldname];
 		} 
 		else 
 		{
@@ -169,30 +168,6 @@ class App_Model extends Model {
 	function prefixGroup($groupname)
 	{ 
 		return $this->prefixGroup . $this->prefixSeparator . $groupname; 
-	}
-
-	/**
-	 * Create a prefix for group messages
-	 * 
-	 * @access public
-	 * @param string $groupname
-	 * @return string
-	 */	
-	function prefixGroupMessages($groupname)
-	{ 
-		return $this->prefixGroupMessages . $this->prefixSeparator . $groupname; 
-	}
-
-	/**
-	 * Create a prefix for a group owner
-	 * 
-	 * @access public
-	 * @param string $groupname
-	 * @return string
-	 */	
-	function prefixGroupOwner($groupname)
-	{ 
-		return $this->prefixGroupOwner . $this->prefixSeparator . $groupname; 
 	}
 	
 	/**
@@ -448,7 +423,7 @@ class App_Model extends Model {
 
     function validates_format_of($fieldName, $options=array()) 
 	{
-		$fieldValue = $this->getValue($fieldName);		
+		$fieldValue = $this->getValue($this->modelData, $fieldName);		
 		if ( !isset($options['message']) ) 
 		{	
 			$options['message'] = 'Field has an invalid format.';
@@ -501,7 +476,7 @@ class App_Model extends Model {
 
     function validates_length_of($fieldName, $options=array()) 
 	{
-		$fieldValue = $this->getValue($fieldName);
+		$fieldValue = $this->getValue($this->modelData, $fieldName);
 		if (!isset($options['message'])) 
 		{
 			$options['message'] = 'Field has the wrong length.';
@@ -563,7 +538,7 @@ class App_Model extends Model {
 	 */
     function validates_presence_of($fieldName, $options=array()) 
 	{
-			$fieldValue = $this->getValue($fieldName);
+			$fieldValue = $this->getValue($this->modelData, $fieldName);
             if ( !isset($options['message']) ) 
 			{
 				$options['message'] = 'This field is required.';
