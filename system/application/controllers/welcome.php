@@ -3,7 +3,8 @@
 class Welcome extends App_Controller {
 	
 	/**
-	 * 
+	 * Public Timeline 
+	 *
 	 * @return 
 	 */
 	function index() {

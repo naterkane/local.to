@@ -59,6 +59,15 @@ require(APPPATH.'config/constants'.EXT);
 set_error_handler('_exception_handler');
 set_magic_quotes_runtime(0); // Kill magic quotes
 
+$CFG =& load_class('Config');
+if ($CFG->item('debug') == 1) 
+{
+	ini_set('display_errors', 1);
+}
+else {
+	ini_set('display_errors', 0);
+}
+
 /*
  * ------------------------------------------------------
  *  Start the timer... tick tock tick tock...
@@ -89,8 +98,6 @@ $EXT->_call_hook('pre_system');
  *  Instantiate the base classes
  * ------------------------------------------------------
  */
-
-$CFG =& load_class('Config');
 $URI =& load_class('URI');
 $RTR =& load_class('Router');
 $OUT =& load_class('Output');

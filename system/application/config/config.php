@@ -328,7 +328,10 @@ $config['proxy_ips'] = '';
 $config['salt'] = 'dfyvf8dbiu23dm80wquyfe7rksldnshhgar6';	
 
 //layout to display
-$config['layout'] = 'default';	
+$config['layout'] = 'default';
+
+//debug state. 1 for development, 0 for production
+$config['debug'] = 1;	
 
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
