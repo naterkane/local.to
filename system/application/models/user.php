@@ -236,7 +236,7 @@ class User extends App_Model
 			$this->validates_length_of('password', array('min'=>6, 'max'=>25, 'message'=>'A password must be between 6 and 25 characters long'));
 			$this->validates_callback('passwordUsernameDoNotMatch', 'password', array('message'=>'Your password cannot be the same as your username'));
 			$this->validates_callback('passwordsMatch', 'password', array('message'=>'Your password and the confirmation do not match'));
-			$this->validates_format_of('password', array('with'=>'/^\w+$/', 'message'=>'A password may only be made up of numbers and letters'));
+			$this->validates_format_of('password', array('with'=>ALPHANUM, 'message'=>'A password may only be made up of numbers, letters, and underscores'));
 			$this->validates_presence_of('password', array('message'=>'A password is required'));
 			$this->modelData['password'] = $this->hashPassword($this->modelData['password']);	//has to be here in order not to screw up character counts and matching
 		}

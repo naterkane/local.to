@@ -6,14 +6,39 @@
 	$password2 = $this->selenium->randomString(10);	
 	$email2 = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';	
 	$group = $this->selenium->randomString(10);
+	$group_long = $this->selenium->randomString(26);		
 	$group_message = "This is a !$group test.";
 	$non_group_message = $this->selenium->randomString(10);	
+	$error = 'There was an error adding your group. Please see below for details.';
 	$this->selenium->caseTitle('Follow');
 	//create first account and sign out
 	$this->selenium->openPage('/admin/flush');
 	$this->selenium->signOut();	
 	$this->selenium->signUp($name, $password, $email);
 	$this->selenium->signIn($name, $password);
+	//submit an empty form
+	$this->selenium->openPage('/groups/add');
+	$this->selenium->click('Sign Up');	
+	$this->selenium->write('verifyTextPresent', $error);
+	$this->selenium->write('verifyTextPresent', 'A group name is required');
+	//submit bad characters
+	$this->selenium->openPage('/groups/add');
+	$this->selenium->write('type', 'name', $group . '!');
+	$this->selenium->click('Sign Up');	
+	$this->selenium->write('verifyTextPresent', $error);
+	$this->selenium->write('verifyTextPresent', 'A group name may only be made up of numbers, letters, and underscores');
+	//too short
+	$this->selenium->openPage('/groups/add');
+	$this->selenium->write('type', 'name', 'x');
+	$this->selenium->click('Sign Up');	
+	$this->selenium->write('verifyTextPresent', $error);
+	$this->selenium->write('verifyTextPresent', 'A group name must be between 6 and 25 characters');		
+	//too long
+	$this->selenium->openPage('/groups/add');
+	$this->selenium->write('type', 'name', $group_long);
+	$this->selenium->click('Sign Up');	
+	$this->selenium->write('verifyTextPresent', $error);
+	$this->selenium->write('verifyTextPresent', 'A group name must be between 6 and 25 characters');	
 	//create a group
 	$this->selenium->openPage('/groups/add');
 	$this->selenium->write('type', 'name', $group);
@@ -21,6 +46,12 @@
 	$this->selenium->write('verifyTextPresent', $group);
 	$this->selenium->write('verifyTextPresent', $name);
 	$this->selenium->write('verifyTextPresent', 'Unsubscribe');	
+	//try adding a group with the same name
+	$this->selenium->openPage('/groups/add');
+	$this->selenium->write('type', 'name', $group);
+	$this->selenium->click('Sign Up');	
+	$this->selenium->write('verifyTextPresent', $error);
+	$this->selenium->write('verifyTextPresent', 'Group name has already been taken');	
 	//create second account	
 	$this->selenium->signOut();	
 	$this->selenium->signUp($name2, $password2, $email2);

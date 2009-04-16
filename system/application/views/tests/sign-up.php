@@ -56,14 +56,14 @@
 	$this->selenium->write('type', 'passwordconfirm', $password);	
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);
-	$this->selenium->write('verifyTextPresent', 'A username may only be made up of numbers and letters');	
+	$this->selenium->write('verifyTextPresent', 'A username may only be made up of numbers, letters, and underscores');	
 	//bad characters in password
 	$this->selenium->write('type', 'username', $name);
 	$this->selenium->write('type', 'password', $password . '!');
 	$this->selenium->write('type', 'passwordconfirm', $password . '!');	
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);
-	$this->selenium->write('verifyTextPresent', 'A password may only be made up of numbers and letters');	
+	$this->selenium->write('verifyTextPresent', 'A password may only be made up of numbers, letters, and underscores');	
 	//sign up
 	$this->selenium->signUp($name, $password, $email);
 	$this->selenium->signIn($name, $password);
