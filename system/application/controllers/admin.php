@@ -12,18 +12,25 @@ class Admin extends App_controller
 	 */
 	function flush() 
 	{
-		$this->redirect('/home');
+		$this->User->tt->vanish();
+		$this->redirect('/admin/stats');
 	}
 	
 	function stats()
 	{
 		$all = $this->User->tt->fwmkeys('', 1000);	
 		$stats = $this->User->tt->stat();
+		echo "<a href=\"/admin/flush\">Flush</a><br>";		
 		echo "<pre>";
 		print_r($all);
 		print_r($stats);
 		echo "</pre>";
 		exit;
+	}
+
+	function test()
+	{
+		
 	}
 
 }
