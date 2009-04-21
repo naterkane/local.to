@@ -211,7 +211,8 @@ class User extends App_Model
 	        $this->push($this->prefixFollower($data['username']), $data['username']);
 			$this->push($this->prefixUserPrivate($data['username']), $message_id);
         	return true;			
-		} else {
+		} 
+		else {
         	return false;
 		}
     }

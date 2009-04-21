@@ -39,7 +39,7 @@
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('Cookie');
+$autoload['libraries'] = array('Cookie', 'Tt');
 
 
 /*

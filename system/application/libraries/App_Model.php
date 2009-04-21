@@ -19,6 +19,8 @@ class App_Model extends Model {
 	private $prefixUser = 'users';
 	private $prefixUserPublic = 'userpublic';
 	private $prefixUserPrivate = 'userprivate';	
+	private $ttHost = 'localhost';
+	private $ttPort = '1978';	
 	public $action;
 	public $id;	
 	public $modelData = array();
@@ -28,8 +30,8 @@ class App_Model extends Model {
 
 	function __construct()
 	{
-		$this->mem = new Memcache();
-		$this->mem->connect($this->memcacheHost, $this->memcachePort) or die ("Could not connect");
+		$this->loadLibrary(array('Tt'));
+		$this->tt->connect($this->ttHost, $this->ttPort);
 	}
 
 	/**
@@ -37,7 +39,7 @@ class App_Model extends Model {
 	 */
 	function delete($key) 
 	{
-		return $this->mem->delete($key);
+		return $this->tt->delete($key);
 	}
 
 	/**
@@ -48,7 +50,7 @@ class App_Model extends Model {
 	 */
 	function find($key) 
 	{
-		$data = $this->mem->get($key);
+		$data = $this->tt->get($key);
 		if ($this->isSerialized($data)) 
 		{
 			$data = unserialize($data);
@@ -104,6 +106,27 @@ class App_Model extends Model {
 	function isSerialized($str) 
 	{
 	    return ($str == serialize(false) || @unserialize($str) !== false);
+	}
+
+	/**
+	 * Load models from controller into model
+	 *
+	 * @access public
+	 * @param array $models
+	 * @return 
+	 */
+	function loadLibrary($files = array())
+	{
+		foreach ($files as $file) 
+		{
+			$path = APPPATH . 'libraries/' . $file . '.php';			
+			if (file_exists($path)) 
+			{
+				include_once($path);
+				$class_name = strtolower($file);
+				$this->{$class_name} = new $file;
+			}
+		}
 	}
 
 	/**
@@ -285,14 +308,18 @@ class App_Model extends Model {
 	function save($key, $data) 
 	{
 		$this->modelData = $data;
-		if ($this->validate) {
-			if ($this->validate()) {
-				return $this->mem->set($key, $this->modelData);
-			} else {
-				return false;
+		if ($this->validate()) {
+			if (is_array($this->modelData)) 
+			{
+				$data = serialize($this->modelData);
 			}
+			else 
+			{
+				$data = $this->modelData;
+			}
+			return $this->tt->put($key, $data);
 		} else {
-			return $this->mem->set($key, $data);			
+			return false;
 		}
 	}
 
