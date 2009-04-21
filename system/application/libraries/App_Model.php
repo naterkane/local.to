@@ -19,7 +19,9 @@ class App_Model extends Model {
 	private $prefixUser = 'users';
 	private $prefixUserPublic = 'userpublic';
 	private $prefixUserPrivate = 'userprivate';	
-	private $ttHost = 'localhost';
+	private $ttHostRemote = '67.23.9.219';// external public IP for access from developers' computers.
+	private $ttHostLocal = '10.176.40.214';// internal IP for access within network
+	private $ttHost = '';
 	private $ttPort = '1978';	
 	public $action;
 	public $id;	
@@ -31,6 +33,11 @@ class App_Model extends Model {
 	function __construct()
 	{
 		$this->loadLibrary(array('Tt'));
+		if( $_SERVER['HTTP_HOST'] == "microblog.dev.wearenom.com" ):
+			$this->ttHost = $this->ttHostLocal;
+		else:
+			$this->ttHost = $this->ttHostRemote;
+		endif;
 		$this->tt->connect($this->ttHost, $this->ttPort);
 	}
 
@@ -68,6 +75,7 @@ class App_Model extends Model {
 	 */
 	function getValue($data, $fieldname)
 	{
+		
 		if (isset($data[$fieldname])) 
 		{
 			return $data[$fieldname];
