@@ -324,6 +324,12 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+//Tokyo Cabinet host settings
+$config['tt_host'] = 'microblog.dev.wearenom.com';
+$config['tt_host_local'] = '10.176.40.214';
+$config['tt_host_remote'] = '67.23.9.219';
+$config['tt_host_port'] = '1978';
+
 //Salt for sha1 hashes
 $config['salt'] = 'dfyvf8dbiu23dm80wquyfe7rksldnshhgar6';	
 

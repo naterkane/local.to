@@ -18,11 +18,7 @@ class App_Model extends Model {
 	private $prefixSeparator = ':';	
 	private $prefixUser = 'users';
 	private $prefixUserPublic = 'userpublic';
-	private $prefixUserPrivate = 'userprivate';	
-	private $ttHostRemote = '67.23.9.219';// external public IP for access from developers' computers.
-	private $ttHostLocal = '10.176.40.214';// internal IP for access within network
-	private $ttHost = '';
-	private $ttPort = '1978';	
+	private $prefixUserPrivate = 'userprivate';
 	public $action;
 	public $id;	
 	public $modelData = array();
@@ -32,13 +28,18 @@ class App_Model extends Model {
 
 	function __construct()
 	{
+		$ci = CI_Base::get_instance();
 		$this->loadLibrary(array('Tt'));
-		if( $_SERVER['HTTP_HOST'] == "microblog.dev.wearenom.com" ):
-			$this->ttHost = $this->ttHostLocal;
-		else:
-			$this->ttHost = $this->ttHostRemote;
-		endif;
-		$this->tt->connect($this->ttHost, $this->ttPort);
+		if( $_SERVER['HTTP_HOST'] == $ci->config->item('tt_host'))
+		{
+			$host = $ci->config->item('tt_host_local');
+		}
+		else
+		{
+			$host = $ci->config->item('tt_host_remote');
+		}
+		$this->tt->connect($host, $ci->config->item('tt_host_port'));
+		unset($ci);
 	}
 
 	/**
