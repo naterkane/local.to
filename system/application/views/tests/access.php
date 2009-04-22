@@ -7,5 +7,6 @@
 	$this->selenium->mustBeLoggedIn('/home');
 	$this->selenium->mustBeLoggedIn('/groups/subscribe/xyz');
 	$this->selenium->mustBeLoggedIn('/groups/add');	
+	$this->selenium->mustBeLoggedIn('/settings');		
 	$this->selenium->openPage('/admin/flush');	
 ?>

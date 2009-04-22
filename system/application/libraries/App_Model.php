@@ -462,6 +462,9 @@ class App_Model extends Model {
 		
 	}
 
+	/**
+	 * Set the save action for validation
+	 */
 	function setAction()
 	{
         if (empty($this->id)) {
@@ -471,6 +474,25 @@ class App_Model extends Model {
         }
         return true;
 	}
+	
+	/**
+	 * Compare values of two arrays before doing an update
+	 *
+	 * Because key value databases do not do tradition inserts (they overwrite all data) we need to make sure we save all fields back to the database
+	 *
+	 * @access public
+	 * @param array $oldData[optional]
+	 * @param array $newData[optional]	
+	 * @return $oldData;
+	 */
+	function updateData($oldData = array(), $newData = array())
+	{
+		foreach ($newData as $key => $value) {
+			$oldData[$key] = $value;
+		}
+		return $oldData;
+	}
+	
 	
 	/**
 	 * Validate data

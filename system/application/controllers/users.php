@@ -35,7 +35,36 @@ class Users extends App_Controller
         $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
         $this->load->view('users/home', $this->data);
     }
-   
+  
+	/**
+	 * Update a user profile
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function settings()
+	{
+		$this->mustBeSignedIn();
+		if ($this->postData) 
+		{
+			if ($this->User->updateProfile($this->userData['id'])) 
+			{
+				$this->cookie->set('user', $this->postData);
+				$this->redirect('/settings', 'Your profile was updated.');
+			} 
+			else 
+			{
+				$this->setErrors(array('User'));
+				$this->cookie->setFlash('There was an error updating your profile. See below for more details.', 'error');
+			}
+		}
+		else 
+		{
+			$this->setData($this->userData);
+		}
+		$this->load->view('users/settings', $this->data);
+	}
+ 
     /**
      * Sign in a user
      * 

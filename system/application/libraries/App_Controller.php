@@ -114,6 +114,24 @@ class App_Controller extends Controller {
     }
 
 	/**
+	 * Send data to html helper
+	 *
+	 * @todo Would be nice if this were done automatically
+	 * @param array $data
+	 * @access public
+	 */
+	function setData($data = array())
+	{
+		if (!empty($this->form)) 
+		{
+			foreach ($data as $field => $value) 
+			{
+				$this->form->data[$field] = $value;
+			}
+		}
+	}
+
+	/**
 	 * Send errors to html helper
 	 *
 	 * @todo Would be nice if this were done automatically

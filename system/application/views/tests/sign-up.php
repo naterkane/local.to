@@ -5,6 +5,7 @@
 	$too_short_name = $this->selenium->randomString(5);
 	$too_long_name = $this->selenium->randomString(26);
 	$error = 'There was an error signing up. Please see below for details.';
+	$reserved = 'groups';
 	$this->selenium->caseTitle('Sign Up');
 	$this->selenium->signOut();	
 	$this->selenium->openPage('/signup');		
@@ -26,6 +27,11 @@
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);	
 	$this->selenium->write('verifyTextPresent', 'Your password cannot be the same as your username');
+	//try reserved username
+	$this->selenium->write('type', 'username', $reserved);
+	$this->selenium->click('Sign Up');
+	$this->selenium->write('verifyTextPresent', $error);	
+	$this->selenium->write('verifyTextPresent', 'This is a reserved username');
 	//too short username
 	$this->selenium->write('type', 'username', $too_short_name);
 	$this->selenium->click('Sign Up');

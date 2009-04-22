@@ -21,6 +21,25 @@ class Form extends Html
 		return $options;
 	}
 	
+	/**
+	 * Get a value for a form element
+	 *
+	 * @access private
+	 * @param string Name	
+	 * @return mixed
+	 */	
+	private function getElementValue($name)
+	{
+		$value = $this->input->post($name);
+		if (!$value) 
+		{
+			if (isset($this->data[$name])) 
+			{
+				$value = $this->data[$name];
+			}
+		}
+		return $value;
+	}
 
 	/**
 	* Print out an error to the user
@@ -73,9 +92,26 @@ class Form extends Html
 		}
 		else
 		{
-			$options = $this->setOptions('value', $this->input->post($name), $options);
+			$options = $this->setOptions('value', $this->getElementValue($name), $options);			
 		}
 		return sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
+	}
+
+	function select($name, $values, $options=array())
+	{
+		$fieldValue = $this->getElementValue($name);
+		$return = "<select id=\"$name\" name=\"$name\">\n";
+		$return .= "<option value=\"\">&nbsp</option>\n";
+		foreach ($values as $key => $value) {
+			$return .= 	"<option value=\"$key\"";
+			if ($fieldValue == $key) 
+			{
+				$return .= 	" selected=\"selected\" ";
+			}
+			$return .= ">$value</option>\n";
+		}
+		$return .= "</select>\n";		
+		return $return;
 	}
 
 	/**

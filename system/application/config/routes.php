@@ -49,7 +49,7 @@ $route['group/(:any)'] = "groups/view/$1";
 $route['signout'] = "users/signout";
 $route['signin'] = "users/signin";
 $route['signup'] = "users/signup";
-
+$route['settings'] = "users/settings";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */
