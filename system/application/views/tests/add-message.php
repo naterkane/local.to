@@ -20,12 +20,12 @@
 	$this->selenium->write('verifyTextNotPresent', $message_long);	
 	$this->selenium->openPage('/' . $name);			
 	$this->selenium->write('verifyTextNotPresent', $message_long);	
-	$this->selenium->openPage('/');	
+	$this->selenium->openPage('/public_timeline');	
 	$this->selenium->write('verifyTextNotPresent', $message_long);		
 	//post a message
 	$this->selenium->write('type', 'message', $message);
 	$this->selenium->click('Update');
-	$this->selenium->openPage('/');
+	$this->selenium->openPage('/public_timeline');
 	$this->selenium->write('verifyTextPresent', $message);	
 	$this->selenium->openPage('/' . $name);	
 	$this->selenium->write('verifyTextPresent', $message);

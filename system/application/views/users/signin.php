@@ -1,14 +1,2 @@
 <h2>Sign In</h2>
-<form action="/signin" method="post" accept-charset="utf-8">
-	<div class="mod">
-		<label for="username">User Name</label>
-		<?php echo $this->form->input('username') ?>
-	</div>
-	<div class="mod">
-		<label for="password">Password</label>		
-		<?php echo $this->form->input('password', array('type'=>'password')) ?>
-	</div>
-	<div class="mod">
-		<input type="submit" value="Sign In">
-	</div>
-</form>
+<?php echo $this->load->view('users/signin_form') ?>

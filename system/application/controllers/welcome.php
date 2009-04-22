@@ -9,9 +9,15 @@ class Welcome extends App_Controller {
 	 */
 	function index() {
 		$this->getUserData();
-		$this->data['title'] = 'Home';
-		$this->data['messages'] = $this->Message->getTimeline();
-		$this->load->view('messages/public_timeline', $this->data);
+		if ($this->userData) 
+		{
+			$this->redirect('/home');
+		} 
+		else 
+		{
+			$this->data['title'] = 'Welcome';
+			$this->load->view('users/welcome');
+		}
 	}
 
 }

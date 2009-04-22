@@ -31,6 +31,19 @@ class Messages extends App_Controller
     }
 
 	/**
+	 * Public timeline
+	 *
+	 * @access public
+	 */
+	function public_timeline()
+	{
+		$this->getUserData();
+		$this->data['messages'] = $this->Message->getTimeline();
+		$this->load->view('messages/public_timeline', $this->data);
+	}
+	
+
+	/**
 	 * Show a single status
 	 *
 	 * @access public

@@ -81,7 +81,7 @@
 	//make sure message is present in other user's private page			
 	$this->selenium->write('verifyTextPresent', $group_message);
 	//make sure message is present timeline		
-	$this->selenium->openPage('/');		
+	$this->selenium->openPage('/public_timeline');		
 	$this->selenium->write('verifyTextPresent', $group_message);
 	//unsubscribe from group
 	//$this->selenium->signOut();	
