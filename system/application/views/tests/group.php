@@ -61,18 +61,11 @@
 	$this->selenium->write('verifyTextPresent', $group);
 	$this->selenium->write('verifyTextPresent', $name);
 	$this->selenium->write('verifyTextPresent', 'Subscribe');	
-	$this->selenium->write('openAndWait', '/groups/subscribe/' . $group);
+	$this->selenium->write('clickAndWait', 'link=Subscribe');
 	$this->selenium->write('verifyTextPresent', $group);
 	$this->selenium->write('verifyTextPresent', $name);
 	$this->selenium->write('verifyTextPresent', $name2);	
-	$this->selenium->write('verifyTextPresent', 'Unsubscribe');	
-	$this->selenium->write('openAndWait', '/groups/unsubscribe/' . $group);
-	$this->selenium->write('verifyTextPresent', $group);
-	$this->selenium->write('verifyTextPresent', $name);
-	$this->selenium->write('verifyTextNotPresent', $name2);	
-	$this->selenium->write('verifyTextPresent', 'Subscribe');
-	//post to group
-	$this->selenium->write('openAndWait', '/groups/subscribe/' . $group);	
+	//post to group	
 	$this->selenium->openPage('/home');
 	$this->selenium->write('type', 'message', $group_message);	
 	$this->selenium->click('Update');
@@ -92,9 +85,18 @@
 	$this->selenium->signIn($name, $password);	
 	$this->selenium->openPage('/home');		
 	//make sure message is present in other user's private page			
-	$this->selenium->write('verifyTextPresent', $group_message);	
+	$this->selenium->write('verifyTextPresent', $group_message);
 	//make sure message is present timeline		
 	$this->selenium->openPage('/');		
-	$this->selenium->write('verifyTextPresent', $group_message);	
+	$this->selenium->write('verifyTextPresent', $group_message);
+	//unsubscribe from group
+	//$this->selenium->signOut();	
+	//$this->selenium->signIn($name2, $password2);	
+	//$this->selenium->openPage('/group/' . $group);	
+	//$this->selenium->write('clickAndWait', 'link=Unsubscribe');
+	//$this->selenium->write('verifyTextPresent', $group);
+	//$this->selenium->write('verifyTextPresent', $name);
+	//$this->selenium->write('verifyTextNotPresent', $name2);	
+	//$this->selenium->write('verifyTextPresent', 'Subscribe');		
 	$this->selenium->openPage('/admin/flush');	
 ?>

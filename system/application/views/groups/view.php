@@ -2,9 +2,9 @@
 
 <h3>
 	<?php if ($imAMember): ?>
-			<a href="/groups/unsubscribe/<?php echo $name ?>" id="unsubscribe">Unsubscribe</a>
+			<a href="/groups/unsubscribe/<?php echo $id ?>" id="unsubscribe">Unsubscribe</a>
 	<?php else: ?>
-			<a href="/groups/subscribe/<?php echo $name ?>" id="subscribe">Subscribe</a>
+			<a href="/groups/subscribe/<?php echo $id ?>" id="subscribe">Subscribe</a>
 	<?php endif ?>
 </h3>
 	
@@ -12,8 +12,8 @@
 <ul>
 <?php foreach ($members as $member): ?>
 	<li>
-		<a href="/<?php echo $member ?>"><?php echo $member ?></a> 
-		<?php if ($owner == $member): ?>
+		<a href="/<?php echo $member['username'] ?>"><?php echo $member['username'] ?></a> 
+		<?php if ($owner == $member['id']): ?>
 			(Owner)
 		<?php endif ?>
 	</li>

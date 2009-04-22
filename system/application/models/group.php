@@ -14,12 +14,22 @@ class Group extends App_Model
 	 */
 	function add($data = array(), $owner_id)
 	{
-		$data['members'] = array(0 => $owner_id);
-		$data['messages'] = array();		
+		$data['id'] = $this->makeId();
 		$data['owner_id'] = $owner_id;
 		$data['public'] = 1;
 		$this->mode = 'add';
-		return $this->save($data);
+		if ($this->save($this->prefixGroup($data['id']), $data)) 
+		{
+			$this->mode = null;
+			$this->save($this->prefixGroupName($data['name']), $data['id'], false);
+			$this->addMember($data['id'], $owner_id);
+			$this->push($this->prefixGroupMessages($data['id']), null);
+			return true;
+		} 
+		else 
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -30,30 +40,45 @@ class Group extends App_Model
 	 * @param string $member Member to add
 	 * @return boolean
 	 */
-	function addMember($name, $member)
+	function addMember($group_id, $member_id = null)
 	{
-		if (!empty($member)) 
-		{
-			$group = $this->find($name);
-			$group['members'][] = $member;
-			return $this->save($group);
-		} 
-		else 
-		{
-			return true;
-		}		
+		return $this->push($this->prefixGroupMessages($group_id), $member_id);
 	}
-
+	
 	/**
-	 * Group specific find
+	 * Find a group by id
 	 *
-	 * @access public 
-	 * @param group $name
-	 * @return array
+	 * @access public
+	 * @param string $name
+	 * @return array User data
 	 */
-	function find($name)
-	{		
-		return parent::find($this->prefixGroup($name));
+	function get($group_id = null)
+	{
+		$return = null;
+		if ($group_id) 
+		{
+			return $this->find($this->prefixGroup($group_id));
+		}
+	}	
+	
+	/**
+	 * Find a group by name
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return array User data
+	 */
+	function getByName($name = null)
+	{
+		$return = null;
+		if ($name) 
+		{
+			$group_id = $this->find($this->prefixGroupName($name), true);
+			if ($group_id) 
+			{
+				return $this->get($group_id);
+			}
+		}
 	}
 	
 	/**
@@ -63,10 +88,17 @@ class Group extends App_Model
 	 * @param string $name Name of group
 	 * @return array Members
 	 */
-	function getMembers($name)
+	function getMembers($group_id)
 	{
-		$group = $this->find($name);
-		return $this->getValue($group, 'members');
+		$member_ids = $this->find($this->prefixGroupMembers($group_id));
+		$members = null;
+		if ($member_ids) 
+		{
+			foreach ($member_ids as $member_id) {
+				$members[] = $this->User->get($member_id);
+			}
+		}
+		return $members;
 	}
 	
 	/**
@@ -76,9 +108,9 @@ class Group extends App_Model
 	 * @param string $name Name of group
 	 * @return string Owner
 	 */
-	function getOwner($name)
+	function getOwner($id)
 	{
-		$group = $this->find($name);
+		$group = $this->find($id);
 		return $this->getValue($group, 'owner_id');		
 	}
 	
@@ -91,15 +123,24 @@ class Group extends App_Model
 	 * @param array $members[optional] will use this array instead if supplied
 	 * @return boolean
 	 */
-	function isMember($groupname, $username, $members = array())
-	{
+	function isMember($id, $user_id, $members = array())
+	{	
 		if (empty($members)) 
 		{
-			$members = $this->getMembers($groupname);
+			$members = $this->getMembers($id);
 		}
 		if (is_array($members)) 
 		{
-			return in_array($username, $members);
+			foreach ($members as $member) {
+				if (!empty($member['id'])) 
+				{
+					if ($member['id'] == $user_id) 
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		} 
 		else 
 		{
@@ -115,9 +156,9 @@ class Group extends App_Model
 	 * @param string $user_name user to search for
 	 * @return boolean
 	 */
-	function isOwner($groupname, $user_name)
+	function isOwner($id, $user_id)
 	{
-		return ($groupname == $user_name);
+		return ($id == $user_id);
 	}
 
 	/**
@@ -148,36 +189,24 @@ class Group extends App_Model
 	 * @param string $member Member to add
 	 * @return boolean
 	 */
-	function removeMember($groupname, $member)
+	function removeMember($group_id, $user_id)
 	{
-		if (!$this->isOwner($groupname, $member)) 
+		if (!$this->isOwner($group_id, $user_id)) 
 		{
-			$group = $this->find($groupname);
+			$group = $this->get($group_id);
 			$new_lineup = array();
-			foreach ($group['members'] as $previous_member) 
+			$members = $this->find($this->prefixGroupMembers($group_id));
+			foreach ($members as $previous_member) 
 			{
-				if ($previous_member != $member) 
+				if ($previous_member != $user_id) 
 				{
 					$new_lineup[] = $previous_member;
 				}
 			}
-			$group['members'] = $new_lineup;
-			return $this->save($group);
+			return $this->save($this->prefixGroupMembers($group_id), $new_lineup);
 		} else {
 			return false;
 		}		
-	}
-	
-	/**
-	 * Group specific save
-	 *
-	 * @access public 
-	 * @param array $group 
-	 * @return boolean
-	 */
-	function save($group)
-	{		
-		return parent::save($this->prefixGroup($group['name']), $group);
 	}
 	
 	/**
@@ -193,7 +222,7 @@ class Group extends App_Model
 		{
 			$this->validates_format_of('name', array('with'=>ALPHANUM, 'message'=>'A group name may only be made up of numbers, letters, and underscores'));
 			$this->validates_length_of('name', array('min'=>6, 'max'=>25, 'message'=>'A group name must be between 6 and 25 characters'));
-			$this->validates_uniqueness_of('name', array('message'=>'Group name has already been taken'));
+			$this->validates_uniqueness_of('name', array('message'=>'Group name has already been taken', 'fieldValue'=>$this->prefixGroupName($this->input->post('name'))));
 			$this->validates_presence_of('name', array('message'=>'A group name is required'));			
 		}
 	    return (count($this->validationErrors) == 0);

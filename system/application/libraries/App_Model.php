@@ -9,16 +9,22 @@ class App_Model extends Model {
 
 	private $memcacheHost = 'localhost';
 	private $memcachePort = '21201';
+	private $prefixAutoincrement = 'autoincrement';
 	private $prefixCookie = 'session';
 	private $prefixFollower = 'followers';
 	private $prefixFollowing = 'following';	
-	private $prefixGroup = 'groups';
-	private $prefixMessage = 'messages';
+	private $prefixGroup = 'group';
+	private $prefixGroupName = 'groupname';	
+	private $prefixGroupMessages = 'groupmessages';
+	private $prefixGroupMembers = 'groupmessages';	
+	private $prefixMessage = 'message';
 	private $prefixPublic = 'timeline';
 	private $prefixSeparator = ':';	
-	private $prefixUser = 'users';
-	private $prefixUserPublic = 'userpublic';
-	private $prefixUserPrivate = 'userprivate';
+	private $prefixUser = 'user';
+	private $prefixUsername = 'username';
+	private $prefixUserEmail = 'useremail';	
+	private $prefixUserPublic = 'public';
+	private $prefixUserPrivate = 'private';
 	public $action;
 	public $id;	
 	public $modelData = array();
@@ -53,12 +59,18 @@ class App_Model extends Model {
 	/**
 	 * Find a record
 	 *
-	 * @todo This needs to behave differently depending on DB type selected. Right now does redis work which should move to redis library extension
 	 * @access public
 	 */
-	function find($key) 
+	function find($key, $isInt = false) 
 	{
-		$data = $this->tt->get($key);
+		if ($isInt) 
+		{
+			$data = $this->tt->getInt($key);
+		} 
+		else 
+		{
+			$data = $this->tt->get($key);
+		}
 		if ($this->isSerialized($data)) 
 		{
 			$data = unserialize($data);
@@ -88,6 +100,18 @@ class App_Model extends Model {
 	}
 
 	/**
+	 * Hash a value
+	 *
+	 * @access public
+	 * @param string $value
+	 * @return string Hashed value
+	 */
+	function hash($value)
+	{
+		return sha1($value . $this->config->item('salt'));
+	}
+
+	/**
 	 * Is there an error>
 	 *
 	 * @access public
@@ -105,7 +129,6 @@ class App_Model extends Model {
 		}
 	}
 	
-
 	/**
 	 * Is a string serialized?
 	 *
@@ -114,7 +137,14 @@ class App_Model extends Model {
 	 */
 	function isSerialized($str) 
 	{
-	    return ($str == serialize(false) || @unserialize($str) !== false);
+		if ($str === 0) 
+		{
+			return false;
+		} 
+		else 
+		{
+	    	return ($str == serialize(false) || @unserialize($str) !== false);
+		}
 	}
 
 	/**
@@ -153,7 +183,26 @@ class App_Model extends Model {
 			$this->$model = $ci->$model;
 		}
 	}
-
+	
+	/**
+	 * Make an id for a model
+	 *
+	 * @access public
+	 * @param string value
+	 * @return id
+	 */
+	function makeId()
+	{
+		$last_id = $this->find($this->prefixAutoincrement, true);
+		if (!$last_id) 
+		{
+			$last_id = 0;
+		}
+		$last_id++;
+		$this->save($this->prefixAutoincrement, $last_id, false);
+		return $last_id;
+	}
+	
 	/**
 	 * Create a prefix for cookie
 	 * 
@@ -197,9 +246,45 @@ class App_Model extends Model {
 	 * @param string $groupname
 	 * @return string
 	 */	
-	function prefixGroup($groupname)
+	function prefixGroup($id)
 	{ 
-		return $this->prefixGroup . $this->prefixSeparator . $groupname; 
+		return $this->prefixGroup . $this->prefixSeparator . $id; 
+	}
+	
+	/**
+	 * Create a prefix for a group name
+	 * 
+	 * @access public
+	 * @param string $groupname
+	 * @return string
+	 */	
+	function prefixGroupName($groupname)
+	{ 
+		return $this->prefixGroupName . $this->prefixSeparator . $groupname; 
+	}
+	
+	/**
+	 * Create a prefix for a group members
+	 * 
+	 * @access public
+	 * @param int $group_id
+	 * @return string
+	 */	
+	function prefixGroupMembers($group_id)
+	{ 
+		return $this->prefixGroupMembers . $this->prefixSeparator . $group_id; 
+	}
+	
+	/**
+	 * Create a prefix for a group messages
+	 * 
+	 * @access public
+	 * @param int $group_id
+	 * @return string
+	 */	
+	function prefixGroupMessages($group_id)
+	{ 
+		return $this->prefixGroupMessages . $this->prefixSeparator . $group_id; 
 	}
 	
 	/**
@@ -210,9 +295,9 @@ class App_Model extends Model {
 	 * @param string $time	
 	 * @return string
 	 */	
-	function prefixMessage($username, $time)
+	function prefixMessage($id)
 	{ 
-		return $this->prefixMessage . $this->prefixSeparator . $username . $this->prefixSeparator . $time; 
+		return $this->prefixMessage . $this->prefixSeparator  . $id; 
 	}
 	
 	/**
@@ -223,20 +308,45 @@ class App_Model extends Model {
 	 */	
 	function prefixPublic()
 	{ 
-		return $this->prefixPublic . $this->prefixSeparator; 
+		return $this->prefixPublic; 
 	}
 
 	/**
-	 * Create a prefix for a user
+	 * Create a prefix for user data
 	 * 
 	 * @access public
 	 * @param string $username
 	 * @return string
 	 */	
-	function prefixUser($username)
+	function prefixUser($id)
 	{ 
-		return $this->prefixUser . $this->prefixSeparator . $username; 
+		return $this->prefixUser . $this->prefixSeparator . $id; 
 	}
+
+	/**
+	 * Create a prefix for a username
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */	
+	function prefixUserEmail($email)
+	{ 
+		return $this->prefixUserEmail . $this->prefixSeparator . $email; 
+	}
+	
+	/**
+	 * Create a prefix for a username
+	 * 
+	 * @access public
+	 * @param string $username
+	 * @return string
+	 */	
+	function prefixUsername($username)
+	{ 
+		return $this->prefixUsername . $this->prefixSeparator . $username; 
+	}
+	
 
 	/**
 	 * Create a prefix for user messages
@@ -272,7 +382,7 @@ class App_Model extends Model {
 	 */
 	function push($key, $value)
 	{
-		$data = $this->find($key, $value);
+		$data = $this->find($key);
 		if (!$data) {
 			$data = array();
 		}
@@ -314,10 +424,15 @@ class App_Model extends Model {
 	 * @return boolean
 	 * @access public
 	 */
-	function save($key, $data) 
+	function save($key, $data, $validate = true) 
 	{
 		$this->modelData = $data;
-		if ($this->validate()) {
+		$valid = true;
+		if ($validate) 
+		{
+			$valid = $this->validate();
+		}
+		if ($valid) {
 			if (is_array($this->modelData)) 
 			{
 				$data = serialize($this->modelData);
@@ -326,10 +441,25 @@ class App_Model extends Model {
 			{
 				$data = $this->modelData;
 			}
-			return $this->tt->put($key, $data);
+			if ($key) 
+			{
+				if (is_int($data)) 
+				{
+					return $this->tt->putInt($key, $data);
+				} 
+				else 
+				{
+					return $this->tt->put($key, $data);
+				}
+			} 
+			else 
+			{
+				return false;
+			}
 		} else {
 			return false;
 		}
+		
 	}
 
 	function setAction()

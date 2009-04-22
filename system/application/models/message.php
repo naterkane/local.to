@@ -10,63 +10,44 @@ class Message extends App_Model
      *
      * @todo Validation and return value, add transactions, move isMember to Validation
      * @param string $message
+	 * @return boolean|message_id
      */
-    function add($message = null, $username)
+    function add($message = null, $user_id)
     {
 		$data = array();
 		$time = time();
 		$this->mode = 'post';
 		$this->loadModels(array('Group'));
-		$this->id = $this->prefixMessage($username, $time);	
+		$data['id'] = $this->makeId();	
 		$data['time'] = $time;
-		$data['username'] = $username;
+		$data['user_id'] = $user_id;
 		$data['message'] = str_replace("\n", " ", $message);
-		if ($this->save($this->id, $data)) 
+		$data['message_html'] = $data['message'];
+		if (!isset($data['reply_to']))
 		{
+			$data['reply_to'] = null;
+		}
+		if ($this->save($this->prefixMessage($data['id']), $data)) 
+		{
+			$this->mode = null;
 			$groups = $this->Group->matchGroups($data['message']);
 			if (!empty($groups)) 
 			{
-				$this->addToGroups($groups, $username, $this->id);
+				$this->addToGroups($groups, $user_id, $data['id']);
 			}
 			else 
 			{
-				$this->addToUserPrivate($username, $this->id);			
-		        $this->addToUserPublic($username, $this->id);
+				$this->addToUserPrivate($user_id, $data['id']);			
+		        $this->addToUserPublic($user_id, $data['id']);
 			}
-			$this->addToPublicTimeline($this->id);		
-        	return true;			
+			$this->addToPublicTimeline($data['id']);		
+        	return $data['id'];
 		} 
 		else 
 		{
 			return false;
 		}
-    }
-
-	/**
-	 * Add to message to user's private facing list
-	 *
-	 * @access public
-	 * @param string $username
-	 * @param string $message_id
-	 * @return 
-	 */
-	function addToUserPrivate($username, $message_id)
-	{
-		return $this->push($this->prefixUserPrivate($username), $message_id);
-	}
-
-	/**
-	 * Add to message to user's public facing list
-	 *
-	 * @access public
-	 * @param string $username
-	 * @param string $message_id
-	 * @return 
-	 */
-	function addToUserPublic($username, $message_id)
-	{
-		return $this->push($this->prefixUserPublic($username), $message_id);
-	}	
+    }	
 
 	/**
 	 * Add message to a group
@@ -77,17 +58,13 @@ class Message extends App_Model
 	 * @param array $group[option]
 	 * @return boolean
 	 */
-	function addToGroup($groupname, $message_id, $group = array())
+	function addToGroup($group_id, $message_id)
 	{
-		if (empty($group)) 
+		$messages = $this->find($this->prefixGroupMessages($group_id));
+		if (!empty($messages)) 
 		{
-			$group = $this->Group->find($groupname);
-		}
-		if (!empty($group)) 
-		{
-			$group['messages'][] = $message_id;
-			array_unshift($group['messages'], $message_id);
-			return $this->Group->save($group);
+			array_unshift($messages, $message_id);
+			return $this->Group->save($this->prefixGroupMessages($group_id), $messages);
 		} 
 		else 
 		{
@@ -102,18 +79,22 @@ class Message extends App_Model
 	 * @param array $groups
 	 * @return 
 	 */
-	function addToGroups($groups, $username, $message_id)
+	function addToGroups($groups, $user_id, $message_id)
 	{
-		foreach ($groups as $group) 
+		foreach ($groups as $groupname) 
 		{
-			if ($this->Group->isMember($group, $username)) 
-			{
-				$this->addToGroup($group, $message_id);
-				$members = $this->Group->getMembers($group);
+			$group = $this->Group->getByName($groupname);
+			if ($this->Group->isMember($group['id'], $user_id)) 
+			{				
+				$this->addToGroup($group['id'], $message_id);
+				$members = $this->Group->getMembers($group['id']);
 				foreach ($members as $member) 
-				{					
-					$this->addToUserPublic($member, $message_id);
-					$this->addToUserPrivate($member, $message_id);
+				{
+					if ((!empty($member['id'])) && ($user_id != $member['id'])) 
+					{
+						$this->addToUserPublic($member['id'], $message_id);
+						$this->addToUserPrivate($member['id'], $message_id);
+					}
 				}
 			}
 		}
@@ -132,6 +113,32 @@ class Message extends App_Model
         $this->trim($this->prefixPublic(), 0, 1000);
 	}
 
+	/**
+	 * Add to message to user's private facing list
+	 *
+	 * @access public
+	 * @param string $username
+	 * @param string $message_id
+	 * @return 
+	 */
+	function addToUserPrivate($user_id, $message_id)
+	{
+		return $this->push($this->prefixUserPrivate($user_id), $message_id);
+	}
+
+	/**
+	 * Add to message to user's public facing list
+	 *
+	 * @access public
+	 * @param string $username
+	 * @param string $message_id
+	 * @return 
+	 */
+	function addToUserPublic($user_id, $message_id)
+	{
+		return $this->push($this->prefixUserPublic($user_id), $message_id);
+	}
+
     /**
      * Get the messages of the people a user is following
      *
@@ -139,10 +146,16 @@ class Message extends App_Model
      * @param string $username
      * @todo 
      */
-    function getFollowed($username)
+    function getFollowed($user_id)
     {		
         return null;
     }
+
+	function getForGroup($group_id)
+	{
+		$messages = $this->find($this->prefixGroupMessages($group_id));
+		return $this->getMany($messages);
+	}
 
     /**
      * Get more than one message
@@ -150,15 +163,15 @@ class Message extends App_Model
      * @return
      * @param object $messages
      */
-    function getMany($messages)
+    function getMany($messages = array())
     {
         $return = array();
-		if ($messages) {
+		if (($messages) AND (is_array($messages))) {
 			foreach ($messages as $id)
 	        {
 				if ($id) 
 				{
-					$return[] = $this->find($id);
+					$return[] = $this->getOne($id);
 				}
 	        }
 		}
@@ -173,20 +186,23 @@ class Message extends App_Model
 	 * @param string $time	
 	 * @return string $message
 	 */
-	function getOne($username, $time)
+	function getOne($message_id)
 	{
-		return $this->find($this->prefixMessage($username, $time));
+		$message = $this->find($this->prefixMessage($message_id));
+		$user = $this->User->get($message['user_id']);
+		$message['username'] = $user['username'];
+		return $message;
 	}
 
     /**
      * Get Messages for user
      *
-     * @param string $username[optional]
+     * @param string $username
      * @return array Messages
      */
-    function getPublic($username = null)
+    function getPublic($user_id)
     {
-        $messages = $this->find($this->prefixUserPublic($username));
+        $messages = $this->find($this->prefixUserPublic($user_id));
         return $this->getMany($messages);
     }
 
@@ -195,9 +211,9 @@ class Message extends App_Model
      * @return
      * @param object $username
      */
-    function getPrivate($username)
+    function getPrivate($user_id)
     {
-        $messages = $this->find($this->prefixUserPrivate($username));
+        $messages = $this->find($this->prefixUserPrivate($user_id));
         return $this->getMany($messages);
     }
    

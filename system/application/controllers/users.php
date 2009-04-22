@@ -14,24 +14,14 @@ class Users extends App_Controller
     function follow($username = null)
     {
         $this->mustBeSignedIn();
-        if ($username)
-        {
-            $user = $this->User->get($username);
-            if ($user)
-            {
-                $this->User->push('followers:' . $username, $this->userData['username']);
-                $this->User->push('following:' . $this->userData['username'], $username);
-                $this->redirect('/' . $username);
-            }
-            else
-            {
-                show_404();
-            }
-        }
-        else
-        {
-            show_404();
-        }
+		if ($this->User->follow($username, $this->userData['id']))
+		{
+			$this->redirect('/' . $username);
+		}
+		else
+		{
+			show_404();
+		}
     }
    
 	/**
@@ -42,7 +32,7 @@ class Users extends App_Controller
     {
         $this->mustBeSignedIn();
         $this->data['title'] = 'Home';
-        $this->data['messages'] = $this->Message->getPrivate($this->userData['username']);
+        $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
         $this->load->view('users/home', $this->data);
     }
    
@@ -103,7 +93,7 @@ class Users extends App_Controller
     function signout()
     {
         $this->cookie->remove('user');
-        $this->redirect('/', 'You have successfully signed out.');
+        $this->redirect('/signin', 'You have successfully signed out.');
     }
  
     /**
@@ -114,14 +104,14 @@ class Users extends App_Controller
      */
     function view($username)
     {	
-       	$user = $this->User->get($username);
+       	$user = $this->User->getByUsername($username);
         if ($user)
         {
             $this->getUserData();
             $this->data['title'] = 'Home';
             $this->data['username'] = $username;
-            $this->data['messages'] = $this->Message->getPublic($username);
-            $this->data['is_following'] = $this->User->isFollowing($username, $this->userData['username']);
+            $this->data['messages'] = $this->Message->getPublic($user['id']);
+            $this->data['is_following'] = $this->User->isFollowing($user['id'], $this->userData['id']);
             $this->load->view('users/view', $this->data);
         }
         else

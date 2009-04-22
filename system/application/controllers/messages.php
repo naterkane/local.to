@@ -16,9 +16,11 @@ class Messages extends App_Controller
         $this->mustBeSignedIn();
         if ($this->postData)
         {
-			if ($this->Message->add($this->postData['message'], $this->userData['username'])) 
+			$message_id = $this->Message->add($this->postData['message'], $this->userData['id']);
+			if ($message_id) 
 			{
-            	$this->User->sendToFollowers($this->Message->id, $this->userData['username']);
+				$this->User->mode = null;
+            	$this->User->sendToFollowers($message_id, $this->userData['id']);
 			}
             $this->redirect('/home');
         }
@@ -36,10 +38,10 @@ class Messages extends App_Controller
 	 * @param int $timestamp	
 	 * @return 
 	 */
-	function view($username, $time)
+	function view($username, $message_id)
 	{
-		$message = $this->Message->getOne($username, $time);
-		if ($message) {
+		$message = $this->Message->getOne($message_id);
+		if (($message) AND ($message['username'] == $username)) {
 			$this->load->view('messages/view', array('message'=>$message));
 		} else {
 			show_404();

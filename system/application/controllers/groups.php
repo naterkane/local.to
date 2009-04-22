@@ -16,7 +16,7 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$this->data['title'] = 'Add a group';
 		if ($this->postData) {
-			if ($this->Group->add($this->postData, $this->userData['username'])) {
+			if ($this->Group->add($this->postData, $this->userData['id'])) {
 				$this->redirect('/group/' . $this->postData['name']);
 			} else {
 				$this->setErrors(array('Group'));
@@ -33,13 +33,13 @@ class Groups extends App_Controller
 	 * @param string $name
 	 * @return 
 	 */
-	function subscribe($name = null)
+	function subscribe($group_id = null)
 	{
 		$this->mustBeSignedIn();
-		$group = $this->Group->find($name);
+		$group = $this->Group->get($group_id);
 		if ($group) {
-			$this->Group->addMember($name, $this->userData['username']);
-			$this->redirect('/group/' . $name);
+			$this->Group->addMember($group_id, $this->userData['id']);
+			$this->redirect('/group/' . $group['name']);
 		} else {
 			show_404();
 		}
@@ -52,16 +52,16 @@ class Groups extends App_Controller
 	 * @param string $name
 	 * @return 
 	 */
-	function unsubscribe($name = null)
+	function unsubscribe($group_id = null)
 	{
 		$this->mustBeSignedIn();
-		$group = $this->Group->find($name);
+		$group = $this->Group->get($group_id);
 		if ($group) {
-			$this->Group->removeMember($name, $this->userData['username']);
-			$this->redirect('/group/' . $name);
+			$this->Group->removeMember($group_id, $this->userData['id']);
+			$this->redirect('/group/' . $group['name']);
 		} else {
 			show_404();
-		}
+		}		
 	}	
 
 	/**
@@ -76,13 +76,14 @@ class Groups extends App_Controller
 	{
 		if ($name) {
 			$this->getUserData();
-			$group = $this->Group->find($name);
+			$group = $this->Group->getByName($name);
 			$this->data['title'] = $group['name'];
-			$this->data['name'] = $group['name'];		
-			$this->data['members'] = $group['members'];
+			$this->data['name'] = $group['name'];
+			$this->data['id'] = $group['id'];					
+			$this->data['members'] = $this->Group->getMembers($group['id']);
 			$this->data['owner'] = $group['owner_id'];
-			$this->data['messages'] = $this->Message->getMany($group['messages']);
-			$this->data['imAMember'] = $this->Group->isMember($name, $this->userData['username'], $group['members']);
+			$this->data['messages'] = $this->Message->getForGroup($group['id']);
+			$this->data['imAMember'] = $this->Group->isMember($group['id'], $this->userData['id']);
 			if ($this->data['members']) {
 				$this->load->view('groups/view', $this->data);
 			} else {

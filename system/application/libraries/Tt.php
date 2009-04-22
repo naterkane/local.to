@@ -31,11 +31,14 @@ class Tt
         {
             throw new Net_TokyoTyrantException('socket read eof error');
         }
-
-        $result = fread($this->socket, $length);
-        if ($result === false) {
-            throw new Net_TokyoTyrantException('socket read error');
-        }
+		$result = null;
+		if ($length) 
+		{
+	        $result = fread($this->socket, $length);
+	        if ($result === false) {
+	            throw new Net_TokyoTyrantException('socket read error');
+	        }
+		}
         return $result;
     }
 

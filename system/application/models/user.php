@@ -6,22 +6,60 @@ class User extends App_Model
 {
 	
 	/**
+	 * Follow a user
+	 *
+	 * @access public
+	 * @param string $username of user to follow
+	 * @param string $user_id of user following
+	 * @return boolean
+	 */
+	function follow($username = null, $user_id)
+	{
+		$user = $this->getByUsername($username);	
+		if ($user) 
+		{
+			$this->push($this->prefixFollower($user['id']), $user_id);
+			$this->push($this->prefixFollowing($user_id), $user['id']);
+			return true;
+		} 
+		else 
+		{
+			return false;
+		}
+	}
+	
+	
+	/**
 	 * Get a User's data by username
 	 *
 	 * @param object $username[optional]
 	 * @return 	
 	 */
-    function get($username = null)
+    function get($user_id = null)
     {
-        if ($username)
+        if ($user_id)
         {
-            return $this->find($this->prefixUser($username));
+            return $this->find($this->prefixUser($user_id));
         }
         else
         {
             return null;
         }
     }
+
+	function getByUsername($username = null)
+	{
+		$return = null;
+		if ($username) 
+		{
+			$user_id = $this->find($this->prefixUsername($username), true);
+			if ($user_id) 
+			{
+				$return = $this->find($this->prefixUser($user_id));
+			}
+		}
+		return $return;
+	}
 	
 	/**
 	 * Get all of a users followers  
@@ -29,11 +67,11 @@ class User extends App_Model
 	 * @param object $username
 	 * @return 	
 	 */
-    function getFollowers($username)
+    function getFollowers($user_id)
     {
-        if ($username)
+        if ($user_id)
         {
-            return $this->find($this->prefixFollower($username));
+            return $this->find($this->prefixFollower($user_id));
         }
         else
         {
@@ -47,11 +85,11 @@ class User extends App_Model
 	 * @param object $username
 	 * @return 	
 	 */
-    function getFollowing($username)
+    function getFollowing($user_id)
     {
-        if ($username)
+        if ($user_id)
         {
-            return $this->find($this->prefixFollowing($username));
+            return $this->find($this->prefixFollowing($user_id));
         }
         else
         {
@@ -67,7 +105,7 @@ class User extends App_Model
      */
     function hashPassword($password)
     {
-        return sha1($password . $this->config->item('salt'));
+        return $this->hash($password);
     }
    
     /**
@@ -77,11 +115,11 @@ class User extends App_Model
      * @param string $my_username The user doing the asking
      * @return boolean
      */
-    function isFollowing($username, $my_username)
+    function isFollowing($user_id, $my_id)
     {
-        $isFollowing = $this->getFollowing($my_username);
+        $isFollowing = $this->getFollowing($my_id);
 		if (!empty($isFollowing)) {
-			if (in_array($username, $isFollowing))
+			if (in_array($user_id, $isFollowing))
 	        {
 	            return true;
 	        }
@@ -151,14 +189,15 @@ class User extends App_Model
      * @param int $message_id
      * @return boolean
      */
-    function sendToFollowers($message_id, $username)
+    function sendToFollowers($message_id, $user_id)
     {
-        $followers = $this->getFollowers($username);
+        $followers = $this->getFollowers($user_id);
 		if ($followers) 
 		{
 			foreach ($followers as $follower)
 	        {
 	            $this->push($this->prefixUserPrivate($follower), $message_id);
+	            $this->push($this->prefixUserPublic($follower), $message_id);	
 	        }
 		}
         return true;
@@ -174,7 +213,7 @@ class User extends App_Model
     {
         if (! empty($data['username']))
         {
-            $user = $this->get($data['username']);
+            $user = $this->getByUsername($data['username']);
             if ((! empty($user)) && ($this->hashPassword($data['password']) == $user['password']))
             {
                 return $user;
@@ -203,14 +242,18 @@ class User extends App_Model
         $user = array();
         $now = time();
         $this->mode = 'signup';
+		$data['id'] = $this->makeId();
         $data['activated'] = 1;
         $data['created'] = $now;
         $data['modified'] = $now;
-		if ($this->save($this->prefixUser($data['username']), $data)) 
+		if ($this->save($this->prefixUser($data['id']), $data)) 
 		{
-	        $this->push($this->prefixFollower($data['username']), $data['username']);
-			$this->push($this->prefixUserPrivate($data['username']), $message_id);
-        	return true;			
+			$this->mode = null;
+			$this->save($this->prefixUserEmail($data['email']), $data['id']);
+			$this->save($this->prefixUsername($data['username']), $data['id']);
+	        $this->push($this->prefixFollower($data['id']), $data['id']);
+			$this->push($this->prefixUserPrivate($data['id']), array());
+        	return true;
 		} 
 		else {
         	return false;
