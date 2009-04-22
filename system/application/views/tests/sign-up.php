@@ -2,8 +2,9 @@
 	$name = $this->selenium->randomString(10);
 	$password = $this->selenium->randomString(10);
 	$email = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';
-	$too_short_name = $this->selenium->randomString(5);
-	$too_long_name = $this->selenium->randomString(26);
+	$too_long_name = $this->selenium->randomString(16);
+	$too_short_password = $this->selenium->randomString(5);	
+	$too_long_password = $this->selenium->randomString(26);		
 	$error = 'There was an error signing up. Please see below for details.';
 	$reserved = 'groups';
 	$this->selenium->caseTitle('Sign Up');
@@ -32,27 +33,22 @@
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);	
 	$this->selenium->write('verifyTextPresent', 'This is a reserved username');
-	//too short username
-	$this->selenium->write('type', 'username', $too_short_name);
-	$this->selenium->click('Sign Up');
-	$this->selenium->write('verifyTextPresent', $error);	
-	$this->selenium->write('verifyTextPresent', 'A username must be between 6 and 25 characters long');
 	//too long username
 	$this->selenium->write('type', 'username', $too_long_name);
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);	
-	$this->selenium->write('verifyTextPresent', 'A username must be between 6 and 25 characters long');	
+	$this->selenium->write('verifyTextPresent', 'A username must be between 1 and 15 characters long');	
 	//too short password
 	$this->selenium->write('type', 'username', '');
-	$this->selenium->write('type', 'password', $too_short_name);
-	$this->selenium->write('type', 'passwordconfirm', $too_short_name);	
+	$this->selenium->write('type', 'password', $too_short_password);
+	$this->selenium->write('type', 'passwordconfirm', $too_short_password);	
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);	
 	$this->selenium->write('verifyTextPresent', 'A password must be between 6 and 25 characters long');
 	//too long password
 	$this->selenium->write('type', 'username', '');
-	$this->selenium->write('type', 'password', $too_long_name);
-	$this->selenium->write('type', 'passwordconfirm', $too_long_name);	
+	$this->selenium->write('type', 'password', $too_long_password);
+	$this->selenium->write('type', 'passwordconfirm', $too_long_password);	
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);	
 	$this->selenium->write('verifyTextPresent', 'A password must be between 6 and 25 characters long');

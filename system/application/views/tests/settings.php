@@ -9,8 +9,7 @@
 	$location = $this->selenium->randomString(10);	
 	$real_name = $this->selenium->randomString(10);	
 	$reserved = 'groups';	
-	$too_short_name = $this->selenium->randomString(5);
-	$too_long_name = $this->selenium->randomString(26);
+	$too_long_name = $this->selenium->randomString(16);
 	$too_long_bio = $this->selenium->randomString(161);	
 	$error = 'There was an error updating your profile. See below for more details.';	
 	$this->selenium->caseTitle('Change Profile');
@@ -39,16 +38,11 @@
 	$this->selenium->click('Update');
 	$this->selenium->write('verifyTextPresent', $error);	
 	$this->selenium->write('verifyTextPresent', 'This is a reserved username');	
-	//too short username
-	$this->selenium->write('type', 'username', $too_short_name);
-	$this->selenium->click('Update');
-	$this->selenium->write('verifyTextPresent', $error);	
-	$this->selenium->write('verifyTextPresent', 'A username must be between 6 and 25 characters long');
 	//too long username
 	$this->selenium->write('type', 'username', $too_long_name);
 	$this->selenium->click('Update');
 	$this->selenium->write('verifyTextPresent', $error);	
-	$this->selenium->write('verifyTextPresent', 'A username must be between 6 and 25 characters long');	
+	$this->selenium->write('verifyTextPresent', 'A username must be between 1 and 15 characters long');	
 	//bad characters in username
 	$this->selenium->write('type', 'username', $name . '!');
 	$this->selenium->click('Update');

@@ -221,7 +221,7 @@ class Group extends App_Model
 		if ($this->mode == 'add')
 		{
 			$this->validates_format_of('name', array('with'=>ALPHANUM, 'message'=>'A group name may only be made up of numbers, letters, and underscores'));
-			$this->validates_length_of('name', array('min'=>6, 'max'=>25, 'message'=>'A group name must be between 6 and 25 characters'));
+			$this->validates_length_of('name', array('min'=>1, 'max'=>15, 'message'=>'A group name must be between 1 and 15 characters'));
 			$this->validates_uniqueness_of('name', array('message'=>'Group name has already been taken', 'fieldValue'=>$this->prefixGroupName($this->input->post('name'))));
 			$this->validates_presence_of('name', array('message'=>'A group name is required'));			
 		}
