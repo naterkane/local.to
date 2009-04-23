@@ -41,6 +41,11 @@
 	$this->selenium->write('verifyTextPresent', 'Unsubscribe');	
 	$this->selenium->openPage('/groups/members/' . $group);		
 	$this->selenium->write('verifyTextPresent', $name);	
+	//check that settings are accessible
+	$this->selenium->openPage('/group/' . $group);		
+	$this->selenium->write('verifyTextPresent', 'Settings');
+	$this->selenium->openPage('/groups/settings/' . $group);		
+	$this->selenium->write('verifyTextPresent', $group);	
 	//try adding a group with the same name
 	$this->selenium->openPage('/groups/add');
 	$this->selenium->write('type', 'name', $group);
@@ -51,6 +56,11 @@
 	$this->selenium->signOut();	
 	$this->selenium->signUp($name2, $password2, $email2);
 	$this->selenium->signIn($name2, $password2);
+	//check that settings are not accessible
+	$this->selenium->openPage('/group/' . $group);	
+	$this->selenium->write('verifyTextNotPresent', '(Settings)');
+	$this->selenium->write('openAndWait', '/groups/settings/' . $group);
+	$this->selenium->write('verifyTextPresent', $this->selenium->missingText);	
 	//subscribe to group
 	$this->selenium->openPage('/group/' . $group);	
 	$this->selenium->write('verifyTextPresent', $group);

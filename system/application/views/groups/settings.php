@@ -1,4 +1,4 @@
-<h2><?php echo $name ?></h2>
+<h2><?php echo $name ?> (<a href="/group/<?php echo $name ?>">View</a>)</h2>
 <form action="/groups/settings/<?php echo $name ?>" method="post" accept-charset="utf-8">
 	<div class="mod">
 		<label for="username">Name</label>

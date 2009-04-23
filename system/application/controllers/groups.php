@@ -73,27 +73,34 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$user = $this->data['User'];
 		$group = $this->Group->getByName($groupname);
-		$this->data = $group;
-		$this->data['User'] = $user;
-		if ($group) 
+		if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
 		{
-			if ($this->postData) 
+			$this->data = $group;
+			$this->data['User'] = $user;
+			if ($group) 
 			{
-				if ($this->Group->update($group, $this->postData, $this->userData['id'])) 
+				if ($this->postData) 
 				{
-					$this->redirect('/groups/settings/' . $this->postData['name'], 'The group was updated.');
-				} 
+					if ($this->Group->update($group, $this->postData, $this->userData['id'])) 
+					{
+						$this->redirect('/groups/settings/' . $this->postData['name'], 'The group was updated.');
+					} 
+					else 
+					{
+						$this->setErrors(array('Group'));
+						$this->cookie->setFlash('There was an error updating your group. See below for more details.', 'error');
+					}
+				}
 				else 
 				{
-					$this->setErrors(array('Group'));
-					$this->cookie->setFlash('There was an error updating your group. See below for more details.', 'error');
+					$this->setData($this->data);
 				}
-			}
+				$this->load->view('groups/settings', $this->data); 
+			} 
 			else 
 			{
-				$this->setData($this->data);
+				show_404();
 			}
-			$this->load->view('groups/settings', $this->data); 
 		} 
 		else 
 		{
@@ -153,13 +160,14 @@ class Groups extends App_Controller
 		if ($name) {
 			$this->getUserData();
 			$group = $this->Group->getByName($name);
+			$user = $this->data['User'];
+			$this->data = $group;
 			$this->data['title'] = $group['name'];
-			$this->data['name'] = $group['name'];
-			$this->data['id'] = $group['id'];
-			$this->data['owner'] = $group['owner_id'];
+			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 			$this->data['member_count'] = $this->Group->getMemberCount($group['id']);
 			$this->data['messages'] = $this->Message->getForGroup($group['id']);
 			$this->data['imAMember'] = $this->Group->isMember($group['id'], $this->userData['id']);
+			$user['User'] = $user;
 			if ($this->data['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);
 			} else {

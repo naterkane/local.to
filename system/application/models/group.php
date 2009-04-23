@@ -147,9 +147,9 @@ class Group extends App_Model
 	 * @param string $name Name of group
 	 * @return string Owner
 	 */
-	function getOwner($id)
+	function getOwner($group_id)
 	{
-		$group = $this->find($id);
+		$group = $this->find($this->prefixGroup($group_id));
 		return $this->getValue($group, 'owner_id');		
 	}
 	
@@ -188,16 +188,21 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * Is a user an owner of a group
+	 * Is a user an owner of a group?
 	 *
 	 * @access public
-	 * @param string $name group name
-	 * @param string $user_name user to search for
+	 * @param int $user_id
+	 * @param int $owner_id[optional]
+	 * @param int $group_id[optional]
 	 * @return boolean
 	 */
-	function isOwner($id, $user_id)
+	function isOwner($user_id, $owner_id = null, $group_id = null)
 	{
-		return ($id == $user_id);
+		if (!$owner_id) 
+		{
+			$owner_id = $this->getOwner($group_id);
+		}
+		return ($owner_id == $user_id);
 	}
 
 	/**

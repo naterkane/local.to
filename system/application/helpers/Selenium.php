@@ -5,11 +5,11 @@
 class Selenium
 {
 
-	private $errorText = 'An Error Was Encountered';	
-	private $missingText = '404 Page Not Found';	
-	private $noticeText = 'Notice';	
-	private $warningText = 'Warning';
-	private $phpError = 'A PHP Error was encountered';
+	public $errorText = 'An Error Was Encountered';	
+	public $missingText = '404 Page Not Found';	
+	public $noticeText = 'Notice';	
+	public $warningText = 'Warning';
+	public $phpError = 'A PHP Error was encountered';
 	
 	/**
 	 * ie Xpath fix
