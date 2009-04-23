@@ -14,7 +14,7 @@ class Group extends App_Model
 	 */
 	function add($data = array(), $owner_id)
 	{
-		$data['id'] = $this->makeId();
+		$data['id'] = $this->makeId($this->groupId);
 		$data['owner_id'] = $owner_id;
 		$data['public'] = 1;
 		$this->mode = 'add';
@@ -73,7 +73,7 @@ class Group extends App_Model
 		$return = null;
 		if ($name) 
 		{
-			$group_id = $this->find($this->prefixGroupName($name), true);
+			$group_id = $this->find($this->prefixGroupName($name));
 			if ($group_id) 
 			{
 				return $this->get($group_id);

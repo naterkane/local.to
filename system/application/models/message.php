@@ -18,7 +18,7 @@ class Message extends App_Model
 		$time = time();
 		$this->mode = 'post';
 		$this->loadModels(array('Group'));
-		$data['id'] = $this->makeId();	
+		$data['id'] = $this->makeId($this->messageId);	
 		$data['time'] = $time;
 		$data['user_id'] = $user_id;
 		$data['message'] = str_replace("\n", " ", $message);
@@ -34,11 +34,6 @@ class Message extends App_Model
 			if (!empty($groups)) 
 			{
 				$this->addToGroups($groups, $user_id, $data['id']);
-			}
-			else 
-			{
-				$this->addToUserPrivate($user_id, $data['id']);			
-		        $this->addToUserPublic($user_id, $data['id']);
 			}
 			$this->addToPublicTimeline($data['id']);		
         	return $data['id'];

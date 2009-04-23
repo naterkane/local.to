@@ -9,7 +9,6 @@ class App_Model extends Model {
 
 	private $memcacheHost = 'localhost';
 	private $memcachePort = '21201';
-	private $prefixAutoincrement = 'autoincrement';
 	private $prefixCookie = 'session';
 	private $prefixFollower = 'followers';
 	private $prefixFollowing = 'following';	
@@ -25,6 +24,9 @@ class App_Model extends Model {
 	private $prefixUserEmail = 'useremail';	
 	private $prefixUserPublic = 'public';
 	private $prefixUserPrivate = 'private';
+	protected $messageId = 'messageId';	
+	protected $groupId = 'groupId';	
+	protected $userId = 'userId';
 	public $action;
 	public $id;	
 	public $modelData = array();
@@ -64,7 +66,7 @@ class App_Model extends Model {
 	 *
 	 * @access public
 	 */
-	function find($key, $isInt = false) 
+	function find($key) 
 	{
 		$data = $this->mem->get($key);
 		if ($this->isSerialized($data)) 
@@ -187,15 +189,14 @@ class App_Model extends Model {
 	 * @param string value
 	 * @return id
 	 */
-	function makeId()
+	function makeId($key)
 	{
-		$last_id = $this->find($this->prefixAutoincrement, true);
+		$last_id = $this->mem->increment($key);
 		if (!$last_id) 
 		{
-			$last_id = 0;
+			$last_id = 1;
+			$this->save($key, $last_id);			
 		}
-		$last_id++;
-		$this->save($this->prefixAutoincrement, $last_id, false);
 		return $last_id;
 	}
 	

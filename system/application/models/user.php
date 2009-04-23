@@ -197,7 +197,7 @@ class User extends App_Model
 		$return = null;
 		if ($username) 
 		{
-			$user_id = $this->find($this->prefixUsername($username), true);
+			$user_id = $this->find($this->prefixUsername($username));
 			if ($user_id) 
 			{
 				$return = $this->find($this->prefixUser($user_id));
@@ -406,7 +406,7 @@ class User extends App_Model
         $user = array();
         $now = time();
         $this->mode = 'signup';
-		$data['id'] = $this->makeId();
+		$data['id'] = $this->makeId($this->userId);
         $data['activated'] = 1;
         $data['created'] = $now;
         $data['modified'] = $now;
