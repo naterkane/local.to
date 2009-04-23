@@ -8,17 +8,7 @@
 	<?php endif ?>
 </h3>
 	
-<h3>Members</h3>
-<ul>
-<?php foreach ($members as $member): ?>
-	<li>
-		<a href="/<?php echo $member['username'] ?>"><?php echo $member['username'] ?></a> 
-		<?php if ($owner == $member['id']): ?>
-			(Owner)
-		<?php endif ?>
-	</li>
-<?php endforeach ?>
-</ul>
+<h3><a href="/groups/members/<?php echo $name ?>">Members (<?php echo $member_count - 1 ?>)</a></h3>
 
 <h3>Messages</h3>
 

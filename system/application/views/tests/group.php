@@ -18,32 +18,33 @@
 	$this->selenium->signIn($name, $password);
 	//submit an empty form
 	$this->selenium->openPage('/groups/add');
-	$this->selenium->click('Sign Up');	
+	$this->selenium->click('Add');	
 	$this->selenium->write('verifyTextPresent', $error);
 	$this->selenium->write('verifyTextPresent', 'A group name is required');
 	//submit bad characters
 	$this->selenium->openPage('/groups/add');
 	$this->selenium->write('type', 'name', $group . '!');
-	$this->selenium->click('Sign Up');	
+	$this->selenium->click('Add');	
 	$this->selenium->write('verifyTextPresent', $error);
 	$this->selenium->write('verifyTextPresent', 'A group name may only be made up of numbers, letters, and underscores');
 	//too long
 	$this->selenium->openPage('/groups/add');
 	$this->selenium->write('type', 'name', $group_long);
-	$this->selenium->click('Sign Up');	
+	$this->selenium->click('Add');	
 	$this->selenium->write('verifyTextPresent', $error);
 	$this->selenium->write('verifyTextPresent', 'A group name must be between 1 and 15 characters');	
 	//create a group
 	$this->selenium->openPage('/groups/add');
 	$this->selenium->write('type', 'name', $group);
-	$this->selenium->click('Sign Up');
+	$this->selenium->click('Add');
 	$this->selenium->write('verifyTextPresent', $group);
-	$this->selenium->write('verifyTextPresent', $name);
 	$this->selenium->write('verifyTextPresent', 'Unsubscribe');	
+	$this->selenium->openPage('/groups/members/' . $group);		
+	$this->selenium->write('verifyTextPresent', $name);	
 	//try adding a group with the same name
 	$this->selenium->openPage('/groups/add');
 	$this->selenium->write('type', 'name', $group);
-	$this->selenium->click('Sign Up');	
+	$this->selenium->click('Add');	
 	$this->selenium->write('verifyTextPresent', $error);
 	$this->selenium->write('verifyTextPresent', 'Group name has already been taken');	
 	//create second account	
@@ -53,12 +54,14 @@
 	//subscribe to group
 	$this->selenium->openPage('/group/' . $group);	
 	$this->selenium->write('verifyTextPresent', $group);
-	$this->selenium->write('verifyTextPresent', $name);
 	$this->selenium->write('verifyTextPresent', 'Subscribe');	
 	$this->selenium->write('clickAndWait', 'link=Subscribe');
-	$this->selenium->write('verifyTextPresent', $group);
+	$this->selenium->openPage('/groups/members/' . $group);	
+	$this->selenium->write('verifyTextPresent', $group);	
 	$this->selenium->write('verifyTextPresent', $name);
-	$this->selenium->write('verifyTextPresent', $name2);	
+	$this->selenium->write('verifyTextPresent', $name2);
+	$this->selenium->openPage('/group/' . $group);	
+	$this->selenium->write('verifyTextPresent', 'Unsubscribe');						
 	//post to group	
 	$this->selenium->openPage('/home');
 	$this->selenium->write('type', 'message', $group_message);	
@@ -84,13 +87,15 @@
 	$this->selenium->openPage('/public_timeline');		
 	$this->selenium->write('verifyTextPresent', $group_message);
 	//unsubscribe from group
-	//$this->selenium->signOut();	
-	//$this->selenium->signIn($name2, $password2);	
-	//$this->selenium->openPage('/group/' . $group);	
-	//$this->selenium->write('clickAndWait', 'link=Unsubscribe');
-	//$this->selenium->write('verifyTextPresent', $group);
-	//$this->selenium->write('verifyTextPresent', $name);
-	//$this->selenium->write('verifyTextNotPresent', $name2);	
-	//$this->selenium->write('verifyTextPresent', 'Subscribe');		
+	$this->selenium->signOut();	
+	$this->selenium->signIn($name2, $password2);	
+	$this->selenium->openPage('/group/' . $group);	
+	$this->selenium->write('clickAndWait', 'link=Unsubscribe');
+	$this->selenium->openPage('/groups/members/' . $group);		
+	$this->selenium->write('verifyTextPresent', $group);
+	$this->selenium->write('verifyTextPresent', $name);
+	$this->selenium->write('verifyTextNotPresent', $name2);	
+	$this->selenium->openPage('/group/' . $group);			
+	$this->selenium->write('verifyTextPresent', 'Subscribe');		
 	$this->selenium->openPage('/admin/flush');	
 ?>

@@ -50,16 +50,33 @@ class Group extends App_Model
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return array User data
+	 * @return array Group data
 	 */
 	function get($group_id = null)
 	{
-		$return = null;
 		if ($group_id) 
 		{
 			return $this->find($this->prefixGroup($group_id));
 		}
-	}	
+	}
+	
+	/**
+	 * Find all groups
+	 *
+	 * @access public
+	 * @return array $groups
+	 */
+	function getAll($max = 2000)
+	{
+		$prefix = $this->prefixGroupName(null);
+		$groups = $this->tt->fwmkeys($prefix, $max);
+		sort($groups);
+		$return = array();
+		foreach ($groups as $key => $value) {
+			$return[$key] = str_replace($prefix, '', $value);
+		}
+		return $return;
+	}
 	
 	/**
 	 * Find a group by name
@@ -85,7 +102,7 @@ class Group extends App_Model
 	 * Get Members
 	 *
 	 * @access public
-	 * @param string $name Name of group
+	 * @param int $group_id Name of group
 	 * @return array Members
 	 */
 	function getMembers($group_id)
@@ -100,6 +117,20 @@ class Group extends App_Model
 		}
 		return $members;
 	}
+	
+	/**
+	 * Get Count of Members
+	 *
+	 * @access public
+	 * @param int $group_id
+	 * @return int
+	 */
+	function getMemberCount($group_id)
+	{
+		$member_ids = $this->find($this->prefixGroupMembers($group_id));
+		return count($member_ids);
+	}
+	
 	
 	/**
 	 * Get Owner

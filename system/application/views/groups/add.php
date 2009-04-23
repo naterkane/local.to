@@ -7,6 +7,6 @@
 		<?php echo $this->form->error('name') ?>		
 	</div>
 	<div class="mod">		
-		<input type="submit" value="Sign Up">
+		<input type="submit" value="Add">
 	</div>	
 </div>

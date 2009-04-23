@@ -27,6 +27,41 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * List all groups
+	 *
+	 * @access public
+	 */
+	function index()
+	{		
+		$this->getUserData();		
+		$this->data['groups'] = $this->Group->getAll();
+		$this->load->view('groups/index', $this->data);
+	}
+
+	/**
+	 * View members
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return 
+	 */
+	function members($name = null)
+	{
+		$group = $this->Group->getByName($name);
+		if ($group) 
+		{
+			$this->data['name'] = $group['name'];
+			$this->data['owner'] = $group['owner_id'];			
+			$this->data['members'] = $this->Group->getMembers($group['id']);
+			$this->load->view('groups/members', $this->data);						
+		} 
+		else 
+		{
+			show_404();
+		}
+	}
+
+	/**
 	 * Subscribe to a group
 	 *
 	 * @access public
@@ -74,17 +109,18 @@ class Groups extends App_Controller
 	 */
 	function view($name = null)
 	{
+		$this->getUserData();
 		if ($name) {
 			$this->getUserData();
 			$group = $this->Group->getByName($name);
 			$this->data['title'] = $group['name'];
 			$this->data['name'] = $group['name'];
-			$this->data['id'] = $group['id'];					
-			$this->data['members'] = $this->Group->getMembers($group['id']);
+			$this->data['id'] = $group['id'];
 			$this->data['owner'] = $group['owner_id'];
+			$this->data['member_count'] = $this->Group->getMemberCount($group['id']);
 			$this->data['messages'] = $this->Message->getForGroup($group['id']);
 			$this->data['imAMember'] = $this->Group->isMember($group['id'], $this->userData['id']);
-			if ($this->data['members']) {
+			if ($this->data['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);
 			} else {
 				show_404();
