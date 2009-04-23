@@ -435,8 +435,19 @@ class User extends App_Model
 	{
 		$this->mode = 'profile';
 		$this->postData = $this->User->updateData($this->userData, $this->postData);
-		$this->postData['id'] = $user_id;
-		return $this->save($this->prefixUser($this->postData['id']), $this->postData);
+		$this->postData['id'] = $user_id;	
+		if ($this->save($this->prefixUser($this->postData['id']), $this->postData)) 
+		{
+			$this->delete($this->prefixUsername($this->userData['username']));
+			$this->delete($this->prefixUserEmail($this->userData['email']));
+			$this->save($this->prefixUserEmail($this->postData['email']), $this->userData['id'], false);
+			$this->save($this->prefixUsername($this->postData['username']), $this->userData['id'], false);			
+			return true;
+		} 
+		else 
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -454,7 +465,7 @@ class User extends App_Model
 			$this->validates_presence_of('email', array('message'=>'A valid email is required'));
 			$this->validates_callback('isNotReserved', 'username', array('message'=>'This is a reserved username'));			
 			$this->validates_length_of('username', array('min'=>1, 'max'=>15, 'message'=>'A username must be between 1 and 15 characters long'));
-			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken', 'fieldValue'=>$this->prefixUser($this->input->post('username'))));
+			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken', 'fieldValue'=>$this->prefixUsername($this->input->post('username'))));
 			$this->validates_format_of('username', array('with'=>ALPHANUM, 'message'=>'A username may only be made up of numbers, letters, and underscores'));
 			$this->validates_presence_of('username', array('message'=>'A username is required'));
 		}

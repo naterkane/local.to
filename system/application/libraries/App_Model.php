@@ -44,7 +44,10 @@ class App_Model extends Model {
 		{
 			$host = $ci->config->item('tt_host_remote');
 		}
-		$this->tt->connect($host, $ci->config->item('tt_host_port'));
+		$port = $ci->config->item('tt_host_port');
+		$this->tt->connect($host, $port);
+		$this->mem = new Memcache;
+		$this->mem->connect($host, $port) or die ("Could not connect to memcached through tc");		
 		unset($ci);
 	}
 
@@ -53,7 +56,7 @@ class App_Model extends Model {
 	 */
 	function delete($key) 
 	{
-		return $this->tt->delete($key);
+		return @$this->mem->delete($key);
 	}
 
 	/**
@@ -63,14 +66,7 @@ class App_Model extends Model {
 	 */
 	function find($key, $isInt = false) 
 	{
-		if ($isInt) 
-		{
-			$data = $this->tt->getInt($key);
-		} 
-		else 
-		{
-			$data = $this->tt->get($key);
-		}
+		$data = $this->mem->get($key);
 		if ($this->isSerialized($data)) 
 		{
 			$data = unserialize($data);
@@ -443,14 +439,7 @@ class App_Model extends Model {
 			}
 			if ($key) 
 			{
-				if (is_int($data)) 
-				{
-					return $this->tt->putInt($key, $data);
-				} 
-				else 
-				{
-					return $this->tt->put($key, $data);
-				}
+				return $this->mem->set($key, $data);
 			} 
 			else 
 			{
@@ -795,18 +784,21 @@ class App_Model extends Model {
 			{
 				$options['message'] = 'The value you entered is already in use by another record.';
             }
-            if ( !isset($options['on']) ) 
+			if (empty($this->postData[$fieldName])) 
 			{
-				$options['on'] = 'save';
-            }
-			$record = $this->find($fieldValue);
-			if ($this->action != 'create') 
-			{
-				//non-create code here
+				$this->postData[$fieldName] = null;
 			}
+			if (empty($this->userData[$fieldName])) 
+			{
+				$this->userData[$fieldName] = null;
+			}
+			$record = $this->find($fieldValue);
 			if ($record) 
 			{
-				$this->validationErrors[$fieldName] = $options['message'];
+				if ($this->postData[$fieldName] != $this->userData[$fieldName]) 
+				{
+					$this->validationErrors[$fieldName] = $options['message'];
+				}
 			}
     }
 	

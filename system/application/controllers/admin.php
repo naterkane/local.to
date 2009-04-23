@@ -31,7 +31,6 @@ class Admin extends App_controller
 	function test()
 	{
 
-
 	}
 
 }

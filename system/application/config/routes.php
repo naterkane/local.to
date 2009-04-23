@@ -51,6 +51,8 @@ $route['signin'] = "users/signin";
 $route['signup'] = "users/signup";
 $route['settings'] = "users/settings";
 $route['public_timeline'] = "messages/public_timeline";
+$route['reset_password'] = "users/reset_password";
+$route['reset/(:any)'] = "users/reset/$1";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

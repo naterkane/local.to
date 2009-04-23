@@ -35,7 +35,7 @@ class Users extends App_Controller
         $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
         $this->load->view('users/home', $this->data);
     }
-  
+
 	/**
 	 * Update a user profile
 	 *

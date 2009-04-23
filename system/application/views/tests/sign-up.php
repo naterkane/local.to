@@ -71,9 +71,13 @@
 	$this->selenium->signIn($name, $password);
 	$this->selenium->openPage('/' . $name);
 	$this->selenium->openPage('/signout');	
-	//try and create an account with the same username
-	$this->selenium->openPage('/signup');		
+	//try and create an account with the same username		
+	$this->selenium->openPage('/signup');
 	$this->selenium->write('type', 'username', $name);
+	$this->selenium->write('type', 'password', $password);
+	$this->selenium->write('type', 'passwordconfirm', $password);	
+	$this->selenium->write('type', 'email', $email);		
 	$this->selenium->click('Sign Up');
+	$this->selenium->write('verifyTextPresent', $error);
 	$this->selenium->openPage('/admin/flush');	
 ?>

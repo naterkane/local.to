@@ -189,8 +189,12 @@ class Message extends App_Model
 	function getOne($message_id)
 	{
 		$message = $this->find($this->prefixMessage($message_id));
-		$user = $this->User->get($message['user_id']);
-		$message['username'] = $user['username'];
+		$user = null;
+		if (!empty($message)) 
+		{
+			$user = $this->User->get($message['user_id']);
+			$message['username'] = $user['username'];			
+		}
 		return $message;
 	}
 
