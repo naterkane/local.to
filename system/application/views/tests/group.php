@@ -38,7 +38,6 @@
 	$this->selenium->write('type', 'name', $group);
 	$this->selenium->click('Add');
 	$this->selenium->write('verifyTextPresent', $group);
-	$this->selenium->write('verifyTextPresent', 'Unsubscribe');	
 	$this->selenium->openPage('/groups/members/' . $group);		
 	$this->selenium->write('verifyTextPresent', $name);	
 	//check that settings are accessible

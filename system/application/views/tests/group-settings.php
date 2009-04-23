@@ -21,7 +21,6 @@
 	$this->selenium->write('type', 'name', $group_name);
 	$this->selenium->click('Add');
 	$this->selenium->write('verifyTextPresent', $group);
-	$this->selenium->write('verifyTextPresent', 'Unsubscribe');		
 	//go to settings	
 	$this->selenium->openPage('/groups/settings/' . $group_name);
 	$this->selenium->write('verifyValue', 'name', $group_name);
