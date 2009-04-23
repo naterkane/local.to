@@ -71,7 +71,7 @@
 	$this->selenium->signIn($name, $password);
 	$this->selenium->openPage('/' . $name);
 	$this->selenium->openPage('/signout');	
-	//try and create an account with the same username		
+	//try and create an account with the same username and email
 	$this->selenium->openPage('/signup');
 	$this->selenium->write('type', 'username', $name);
 	$this->selenium->write('type', 'password', $password);
@@ -79,5 +79,7 @@
 	$this->selenium->write('type', 'email', $email);		
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);
+	$this->selenium->write('verifyTextPresent', 'Username has already been taken');	
+	$this->selenium->write('verifyTextPresent', 'Email is already in use');			
 	$this->selenium->openPage('/admin/flush');	
 ?>

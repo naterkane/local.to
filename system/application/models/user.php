@@ -462,6 +462,7 @@ class User extends App_Model
 		{
 			$this->setAction();
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required'));
+			$this->validates_uniqueness_of('email', array('message'=>'Email is already in use', 'fieldValue'=>$this->prefixUserEmail($this->input->post('email'))));
 			$this->validates_presence_of('email', array('message'=>'A valid email is required'));
 			$this->validates_callback('isNotReserved', 'username', array('message'=>'This is a reserved username'));			
 			$this->validates_length_of('username', array('min'=>1, 'max'=>15, 'message'=>'A username must be between 1 and 15 characters long'));
