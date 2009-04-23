@@ -339,6 +339,15 @@ $config['layout'] = 'default';
 //debug state. 1 for development, 0 for production
 $config['debug'] = 1;	
 
+//mail settings
+$config['host'] =  '';
+$config['port'] = '';
+$config['username'] = '';
+$config['password'] = '';
+$config['from_email'] = '';
+$config['from_name'] = '';
+
+
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
 ?>

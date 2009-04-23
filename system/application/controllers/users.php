@@ -99,10 +99,13 @@ class Users extends App_Controller
     function signup()
     {
         $this->data['title'] = 'Sign Up';
+		
         if ($this->postData)
         {
             if ($this->User->signUp($this->postData))
             {
+				$this->load->library('Mail');
+				$this->mail->send($this->postData['email'], null, null, 'Welcome', 'Welcome to the microblog!');	
                 $this->redirect('/signin', 'Your account has been created. Please sign in.');
             }
 			else 
