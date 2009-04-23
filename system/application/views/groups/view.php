@@ -1,4 +1,4 @@
-<h2><?php echo $name ?></h2>
+<h2><?php echo $name ?> (<a href="/groups/settings/<?php echo $name ?>">Settings</a>)</h2>
 
 <h3>
 	<?php if ($imAMember): ?>

@@ -221,6 +221,32 @@ class Group extends App_Model
 	}
 
 	/**
+	 * Is a group name unique?
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	function nameUnique()
+	{
+		if (isset($this->modelData['name'])) 
+		{
+			$group = $this->getByName($this->modelData['name']);
+			if ((!$group['id']) OR ($this->modelData['id'] == $group['id']))
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		} 
+		else 
+		{
+			return true;
+		}
+	}
+
+	/**
 	 * Remove member from a group
 	 *
 	 * @access public
@@ -264,7 +290,8 @@ class Group extends App_Model
 	/**
 	 * Send message to a group
 	 *
-	 * @access public
+	 * @todo Break this out into smaller methods
+	 * @access public	
 	 * @param array $data
 	 * @param int $user_id	
 	 * @return 
@@ -296,7 +323,32 @@ class Group extends App_Model
 			}
 		}
 	}
-	
+
+	/**
+	 * Update group
+	 *
+	 * @access public
+	 * @param array $oldGroup
+	 * @param array $newGroup
+	 * @param array $user_id	
+	 * @return boolean
+	 */
+	function update($oldGroup, $newGroup, $user_id)
+	{
+		$this->mode = 'update';
+		$group = $this->updateData($oldGroup, $newGroup);
+		if ($this->save($this->prefixGroup($oldGroup['id']), $group)) 
+		{
+			$this->mode = null;			
+			$this->delete($this->prefixGroupName($oldGroup['name']));
+			$this->save($this->prefixGroupName($newGroup['name']), $oldGroup['id']);
+			return true;
+		} 
+		else 
+		{
+			return false;
+		}
+	}	
 	
 	/**
 	 * Validates a group
@@ -307,12 +359,17 @@ class Group extends App_Model
 	function validate()
 	{
 		$this->setAction();		
-		if ($this->mode == 'add')
+		if (($this->mode == 'add') || ($this->mode == 'update'))
 		{
+			$this->validates_callback('isNotReserved', 'name', array('message'=>'This is a reserved name'));			
 			$this->validates_format_of('name', array('with'=>ALPHANUM, 'message'=>'A group name may only be made up of numbers, letters, and underscores'));
 			$this->validates_length_of('name', array('min'=>1, 'max'=>15, 'message'=>'A group name must be between 1 and 15 characters'));
-			$this->validates_uniqueness_of('name', array('message'=>'Group name has already been taken', 'fieldValue'=>$this->prefixGroupName($this->input->post('name'))));
+			$this->validates_callback('nameUnique', 'name', array('message'=>'Group name has already been taken'));
 			$this->validates_presence_of('name', array('message'=>'A group name is required'));			
+			if ($this->mode == 'update') 
+			{
+				$this->validates_length_of('desc', array('min'=>0, 'max'=>160, 'message'=>'A description must be between 1 and 160 characters long'));
+			}
 		}
 	    return (count($this->validationErrors) == 0);
 	}

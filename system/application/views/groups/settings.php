@@ -1,14 +1,9 @@
-<h2><?php echo $User['username'] ?></h2>
-<form action="/settings" method="post" accept-charset="utf-8">
+<h2><?php echo $name ?></h2>
+<form action="/groups/settings/<?php echo $name ?>" method="post" accept-charset="utf-8">
 	<div class="mod">
-		<label for="username">Real Name</label>
-		<?php echo $this->form->input('realname') ?>
-		<?php echo $this->form->error('realname') ?>
-	</div>
-	<div class="mod">
-		<label for="username">User Name</label>
-		<?php echo $this->form->input('username') ?>
-		<?php echo $this->form->error('username') ?>
+		<label for="username">Name</label>
+		<?php echo $this->form->input('name') ?>
+		<?php echo $this->form->error('name') ?>
 	</div>
 	<div class="mod">
 		<label for="username">Email</label>
@@ -21,9 +16,9 @@
 		<?php echo $this->form->error('url') ?>		
 	</div>
 	<div class="mod">
-		<label for="username">Bio</label>
-		<?php echo $this->form->input('bio') ?>
-		<?php echo $this->form->error('bio') ?>		
+		<label for="username">Description</label>
+		<?php echo $this->form->input('desc') ?>
+		<?php echo $this->form->error('desc') ?>		
 	</div>	
 	<div class="mod">
 		<label for="username">Location</label>

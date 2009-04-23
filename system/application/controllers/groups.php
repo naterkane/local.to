@@ -63,6 +63,45 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * Update a user profile
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function settings($groupname = null)
+	{
+		$this->mustBeSignedIn();
+		$user = $this->data['User'];
+		$group = $this->Group->getByName($groupname);
+		$this->data = $group;
+		$this->data['User'] = $user;
+		if ($group) 
+		{
+			if ($this->postData) 
+			{
+				if ($this->Group->update($group, $this->postData, $this->userData['id'])) 
+				{
+					$this->redirect('/groups/settings/' . $this->postData['name'], 'The group was updated.');
+				} 
+				else 
+				{
+					$this->setErrors(array('Group'));
+					$this->cookie->setFlash('There was an error updating your group. See below for more details.', 'error');
+				}
+			}
+			else 
+			{
+				$this->setData($this->data);
+			}
+			$this->load->view('groups/settings', $this->data); 
+		} 
+		else 
+		{
+			show_404();
+		}
+	}
+
+	/**
 	 * Subscribe to a group
 	 *
 	 * @access public

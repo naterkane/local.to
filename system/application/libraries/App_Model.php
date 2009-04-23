@@ -24,8 +24,9 @@ class App_Model extends Model {
 	private $prefixUserEmail = 'useremail';	
 	private $prefixUserPublic = 'public';
 	private $prefixUserPrivate = 'private';
-	protected $messageId = 'messageId';	
 	protected $groupId = 'groupId';	
+	protected $messageId = 'messageId';		
+	protected $reservedNames = array('users', 'groups', 'admin', 'profile', 'settings', 'messages', 'tests', 'welcome');		
 	protected $userId = 'userId';
 	public $action;
 	public $id;	
@@ -107,6 +108,31 @@ class App_Model extends Model {
 	function hash($value)
 	{
 		return sha1($value . $this->config->item('salt'));
+	}
+
+	/**
+	 * Is a username not reserved
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	function isNotReserved()
+	{
+		if (isset($this->modelData['username'])) 
+		{
+			if (in_array($this->modelData['username'], $this->reservedNames)) 
+			{
+				return false;
+			}
+			else 
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 
 	/**
@@ -448,15 +474,15 @@ class App_Model extends Model {
 		if ($valid) {
 			if (is_array($this->modelData)) 
 			{
-				$data = serialize($this->modelData);
+				$newData = serialize($this->modelData);
 			}
 			else 
 			{
-				$data = $this->modelData;
+				$newData = $this->modelData;
 			}
 			if ($key) 
 			{
-				return $this->mem->set($key, $data);
+				return $this->mem->set($key, $newData);
 			} 
 			else 
 			{

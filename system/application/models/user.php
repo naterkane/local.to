@@ -4,8 +4,7 @@
  */
 class User extends App_Model
 {
-
-	var $reservedNames = array('users', 'groups', 'admin', 'profile', 'settings', 'messages', 'tests', 'welcome');
+	
 	var $timezones = array(
 		'Hawaii' => '(GMT-10:00) Hawaii',
 		'Alaska' => '(GMT-09:00) Alaska',
@@ -275,26 +274,7 @@ class User extends App_Model
 		} else {
 			return false;
 		}
-    }
- 
-	/**
-	 * Is a username not reserved
-	 *
-	 * @access public
-	 * @return boolean
-	 */
-	function isNotReserved()
-	{
-		if (in_array($this->modelData['username'], $this->reservedNames)) 
-		{
-			return false;
-		}
-		else 
-		{
-			return true;
-		}
-	}
-	
+    }	
 
 	/**
 	 * Does the password and its confirm work?
@@ -425,13 +405,13 @@ class User extends App_Model
 	 * Update profile
 	 *
 	 * @access public
-	 * @param array $data
+	 * @param int $group_id
 	 * @return boolean
 	 */
 	function updateProfile($user_id)
 	{
 		$this->mode = 'profile';
-		$this->postData = $this->User->updateData($this->userData, $this->postData);
+		$this->postData = $this->updateData($this->userData, $this->postData);
 		$this->postData['id'] = $user_id;	
 		if ($this->save($this->prefixUser($this->postData['id']), $this->postData)) 
 		{
