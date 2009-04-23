@@ -127,7 +127,26 @@ class Users extends App_Controller
         $this->cookie->remove('user');
         $this->redirect('/signin', 'You have successfully signed out.');
     }
- 
+
+    /**
+     * unFollow a user
+     *
+     * @todo check if user is not yourself
+     * @param string $username
+     */
+    function unfollow($username = null)
+    {
+        $this->mustBeSignedIn();
+		if ($this->User->unfollow($username, $this->userData['id']))
+		{
+			$this->redirect('/' . $username);
+		}
+		else
+		{
+			show_404();
+		}
+    } 
+
     /**
      * View a users public page
      *

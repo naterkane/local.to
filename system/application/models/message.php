@@ -35,7 +35,9 @@ class Message extends App_Model
 			{
 				$this->addToGroups($groups, $user_id, $data['id']);
 			}
-			$this->addToPublicTimeline($data['id']);		
+			$this->push($this->prefixUserPublic($user_id), $data['id']);
+			$this->push($this->prefixUserPrivate($user_id), $data['id']);
+			$this->addToPublicTimeline($data['id']);
         	return $data['id'];
 		} 
 		else 

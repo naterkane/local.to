@@ -412,6 +412,22 @@ class App_Model extends Model {
 			return false;
 		}
 	}
+
+	/**
+	 * Remove an item from an array and reorder (used to remove followers, members, etc)
+	 *
+	 * @param array $data
+	 * @param string $value 
+	 * @return array $data
+	 * @access public
+	 */
+	function removeFromArray($data, $value)
+	{
+		$data = array_flip($data);
+		unset($data[$value]);
+		$data = array_flip($data);
+		return array_merge(array(), $data);
+	}
 	
 	/**
 	 * Save a record

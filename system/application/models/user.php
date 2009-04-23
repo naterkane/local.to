@@ -361,7 +361,6 @@ class User extends App_Model
 			foreach ($followers as $follower)
 	        {
 	            $this->push($this->prefixUserPrivate($follower), $message_id);
-	            $this->push($this->prefixUserPublic($follower), $message_id);	
 	        }
 		}
         return true;
@@ -415,8 +414,6 @@ class User extends App_Model
 			$this->mode = null;
 			$this->save($this->prefixUserEmail($data['email']), $data['id']);
 			$this->save($this->prefixUsername($data['username']), $data['id']);
-	        $this->push($this->prefixFollower($data['id']), $data['id']);
-			$this->push($this->prefixUserPrivate($data['id']), array());
         	return true;
 		} 
 		else {
@@ -448,6 +445,26 @@ class User extends App_Model
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Unfollow a user
+	 *
+	 * @access public
+	 * @param string $username of user to follow
+	 * @param string $user_id of user following
+	 * @return boolean
+	 */
+	function unfollow($username = null, $user_id)
+	{
+		$user = $this->getByUsername($username);	
+		$followers = $this->User->getFollowers($user['id']);
+		$followers = $this->removeFromArray($followers, $user_id);
+		$this->save($this->prefixFollower($user['id']), $followers);
+		$following = $this->User->getFollowing($user_id);
+		$following = $this->removeFromArray($following, $user['id']);		
+		$this->save($this->prefixFollowing($user_id), $following);
+		return true;
 	}
 	
 	/**
