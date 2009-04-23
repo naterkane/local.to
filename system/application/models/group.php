@@ -42,7 +42,7 @@ class Group extends App_Model
 	 */
 	function addMember($group_id, $member_id = null)
 	{
-		return $this->push($this->prefixGroupMessages($group_id), $member_id);
+		return $this->push($this->prefixGroupMembers($group_id), $member_id);
 	}
 	
 	/**
@@ -107,7 +107,7 @@ class Group extends App_Model
 	 */
 	function getMembers($group_id)
 	{
-		$member_ids = $this->find($this->prefixGroupMembers($group_id));
+		$member_ids = $this->find($this->prefixGroupMembers($group_id));		
 		$members = null;
 		if ($member_ids) 
 		{
@@ -128,7 +128,15 @@ class Group extends App_Model
 	function getMemberCount($group_id)
 	{
 		$member_ids = $this->find($this->prefixGroupMembers($group_id));
-		return count($member_ids);
+		if ($member_ids) 
+		{
+			return count($member_ids);
+		} 
+		else 
+		{
+			return null;
+		}
+		return $count;
 	}
 	
 	
@@ -239,6 +247,56 @@ class Group extends App_Model
 			return false;
 		}		
 	}
+
+	/**
+	 * Send message to group message list
+	 *
+	 * @access public
+	 * @param int $message_id
+	 * @param int $group_id
+	 * @return boolean
+	 */
+	function sendTo($group_id, $message_id)
+	{
+		return $this->push($this->prefixGroupMessages($group_id), $message_id);
+	}
+	
+	/**
+	 * Send message to a group
+	 *
+	 * @access public
+	 * @param array $data
+	 * @param int $user_id	
+	 * @return 
+	 */
+	function sendToMembers($messageData, $user_id)
+	{
+		$this->mode = null;
+		$sent = array();
+		$sent[] = $user_id;
+		$groups = $this->Group->matchGroups($messageData['message']);
+		if (!empty($groups)) 
+		{
+			foreach ($groups as $groupname) 
+			{
+				$group = $this->getByName($groupname);
+				$this->sendTo($group['id'], $messageData['id']);
+				if ($group) 
+				{
+					$members = $this->getMembers($group['id']);
+					foreach ($members as $member) {
+						if (!in_array($member['id'], $sent)) 
+						{
+							$this->push($this->prefixUserPublic($member['id']), $messageData['id']);
+							$this->push($this->prefixUserPrivate($member['id']), $messageData['id']);
+							$sent[] = $member['id'];
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * Validates a group

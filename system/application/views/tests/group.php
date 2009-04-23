@@ -96,6 +96,9 @@
 	$this->selenium->write('verifyTextPresent', $name);
 	$this->selenium->write('verifyTextNotPresent', $name2);	
 	$this->selenium->openPage('/group/' . $group);			
-	$this->selenium->write('verifyTextPresent', 'Subscribe');		
+	$this->selenium->write('verifyTextPresent', 'Subscribe');	
+	//check to see if messages are still on group's home page	
+	$this->selenium->openPage('/group/' . $group);
+	$this->selenium->write('verifyTextPresent', $group_message);	
 	$this->selenium->openPage('/admin/flush');	
 ?>

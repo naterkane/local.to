@@ -15,7 +15,7 @@ class App_Model extends Model {
 	private $prefixGroup = 'group';
 	private $prefixGroupName = 'groupname';	
 	private $prefixGroupMessages = 'groupmessages';
-	private $prefixGroupMembers = 'groupmessages';	
+	private $prefixGroupMembers = 'groupmembers';	
 	private $prefixMessage = 'message';
 	private $prefixPublic = 'timeline';
 	private $prefixSeparator = ':';	

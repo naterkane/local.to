@@ -16,11 +16,12 @@ class Messages extends App_Controller
         $this->mustBeSignedIn();
         if ($this->postData)
         {
-			$message_id = $this->Message->add($this->postData['message'], $this->userData['id']);
-			if ($message_id) 
+			$message = $this->Message->add($this->postData['message'], $this->userData['id']);
+			if ($message) 
 			{
 				$this->User->mode = null;
-            	$this->User->sendToFollowers($message_id, $this->userData['id']);
+            	$this->Group->sendToMembers($message, $this->userData['id']);
+            	$this->User->sendToFollowers($message['id'], $this->userData['id']);
 			}
             $this->redirect('/home');
         }

@@ -19,7 +19,7 @@ class Message extends App_Model
      *
      * @todo Validation and return value, add transactions, move isMember to Validation
      * @param string $message
-	 * @return boolean|message_id
+	 * @return boolean|data
      */
     function add($message = null, $user_id)
     {
@@ -40,72 +40,16 @@ class Message extends App_Model
 		if ($this->save($this->prefixMessage($data['id']), $data)) 
 		{
 			$this->mode = null;
-			$groups = $this->Group->matchGroups($data['message']);
-			if (!empty($groups)) 
-			{
-				$this->addToGroups($groups, $user_id, $data['id']);
-			}
 			$this->push($this->prefixUserPublic($user_id), $data['id']);
 			$this->push($this->prefixUserPrivate($user_id), $data['id']);
 			$this->addToPublicTimeline($data['id']);
-        	return $data['id'];
+        	return $data;
 		} 
 		else 
 		{
 			return false;
 		}
-    }	
-
-	/**
-	 * Add message to a group
-	 *
-	 * @access public
-	 * @param string $name Name of group
-	 * @param string $member Member to add
-	 * @param array $group[option]
-	 * @return boolean
-	 */
-	function addToGroup($group_id, $message_id)
-	{
-		$messages = $this->find($this->prefixGroupMessages($group_id));
-		if (!empty($messages)) 
-		{
-			array_unshift($messages, $message_id);
-			return $this->Group->save($this->prefixGroupMessages($group_id), $messages);
-		} 
-		else 
-		{
-			return false;
-		}		
-	}
-
-	/**
-	 * Add to message to many groups
-	 *
-	 * @access public
-	 * @param array $groups
-	 * @return 
-	 */
-	function addToGroups($groups, $user_id, $message_id)
-	{
-		foreach ($groups as $groupname) 
-		{
-			$group = $this->Group->getByName($groupname);
-			if ($this->Group->isMember($group['id'], $user_id)) 
-			{				
-				$this->addToGroup($group['id'], $message_id);
-				$members = $this->Group->getMembers($group['id']);
-				foreach ($members as $member) 
-				{
-					if ((!empty($member['id'])) && ($user_id != $member['id'])) 
-					{
-						$this->addToUserPublic($member['id'], $message_id);
-						$this->addToUserPrivate($member['id'], $message_id);
-					}
-				}
-			}
-		}
-	}
+    }
 
 	/**
 	 * Add to public timeline

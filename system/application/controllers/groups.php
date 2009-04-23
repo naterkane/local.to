@@ -47,6 +47,7 @@ class Groups extends App_Controller
 	 */
 	function members($name = null)
 	{
+		$this->getUserData();		
 		$group = $this->Group->getByName($name);
 		if ($group) 
 		{

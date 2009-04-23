@@ -8,7 +8,7 @@
 	<?php endif ?>
 </h3>
 	
-<h3><a href="/groups/members/<?php echo $name ?>">Members (<?php echo $member_count - 1 ?>)</a></h3>
+<h3><a href="/groups/members/<?php echo $name ?>">Members (<?php echo $member_count ?>)</a></h3>
 
 <h3>Messages</h3>
 
