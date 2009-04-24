@@ -167,7 +167,7 @@ class Groups extends App_Controller
 			$this->data['member_count'] = $this->Group->getMemberCount($group['id']);
 			$this->data['messages'] = $this->Message->getForGroup($group['id']);
 			$this->data['imAMember'] = $this->Group->isMember($group['id'], $this->userData['id']);
-			$user['User'] = $user;
+			$this->data['User'] = $user;
 			if ($this->data['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);
 			} else {
