@@ -148,6 +148,33 @@ class User extends App_Model
 		'Wellington' => '(GMT+12:00) Wellington',
 		'Nuku\'alofa' => '(GMT+13:00) Nuku\'alofa'
 	);
+
+	/**
+	 * Delete a user
+	 *
+	 * @access public
+	 * @param array $data User Data
+	 * @return boolean
+	 */
+	function delete($data = array())
+	{
+		if ($data) 
+		{
+			parent::delete($this->prefixUser($data['id']));
+			parent::delete($this->prefixUsername($data['username']));
+			parent::delete($this->prefixUserEmail($data['email']));
+			parent::delete($this->prefixUserPrivate($data['id']));
+			parent::delete($this->prefixUserPublic($data['id']));			
+			parent::delete($this->prefixFollower($data['email']));
+			parent::delete($this->prefixFollowing($data['id']));
+			return true;
+		} 
+		else 
+		{
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * Follow a user

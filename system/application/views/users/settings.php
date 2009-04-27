@@ -1,4 +1,7 @@
 <h2><?php echo $User['username'] ?></h2>
+
+<p><a href="/delete" id="delete" onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.'); event.returnValue = false; return false;">Delete this account</a></p>
+
 <form action="/settings" method="post" accept-charset="utf-8">
 	<div class="mod">
 		<label for="username">Real Name</label>

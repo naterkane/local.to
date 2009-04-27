@@ -80,6 +80,18 @@
 	$this->selenium->click('Sign Up');
 	$this->selenium->write('verifyTextPresent', $error);
 	$this->selenium->write('verifyTextPresent', 'Username has already been taken');	
-	$this->selenium->write('verifyTextPresent', 'Email is already in use');			
+	$this->selenium->write('verifyTextPresent', 'Email is already in use');
+	//delete account
+	$this->selenium->signIn($name, $password);
+	$this->selenium->openPage('/settings');
+	$this->selenium->write('clickAndWait', 'delete');
+	$this->selenium->write('verifyConfirmationPresent', 'Are you sure you want to delete your account? This cannot be undone.');
+	$this->selenium->write('storeConfirmation');	
+	$this->selenium->write('verifyTextPresent', 'Your account has been deleted.');
+	$this->selenium->openPage('/signin');
+	$this->selenium->write('type', 'username', $name);
+	$this->selenium->write('type', 'password', $password);	
+	$this->selenium->click('Sign In');
+	$this->selenium->write('verifyTextPresent', 'The username and password do not match any in our records.');
 	$this->selenium->openPage('/admin/flush');	
 ?>

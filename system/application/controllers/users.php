@@ -5,6 +5,26 @@
 class Users extends App_Controller
 {
    
+	/**
+	 * Delete an account
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function delete()
+	{
+		$this->mustBeSignedIn();
+		if ($this->User->delete($this->userData)) 
+		{
+        	$this->cookie->remove('user');
+			$this->redirect('/signin', 'Your account has been deleted.');
+		} 
+		else 
+		{
+			$this->redirect('/home', 'There was a problem deleting your account.');
+		}		
+	}
+	
     /**
      * Follow a user
      *

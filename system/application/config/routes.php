@@ -49,6 +49,7 @@ $route['group/(:any)'] = "groups/view/$1";
 $route['signout'] = "users/signout";
 $route['signin'] = "users/signin";
 $route['signup'] = "users/signup";
+$route['delete'] = "users/delete";
 $route['settings'] = "users/settings";
 $route['public_timeline'] = "messages/public_timeline";
 $route['reset_password'] = "users/reset_password";

@@ -43,6 +43,19 @@ class App_Controller extends Controller {
 		}
 	}
 	
+	/**
+	 * Check if post exists
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function checkPost()
+	{
+		if (!$this->postData) 
+		{
+			show_404();
+		}
+	}
  
 	/**
 	 * Get a users data from cookie
