@@ -224,6 +224,24 @@ class User extends App_Model
     }
 	
 	/**
+	 * Get the groups that a user is a member of
+	 * @return 
+	 * @param object $username
+	 * @todo finish method
+	 */
+	function getGroups($username)
+	{
+		if ($username)
+		{
+			
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * Get all users following a user 
 	 *
 	 * @param object $username

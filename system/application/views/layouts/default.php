@@ -6,17 +6,33 @@
 	<meta http-equiv="Expires" content="-1" />
 	<meta name="robots" content="noindex,nofollow" />	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link href="/css/styles.css?1238698095" media="screen, projection" rel="stylesheet" type="text/css" />
-	<title><?php if(!empty($title)) echo $title ?></title>
+	<link href="/css/styles.css?<?php echo time();?>" media="screen, projection" rel="stylesheet" type="text/css" />
+	<title><?php 
+		if (!empty($title)): 
+			echo $title;
+		else:
+			echo "microblog";
+		endif; 
+	?></title>
 </head>
 <body>
 	<p>
-		<a href="/">Microblog</a>
+		<a href="/">[Microblog Logo]</a>
 		<?php
 		if (!empty($User)) {
-			echo "<a href=\"/home\">Home</a> <a href=\"/{$User['username']}\">Profile</a> <a href=\"/settings\">Settings</a> <a href=\"/public_timeline\">Everyone</a> <a href=\"/groups\">Groups</a> <a href=\"/signout\">Sign Out</a>";
+			?>
+			<a href="/home">Home</a> 
+			<a href="/<?php echo $User["username"] ?>">Profile</a>
+			<a href="/groups">Groups</a>
+			<a href="/settings">Settings</a>
+			<a href="/public_timeline">Everyone</a>
+			<a href="/users/signout">Sign Out</a>
+			<?php
 		} else {
-			echo "<a href=\"/signin\">Sign In</a> <a href=\"/signup\">Sign Up</a>";
+			?>
+			<a href="/users/signin">Sign In</a>
+			<a href="/users/signup">Sign Up</a>
+			<?php
 		}
 		?>
 	</p>

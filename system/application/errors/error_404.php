@@ -27,6 +27,16 @@ margin: 			0 0 4px 0;
 </style>
 </head>
 <body>
+	<p>
+		<a href="/">Microblog</a>
+		<?php
+		if (!empty($User)) {
+			echo "<a href=\"/home\">Home</a> <a href=\"/{$User['username']}\">Profile</a> <a href=\"/users/signout\">Sign Out</a>";
+		} else {
+			echo "<a href=\"/users/signin\">Sign In</a> <a href=\"/users/signup\">Sign Up</a>";
+		}
+		?>
+	</p>
 	<div id="content">
 		<h1><?php echo $heading; ?></h1>
 		<?php echo $message; ?>

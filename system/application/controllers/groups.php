@@ -117,10 +117,19 @@ class Groups extends App_Controller
 	 */
 	function subscribe($group_id = null)
 	{
+		if (!$group_id)
+			$this->redirect('/home');
+		
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);
 		if ($group) {
 			$this->Group->addMember($group_id, $this->userData['id']);
+			
+			// lets everyone know that you've joined the group
+			$message = 'I just joined '.$name.', check it out! <a href="/groups/'.$group["name"].'">'.$_SERVER['HTTP_HOST'].'/groups/'.$group["name"].'</a>';
+			$message_id = $this->Message->addMessage($message, $this->userData['username']);
+			$this->User->sendToFollowers($message_id, $this->userData['username']);
+			
 			$this->redirect('/group/' . $group['name']);
 		} else {
 			show_404();
@@ -136,6 +145,9 @@ class Groups extends App_Controller
 	 */
 	function unsubscribe($group_id = null)
 	{
+		if (!$group_id)
+			$this->redirect('/home');
+		
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);
 		if ($group) {

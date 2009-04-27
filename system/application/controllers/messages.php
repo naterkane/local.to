@@ -9,6 +9,7 @@ class Messages extends App_Controller
      * Add a message
      *
      * @todo Make ajax
+     * @todo Find out where `<script>` tags are being set to `[removed]` and make sure they're just escaped like other tags.
      * @return
      */
     function add()
@@ -27,8 +28,9 @@ class Messages extends App_Controller
         }
         else
         {
-            show_404();
+            $this->redirect('/home',"Sorry but you must post a message to post a message.",'error');
         }
+		
     }
 
 	/**
@@ -52,13 +54,20 @@ class Messages extends App_Controller
 	 * @param int $timestamp	
 	 * @return 
 	 */
-	function view($username, $message_id)
+	function view($username = null, $message_id = null)
 	{
+		
+		if (!$username)
+			$this->redirect("/home");
+		if (!$message_id)
+			$this->redirect("/".$username);
+		
 		$message = $this->Message->getOne($message_id);
 		if (($message) AND ($message['username'] == $username)) {
 			$this->load->view('messages/view', array('message'=>$message));
 		} else {
-			show_404();
+			$url = ($User['username']) ? "/home" : "/";
+			$this->redirect($url,"We were unable to retrieve the post you requested","notice");
 		}
 	}
 

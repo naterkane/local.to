@@ -11,7 +11,7 @@
 </h3>
 	
 <h3><a href="/groups/members/<?php echo $name ?>">Members (<?php echo $member_count ?>)</a></h3>
-
+<?php $this->load->view("messages/postform"); ?>
 <p><?php if (!empty($url)) echo "<a href=\"$url\">$url</a>";  ?></p>
 <p><?php if (!empty($desc)) echo $desc;  ?></p>
 <p><?php if (!empty($location)) echo $location;  ?></p>
