@@ -86,7 +86,7 @@ class Selenium
 	 */
 	public function openPage($page)
 	{
-		$this->write('open', $page);
+		$this->write('openAndWait', $page);
 		$this->checkErrors();
 	}
 	

@@ -27,6 +27,22 @@ class App_Controller extends Controller {
             $this->postData = $this->input->xss_clean($_POST);
         }
     }
+
+	/**
+	 * CheckID 
+	 *
+	 * @access public
+	 * @param $id to check
+	 * @return 
+	 */
+	function checkId($id = null, $redirect = '/home')
+	{
+		if (!$id) 
+		{
+			$this->redirect($redirect);
+		}
+	}
+	
  
 	/**
 	 * Get a users data from cookie

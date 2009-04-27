@@ -25,14 +25,6 @@ class Group extends App_Model
 		$data['id'] = $this->makeId($this->groupId);
 		$data['owner_id'] = $owner_id;
 		$data['public'] = 1;
-		
-		/*
-		$groups = $this->find("all") || array();
-		//var_dump($groups);
-		//var_dump($data['name']);
-		$groups["name"] = $data['name'];
-		parent::save("groups",$groups);
-		*/
 		$this->mode = 'add';
 		if ($this->save($this->prefixGroup($data['id']), $data)) 
 		{

@@ -56,12 +56,6 @@ class Messages extends App_Controller
 	 */
 	function view($username = null, $message_id = null)
 	{
-		
-		if (!$username)
-			$this->redirect("/home");
-		if (!$message_id)
-			$this->redirect("/".$username);
-		
 		$message = $this->Message->getOne($message_id);
 		if (($message) AND ($message['username'] == $username)) {
 			$this->load->view('messages/view', array('message'=>$message));

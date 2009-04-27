@@ -153,7 +153,7 @@ class Users extends App_Controller
      * @param string $username
      * @return
      */
-    function view($username)
+    function view($username = null)
     {	
        	$user = $this->User->getByUsername($username);
         if ($user)
