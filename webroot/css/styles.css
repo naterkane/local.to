@@ -48,27 +48,43 @@ label {
 	padding: 0 0 25px 0;
 }
 
+.flashMessage {
+	padding: 0.8em;
+	background: #fff6bf;
+	color: #514721;
+	margin-bottom: 1em;
+	border: 2px solid #ffd324;
+}
+
 .success {
-	background: #63BF53;	
-	border: 1px solid #66cc33;
-	padding: 10px;
-	margin: 0 0 15px 0;
-	color: #fff;
+	background: #e6efc2;	
+	border-color: #c6d880;
+	color: #264409;
 }
 
 .error {
-	background: #E2147F;	
-	padding: 10px;
-	margin: 0 0 15px 0;
-	color: #fff;
-	font-weight: bold;	
+	background: #fbe3e4;	
+	border-color:#fbc2c4;
+	color: #8a1f11;
 }
 
 .neutral {
 	background-color: #ffffdd;	
-	border: 1px solid #4F4800;
-	padding: 10px;
-	margin: 0 0 15px 0;
+	border-color: #4F4800;
+}
+.profile .message .author {
+	display:none;
+}
+.message .author a{
+	font-weight: bold;
+}
+.message .message {
+	font-weight:normal;
+}
+.message .meta {
+	display:block;
+	font-size: 0.8em;
+	font-style:oblique;
 }
 
 .inline-error {
