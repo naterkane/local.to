@@ -81,8 +81,17 @@
 	$this->selenium->write('verifyTextPresent', $error);
 	$this->selenium->write('verifyTextPresent', 'Username has already been taken');	
 	$this->selenium->write('verifyTextPresent', 'Email is already in use');
+	$this->selenium->signIn($name, $password);	
+	//try to delete account through illegal actions
+	$this->selenium->openPage('/delete');
+	$this->selenium->write('verifyTextPresent', $name);
+	$this->selenium->openPage('/settings');	
+	$this->selenium->write('type', 'update_key', '1');
+	$this->selenium->write('clickAndWait', 'delete');
+	$this->selenium->write('verifyConfirmationPresent', 'Are you sure you want to delete your account? This cannot be undone.');
+	$this->selenium->write('storeConfirmation');
+	$this->selenium->write('verifyTextPresent', $name);	
 	//delete account
-	$this->selenium->signIn($name, $password);
 	$this->selenium->openPage('/settings');
 	$this->selenium->write('clickAndWait', 'delete');
 	$this->selenium->write('verifyConfirmationPresent', 'Are you sure you want to delete your account? This cannot be undone.');

@@ -36,6 +36,11 @@ class Users extends App_Controller
 	function delete()
 	{
 		$this->mustBeSignedIn();
+		$key = $this->cookie->get('update_key');
+		if ((empty($this->postData['update_key'])) ||  ($this->postData['update_key'] != $key))
+		{
+			$this->redirect('/home');
+		}
 		if ($this->User->delete($this->userData)) 
 		{
         	$this->cookie->remove('user');
@@ -115,6 +120,9 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
         $this->data['page_title'] = 'Settings';
+		$key = md5($this->randomString(5));
+		$this->userData['update_key'] = $key;
+		$this->cookie->set('update_key', $key);
 		if ($this->postData) 
 		{
 			if ($this->User->updateProfile($this->userData['id'])) 
