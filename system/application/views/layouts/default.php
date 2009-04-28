@@ -9,7 +9,7 @@
 	<link href="/css/styles.css?<?php echo time();?>" media="screen, projection" rel="stylesheet" type="text/css" />
 	<title><?php 
 		if (!empty($page_title)): 
-			echo $title;
+			echo $page_title;
 		else:
 			echo "microblog";
 		endif; 
