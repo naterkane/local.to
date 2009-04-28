@@ -15,7 +15,7 @@ class Welcome extends App_Controller {
 		} 
 		else 
 		{
-			$this->data['title'] = 'Welcome';
+			$this->data['page_title'] = 'Welcome';
 			$this->load->view('users/welcome');
 		}
 	}

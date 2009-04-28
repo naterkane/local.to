@@ -98,7 +98,7 @@ class Users extends App_Controller
     function home()
     {
         $this->mustBeSignedIn();
-        $this->data['title'] = 'Home';
+        $this->data['page_title'] = 'Home';
         $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
 		$this->data['following_count'] = count($this->User->getFollowing($this->userData['id']));
 		$this->data['follower_count'] = count($this->User->getFollowers($this->userData['id']));		
@@ -114,6 +114,7 @@ class Users extends App_Controller
 	function settings()
 	{
 		$this->mustBeSignedIn();
+        $this->data['page_title'] = 'Settings';
 		if ($this->postData) 
 		{
 			if ($this->User->updateProfile($this->userData['id'])) 
@@ -142,7 +143,7 @@ class Users extends App_Controller
      */
     function signin()
     {
-        $this->data['title'] = 'Sign In';
+        $this->data['page_title'] = 'Sign In';
         if ($this->postData)
         {
             $user = $this->User->signIn($this->postData);
@@ -167,8 +168,7 @@ class Users extends App_Controller
      */
     function signup()
     {
-        $this->data['title'] = 'Sign Up';
-		
+        $this->data['page_title'] = 'Sign Up';
         if ($this->postData)
         {
             if ($this->User->signUp($this->postData))
@@ -228,7 +228,7 @@ class Users extends App_Controller
         if ($user)
         {
             $this->getUserData();
-            $this->data['title'] = 'Home';
+            $this->data['page_title'] = $username;
             $this->data['username'] = $username;
             $this->data['messages'] = $this->Message->getPublic($user['id']);
 			if ($this->User->isFollowing($user['id'], $this->userData['id'])) 

@@ -14,7 +14,7 @@ class Groups extends App_Controller
 	function add()
 	{
 		$this->mustBeSignedIn();
-		$this->data['title'] = 'Add a group';
+		$this->data['page_title'] = 'Add a group';
 		if ($this->postData) {
 			if ($this->Group->add($this->postData, $this->userData['id'])) {
 				$this->redirect('/group/' . $this->postData['name']);
@@ -51,6 +51,7 @@ class Groups extends App_Controller
 		$group = $this->Group->getByName($name);
 		if ($group) 
 		{
+			$this->data['page_title'] = $group['name'] . ' Members';
 			$this->data['name'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
 			$this->data['members'] = $this->Group->getMembers($group['id']);
@@ -73,6 +74,7 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$user = $this->data['User'];
 		$group = $this->Group->getByName($groupname);
+		$this->data['page_title'] = 'Group Settings';
 		if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
 		{
 			$this->data = $group;
@@ -168,7 +170,7 @@ class Groups extends App_Controller
 			$group = $this->Group->getByName($name);
 			$user = $this->data['User'];
 			$this->data = $group;
-			$this->data['title'] = $group['name'];
+			$this->data['page_title'] = $group['name'];
 			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 			$this->data['member_count'] = $this->Group->getMemberCount($group['id']);
 			$this->data['messages'] = $this->Message->getForGroup($group['id']);

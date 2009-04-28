@@ -8,7 +8,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link href="/css/styles.css?<?php echo time();?>" media="screen, projection" rel="stylesheet" type="text/css" />
 	<title><?php 
-		if (!empty($title)): 
+		if (!empty($page_title)): 
 			echo $title;
 		else:
 			echo "microblog";

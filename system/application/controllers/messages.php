@@ -41,6 +41,7 @@ class Messages extends App_Controller
 	function public_timeline()
 	{
 		$this->getUserData();
+        $this->data['page_title'] = 'Public Timeline';		
 		$this->data['messages'] = $this->Message->getTimeline();
 		$this->load->view('messages/public_timeline', $this->data);
 	}
