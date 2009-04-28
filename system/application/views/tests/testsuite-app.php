@@ -5,6 +5,6 @@
 	$this->selenium->addTestCase('Add Message', 'add-message');	
 	$this->selenium->addTestCase('Follow', 'follow');
 	$this->selenium->addTestCase('Add Group and Subscribe', 'group');
-	$this->selenium->addTestCase('Add Group and Change Profile', 'group');	
+	$this->selenium->addTestCase('Add Group and Change Profile', 'group-settings');	
 	$this->selenium->addTestCase('Access', 'access');	
 ?>

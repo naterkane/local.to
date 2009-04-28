@@ -41,7 +41,7 @@ class Mail
 		$this->mail->SetFrom($from_email, $from_name);
 		$this->mail->Subject = $subject;
 		$this->mail->Body = $message;
-		$this->mail->Send();
+		//$this->mail->Send();
 	}
 	
 }

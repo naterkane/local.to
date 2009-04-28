@@ -349,7 +349,7 @@ class Group extends App_Model
 	function update($oldGroup, $newGroup, $user_id)
 	{
 		$this->mode = 'update';
-		$group = $this->updateData($oldGroup, $newGroup);
+		$group = $this->updateData($oldGroup, $newGroup);		
 		if ($this->save($this->prefixGroup($oldGroup['id']), $group)) 
 		{
 			$this->mode = null;			
@@ -371,7 +371,7 @@ class Group extends App_Model
 	 */	
 	function validate()
 	{
-		$this->setAction();		
+		$this->setAction();	
 		if (($this->mode == 'add') || ($this->mode == 'update'))
 		{
 			$this->validates_callback('isNotReserved', 'name', array('message'=>'This is a reserved name'));			

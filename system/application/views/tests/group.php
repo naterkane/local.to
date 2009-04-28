@@ -94,7 +94,7 @@
 	$this->selenium->write('verifyTextPresent', $group_message);
 	//make sure message is present timeline		
 	$this->selenium->openPage('/public_timeline');		
-	$this->selenium->write('verifyTextPresent', $group_message);
+	$this->selenium->write('verifyTextNotPresent', $group_message);
 	//unsubscribe from group
 	$this->selenium->signOut();	
 	$this->selenium->signIn($name2, $password2);	

@@ -2,6 +2,7 @@
 	$name = $this->selenium->randomString(10);
 	$password = $this->selenium->randomString(10);	
 	$email = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';	
+	$email_new = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';		
 	$group_name = $this->selenium->randomString(10);
 	$group_name_new = $this->selenium->randomString(10);
 	$desc = $this->selenium->randomString(10);
@@ -20,7 +21,7 @@
 	$this->selenium->openPage('/groups/add');
 	$this->selenium->write('type', 'name', $group_name);
 	$this->selenium->click('Add');
-	$this->selenium->write('verifyTextPresent', $group);
+	$this->selenium->write('verifyTextPresent', $group_name);
 	//go to settings	
 	$this->selenium->openPage('/groups/settings/' . $group_name);
 	$this->selenium->write('verifyValue', 'name', $group_name);
@@ -56,13 +57,12 @@
 	$this->selenium->write('verifyTextPresent', 'A description must be between 1 and 160 characters long');	
 	//update record
 	$this->selenium->write('type', 'name', $group_name_new);
-	$this->selenium->write('type', 'email', $email);	
+	$this->selenium->write('type', 'email', $email_new);	
 	$this->selenium->write('type', 'desc', $desc);
 	$this->selenium->write('type', 'location', $location);	
 	$this->selenium->write('type', 'url', $url);
 	$this->selenium->click('Update');
 	$this->selenium->write('verifyTextPresent', 'The group was updated.');
-	$this->selenium->openPage('/settings');	
 	$this->selenium->write('verifyValue', 'name', $group_name_new);
 	$this->selenium->write('verifyValue', 'email', $email_new);	
 	$this->selenium->write('verifyValue', 'desc', $desc);		

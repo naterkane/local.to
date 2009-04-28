@@ -17,7 +17,7 @@ class Messages extends App_Controller
         $this->mustBeSignedIn();
         if ($this->postData)
         {
-			$message = $this->Message->add($this->postData['message'], $this->userData['id']);
+			$message = $this->Message->add($this->postData['message'], $this->userData);
 			if ($message) 
 			{
 				$this->User->mode = null;

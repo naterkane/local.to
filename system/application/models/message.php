@@ -17,12 +17,14 @@ class Message extends App_Model
     /**
      * Add a new message
      *
-     * @todo Validation and return value, add transactions, move isMember to Validation
+     * @todo add transactions
      * @param string $message
+     * @param array $userdata
 	 * @return boolean|data
      */
-    function add($message = null, $user_id)
+    function add($message = null, $user)
     {
+		$user_id = $user['id'];
 		$data = array();
 		$time = time();
 		$this->mode = 'post';
@@ -42,7 +44,10 @@ class Message extends App_Model
 			$this->mode = null;
 			$this->push($this->prefixUserPublic($user_id), $data['id']);
 			$this->push($this->prefixUserPrivate($user_id), $data['id']);
-			$this->addToPublicTimeline($data['id']);
+			if (!$user['locked']) 
+			{
+				$this->addToPublicTimeline($data['id']);
+			}
         	return $data;
 		} 
 		else 
