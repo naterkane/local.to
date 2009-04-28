@@ -4,6 +4,32 @@
 */
 class Form extends Html
 {
+
+	/**
+	* Print out a checkbox
+	*
+	* @access public	
+	* @param string $name Name of field
+	* @param array $options[optional] HTML options
+	* @return string
+	*/
+	public function checkbox($name, $options = array())
+	{
+		$options = $this->setOptions('type', 'checkbox', $options);
+		$options = $this->setOptions('name', $name, $options);
+		$options = $this->setOptions('id', $name, $options);
+		if (empty($options['value'])) {
+			$options = $this->setOptions('value', $this->getElementValue($name), $options);
+		}
+		if($options['value'] == 1) {
+			$options['checked'] = 'checked';
+		} else {
+			$options['value'] = 1;
+		}
+		$output = $this->input($name, array('type' => 'hidden', 'id' => $options['id'] . '_', 'name' => $options['name'], 'value' => '0'));
+		return $output . sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
+	}
+	
 	
 	/**
 	 * Process form options

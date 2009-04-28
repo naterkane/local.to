@@ -38,6 +38,10 @@
 		<?php echo $this->form->select('timezone', $this->User->timezones) ?>
 	</div>
 	<div class="mod">
+		<label for="locked">Lock Account</label>	
+		<?php echo $this->form->checkbox('locked'); ?>
+	</div>
+	<div class="mod">
 		<input type="submit" value="Update">
 	</div>
 </form>

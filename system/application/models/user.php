@@ -245,7 +245,7 @@ class User extends App_Model
 			}
 			else 
 			{
-				$this->_follow($user['id'], $user_id);
+				$this->_follow($user_id, $user['id']);
 			}
 			return true;			
 		} 
@@ -554,8 +554,8 @@ class User extends App_Model
         $now = time();
         $this->mode = 'signup';
 		$data['id'] = $this->makeId($this->userId);
-        $data['locked'] = true;
-        $data['activated'] = true;
+        $data['locked'] = 1;
+        $data['activated'] = 1;
         $data['created'] = $now;
         $data['modified'] = $now;
 		if ($this->save($this->prefixUser($data['id']), $data)) 
@@ -579,9 +579,9 @@ class User extends App_Model
 	 */
 	function updateProfile($user_id)
 	{
-		$this->mode = 'profile';
+		$this->mode = 'profile';		
 		$this->postData = $this->updateData($this->userData, $this->postData);
-		$this->postData['id'] = $user_id;	
+		$this->postData['id'] = $user_id;
 		if ($this->save($this->prefixUser($this->postData['id']), $this->postData)) 
 		{
 			$this->delete($this->prefixUsername($this->userData['username']));

@@ -6,7 +6,8 @@
 	$password2 = $this->selenium->randomString(10);	
 	$email2 = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';	
 	$message = $this->selenium->randomString(10);
-	$message2 = $this->selenium->randomString(10);				
+	$message2 = $this->selenium->randomString(10);	
+	$message3 = $this->selenium->randomString(10);					
 	$this->selenium->caseTitle('Follow');
 	//create first account and sign out
 	$this->selenium->signOut();	
@@ -81,5 +82,38 @@
 	$this->selenium->write('verifyTextNotPresent', $message2);
 	$this->selenium->openPage('/' . $name2);	
 	$this->selenium->write('verifyTextNotPresent', $message2);	
+	//unlock settings
+	$this->selenium->signOut();	
+	$this->selenium->signIn($name, $password);
+	$this->selenium->openPage('/settings');
+	$this->selenium->write('assertChecked', 'locked');		
+	$this->selenium->write('click', 'locked');
+	$this->selenium->click('Update');
+	$this->selenium->write('verifyTextPresent', 'Your profile was updated.');
+	$this->selenium->write('assertNotChecked', 'locked');			
+	//friend without confirmation
+	$this->selenium->signOut();	
+	$this->selenium->signIn($name2, $password2);		
+	$this->selenium->openPage('/' . $name);		
+	$this->selenium->write('clickAndWait', 'follow');
+	$this->selenium->write('verifyTextPresent', 'Unfollow');
+	$this->selenium->openPage('/home');
+	$this->selenium->write('verifyTextPresent', 'Following: 1 Followers: 0');	
+	//sign out and post from first account
+	$this->selenium->signOut();	
+	$this->selenium->signIn($name, $password);
+	$this->selenium->openPage('/friend_requests');
+	$this->selenium->write('verifyTextNotPresent', $name);		
+	$this->selenium->openPage('/home');
+	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');	
+	$this->selenium->write('type', 'message', $message3);
+	$this->selenium->click('Update');
+	$this->selenium->openPage('/');
+	$this->selenium->write('verifyTextPresent', $message3);
+	$this->selenium->signOut();
+	//sign in and check if second account sees message		
+	$this->selenium->signOut();	
+	$this->selenium->signIn($name2, $password2);		
+	$this->selenium->write('verifyTextPresent', $message3);	
 	$this->selenium->openPage('/admin/flush');	
 ?>
