@@ -9,5 +9,9 @@
 	$this->selenium->mustBeLoggedIn('/groups/add');	
 	$this->selenium->mustBeLoggedIn('/settings');
 	$this->selenium->mustBeLoggedIn('/delete');	
+	$this->selenium->mustBeLoggedIn('/follow/123');
+	$this->selenium->mustBeLoggedIn('/unfollow/123');	
+	$this->selenium->mustBeLoggedIn('/confirm/123');
+	$this->selenium->mustBeLoggedIn('/deny/123');	
 	$this->selenium->openPage('/admin/flush');	
 ?>

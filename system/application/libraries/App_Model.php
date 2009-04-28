@@ -7,31 +7,33 @@
 */
 class App_Model extends Model {
 
-	private $memcacheHost = 'localhost';
-	private $memcachePort = '21201';
-	private $prefixCookie = 'session';
-	private $prefixFollower = 'followers';
-	private $prefixFollowing = 'following';	
-	private $prefixGroup = 'group';
-	private $prefixGroupName = 'groupname';	
-	private $prefixGroupMessages = 'groupmessages';
-	private $prefixGroupMembers = 'groupmembers';	
-	private $prefixMessage = 'message';
-	private $prefixPublic = 'timeline';
-	private $prefixSeparator = ':';	
-	private $prefixUser = 'user';
-	private $prefixUsername = 'username';
-	private $prefixUserEmail = 'useremail';	
-	private $prefixUserPublic = 'public';
-	private $prefixUserPrivate = 'private';
+	protected $memcacheHost = 'localhost';
+	protected $memcachePort = '21201';
+	protected $prefixCookie = 'session';
+	protected $prefixFollower = 'followers';
+	protected $prefixFollowing = 'following';	
+	protected $prefixFriendRequests = 'friendrequests';	
+	protected $prefixGroup = 'group';
+	protected $prefixGroupName = 'groupname';	
+	protected $prefixGroupMessages = 'groupmessages';
+	protected $prefixGroupMembers = 'groupmembers';	
+	protected $prefixMessage = 'message';
+	protected $prefixPublic = 'timeline';
+	protected $prefixSeparator = ':';	
+	protected $prefixUser = 'user';
+	protected $prefixUsername = 'username';
+	protected $prefixUserEmail = 'useremail';	
+	protected $prefixUserPublic = 'public';
+	protected $prefixUserPrivate = 'private';
 	protected $groupId = 'groupId';	
 	protected $messageId = 'messageId';		
 	protected $reservedNames = array('users', 'groups', 'admin', 'profile', 'settings', 'messages', 'tests', 'welcome');		
 	protected $userId = 'userId';
 	public $action;
 	public $id;	
+	public $locked = false;	
 	public $modelData = array();
-	public $mode;	
+	public $mode;
 	public $validate = true;
 	public $validationErrors = array();	
 
@@ -245,28 +247,40 @@ class App_Model extends Model {
 	 * @param string $username
 	 * @return string
 	 */
-	function prefixFollower($username)
+	function prefixFollower($id)
 	{ 
-		return $this->prefixFollower . $this->prefixSeparator . $username; 
+		return $this->prefixFollower . $this->prefixSeparator . $id; 
 	}
 	
 	/**
 	 * Create a prefix for followers
 	 * 
 	 * @access public
-	 * @param string $username
+	 * @param string $id
 	 * @return string
 	 */	
-	function prefixFollowing($username)
+	function prefixFollowing($id)
 	{ 
-		return $this->prefixFollowing . $this->prefixSeparator . $username; 
+		return $this->prefixFollowing . $this->prefixSeparator . $id; 
+	}
+
+	/**
+	 * Create a prefix for a follow request
+	 * 
+	 * @access public
+	 * @param string $id
+	 * @return string
+	 */	
+	function prefixFriendRequests($id)
+	{ 
+		return $this->prefixFriendRequests . $this->prefixSeparator . $id; 
 	}
 	
 	/**
 	 * Create a prefix for a group
 	 * 
 	 * @access public
-	 * @param string $groupname
+	 * @param string $id
 	 * @return string
 	 */	
 	function prefixGroup($id)
@@ -410,9 +424,16 @@ class App_Model extends Model {
 			$data = array();
 		}
 		if (is_array($data)) {
-			array_unshift($data, $value);
-			$data = serialize($data);
-			return $this->save($key, $data);
+			if (in_array($value, $data)) 
+			{
+				return false;
+			} 
+			else 
+			{
+				array_unshift($data, $value);
+				$data = serialize($data);
+				return $this->save($key, $data);
+			}
 		} else {
 			return false;
 		}	

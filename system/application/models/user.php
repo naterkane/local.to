@@ -150,6 +150,58 @@ class User extends App_Model
 	);
 
 	/**
+	 * Private method for following
+	 *
+	 * @access private
+	 * @param int $follower_id
+	 * @param int $following_id	
+	 * @return 
+	 */
+	private function _follow($following_id, $follower_id)
+	{
+		$this->push($this->prefixFollower($follower_id), $following_id);
+		$this->push($this->prefixFollowing($following_id), $follower_id);
+		return true;
+	}
+
+	/**
+	 * Confirm Request
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	function confirm($username, $user_id)
+	{
+		$this->mode = 'confirm';
+		$user = $this->getByUsername($username);	//get follower
+		if (!$user) 
+		{
+			return false;
+		}		
+		$requests = $this->getFriendRequests($user_id, true);
+		if (($requests) AND (in_array($user['id'], $requests)))	//check if follower in in requests
+		{
+			$friends = $this->getFollowers($user_id);
+			if (($friends) AND (in_array($user['id'], $friends))) //check if follower is already following
+			{	
+				$this->removeFriendRequest($requests, $user['id'], $user_id);
+				return false;
+			}
+			else 
+			{
+				$this->_follow($user['id'], $user_id);
+				$this->removeFriendRequest($requests, $user['id'], $user_id);
+				return true;
+			}
+		} 
+		else 
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * Delete a user
 	 *
 	 * @access public
@@ -175,23 +227,27 @@ class User extends App_Model
 		}
 	}
 	
-	
 	/**
 	 * Follow a user
 	 *
 	 * @access public
-	 * @param string $username of user to follow
-	 * @param string $user_id of user following
+	 * @param array $user Data of user to follow
+	 * @param int $user_id of user follower
 	 * @return boolean
 	 */
-	function follow($username = null, $user_id)
+	function follow($user = array(), $user_id)
 	{
-		$user = $this->getByUsername($username);	
 		if ($user) 
 		{
-			$this->push($this->prefixFollower($user['id']), $user_id);
-			$this->push($this->prefixFollowing($user_id), $user['id']);
-			return true;
+			if ($user['locked']) 
+			{
+				$this->push($this->prefixFriendRequests($user['id']), $user_id);
+			}
+			else 
+			{
+				$this->_follow($user['id'], $user_id);
+			}
+			return true;			
 		} 
 		else 
 		{
@@ -201,10 +257,10 @@ class User extends App_Model
 	
 	
 	/**
-	 * Get a User's data by username
+	 * Get a User's data by id
 	 *
-	 * @param object $username[optional]
-	 * @return 	
+	 * @param int $user_id[optional]
+	 * @return 	array $user_data
 	 */
     function get($user_id = null)
     {
@@ -218,6 +274,12 @@ class User extends App_Model
         }
     }
 
+	/**
+	 * Get a User's data by username
+	 *
+	 * @param int $username[optional]
+	 * @return 	array $user_data
+	 */
 	function getByUsername($username = null)
 	{
 		$return = null;
@@ -235,25 +297,63 @@ class User extends App_Model
 	/**
 	 * Get all of a users followers  
 	 *
-	 * @param object $username
+	 * @param int $user_id
 	 * @return 	
 	 */
     function getFollowers($user_id)
     {
-        if ($user_id)
-        {
-            return $this->find($this->prefixFollower($user_id));
-        }
-        else
-        {
-            return null;
-        }
+		$followers = $this->find($this->prefixFollower($user_id));
+		if (!$followers) 
+		{
+			$followers = array(); 	//need an empty array for count to work correctly
+		}
+		return $followers;
+    }
+
+	/**
+	 * Get all users following a user 
+	 *
+	 * @param int $user_id
+	 * @return 	
+	 */
+    function getFollowing($user_id)
+    {
+
+		$following = $this->find($this->prefixFollowing($user_id));
+		if (!$following) 
+		{
+			$following = array(); 	//need an empty array for count to work correctly
+		}
+		return $following;
+    }
+
+	/**
+	 * Get all of a users friend requests
+	 *
+	 * @param int $user_id
+	 * @return 	
+	 */
+    function getFriendRequests($user_id, $idsOnly = false)
+    {
+		$data = $this->find($this->prefixFriendRequests($user_id));
+		if ($idsOnly) 
+		{
+			return $data;
+		} 
+		else 
+		{
+			$return = array();
+			foreach ($data as $request) {
+				$return[] = $this->get($request);
+			}
+			return $return;
+		}
     }
 	
 	/**
 	 * Get the groups that a user is a member of
 	 * @return 
-	 * @param object $username
+	 * @param string $username
 	 * @todo finish method
 	 */
 	function getGroups($username)
@@ -267,24 +367,6 @@ class User extends App_Model
 			return null;
 		}
 	}
-	
-	/**
-	 * Get all users following a user 
-	 *
-	 * @param object $username
-	 * @return 	
-	 */
-    function getFollowing($user_id)
-    {
-        if ($user_id)
-        {
-            return $this->find($this->prefixFollowing($user_id));
-        }
-        else
-        {
-            return null;
-        }
-    }
    
     /**
      * Hash a password
@@ -300,8 +382,8 @@ class User extends App_Model
     /**
      * Check if a user is following another user
      *
-     * @param string $username The user in question
-     * @param string $my_username The user doing the asking
+     * @param int $user_id The user in question
+     * @param int $my_id The user doing the asking
      * @return boolean
      */
     function isFollowing($user_id, $my_id)
@@ -320,6 +402,31 @@ class User extends App_Model
 			return false;
 		}
     }	
+
+    /**
+     * Check if a user has already requested friend
+     *
+     * @param int $user_id The user in question
+     * @param int $my_id The user doing the asking
+     * @return boolean
+     */
+    function isPendingFriendRequest($user_id, $my_id)
+    {
+        $friendRequests = $this->getFriendRequests($user_id, true);
+		if (!empty($friendRequests)) {
+			if (in_array($my_id, $friendRequests))
+	        {
+	            return true;
+	        }
+	        else
+	        {
+	            return false;
+	        }
+		} else {
+			return false;
+		}
+    }
+
 
 	/**
 	 * Does the password and its confirm work?
@@ -370,6 +477,22 @@ class User extends App_Model
 			return true;
 		}
 	}
+
+	/**
+	 * Remove a user from friend requests
+	 *
+	 * @access public
+	 * @param array $requests
+	 * @param int $user_id User to remove
+	 * @param int $owner_id User owning list		
+	 * @return 
+	 */
+	function removeFriendRequest($requests, $user_id, $owner_id)
+	{
+		$requests = $this->removeFromArray($requests, $user_id);
+		return $this->save($this->prefixFriendRequests($owner_id), $requests);
+	}
+	
 
     /**
      * Send messages to followes
@@ -431,7 +554,8 @@ class User extends App_Model
         $now = time();
         $this->mode = 'signup';
 		$data['id'] = $this->makeId($this->userId);
-        $data['activated'] = 1;
+        $data['locked'] = true;
+        $data['activated'] = true;
         $data['created'] = $now;
         $data['modified'] = $now;
 		if ($this->save($this->prefixUser($data['id']), $data)) 

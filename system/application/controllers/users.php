@@ -6,6 +6,28 @@ class Users extends App_Controller
 {
    
 	/**
+	 * Confirm a friend request
+	 *
+	 * @access public
+	 * @param string $username
+	 * @return 
+	 */
+	function confirm($username = null)
+	{
+		$this->mustBeSignedIn();
+		$this->checkId($username);
+		if ($this->User->confirm($username, $this->userData['id'])) 
+		{
+			$this->redirect('/home', $username . ' is now following your posts.');
+		} 
+		else 
+		{
+			$this->redirect('/home', 'There was problem adding this follower', 'error');
+		}
+	}
+	
+
+	/**
 	 * Delete an account
 	 *
 	 * @access public
@@ -34,9 +56,20 @@ class Users extends App_Controller
     function follow($username = null)
     {
         $this->mustBeSignedIn();
-		if ($this->User->follow($username, $this->userData['id']))
+		$user = $this->User->getByUsername($username);
+		if ($this->User->follow($user, $this->userData['id']))
 		{
-			$this->redirect('/' . $username);
+			if ($user['locked']) 
+			{
+				$this->load->library('Mail');				
+				$this->mail->send($user['email'], null, null, 'Welcome', 'http://' . $_SERVER['HTTP_HOST'] . '/friend_requests');
+				$message = 'A confirmation request has been sent to ' . $user['username'] . ' for confirmation.';				
+			} 
+			else 
+			{
+				$message = 'You are now following ' . $user['username'] . '.';				
+			}
+			$this->redirect('/' . $username, $message);
 		}
 		else
 		{
@@ -44,6 +77,20 @@ class Users extends App_Controller
 		}
     }
    
+	/**
+	 * Process a request for following
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return 
+	 */
+	function friend_requests()
+	{
+		$this->mustBeSignedIn();
+		$this->data['requests'] = $this->User->getFriendRequests($this->userData['id']);
+        $this->load->view('users/friend_requests', $this->data);		
+	}
+
 	/**
 	 * User's home page
 	 * @return 
@@ -53,6 +100,8 @@ class Users extends App_Controller
         $this->mustBeSignedIn();
         $this->data['title'] = 'Home';
         $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
+		$this->data['following_count'] = count($this->User->getFollowing($this->userData['id']));
+		$this->data['follower_count'] = count($this->User->getFollowers($this->userData['id']));		
         $this->load->view('users/home', $this->data);
     }
 
@@ -125,7 +174,7 @@ class Users extends App_Controller
             if ($this->User->signUp($this->postData))
             {
 				$this->load->library('Mail');
-				$this->mail->send($this->postData['email'], null, null, 'Welcome', 'Welcome to the microblog!');	
+				$this->mail->send($this->postData['email'], null, null, 'Welcome', 'Welcome to the microblog!');
                 $this->redirect('/signin', 'Your account has been created. Please sign in.');
             }
 			else 
@@ -182,7 +231,18 @@ class Users extends App_Controller
             $this->data['title'] = 'Home';
             $this->data['username'] = $username;
             $this->data['messages'] = $this->Message->getPublic($user['id']);
-            $this->data['is_following'] = $this->User->isFollowing($user['id'], $this->userData['id']);
+			if ($this->User->isFollowing($user['id'], $this->userData['id'])) 
+			{
+				$this->data['friend_status'] = 'following';
+			}
+			elseif ($this->User->isPendingFriendRequest($user['id'], $this->userData['id'])) 
+			{
+				$this->data['friend_status'] = 'pending';
+			}
+			else 
+			{
+				$this->data['friend_status'] = 'follow';				
+			}
             $this->load->view('users/view', $this->data);
         }
         else
