@@ -5,6 +5,28 @@
 class Form extends Html
 {
 
+	public $data = array();
+	public $validationErrors = array();	
+
+	function __construct()
+	{
+		$ci = get_instance();
+		if (isset($ci->input)) 
+		{
+			$this->input = $ci->input;
+		}
+		if (!empty($ci->postData)) 
+		{
+			$this->data = $ci->postData;
+		}
+		else
+		{
+			$this->data = $ci->data;
+		}
+		$this->validationErrors = $ci->validationErrors;
+		unset($ci);
+	}
+
 	/**
 	* Print out a checkbox
 	*

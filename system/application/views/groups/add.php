@@ -3,8 +3,8 @@
 <div class="mod">
 	<div class="mod">
 		<label for="name">Name</label>		
-		<?php echo $this->form->input('name') ?>
-		<?php echo $this->form->error('name') ?>		
+		<?php echo $form->input('name') ?>
+		<?php echo $form->error('name') ?>		
 	</div>
 	<div class="mod">		
 		<input type="submit" value="Add">

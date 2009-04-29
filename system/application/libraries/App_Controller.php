@@ -5,9 +5,10 @@
 class App_Controller extends Controller {
    
     var $data = array();
-	var $layout;				//leave empty for default
+	var $layout;				//leave empty for default	
     var $postData = array();
     var $userData = array();
+	var $validationErrors = array();
    
 	/**
 	 * Constructor
@@ -21,7 +22,6 @@ class App_Controller extends Controller {
         parent::Controller();
         $this->load->library(array('Load_helpers'));
         $this->load->model(array('User', 'Message', 'Group'));
-		$this->load_helpers->load(array('Html', 'Time', 'Selenium', 'Form'));
         if ($_POST) 
 		{
             $this->postData = $this->input->xss_clean($_POST);
@@ -81,7 +81,7 @@ class App_Controller extends Controller {
 	{
 		return ini_get('display_errors');
 	}
- 
+
     /**
      * Checks to see if a user is signed in
      *
@@ -151,12 +151,9 @@ class App_Controller extends Controller {
 	 */
 	function setData($data = array())
 	{
-		if (!empty($this->form)) 
+		foreach ($data as $field => $value) 
 		{
-			foreach ($data as $field => $value) 
-			{
-				$this->form->data[$field] = $value;
-			}
+			$this->data[$field] = $value;
 		}
 	}
 
@@ -169,14 +166,11 @@ class App_Controller extends Controller {
 	 */
 	function setErrors($models = array())
 	{
-		if (!empty($this->html)) 
+		foreach ($models as $model) 
 		{
-			foreach ($models as $model) 
+			foreach ($this->$model->validationErrors as $field => $error) 
 			{
-				foreach ($this->$model->validationErrors as $field => $error) 
-				{
-					$this->form->validationErrors[$field] = $error;
-				}
+				$this->validationErrors[$field] = $error;
 			}
 		}
 	}

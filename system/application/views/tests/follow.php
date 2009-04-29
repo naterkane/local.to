@@ -1,119 +1,119 @@
 <?php
-	$name = $this->selenium->randomString(10);
-	$password = $this->selenium->randomString(10);	
-	$email = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';	
-	$name2 = $this->selenium->randomString(10);
-	$password2 = $this->selenium->randomString(10);	
-	$email2 = $this->selenium->randomString(10) . '@' . $this->selenium->randomString(10) . '.com';	
-	$message = $this->selenium->randomString(10);
-	$message2 = $this->selenium->randomString(10);	
-	$message3 = $this->selenium->randomString(10);					
-	$this->selenium->caseTitle('Follow');
+	$name = $selenium->randomString(10);
+	$password = $selenium->randomString(10);	
+	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$name2 = $selenium->randomString(10);
+	$password2 = $selenium->randomString(10);	
+	$email2 = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$message = $selenium->randomString(10);
+	$message2 = $selenium->randomString(10);	
+	$message3 = $selenium->randomString(10);					
+	$selenium->caseTitle('Follow');
 	//create first account and sign out
-	$this->selenium->signOut();	
-	$this->selenium->signUp($name, $password, $email);
-	$this->selenium->signIn($name, $password);
-	$this->selenium->signOut();	
+	$selenium->signOut();	
+	$selenium->signUp($name, $password, $email);
+	$selenium->signIn($name, $password);
+	$selenium->signOut();	
 	//create second account	
-	$this->selenium->signOut();	
-	$this->selenium->signUp($name2, $password2, $email2);
-	$this->selenium->signIn($name2, $password2);
+	$selenium->signOut();	
+	$selenium->signUp($name2, $password2, $email2);
+	$selenium->signIn($name2, $password2);
 	//check follower counts
-	$this->selenium->openPage('/home');
-	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');
+	$selenium->openPage('/home');
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');
 	//follow first account
-	$this->selenium->openPage('/' . $name);		
-	$this->selenium->write('clickAndWait', 'follow');
-	$this->selenium->write('verifyTextPresent', 'A confirmation request has been sent to ' . $name . ' for confirmation.');
-	$this->selenium->write('verifyTextPresent', 'Pending a friend request');	
+	$selenium->openPage('/' . $name);		
+	$selenium->write('clickAndWait', 'follow');
+	$selenium->write('verifyTextPresent', 'A confirmation request has been sent to ' . $name . ' for confirmation.');
+	$selenium->write('verifyTextPresent', 'Pending a friend request');	
 	//try to follow a second time and get error
-	$this->selenium->write('openAndWait', '/follow/' . $name);	
-	$this->selenium->write('verifyTextPresent', $this->selenium->missingText);	
+	$selenium->write('openAndWait', '/follow/' . $name);	
+	$selenium->write('verifyTextPresent', $selenium->missingText);	
 	//try to follow yourself
-	$this->selenium->write('openAndWait', '/follow/' . $name2);	
-	$this->selenium->write('verifyTextPresent', $this->selenium->missingText);	
-	$this->selenium->signOut();		
+	$selenium->write('openAndWait', '/follow/' . $name2);	
+	$selenium->write('verifyTextPresent', $selenium->missingText);	
+	$selenium->signOut();		
 	//go to first user's home page
-	$this->selenium->signIn($name, $password);	
-	$this->selenium->openPage('/home');	
-	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');
+	$selenium->signIn($name, $password);	
+	$selenium->openPage('/home');	
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');
 	//accept friend request
-	$this->selenium->openPage('/friend_requests');	
-	$this->selenium->write('verifyTextPresent', $name2);
-	$this->selenium->write('clickAndWait', 'confirm' . $name2);	
-	$this->selenium->write('verifyTextPresent', $name2 . ' is now following your posts.');
-	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');
+	$selenium->openPage('/friend_requests');	
+	$selenium->write('verifyTextPresent', $name2);
+	$selenium->write('clickAndWait', 'confirm' . $name2);	
+	$selenium->write('verifyTextPresent', $name2 . ' is now following your posts.');
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');
 	//try and accept a friend request from someone who did not request
-	$this->selenium->write('openAndWait', '/confirm/1');		
-	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');	
-	$this->selenium->write('verifyTextPresent', 'There was problem adding this follower');	
+	$selenium->write('openAndWait', '/confirm/1');		
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');	
+	$selenium->write('verifyTextPresent', 'There was problem adding this follower');	
 	//post a message
-	$this->selenium->write('type', 'message', $message);
-	$this->selenium->click('Update');
-	$this->selenium->openPage('/');
-	$this->selenium->write('verifyTextPresent', $message);
-	$this->selenium->signOut();		
+	$selenium->write('type', 'message', $message);
+	$selenium->click('Update');
+	$selenium->openPage('/');
+	$selenium->write('verifyTextPresent', $message);
+	$selenium->signOut();		
 	//make sure second account sees post and is following
-	$this->selenium->signIn($name2, $password2);
-	$this->selenium->openPage('/home');	
-	$this->selenium->write('verifyTextPresent', $message);
-	$this->selenium->write('verifyTextPresent', 'Following: 1 Followers: 0');	
-	$this->selenium->openPage('/' . $name2);	
-	$this->selenium->write('verifyTextNotPresent', $message);	
+	$selenium->signIn($name2, $password2);
+	$selenium->openPage('/home');	
+	$selenium->write('verifyTextPresent', $message);
+	$selenium->write('verifyTextPresent', 'Following: 1 Followers: 0');	
+	$selenium->openPage('/' . $name2);	
+	$selenium->write('verifyTextNotPresent', $message);	
 	//unsubscribe
-	$this->selenium->openPage('/' . $name);		
-	$this->selenium->write('clickAndWait', 'unfollow');
-	$this->selenium->write('verifyTextPresent', 'Follow');
-	$this->selenium->openPage('/home');	
-	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');	
-	$this->selenium->signOut();	
+	$selenium->openPage('/' . $name);		
+	$selenium->write('clickAndWait', 'unfollow');
+	$selenium->write('verifyTextPresent', 'Follow');
+	$selenium->openPage('/home');	
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');	
+	$selenium->signOut();	
 	//Post again as first
-	$this->selenium->signIn($name, $password);
-	$this->selenium->openPage('/home');	
-	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');	
-	$this->selenium->write('type', 'message', $message2);
-	$this->selenium->click('Update');
-	$this->selenium->openPage('/');
-	$this->selenium->write('verifyTextPresent', $message2);
-	$this->selenium->signOut();	
+	$selenium->signIn($name, $password);
+	$selenium->openPage('/home');	
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 0');	
+	$selenium->write('type', 'message', $message2);
+	$selenium->click('Update');
+	$selenium->openPage('/');
+	$selenium->write('verifyTextPresent', $message2);
+	$selenium->signOut();	
 	//make sure second message is not there
-	$this->selenium->signIn($name2, $password2);
-	$this->selenium->openPage('/home');	
-	$this->selenium->write('verifyTextNotPresent', $message2);
-	$this->selenium->openPage('/' . $name2);	
-	$this->selenium->write('verifyTextNotPresent', $message2);	
+	$selenium->signIn($name2, $password2);
+	$selenium->openPage('/home');	
+	$selenium->write('verifyTextNotPresent', $message2);
+	$selenium->openPage('/' . $name2);	
+	$selenium->write('verifyTextNotPresent', $message2);	
 	//unlock settings
-	$this->selenium->signOut();	
-	$this->selenium->signIn($name, $password);
-	$this->selenium->openPage('/settings');
-	$this->selenium->write('assertChecked', 'locked');		
-	$this->selenium->write('click', 'locked');
-	$this->selenium->click('Update');
-	$this->selenium->write('verifyTextPresent', 'Your profile was updated.');
-	$this->selenium->write('assertNotChecked', 'locked');			
+	$selenium->signOut();	
+	$selenium->signIn($name, $password);
+	$selenium->openPage('/settings');
+	$selenium->write('assertChecked', 'locked');		
+	$selenium->write('click', 'locked');
+	$selenium->click('Update');
+	$selenium->write('verifyTextPresent', 'Your profile was updated.');
+	$selenium->write('assertNotChecked', 'locked');			
 	//friend without confirmation
-	$this->selenium->signOut();	
-	$this->selenium->signIn($name2, $password2);		
-	$this->selenium->openPage('/' . $name);		
-	$this->selenium->write('clickAndWait', 'follow');
-	$this->selenium->write('verifyTextPresent', 'Unfollow');
-	$this->selenium->openPage('/home');
-	$this->selenium->write('verifyTextPresent', 'Following: 1 Followers: 0');	
+	$selenium->signOut();	
+	$selenium->signIn($name2, $password2);		
+	$selenium->openPage('/' . $name);		
+	$selenium->write('clickAndWait', 'follow');
+	$selenium->write('verifyTextPresent', 'Unfollow');
+	$selenium->openPage('/home');
+	$selenium->write('verifyTextPresent', 'Following: 1 Followers: 0');	
 	//sign out and post from first account
-	$this->selenium->signOut();	
-	$this->selenium->signIn($name, $password);
-	$this->selenium->openPage('/friend_requests');
-	$this->selenium->write('verifyTextNotPresent', $name);		
-	$this->selenium->openPage('/home');
-	$this->selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');	
-	$this->selenium->write('type', 'message', $message3);
-	$this->selenium->click('Update');
-	$this->selenium->openPage('/');
-	$this->selenium->write('verifyTextPresent', $message3);
-	$this->selenium->signOut();
+	$selenium->signOut();	
+	$selenium->signIn($name, $password);
+	$selenium->openPage('/friend_requests');
+	$selenium->write('verifyTextNotPresent', $name);		
+	$selenium->openPage('/home');
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');	
+	$selenium->write('type', 'message', $message3);
+	$selenium->click('Update');
+	$selenium->openPage('/');
+	$selenium->write('verifyTextPresent', $message3);
+	$selenium->signOut();
 	//sign in and check if second account sees message		
-	$this->selenium->signOut();	
-	$this->selenium->signIn($name2, $password2);		
-	$this->selenium->write('verifyTextPresent', $message3);	
-	$this->selenium->openPage('/admin/flush');	
+	$selenium->signOut();	
+	$selenium->signIn($name2, $password2);		
+	$selenium->write('verifyTextPresent', $message3);	
+	$selenium->openPage('/admin/flush');	
 ?>

@@ -1,10 +1,10 @@
 <?php
-	$this->selenium->suiteTitle('Microblog Tests');
-	$this->selenium->addTestCase('Sign Up', 'sign-up');
-	$this->selenium->addTestCase('Change Settings', 'settings');	
-	$this->selenium->addTestCase('Add Message', 'add-message');	
-	$this->selenium->addTestCase('Follow', 'follow');
-	$this->selenium->addTestCase('Add Group and Subscribe', 'group');
-	$this->selenium->addTestCase('Add Group and Change Profile', 'group-settings');	
-	$this->selenium->addTestCase('Access', 'access');	
+	$selenium->suiteTitle('Microblog Tests');
+	$selenium->addTestCase('Sign Up', 'sign-up');
+	$selenium->addTestCase('Change Settings', 'settings');	
+	$selenium->addTestCase('Add Message', 'add-message');	
+	$selenium->addTestCase('Follow', 'follow');
+	$selenium->addTestCase('Add Group and Subscribe', 'group');
+	$selenium->addTestCase('Add Group and Change Profile', 'group-settings');	
+	$selenium->addTestCase('Access', 'access');	
 ?>

@@ -1,17 +1,17 @@
 <?php
-	$name = $this->selenium->randomString(10);
-	$password = $this->selenium->randomString(10);	
-	$this->selenium->caseTitle('Access');
+	$name = $selenium->randomString(10);
+	$password = $selenium->randomString(10);	
+	$selenium->caseTitle('Access');
 	//list of pages users must be logged in to view
-	$this->selenium->signOut();	
-	$this->selenium->mustBeLoggedIn('/home');
-	$this->selenium->mustBeLoggedIn('/groups/subscribe/xyz');
-	$this->selenium->mustBeLoggedIn('/groups/add');	
-	$this->selenium->mustBeLoggedIn('/settings');
-	$this->selenium->mustBeLoggedIn('/delete');	
-	$this->selenium->mustBeLoggedIn('/follow/123');
-	$this->selenium->mustBeLoggedIn('/unfollow/123');	
-	$this->selenium->mustBeLoggedIn('/confirm/123');
-	$this->selenium->mustBeLoggedIn('/deny/123');	
-	$this->selenium->openPage('/admin/flush');	
+	$selenium->signOut();	
+	$selenium->mustBeLoggedIn('/home');
+	$selenium->mustBeLoggedIn('/groups/subscribe/xyz');
+	$selenium->mustBeLoggedIn('/groups/add');	
+	$selenium->mustBeLoggedIn('/settings');
+	$selenium->mustBeLoggedIn('/delete');	
+	$selenium->mustBeLoggedIn('/follow/123');
+	$selenium->mustBeLoggedIn('/unfollow/123');	
+	$selenium->mustBeLoggedIn('/confirm/123');
+	$selenium->mustBeLoggedIn('/deny/123');	
+	$selenium->openPage('/admin/flush');	
 ?>

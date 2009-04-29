@@ -3,7 +3,7 @@
  * Provides simple time tools
  *
  */
-class Time {
+class Time_format {
 
 	/**
 	 * 

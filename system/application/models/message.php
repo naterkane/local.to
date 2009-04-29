@@ -4,15 +4,6 @@
  */
 class Message extends App_Model
 {
-   
-	function __construct()
-	{
-		parent::__construct();
-		$ci = get_instance();
-		$ci->load_helpers->load(array('Html'));
-		$this->html = $ci->html;
-		unset($ci);
-	}
 
     /**
      * Add a new message
@@ -32,9 +23,9 @@ class Message extends App_Model
 		$data['id'] = $this->makeId($this->messageId);	
 		$data['time'] = $time;
 		$data['user_id'] = $user_id;
-		$data['message'] = str_replace("\n", " ", $message);
-		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@' . \$this->html->link('\\2', '\\2')", $message);
-		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!' . \$this->html->link('\\2', '/group/\\2')", $data['message_html']);
+		$data['message'] = str_replace("\n", " ", $message);	
+		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message);
+		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
 		if (!isset($data['reply_to']))
 		{
 			$data['reply_to'] = null;
