@@ -179,5 +179,23 @@ class Form extends Html
 		return "<textarea name=\"" . $options['name'] . "\" id=\"" . $options['id'] . "\" rows=\"" . $options['rows']  . "\" cols=\"" . $options['cols'] . "\">" . $options['value'] . "</textarea>";
 	}
 
+	/**
+	 * Timezone select
+	 *
+	 * @access public
+	 * @param string
+	 * @return 
+	 */
+	function timezones($name, $options = array())
+	{
+		$timeZones = timezone_identifiers_list();
+		$values = array();
+		foreach($timeZones as $timeZone) {
+			$values[$timeZone] = $timeZone;
+		}
+		return $this->select($name, $values, $options);
+	}
+	
+
 }
 ?>

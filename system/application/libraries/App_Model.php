@@ -174,6 +174,23 @@ class App_Model extends Model {
 	}
 
 	/**
+	 * Check if a submitted time zone is in the PHP global list
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	function isTimeZone()
+	{
+		if (empty($this->modelData['time_zone'])) 
+		{
+			return false;
+		}
+		$timeZones = timezone_identifiers_list();
+		return in_array($this->modelData['time_zone'], $timeZones);
+	}
+	
+
+	/**
 	 * Load models from controller into model
 	 *
 	 * @access public

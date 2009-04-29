@@ -28,9 +28,14 @@ class Admin extends App_controller
 		exit;
 	}
 
-	function test()
+	function test() 
 	{
-
+		echo "<pre>";
+		print_r($_GET);
+		echo "</pre>";
+		exit;
+		
+		
 	}
 
 }

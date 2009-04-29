@@ -37,7 +37,8 @@
 	</div>
 	<div class="mod">
 		<label for="timezone">Time Zone</label>	
-		<?php echo $form->select('timezone', $this->User->timezones) ?>
+		<?php echo $form->timezones('time_zone') ?>
+		<?php echo $form->error('time_zone') ?>				
 	</div>
 	<div class="mod">
 		<label for="locked">Lock Account</label>	

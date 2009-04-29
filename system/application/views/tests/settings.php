@@ -4,6 +4,8 @@
 	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
 	$name_new = $selenium->randomString(10);
 	$email_new = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$default_time_zone = 'America/New_York';
+	$time_zone = 'Asia/Tokyo';
 	$bio = $selenium->randomString(10);
 	$url = $selenium->randomString(10);
 	$location = $selenium->randomString(10);	
@@ -21,6 +23,7 @@
 	$selenium->openPage('/settings');
 	$selenium->write('verifyValue', 'username', $name);
 	$selenium->write('verifyValue', 'email', $email);
+	$selenium->write('verifyValue', 'time_zone', $default_time_zone);	
 	//test empty record
 	$selenium->write('type', 'username', '');
 	$selenium->write('type', 'email', '');	
@@ -60,6 +63,7 @@
 	$selenium->write('type', 'realname', $real_name);
 	$selenium->write('type', 'location', $location);	
 	$selenium->write('type', 'url', $url);
+	$selenium->write('select', 'time_zone', $time_zone);	
 	$selenium->click('Update');
 	$selenium->write('verifyTextPresent', 'Your profile was updated.');
 	$selenium->openPage('/settings');	
@@ -68,6 +72,7 @@
 	$selenium->write('verifyValue', 'bio', $bio);		
 	$selenium->write('verifyValue', 'realname', $real_name);
 	$selenium->write('verifyValue', 'location', $location);	
-	$selenium->write('verifyValue', 'url', $url);		
+	$selenium->write('verifyValue', 'url', $url);
+	$selenium->write('verifyValue', 'time_zone', $time_zone);		
 	$selenium->openPage('/admin/flush');	
 ?>

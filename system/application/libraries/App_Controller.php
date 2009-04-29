@@ -68,6 +68,10 @@ class App_Controller extends Controller {
         if (! empty($this->userData)) 
 		{
             $this->data['User'] = $this->userData;
+			if (isset($this->userData['time_zone'])) 
+			{
+				date_default_timezone_set($this->userData['time_zone']);
+			}
         }
     }
 

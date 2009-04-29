@@ -558,6 +558,7 @@ class User extends App_Model
         $data['activated'] = 1;
         $data['created'] = $now;
         $data['modified'] = $now;
+        $data['time_zone'] = 'America/New_York';
 		if ($this->save($this->prefixUser($data['id']), $data)) 
 		{
 			$this->mode = null;
@@ -630,7 +631,7 @@ class User extends App_Model
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required'));
 			$this->validates_uniqueness_of('email', array('message'=>'Email is already in use', 'fieldValue'=>$this->prefixUserEmail($this->input->post('email'))));
 			$this->validates_presence_of('email', array('message'=>'A valid email is required'));
-			$this->validates_callback('isNotReserved', 'username', array('message'=>'This is a reserved username'));			
+			$this->validates_callback('isNotReserved', 'username', array('message'=>'This is a reserved username'));
 			$this->validates_length_of('username', array('min'=>1, 'max'=>15, 'message'=>'A username must be between 1 and 15 characters long'));
 			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken', 'fieldValue'=>$this->prefixUsername($this->input->post('username'))));
 			$this->validates_format_of('username', array('with'=>ALPHANUM, 'message'=>'A username may only be made up of numbers, letters, and underscores'));
@@ -647,6 +648,7 @@ class User extends App_Model
 		}
 		if ($this->mode == 'profile') 
 		{
+			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));			
 			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'A bio must be between 1 and 160 characters long'));
 		}		
 	    return (count($this->validationErrors) == 0);
