@@ -185,8 +185,8 @@ class App_Model extends Model {
 		{
 			return false;
 		}
-		$timeZones = timezone_identifiers_list();
-		return in_array($this->modelData['time_zone'], $timeZones);
+		$reversed_zones = array_flip($this->timeZones);
+		return in_array($this->modelData['time_zone'], $reversed_zones);
 	}
 	
 

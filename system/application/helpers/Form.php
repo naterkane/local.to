@@ -23,6 +23,7 @@ class Form extends Html
 		{
 			$this->data = $ci->data;
 		}
+		$this->timeZones = $ci->User->timeZones;
 		$this->validationErrors = $ci->validationErrors;
 		unset($ci);
 	}
@@ -149,7 +150,10 @@ class Form extends Html
 	{
 		$fieldValue = $this->getElementValue($name);
 		$return = "<select id=\"$name\" name=\"$name\">\n";
-		$return .= "<option value=\"\">&nbsp</option>\n";
+		if (empty($options['no_blank'])) 
+		{
+			$return .= "<option value=\"\">&nbsp</option>\n";
+		}
 		foreach ($values as $key => $value) {
 			$return .= 	"<option value=\"$key\"";
 			if ($fieldValue == $key) 
@@ -188,12 +192,8 @@ class Form extends Html
 	 */
 	function timezones($name, $options = array())
 	{
-		$timeZones = timezone_identifiers_list();
-		$values = array();
-		foreach($timeZones as $timeZone) {
-			$values[$timeZone] = $timeZone;
-		}
-		return $this->select($name, $values, $options);
+		$options['no_blank'] = true;
+		return $this->select($name, $this->timeZones, $options);
 	}
 	
 

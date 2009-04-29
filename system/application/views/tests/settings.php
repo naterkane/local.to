@@ -4,8 +4,9 @@
 	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
 	$name_new = $selenium->randomString(10);
 	$email_new = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
-	$default_time_zone = 'America/New_York';
-	$time_zone = 'Asia/Tokyo';
+	$default_time_zone = 'US/Eastern';
+	$time_zone = '(GMT+09:00) Tokyo';
+	$time_zone_value = 'Asia/Tokyo';	
 	$bio = $selenium->randomString(10);
 	$url = $selenium->randomString(10);
 	$location = $selenium->randomString(10);	
@@ -73,6 +74,6 @@
 	$selenium->write('verifyValue', 'realname', $real_name);
 	$selenium->write('verifyValue', 'location', $location);	
 	$selenium->write('verifyValue', 'url', $url);
-	$selenium->write('verifyValue', 'time_zone', $time_zone);		
+	$selenium->write('verifyValue', 'time_zone', $time_zone_value);		
 	$selenium->openPage('/admin/flush');	
 ?>
