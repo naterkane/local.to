@@ -379,6 +379,7 @@ class Group extends App_Model
 			$this->validates_length_of('name', array('min'=>1, 'max'=>15, 'message'=>'A group name must be between 1 and 15 characters'));
 			$this->validates_callback('nameUnique', 'name', array('message'=>'Group name has already been taken'));
 			$this->validates_presence_of('name', array('message'=>'A group name is required'));			
+			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required', 'allow_null'=>true));
 			if ($this->mode == 'update') 
 			{
 				$this->validates_length_of('desc', array('min'=>0, 'max'=>160, 'message'=>'A description must be between 1 and 160 characters long'));

@@ -118,11 +118,11 @@ class App_Model extends Model {
 	 * @access public
 	 * @return boolean
 	 */
-	function isNotReserved()
+	function isNotReserved($fieldName)
 	{
-		if (isset($this->modelData['username'])) 
+		if (isset($this->modelData[$fieldName])) 
 		{
-			if (in_array($this->modelData['username'], $this->reservedNames)) 
+			if (in_array($this->modelData[$fieldName], $this->reservedNames)) 
 			{
 				return false;
 			}
@@ -570,13 +570,13 @@ class App_Model extends Model {
 	 * @return boolean
 	 * @access public
 	 */	
-	function validates_callback ($callback, $fieldName,$options=array()) 
+	function validates_callback ($callback, $fieldName, $options=array()) 
 	{
         if ( !isset($options['message']) ) 
 		{
                 $options['message'] = 'The field is incorrectly entered.';
-        }		
-		if (!call_user_func(array($this, $callback))) 
+        }	
+		if (!call_user_func(array($this, $callback), $fieldName)) 
 		{
 			$this->validationErrors[$fieldName] = $options['message'];
 		}
@@ -665,6 +665,10 @@ class App_Model extends Model {
     function validates_format_of($fieldName, $options=array()) 
 	{
 		$fieldValue = $this->getValue($this->modelData, $fieldName);		
+		if ((isset($options['allow_null'])) AND (!$fieldValue)) 
+		{	
+			return true;
+		}		
 		if ( !isset($options['message']) ) 
 		{	
 			$options['message'] = 'Field has an invalid format.';

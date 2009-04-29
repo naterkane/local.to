@@ -29,7 +29,7 @@
 	$this->selenium->write('type', 'name', '');
 	$this->selenium->click('Update');
 	$this->selenium->write('verifyTextPresent', $error);
-	$this->selenium->write('verifyTextPresent', 'A name is required');
+	$this->selenium->write('verifyTextPresent', 'A group name is required');
 	//try invalid email
 	$this->selenium->write('type', 'email', $name);
 	$this->selenium->click('Update');	
@@ -44,7 +44,7 @@
 	$this->selenium->write('type', 'name', $too_long_name);
 	$this->selenium->click('Update');
 	$this->selenium->write('verifyTextPresent', $error);	
-	$this->selenium->write('verifyTextPresent', 'A group name must be between 1 and 15 characters long');	
+	$this->selenium->write('verifyTextPresent', 'A group name must be between 1 and 15 characters');	
 	//bad characters in username
 	$this->selenium->write('type', 'name', $group_name . '!');
 	$this->selenium->click('Update');
