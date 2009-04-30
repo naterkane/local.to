@@ -8,6 +8,7 @@ class App_Controller extends Controller {
 	var $layout;				//leave empty for default	
     var $postData = array();
     var $userData = array();
+	var $testingData;
 	var $validationErrors = array();
    
 	/**
@@ -26,6 +27,11 @@ class App_Controller extends Controller {
 		{
             $this->postData = $this->input->xss_clean($_POST);
         }
+		if ($this->testing()) 
+		{
+			$this->testingData['testing'] = true;
+			$this->testingData['count'] = $this->countAllRecords();
+		}
     }
 
 	/**
@@ -57,6 +63,20 @@ class App_Controller extends Controller {
 		}
 	}
  
+	/**
+	 * Count all records in DB
+	 *
+	 * @access public
+	 * @return int
+	 */
+	function countAllRecords()
+	{
+		$this->User->mem->set('stupidHackToMakeCountingNullRecordsWork', 'ugh');
+		$count = count($this->User->tt->fwmkeys('', 1000000)) - 1;
+		return $count;
+	}
+	
+
 	/**
 	 * Get a users data from cookie
 	 *
@@ -178,6 +198,18 @@ class App_Controller extends Controller {
 			}
 		}
 	}
+	
+	/**
+	 * Is the app in testing mode?
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	function testing()
+	{
+		return $this->config->item('debug');
+	}
+	
    
 }
 

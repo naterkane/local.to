@@ -8,7 +8,7 @@
 	$message = $selenium->randomString(10);
 	$message2 = $selenium->randomString(10);	
 	$message3 = $selenium->randomString(10);					
-	$selenium->caseTitle('Follow');
+	$selenium->caseTitle('Follow');	
 	//create first account and sign out
 	$selenium->signOut();	
 	$selenium->signUp($name, $password, $email);

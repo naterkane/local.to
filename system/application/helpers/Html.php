@@ -10,7 +10,7 @@ class Html
 	 *
 	 * @var array
 	 */
-		var $tags = array(
+	public $tags = array(
 			'meta' => '<meta%s/>',
 			'metalink' => '<link href="%s"%s/>',
 			'link' => '<a href="%s"%s>%s</a>',
@@ -64,7 +64,8 @@ class Html
 			'li' => '<li%s>%s</li>',
 			'error' => '<div%s>%s</div>'
 		);
-	var $validationErrors = array();
+	public $testingData;
+	public $validationErrors = array();
 
 	/**
 	 * Construct
@@ -73,7 +74,22 @@ class Html
 	function __construct()
 	{
 		$ci = get_instance();
-		$this->input = $ci->input;
+		$this->testingData = $ci->testingData;
+		if (isset($ci->input)) 
+		{
+			$this->input = $ci->input;
+		}
+		if (!empty($ci->postData)) 
+		{
+			$this->data = $ci->postData;
+		}
+		else
+		{
+			$this->data = $ci->data;
+		}
+		$this->timeZones = $ci->User->timeZones;
+		$this->validationErrors = $ci->validationErrors;		
+		unset($ci);
 	}
 	
 

@@ -1,5 +1,5 @@
 <?php
-	$selenium->suiteTitle('Microblog Tests');
+	$selenium->suiteTitle('Microblog Tests (FLUSH YOUR DATABASE BEFORE USING)');
 	$selenium->addTestCase('Sign Me Up (Not Really a Test, Just Tired of Making Stupid Accounts)', 'sign-me-up');	
 	$selenium->addTestCase('Sign Up', 'sign-up');
 	$selenium->addTestCase('Change Settings', 'settings');	

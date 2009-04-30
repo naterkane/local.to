@@ -16,6 +16,7 @@
 	$too_long_bio = $selenium->randomString(161);	
 	$error = 'There was an error updating your profile. See below for more details.';	
 	$selenium->caseTitle('Change Profile');
+	$selenium->openPage('/admin/flush');		
 	//create account and sign in
 	$selenium->signOut();	
 	$selenium->signUp($name, $password, $email);

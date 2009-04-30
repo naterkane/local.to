@@ -9,7 +9,6 @@
 	$message_long = $selenium->randomString(141);	
 	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';		
 	$selenium->caseTitle('Add Message');
-	$selenium->openPage('/admin/flush');	
 	$selenium->signOut();	
 	$selenium->signUp($name, $password, $email);
 	$selenium->signIn($name, $password);

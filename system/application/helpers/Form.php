@@ -10,22 +10,7 @@ class Form extends Html
 
 	function __construct()
 	{
-		$ci = get_instance();
-		if (isset($ci->input)) 
-		{
-			$this->input = $ci->input;
-		}
-		if (!empty($ci->postData)) 
-		{
-			$this->data = $ci->postData;
-		}
-		else
-		{
-			$this->data = $ci->data;
-		}
-		$this->timeZones = $ci->User->timeZones;
-		$this->validationErrors = $ci->validationErrors;
-		unset($ci);
+		parent::__construct();
 	}
 
 	/**
@@ -165,6 +150,22 @@ class Form extends Html
 		$return .= "</select>\n";		
 		return $return;
 	}
+
+	/**
+	 * Create a hidden testing field only visible when testing
+	 *
+	 * @access public
+	 * @param fieldName
+	 * @return null|string
+	 */
+	function testInput($fieldName)
+	{
+		if (!empty($this->testingData)) 
+		{
+			return $this->input('testing_' . $fieldName, array('value'=>$this->testingData[$fieldName], 'type'=>'hidden'));
+		}
+	}
+	
 
 	/**
 	 * Creates a textarea 

@@ -2,7 +2,7 @@
 	$name = $selenium->randomString(10);
 	$password = $selenium->randomString(10);	
 	$selenium->caseTitle('Access');
-	//list of pages users must be logged in to view
+	//list of pages users must be logged in to view	
 	$selenium->signOut();	
 	$selenium->mustBeLoggedIn('/home');
 	$selenium->mustBeLoggedIn('/groups/subscribe/xyz');

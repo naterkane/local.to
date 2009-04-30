@@ -12,7 +12,7 @@
 	$too_long_name = $selenium->randomString(16);
 	$too_long_desc = $selenium->randomString(161);	
 	$error = 'There was an error updating your group. See below for more details.';	
-	$selenium->caseTitle('Change Group Profile');
+	$selenium->caseTitle('Change Group Profile');	
 	//create account and sign in
 	$selenium->signOut();	
 	$selenium->signUp($name, $password, $email);

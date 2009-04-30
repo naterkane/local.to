@@ -38,5 +38,6 @@
 	</p>
 <?php echo $this->cookie->flashMessage(); ?>
 {yield}
+<?php echo $form->testInput('count') ?>
 </body>
 </html>
