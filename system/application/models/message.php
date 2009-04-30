@@ -41,6 +41,7 @@ class Message extends App_Model
 		$data['id'] = $this->makeId($this->messageId);	
 		$data['time'] = $time;
 		$data['user_id'] = $user['id'];
+		$data['reply_count'] = 0;		
 		$data['message'] = str_replace("\n", " ", $message['message']);	
 		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
 		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
@@ -49,13 +50,18 @@ class Message extends App_Model
 			$this->mode = null;
 			$this->addToUserPublic($user_id, $data['id']);
 			$this->addToUserPrivate($user_id, $data['id']);
-			if (!$user['locked']) 
-			{
-				$this->addToPublicTimeline($data['id']);
-			}
 			if ($data['reply_to']) 
 			{
 				$this->addToReplies($data['reply_to'], $data['id']);
+			}
+			if (($this->parent) AND (!$user['locked']))
+			{
+				++$this->parent['reply_count'];
+				$this->save($this->prefixMessage($this->parent['id']), $this->parent);
+			}
+			if (!$user['locked']) 
+			{
+				$this->addToPublicTimeline($data);
 			}
         	return $data;
 		} 
@@ -72,10 +78,15 @@ class Message extends App_Model
 	 * @param int $message_id
 	 * @return 
 	 */
-	function addToPublicTimeline($message_id)
+	function addToPublicTimeline($message)
 	{
-		$this->push($this->prefixPublic(), $message_id);
-        $this->trim($this->prefixPublic(), 0, 1000);
+		if (empty($message['reply_to'])) 
+		{
+			$this->push($this->prefixPublicThreaded(), $message['id']);
+	        $this->trim($this->prefixPublicThreaded(), 0, 1000);			
+		}
+		$this->push($this->prefixPublic(), $message['id']);
+		$this->trim($this->prefixPublic(), 0, 1000);
 	}
 
 	/**
@@ -222,6 +233,18 @@ class Message extends App_Model
     function getTimeline()
     {
         $messages = $this->find($this->prefixPublic());
+        return $this->getMany($messages);
+    }
+
+    /**
+     * Get Public Timeline Threaded
+     *
+     * @todo figure out how the end and start values work
+     * @return array Messages
+     */
+    function getTimelineThreaded()
+    {
+        $messages = $this->find($this->prefixPublicThreaded());
         return $this->getMany($messages);
     }
 

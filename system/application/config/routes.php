@@ -56,6 +56,7 @@ $route['deny/(:any)'] = "users/deny/$1";
 $route['friend_requests'] = "users/friend_requests";
 $route['settings'] = "users/settings";
 $route['public_timeline'] = "messages/public_timeline";
+$route['public_timeline_threaded'] = "messages/public_timeline_threaded";
 $route['reset_password'] = "users/reset_password";
 $route['reset/(:any)'] = "users/reset/$1";
 

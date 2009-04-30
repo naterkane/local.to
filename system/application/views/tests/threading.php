@@ -4,7 +4,8 @@
 	$blank = '@' . $name . ' ';	
 	$message = $selenium->randomString(10);
 	$message2 = $blank . $selenium->randomString(10);
-	$message3 = $blank . $selenium->randomString(10);		
+	$message3 = $blank . $selenium->randomString(10);
+	$message4 = $blank . $selenium->randomString(10);		
 	$message_long = $selenium->randomString(141);	
 	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';		
 	$selenium->caseTitle('Add Message');
@@ -39,5 +40,28 @@
 	$selenium->click('Update');
 	$selenium->write('verifyTextPresent', 'There was an error adding your message.');
 	$selenium->write('verifyTextNotPresent', $message3);	
+	//test threading view
+	$selenium->openPage('/settings');
+	$selenium->write('assertChecked', 'locked');		
+	$selenium->write('click', 'locked');	
+	$selenium->click('Update');
+	$selenium->write('assertNotChecked', 'locked');	
+	$selenium->write('verifyTextPresent', 'Your profile was updated.');
+	$selenium->openPage('/home');	
+	$selenium->write('type', 'message', $message3);		
+	$selenium->click('Update');
+	$selenium->write('verifyTextPresent', $message3);
+	$selenium->openPage('/public_timeline');	
+	$selenium->write('verifyTextPresent', $message3);
+	$selenium->openPage('/public_timeline_threaded');		
+	$selenium->write('verifyTextPresent', $message3);
+	$selenium->write('clickAndWait', 'xpath=//a[text()="[Reply]"]');	
+	$selenium->write('type', 'message', $message4);		
+	$selenium->click('Update');
+	$selenium->write('verifyTextPresent', $message4);
+	$selenium->openPage('/public_timeline');	
+	$selenium->write('verifyTextPresent', $message4);
+	$selenium->openPage('/public_timeline_threaded');		
+	$selenium->write('verifyTextNotPresent', $message4);	
 	$selenium->openPage('/admin/flush');
 ?>

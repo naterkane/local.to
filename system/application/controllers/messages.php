@@ -36,18 +36,41 @@ class Messages extends App_Controller
         }
     }
 
+	function delete($id)
+	{
+		//remember to decrease thread count if message is reply to
+		return false;
+	}
+
 	/**
 	 * Public timeline
 	 *
 	 * @access public
 	 */
-	function public_timeline()
+	function public_timeline($threaded = false)
 	{
 		$this->getUserData();
         $this->data['page_title'] = 'Public Timeline';		
-		$this->data['messages'] = $this->Message->getTimeline();
+		if ($threaded) 
+		{
+			$this->data['messages'] = $this->Message->getTimelineThreaded();
+		} 
+		else 
+		{
+			$this->data['messages'] = $this->Message->getTimeline();
+		}
 		$this->load->view('messages/public_timeline', $this->data);
 	}
+	
+	/**
+	 * Threaded public timeline
+	 *
+	 * @access public
+	 */
+	function public_timeline_threaded()
+	{
+		$this->public_timeline(true);
+	}	
 	
 	/**
 	 * Show a single status

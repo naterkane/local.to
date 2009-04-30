@@ -19,6 +19,7 @@ class App_Model extends Model {
 	protected $prefixGroupMembers = 'groupmembers';	
 	protected $prefixMessage = 'message';
 	protected $prefixPublic = 'timeline';
+	protected $prefixPublicThreaded = 'timelinethreaded';	
 	protected $prefixReplies = 'replies';	
 	protected $prefixSeparator = ':';	
 	protected $prefixUser = 'user';
@@ -364,6 +365,18 @@ class App_Model extends Model {
 	{ 
 		return $this->prefixPublic; 
 	}
+	
+	/**
+	 * Create a prefix for public messages threaded
+	 * 
+	 * @access public
+	 * @return string
+	 */	
+	function prefixPublicThreaded()
+	{ 
+		return $this->prefixPublicThreaded; 
+	}
+	
 	
 	/**
 	 * Create a prefix for replies

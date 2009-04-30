@@ -1,5 +1,6 @@
 <?php
 	$selenium->suiteTitle('Microblog Tests');
+	$selenium->addTestCase('Sign Me Up (Not Really a Test, Just Tired of Making Stupid Accounts)', 'sign-me-up');	
 	$selenium->addTestCase('Sign Up', 'sign-up');
 	$selenium->addTestCase('Change Settings', 'settings');	
 	$selenium->addTestCase('Add Message', 'add-message');
