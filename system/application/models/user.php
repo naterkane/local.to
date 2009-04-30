@@ -24,6 +24,37 @@ class User extends App_Model
 	}
 
 	/**
+	 * Change password
+	 *
+	 * @access public
+	 * @param int $user_id
+	 * @param string $password	
+	 * @return 
+	 */
+	function changePassword($user_id, $password)
+	{
+		$this->mode = 'change_password';
+		$this->postData = $this->updateData($this->userData, $this->postData);
+		$this->postData['id'] = $user_id;
+		$this->postData['old_password'] = $password;
+		$this->modelData = $this->postData;
+		if ($this->validate()) 
+		{
+			$this->mode = null;
+			unset($this->modelData['old_password']);
+			unset($this->modelData['new_password']);
+			unset($this->modelData['new_password_confirm']);
+			unset($this->modelData['password_confirm']);						
+			$this->save($this->prefixUser($this->modelData['id']), $this->modelData);
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * Confirm Request
 	 *
 	 * @access public
@@ -286,6 +317,23 @@ class User extends App_Model
 		}
     }
 
+	/**
+	 * Does password match on on record
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function passwordMatches()
+	{
+		if (($this->hash($this->modelData['password'])) == ($this->modelData['old_password'])) 
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
 
 	/**
 	 * Does the password and its confirm work?
@@ -497,7 +545,13 @@ class User extends App_Model
 			$this->validates_format_of('username', array('with'=>ALPHANUM, 'message'=>'A username may only be made up of numbers, letters, and underscores'));
 			$this->validates_presence_of('username', array('message'=>'A username is required'));
 		}
-		if ($this->mode == 'signup') 
+		if ($this->mode == 'change_password') 
+		{
+			$this->validates_callback('passwordMatches', 'old_password', array('message'=>'Your password password does not match the one on record'));			
+			$this->modelData['password'] = $this->modelData['new_password'];
+			$this->modelData['passwordconfirm'] = $this->modelData['new_password_confirm'];
+		}		
+		if (($this->mode == 'signup') || ($this->mode == 'change_password'))
 		{
 			$this->validates_length_of('password', array('min'=>6, 'max'=>25, 'message'=>'A password must be between 6 and 25 characters long'));
 			$this->validates_callback('passwordUsernameDoNotMatch', 'password', array('message'=>'Your password cannot be the same as your username'));
@@ -510,7 +564,7 @@ class User extends App_Model
 		{
 			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));			
 			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'A bio must be between 1 and 160 characters long'));
-		}		
+		}
 	    return (count($this->validationErrors) == 0);
 	}
 	

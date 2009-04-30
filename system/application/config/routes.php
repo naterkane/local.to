@@ -59,6 +59,7 @@ $route['public_timeline'] = "messages/public_timeline";
 $route['public_timeline_threaded'] = "messages/public_timeline_threaded";
 $route['reset_password'] = "users/reset_password";
 $route['reset/(:any)'] = "users/reset/$1";
+$route['change_password'] = "users/change_password";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

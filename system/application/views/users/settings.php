@@ -1,5 +1,5 @@
 <h2><?php echo $User['username'] ?></h2>
-
+<p><a href="/change_password">Change Password</a></p>
 <form action="/delete" method="post" accept-charset="utf-8">
 	<?php echo $form->input('update_key', array('type'=>'hidden')) ?>
 	<input type="submit" id="delete" value="Delete this account" onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.'); event.returnValue = false; return false;">

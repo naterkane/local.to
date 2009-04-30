@@ -238,6 +238,32 @@ class Users extends App_Controller
 		}
     } 
 
+	/**
+	 * Update a password
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function change_password()
+	{
+		$this->mustBeSignedIn();
+        $this->data['page_title'] = 'Update Password';
+		if ($this->postData) 
+		{
+			if ($this->User->changePassword($this->userData['id'], $this->userData['password']))
+			{
+				$this->cookie->set('user', $this->User->modelData);
+				$this->redirect('/home', 'Your password was updated.');
+			} 
+			else 
+			{
+				$this->setErrors(array('User'));
+				$this->cookie->setFlash('There was an error updating your password. See below for more details.', 'error');
+			}
+		}
+		$this->load->view('users/change_password', $this->data);
+	}
+
     /**
      * View a users public page
      *
