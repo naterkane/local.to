@@ -179,7 +179,7 @@ class Form extends Html
 		$options = $this->setOptions('id', $name, $options);		
 		$options = $this->setOptions('rows', 8, $options);		
 		$options = $this->setOptions('cols', 20, $options);	
-		$options = $this->setOptions('value', $this->input->post($name), $options);		
+		$options = $this->setOptions('value', $this->getElementValue($name), $options);		
 		return "<textarea name=\"" . $options['name'] . "\" id=\"" . $options['id'] . "\" rows=\"" . $options['rows']  . "\" cols=\"" . $options['cols'] . "\">" . $options['value'] . "</textarea>";
 	}
 

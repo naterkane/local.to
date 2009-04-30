@@ -19,6 +19,7 @@ class App_Model extends Model {
 	protected $prefixGroupMembers = 'groupmembers';	
 	protected $prefixMessage = 'message';
 	protected $prefixPublic = 'timeline';
+	protected $prefixReplies = 'replies';	
 	protected $prefixSeparator = ':';	
 	protected $prefixUser = 'user';
 	protected $prefixUsername = 'username';
@@ -345,8 +346,7 @@ class App_Model extends Model {
 	 * Create a prefix for a message
 	 * 
 	 * @access public
-	 * @param string $username
-	 * @param string $time	
+	 * @param int $id	
 	 * @return string
 	 */	
 	function prefixMessage($id)
@@ -364,6 +364,18 @@ class App_Model extends Model {
 	{ 
 		return $this->prefixPublic; 
 	}
+	
+	/**
+	 * Create a prefix for replies
+	 * 
+	 * @access public
+	 * @param int $id
+	 * @return string
+	 */	
+	function prefixReplies($id)
+	{ 
+		return $this->prefixReplies . $this->prefixSeparator  . $id; 
+	}	
 
 	/**
 	 * Create a prefix for user data

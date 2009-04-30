@@ -17,7 +17,7 @@ class Messages extends App_Controller
         $this->mustBeSignedIn();
         if ($this->postData)
         {
-			$message = $this->Message->add($this->postData['message'], $this->userData);
+			$message = $this->Message->add($this->postData, $this->userData);
 			if ($message) 
 			{
 				$this->User->mode = null;
@@ -28,9 +28,8 @@ class Messages extends App_Controller
         }
         else
         {
-            $this->redirect('/home',"Sorry but you must post a message to post a message.",'error');
+            $this->redirect('/home');
         }
-		
     }
 
 	/**
@@ -46,7 +45,6 @@ class Messages extends App_Controller
 		$this->load->view('messages/public_timeline', $this->data);
 	}
 	
-
 	/**
 	 * Show a single status
 	 *
@@ -57,12 +55,14 @@ class Messages extends App_Controller
 	 */
 	function view($username = null, $message_id = null)
 	{
-		$message = $this->Message->getOne($message_id);
-		if (($message) AND ($message['username'] == $username)) {
-			$this->load->view('messages/view', array('message'=>$message));
-		} else {
-			$url = ($User['username']) ? "/home" : "/";
-			$this->redirect($url,"We were unable to retrieve the post you requested","notice");
+		$this->getUserData();
+		$this->data['message'] = $this->Message->getOne($message_id);
+		$this->data['messages'] = $this->Message->getReplies($message_id);		
+		$user = $this->User->getByUserName($username);
+		if (($this->data['message']) AND ($user['username'] == $username)) {
+			$this->load->view('messages/view', $this->data);
+		} else{
+			show_404();
 		}
 	}
 

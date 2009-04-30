@@ -100,9 +100,23 @@ class Users extends App_Controller
 	 * User's home page
 	 * @return 
 	 */
-    function home()
+    function home($replyTo = null)
     {
         $this->mustBeSignedIn();
+		if ($replyTo) 
+		{
+			$message = $this->Message->getOne($replyTo);
+			if (!empty($message['user_id'])) 
+			{
+				$user = $this->User->get($message['user_id']);
+				if ($user) 
+				{
+					$this->data['reply_to'] = $user['id'];
+					$this->data['reply_to_username'] = $user['username'];
+					$this->data['message'] = '@' . $user['username'] . ' ';
+				}
+			}
+		}
         $this->data['page_title'] = 'Home';
         $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
 		$this->data['following_count'] = count($this->User->getFollowing($this->userData['id']));

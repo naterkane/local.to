@@ -9,12 +9,16 @@ class Message extends App_Model
      * Add a new message
      *
      * @todo add transactions
-     * @param string $message
-     * @param array $userdata
+     * @param array $message
+     * @param array $user
 	 * @return boolean|data
      */
-    function add($message = null, $user)
+    function add($message = array(), $user = array())
     {
+		if ((empty($message)) || (empty($user)))
+		{
+			return false;
+		}
 		$user_id = $user['id'];
 		$data = array();
 		$time = time();
@@ -22,22 +26,24 @@ class Message extends App_Model
 		$this->loadModels(array('Group'));
 		$data['id'] = $this->makeId($this->messageId);	
 		$data['time'] = $time;
-		$data['user_id'] = $user_id;
-		$data['message'] = str_replace("\n", " ", $message);	
-		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message);
+		$data['user_id'] = $user['id'];
+		$data['message'] = str_replace("\n", " ", $message['message']);	
+		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
 		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
-		if (!isset($data['reply_to']))
-		{
-			$data['reply_to'] = null;
-		}
+		$data['reply_to'] = $message['reply_to'];
+		$data['reply_to_username'] = $message['reply_to_username'];
 		if ($this->save($this->prefixMessage($data['id']), $data)) 
 		{
 			$this->mode = null;
-			$this->push($this->prefixUserPublic($user_id), $data['id']);
-			$this->push($this->prefixUserPrivate($user_id), $data['id']);
+			$this->addToUserPublic($user_id, $data['id']);
+			$this->addToUserPrivate($user_id, $data['id']);
 			if (!$user['locked']) 
 			{
 				$this->addToPublicTimeline($data['id']);
+			}
+			if ($data['reply_to']) 
+			{
+				$this->addToReplies($data['reply_to'], $data['id']);
 			}
         	return $data;
 		} 
@@ -51,7 +57,7 @@ class Message extends App_Model
 	 * Add to public timeline
 	 *
 	 * @access public
-	 * @param string $message_id
+	 * @param int $message_id
 	 * @return 
 	 */
 	function addToPublicTimeline($message_id)
@@ -64,8 +70,8 @@ class Message extends App_Model
 	 * Add to message to user's private facing list
 	 *
 	 * @access public
-	 * @param string $username
-	 * @param string $message_id
+	 * @param int $user_id	
+	 * @param int $message_id
 	 * @return 
 	 */
 	function addToUserPrivate($user_id, $message_id)
@@ -77,13 +83,26 @@ class Message extends App_Model
 	 * Add to message to user's public facing list
 	 *
 	 * @access public
-	 * @param string $username
-	 * @param string $message_id
+	 * @param int $user_id	
+	 * @param int $message_id
 	 * @return 
 	 */
 	function addToUserPublic($user_id, $message_id)
 	{
 		return $this->push($this->prefixUserPublic($user_id), $message_id);
+	}
+	
+	/**
+	 * Add to message to message's replies
+	 *
+	 * @access public
+	 * @param int $user_id	
+	 * @param int $message_id
+	 * @return 
+	 */
+	function addToReplies($reply_to, $message_id)
+	{
+		return $this->push($this->prefixReplies($reply_to), $message_id);
 	}
 
     /**
@@ -129,10 +148,9 @@ class Message extends App_Model
 	 * Get one message
 	 *
 	 * @access public
-	 * @param string $username
-	 * @param string $time	
-	 * @return string $message
-	 */
+     * @param int $message_id
+     * @return array Message
+     */
 	function getOne($message_id)
 	{
 		$message = $this->find($this->prefixMessage($message_id));
@@ -146,9 +164,23 @@ class Message extends App_Model
 	}
 
     /**
+     * Get Private messages 
+	 *
+     * @access public
+     * @param int $user_id
+     * @return array Messages
+     */
+    function getPrivate($user_id)
+    {
+        $messages = $this->find($this->prefixUserPrivate($user_id));
+        return $this->getMany($messages);
+    }
+
+    /**
      * Get Messages for user
      *
-     * @param string $username
+     * @access public
+     * @param int $user_id
      * @return array Messages
      */
     function getPublic($user_id)
@@ -156,18 +188,19 @@ class Message extends App_Model
         $messages = $this->find($this->prefixUserPublic($user_id));
         return $this->getMany($messages);
     }
-
+   
     /**
+     * Get replies to a message
      *
-     * @return
-     * @param object $username
+     * @param int $messages
+     * @return array Messages
      */
-    function getPrivate($user_id)
+    function getReplies($message_id)
     {
-        $messages = $this->find($this->prefixUserPrivate($user_id));
+        $messages = $this->find($this->prefixReplies($message_id));
         return $this->getMany($messages);
     }
-   
+
     /**
      * Get Public Timeline
      *

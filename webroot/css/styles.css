@@ -78,9 +78,7 @@ label {
 .message .author a{
 	font-weight: bold;
 }
-.message .message {
-	font-weight:normal;
-}
+
 .message .meta {
 	display:block;
 	font-size: 0.8em;
@@ -90,4 +88,11 @@ label {
 .inline-error {
 	color: #E2147F;	
 	font-weight: bold;	
+}
+
+#single_post .message_text{
+	font-size: 300%;
+	display: block;
+	float: left;
+	width: 100%;
 }

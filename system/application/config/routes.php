@@ -45,6 +45,7 @@ $route['scaffolding_trigger'] = "";
 $route['tests/:any'] = "tests/index";
 $route['testme'] = "tests/testme";
 $route['home'] = "users/home";
+$route['home/(:any)'] = "users/home/$1";
 $route['group/(:any)'] = "groups/view/$1";
 $route['signout'] = "users/signout";
 $route['signin'] = "users/signin";
