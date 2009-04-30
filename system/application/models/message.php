@@ -5,6 +5,8 @@
 class Message extends App_Model
 {
 
+	private $parent;
+
     /**
      * Add a new message
      *
@@ -19,10 +21,22 @@ class Message extends App_Model
 		{
 			return false;
 		}
+		$data = array();		
+		if ((empty($message['reply_to'])) && (empty($message['reply_username']))) 
+		{
+			$this->mode = 'post';
+			$data['reply_to'] = null;
+			$data['reply_to_username'] = null;			
+		}
+		else 
+		{
+			$this->mode = 'reply';
+			$data['reply_to'] = $message['reply_to'];
+			$data['reply_to_username'] = $message['reply_to_username'];	
+			$this->parent = $this->getOne($message['reply_to']);
+		}
 		$user_id = $user['id'];
-		$data = array();
 		$time = time();
-		$this->mode = 'post';
 		$this->loadModels(array('Group'));
 		$data['id'] = $this->makeId($this->messageId);	
 		$data['time'] = $time;
@@ -30,8 +44,6 @@ class Message extends App_Model
 		$data['message'] = str_replace("\n", " ", $message['message']);	
 		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
 		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
-		$data['reply_to'] = $message['reply_to'];
-		$data['reply_to_username'] = $message['reply_to_username'];
 		if ($this->save($this->prefixMessage($data['id']), $data)) 
 		{
 			$this->mode = null;
@@ -212,6 +224,58 @@ class Message extends App_Model
         $messages = $this->find($this->prefixPublic());
         return $this->getMany($messages);
     }
+
+    /**
+     * Is a message is a real message
+     *
+     * @return boolean
+     */
+    function isAMessage()
+    {
+		if (empty($this->parent))
+		{
+			return false;
+		}
+		else 
+		{
+			return true;
+		}
+    }
+
+    /**
+     * Is a message a not a reply
+     *
+     * @return boolean
+     */
+    function isNotAReply()
+    {
+		if (empty($this->parent['reply_to']))
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+    }
+
+    /**
+     * Is a message's owner correct?
+     *
+     * @return boolean
+     */
+    function userOwnsMessage()
+    {
+		$user = $this->User->get($this->parent['user_id']);
+		if ($user['username'] == $this->modelData['reply_to_username']) 
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+    }
 	
 	/**
 	 * Validates a message
@@ -222,10 +286,16 @@ class Message extends App_Model
 	function validate()
 	{
 		$this->setAction();		
-		if ($this->mode == 'post')
+		if (($this->mode == 'post') || ($this->mode == 'reply'))
 		{
 			$this->validates_length_of('message', array('min'=>1, 'max'=>140, 'message'=>'A message must be between 1 and 140 characters'));
 			$this->validates_presence_of('message', array('message'=>'A message must be between 1 and 140 characters'));
+		}
+		if ($this->mode == 'reply') 
+		{
+			$this->validates_callback('isNotAReply', 'reply_to', array('message'=>'You can not reply to a reply'));
+			$this->validates_callback('isAMessage', 'reply_to', array('message'=>'The message does not exist'));
+			$this->validates_callback('userOwnsMessage', 'reply_to', array('message'=>'The user does not own this message'));
 		}
 	    return (count($this->validationErrors) == 0);
 	}

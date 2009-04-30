@@ -23,8 +23,12 @@ class Messages extends App_Controller
 				$this->User->mode = null;
             	$this->Group->sendToMembers($message, $this->userData['id']);
             	$this->User->sendToFollowers($message['id'], $this->userData['id']);
+            	$this->redirect('/home');
 			}
-            $this->redirect('/home');
+			else 
+			{
+            	$this->redirect('/home', 'There was an error adding your message.', 'error');
+			}
         }
         else
         {

@@ -3,10 +3,12 @@
 	$password = $selenium->randomString(10);
 	$blank = '@' . $name . ' ';	
 	$message = $selenium->randomString(10);
-	$message2 = $blank . $selenium->randomString(10);	
+	$message2 = $blank . $selenium->randomString(10);
+	$message3 = $blank . $selenium->randomString(10);		
 	$message_long = $selenium->randomString(141);	
 	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';		
 	$selenium->caseTitle('Add Message');
+	$selenium->openPage('/admin/flush');	
 	$selenium->signOut();	
 	$selenium->signUp($name, $password, $email);
 	$selenium->signIn($name, $password);
@@ -23,6 +25,19 @@
 	$selenium->write('verifyTextPresent', $message2);
 	$selenium->write('clickAndWait', 'xpath=//a[text()="this message"]');	
 	$selenium->openPage('/home');
-	$selenium->write('verifyTextPresent', $message);
+	//try to post to a reply to a non-existant username and fail miserably
+	$selenium->write('clickAndWait', 'xpath=//a[text()="[Reply]"]');	
+	$selenium->write('type', 'message', $message3);	
+	$selenium->write('type', 'reply_to_username', 'blah');		
+	$selenium->click('Update');
+	$selenium->write('verifyTextPresent', 'There was an error adding your message.');
+	$selenium->write('verifyTextNotPresent', $message3);
+	//try to post to a reply to a non-existant user_id and fail miserably
+	$selenium->write('clickAndWait', 'xpath=//a[text()="[Reply]"]');	
+	$selenium->write('type', 'message', $message3);	
+	$selenium->write('type', 'reply_to', 'blah');		
+	$selenium->click('Update');
+	$selenium->write('verifyTextPresent', 'There was an error adding your message.');
+	$selenium->write('verifyTextNotPresent', $message3);	
 	$selenium->openPage('/admin/flush');
 ?>

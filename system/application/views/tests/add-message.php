@@ -24,6 +24,7 @@
 	$selenium->openPage('/public_timeline');	
 	$selenium->write('verifyTextNotPresent', $message_long);		
 	//post a message
+	$selenium->openPage('/home');		
 	$selenium->write('type', 'message', $message);
 	$selenium->click('Update');
 	$selenium->openPage('/public_timeline');	
