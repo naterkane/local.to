@@ -2,7 +2,7 @@
 class Yielder {
 	
 	var $setHelpers = array();
-	
+	var $layout;
 	/**
 	 * Determines layout to load for view
 	 *
@@ -11,7 +11,9 @@ class Yielder {
 	function Yield() 
 	{
 		$ci= & get_instance();
+		var_dump($ci->layout);
 		if (!$ci->layout) {
+			
 			$ci->layout = 'default';
 		}
 		$layout = BASEPATH ."application/views/layouts/" . $ci->layout . ".php";
@@ -24,6 +26,13 @@ class Yielder {
 		} else {
 			$output = $current_output;
 			echo $output;
+		}
+	}
+	
+	function setlayout($layout = null){
+		if ($layout)
+		{
+			$ci->layout = $layout;
 		}
 	}
 

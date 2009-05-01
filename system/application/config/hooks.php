@@ -16,7 +16,13 @@ $hook['display_override'][] = array(
 	'filename' => 'yielder.php',
 	'filepath' => 'hooks'
 );
-
+$hook['post_controller'][] = array(
+	'class' => 'Yielder',
+	'function' => 'setlayout',
+	'filename' => 'yielder.php',
+	'filepath' => 'hooks',
+	'params' => array('layout')
+);
 /* End of file hooks.php */
 /* Location: ./system/application/config/hooks.php */
 ?>
