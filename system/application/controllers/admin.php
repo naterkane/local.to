@@ -28,6 +28,16 @@ class Admin extends App_controller
 		exit;
 	}
 
+	/**
+	 * loads the memcache control panel
+	 * @return 
+	 * @todo rewrite views/admin/memcache.php and make it work with TT/TC
+	 */
+	function memcache()
+	{
+		$this->load->view('admin/memcache');
+	}
+
 	function test() 
 	{
 		$old = $this->User->timezones;
@@ -43,9 +53,6 @@ class Admin extends App_controller
 			}
 		}
 		exit;
-		
-		
-		
 	}
 
 }

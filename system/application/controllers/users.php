@@ -119,10 +119,21 @@ class Users extends App_Controller
 		}
         $this->data['page_title'] = 'Home';
         $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
-		$this->data['following_count'] = count($this->User->getFollowing($this->userData['id']));
-		$this->data['follower_count'] = count($this->User->getFollowers($this->userData['id']));		
+		$this->data['following'] = $this->User->getFollowing($this->userData['id']);
         $this->load->view('users/home', $this->data);
     }
+
+	/**
+	 * User's profile area in sidebar 
+	 * @return 
+	 */
+	function sidebarprofile(){
+		$this->mustBeSignedIn();
+		$this->data['following_count'] = count($this->User->getFollowing($this->userData['id']));
+		$this->data['follower_count'] = count($this->User->getFollowers($this->userData['id']));
+		$this->data['messages_count'] = count($this->Message->getPrivate($this->userData['id']));
+		$this->load->view('users/sidebarprofile', $this->data);	
+	}
 
 	/**
 	 * Update a user profile
@@ -165,7 +176,8 @@ class Users extends App_Controller
      */
     function signin()
     {
-        $this->data['page_title'] = 'Sign In';
+        $this->layout = 'public';
+		$this->data['page_title'] = 'Sign In';
         if ($this->postData)
         {
             $user = $this->User->signIn($this->postData);
@@ -190,7 +202,8 @@ class Users extends App_Controller
      */
     function signup()
     {
-        $this->data['page_title'] = 'Sign Up';
+        $this->layout = 'public';
+		$this->data['page_title'] = 'Sign Up';
         if ($this->postData)
         {
             if ($this->User->signUp($this->postData))

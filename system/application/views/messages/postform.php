@@ -1,10 +1,10 @@
-<div class="mod">
-	<?php echo $form->textarea('message', array('rows'=>8, "cols"=>40)); ?>
+<p>
+	<?php echo $form->textarea('message', array('rows'=>3,'class'=>'grid_10')); ?>
 	<?php echo $form->error('message') ?>
 	<?php echo $form->error('reply_to') ?>	
 	<?php echo $form->input('reply_to', array('type'=>'hidden')) ?>
 	<?php echo $form->input('reply_to_username', array('type'=>'hidden')) ?>	
-</div>
-<div class="mod">
-	<input type="submit" value="Update">
-</div>
+</p>
+<p>
+	<input class="confirm button" type="submit" value="Update">
+</p>

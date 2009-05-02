@@ -704,6 +704,13 @@ class App_Model extends Model {
             }
     }*/
 
+	/**
+	 * Validate by checking for format of value
+	 * 
+	 * @return 
+	 * @param object $fieldName
+	 * @param object $options[optional]
+	 */
     function validates_format_of($fieldName, $options=array()) 
 	{
 		$fieldValue = $this->getValue($this->modelData, $fieldName);		
@@ -761,6 +768,13 @@ class App_Model extends Model {
             }
     }*/
 
+	/**
+	 * Validate by checking length of value
+	 * 
+	 * @return 
+	 * @param object $fieldName
+	 * @param object $options[optional]
+	 */
     function validates_length_of($fieldName, $options=array()) 
 	{
 		$fieldValue = $this->getValue($this->modelData, $fieldName);

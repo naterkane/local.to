@@ -8,6 +8,7 @@ class Welcome extends App_Controller {
 	 * @return 
 	 */
 	function index() {
+		$this->layout = 'public';
 		$this->getUserData();
 		if ($this->userData) 
 		{

@@ -11,9 +11,7 @@ class Yielder {
 	function Yield() 
 	{
 		$ci= & get_instance();
-		var_dump($ci->layout);
-		if (!$ci->layout) {
-			
+		if (!$ci->layout) {			
 			$ci->layout = 'default';
 		}
 		$layout = BASEPATH ."application/views/layouts/" . $ci->layout . ".php";
@@ -29,8 +27,15 @@ class Yielder {
 		}
 	}
 	
+	/**
+	 * defines a layout if it was set in the controller
+	 * <code>$this->layout = "{nameOfTheLayout}"</code>
+	 * 
+	 * @return 
+	 * @param object $layout[optional]
+	 */
 	function setlayout($layout = null){
-		if ($layout)
+		if (!empty($layout))
 		{
 			$ci->layout = $layout;
 		}

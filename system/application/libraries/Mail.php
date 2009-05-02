@@ -29,6 +29,16 @@ class Mail
 		*/
 	}
 	
+	/**
+	 * Sends an email
+	 * 
+	 * @return 
+	 * @param object $to
+	 * @param object $from_email[optional]
+	 * @param object $from_name[optional]
+	 * @param object $subject[optional]
+	 * @param object $message[optional]
+	 */
 	function send($to, $from_email = null, $from_name = null, $subject = null, $message = null)
 	{
 		/*

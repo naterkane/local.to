@@ -5,7 +5,7 @@
 class App_Controller extends Controller {
    
     var $data = array();
-	var $layout;				//leave empty for default	
+	var $layout = 'default';				//leave empty for default	
     var $postData = array();
     var $userData = array();
 	var $testingData;
@@ -21,7 +21,7 @@ class App_Controller extends Controller {
     function __construct() 
 	{
         parent::Controller();
-        $this->load->library(array('Load_helpers'));
+        $this->load->library(array('Load_helpers','Wick'));
         $this->load->model(array('User', 'Message', 'Group'));
         if ($_POST) 
 		{
