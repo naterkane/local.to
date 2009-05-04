@@ -174,7 +174,7 @@ class Selenium
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);	
 		$this->click('Sign In');
-		$this->write('verifyTextPresent', 'Hello ' . $name);
+		$this->write('verifyText', 'profile_username', $name);
 	}
 
 	/**
