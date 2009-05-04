@@ -82,9 +82,13 @@ class App_Controller extends Controller {
 	 *
 	 * @access public
 	 */ 
-    function getUserData() 
+    function getUserData($full = false) 
 	{
-        $this->userData = $this->cookie->get('user');
+		$this->userData = $this->cookie->get('user');
+		if ($full) 
+		{
+			$this->userData = $this->User->get($this->userData['id']);
+		} 
         if (! empty($this->userData)) 
 		{
             $this->data['User'] = $this->userData;

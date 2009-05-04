@@ -132,6 +132,7 @@ class Users extends App_Controller
 	function settings()
 	{
 		$this->mustBeSignedIn();
+		$this->getUserData(true);
         $this->data['page_title'] = 'Settings';
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
@@ -140,7 +141,7 @@ class Users extends App_Controller
 		{
 			if ($this->User->updateProfile($this->userData['id'])) 
 			{
-				$this->cookie->set('user', $this->postData);
+				$this->cookie->setUser($this->postData);
 				$this->redirect('/settings', 'Your profile was updated.');
 			} 
 			else 
@@ -175,7 +176,7 @@ class Users extends App_Controller
             }
 			else 
 			{
-				$this->cookie->set('user', $user);
+				$this->cookie->setUser($user);
                 $this->redirect('/home');
 			}
         }
