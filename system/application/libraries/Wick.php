@@ -123,7 +123,7 @@ class Wick
         // and transfers data back into the previous one
         $ci     = &$this->_transfer($controller);
         $return = call_user_func_array(array(&$ci, $method), array_slice($uri->rsegments, 2));
-        $this->_transfer(&$this->_queue[count($this->_queue)-1]);
+        $this->_transfer($this->_queue[count($this->_queue)-1]);
 
         // Pops the controller off the queue
         array_pop($this->_queue);
