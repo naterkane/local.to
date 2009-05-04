@@ -124,18 +124,6 @@ class Users extends App_Controller
     }
 
 	/**
-	 * User's profile area in sidebar 
-	 * @return 
-	 */
-	function sidebarprofile(){
-		$this->mustBeSignedIn();
-		$this->data['following_count'] = count($this->User->getFollowing($this->userData['id']));
-		$this->data['follower_count'] = count($this->User->getFollowers($this->userData['id']));
-		$this->data['messages_count'] = count($this->Message->getPrivate($this->userData['id']));
-		$this->load->view('users/sidebarprofile', $this->data);	
-	}
-
-	/**
 	 * Update a user profile
 	 *
 	 * @access public

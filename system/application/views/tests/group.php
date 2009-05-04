@@ -83,6 +83,7 @@
 	$selenium->write('verifyTextPresent', $group_message);
 	//make sure message is present in user's public page	
 	$selenium->openPage('/' . $name2);
+	$selenium->write('storeValue', 'user_id', 'user_id');	
 	$selenium->write('verifyTextPresent', $group_message);	
 	//make sure message is present in other user's public page		
 	$selenium->openPage('/' . $name);	
@@ -103,7 +104,7 @@
 	$selenium->openPage('/groups/members/' . $group);		
 	$selenium->write('verifyTextPresent', $group);
 	$selenium->write('verifyTextPresent', $name);
-	$selenium->write('verifyTextNotPresent', $name2);	
+	$selenium->write('verifyElementNotPresent', 'user_id_${user_id}');	
 	$selenium->openPage('/group/' . $group);			
 	$selenium->write('verifyTextPresent', 'Subscribe');	
 	//check to see if messages are still on group's home page	

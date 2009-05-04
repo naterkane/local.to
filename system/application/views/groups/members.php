@@ -4,7 +4,7 @@
 	<ul>
 	<?php foreach ($members as $member): ?>
 		<li>
-			<a href="/<?php echo $member['username'] ?>"><?php echo $member['username'] ?></a> 
+			<a href="/<?php echo $member['username'] ?>" id="user_id_<?php echo $member['id'] ?>"><?php echo $member['username'] ?></a> 
 			<?php if ($owner == $member['id']): ?>
 				(Owner)
 			<?php endif ?>

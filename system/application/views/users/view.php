@@ -1,5 +1,6 @@
 <div class="profile">
 <h2><?php echo $username ?></h2>
+<?php echo $form->input('user_id', array('value'=>$User['id'], 'type'=>'hidden')) ?>
 <?php 
 if ((!empty($User)) AND ($User['username'] != $username)) {
 	if ($friend_status == 'follow') 

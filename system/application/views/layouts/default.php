@@ -55,7 +55,7 @@
 		<div class="clear"></div>
 		<div class="grid_4">
 			<div class="box">
-				<?php $this->wick->light('users/sidebarprofile'); ?>
+				<?php $this->load->view('users/sidebarprofile'); ?>
 			
 			
 				<ul class="menu">

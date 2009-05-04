@@ -11,7 +11,7 @@
 </h3>
 	
 <h3><a href="/groups/members/<?php echo $name ?>">Members (<?php echo $member_count ?>)</a></h3>
-<h3>Post a message to $name</h3>
+<h3>Post a message to <?php echo $name ?></h3>
 <form action="/messages/add" method="post" accept-charset="utf-8">
 	<?php $this->load->view("messages/postform"); ?>
 </form>

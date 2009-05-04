@@ -21,7 +21,7 @@ class App_Controller extends Controller {
     function __construct() 
 	{
         parent::Controller();
-        $this->load->library(array('Load_helpers','Wick'));
+        $this->load->library(array('Load_helpers'));
         $this->load->model(array('User', 'Message', 'Group'));
         if ($_POST) 
 		{
@@ -88,6 +88,9 @@ class App_Controller extends Controller {
         if (! empty($this->userData)) 
 		{
             $this->data['User'] = $this->userData;
+			$this->data['User']['following_count'] = count($this->User->getFollowing($this->userData['id']));
+			$this->data['User']['follower_count'] = count($this->User->getFollowers($this->userData['id']));
+			$this->data['User']['messages_count'] = count($this->Message->getPrivate($this->userData['id']));
 			if (isset($this->userData['time_zone'])) 
 			{
 				date_default_timezone_set($this->userData['time_zone']);

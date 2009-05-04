@@ -34,7 +34,7 @@ if ((is_array($message)) AND (!empty($message['message_html'])))
 	<a href="#" class="image">
 		<img src="img/photo_60x60.jpg" width="60" height="60" alt="photo" />
 	</a>
-	<p class="author"><?php echo $html->link(($User['realname'])?$User['realname']:$User['username'], '/' . $message['username']); ?> </p>
+	<p class="author"><?php echo $html->link(!empty($User['realname'])?$User['realname']:$User['username'], '/' . $message['username']); ?> </p>
 	<p class="message_text"><?php echo $message['message_html'] ?></p>
 
 	<p class="meta">		

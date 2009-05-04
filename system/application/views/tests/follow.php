@@ -103,7 +103,6 @@
 	$selenium->signOut();	
 	$selenium->signIn($name, $password);
 	$selenium->openPage('/friend_requests');
-	$selenium->write('verifyTextNotPresent', $name);		
 	$selenium->openPage('/home');
 	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');	
 	$selenium->write('type', 'message', $message3);

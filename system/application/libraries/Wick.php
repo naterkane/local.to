@@ -82,7 +82,7 @@ class Wick
         if (!is_array($segments)) {
             $segments = explode('/', $segments);
         }
-
+		
         // We need stock libraries for native routing
         $router = &load_class('Router');
         $uri    = &load_class('URI');
@@ -94,7 +94,7 @@ class Wick
         $directory = $router->fetch_directory();
         $method    = $router->fetch_method();
         $path      = APPPATH . 'controllers/' . $directory . $class . EXT;
-
+		
         // No need to load the file if it's already in memory
         if (!class_exists($class)) {
             include_once($path);
