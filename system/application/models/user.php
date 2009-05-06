@@ -20,7 +20,7 @@ class User extends App_Model
 	{
 		$this->push($this->prefixFollower($follower_id), $following_id);
 		$this->push($this->prefixFollowing($following_id), $follower_id);
-		return true;
+		return true; //allways returns true, use transactions in calling method to check both saves
 	}
 
 	/**
@@ -45,8 +45,7 @@ class User extends App_Model
 			unset($this->modelData['new_password']);
 			unset($this->modelData['new_password_confirm']);
 			unset($this->modelData['password_confirm']);						
-			$this->save($this->prefixUser($this->modelData['id']), $this->modelData);
-			return true;
+			return $this->save($this->prefixUser($this->modelData['id']), $this->modelData);
 		}
 		else 
 		{
@@ -73,17 +72,17 @@ class User extends App_Model
 		if (($requests) AND (in_array($user['id'], $requests)))	//check if follower in in requests
 		{
 			$friends = $this->getFollowers($user_id);
+			$this->startTransaction();
 			if (($friends) AND (in_array($user['id'], $friends))) //check if follower is already following
 			{	
 				$this->removeFriendRequest($requests, $user['id'], $user_id);
-				return false;
 			}
 			else 
 			{
 				$this->_follow($user['id'], $user_id);
 				$this->removeFriendRequest($requests, $user['id'], $user_id);
-				return true;
 			}
+			return $this->endTransaction();
 		} 
 		else 
 		{
@@ -98,17 +97,17 @@ class User extends App_Model
 	 * @param array $data User Data
 	 * @return boolean
 	 */
-	function delete($data = array())
+	function deleteMe($data = array())
 	{
 		if ($data) 
 		{
-			parent::delete($this->prefixUser($data['id']));
-			parent::delete($this->prefixUsername($data['username']));
-			parent::delete($this->prefixUserEmail($data['email']));
-			parent::delete($this->prefixUserPrivate($data['id']));
-			parent::delete($this->prefixUserPublic($data['id']));			
-			parent::delete($this->prefixFollower($data['email']));
-			parent::delete($this->prefixFollowing($data['id']));
+			$this->delete($this->prefixUser($data['id']));
+			$this->delete($this->prefixUsername($data['username']));
+			$this->delete($this->prefixUserEmail($data['email']));
+			$this->delete($this->prefixUserPrivate($data['id']));
+			$this->delete($this->prefixUserPublic($data['id']));			
+			$this->delete($this->prefixFollower($data['email']));
+			$this->delete($this->prefixFollowing($data['id']));
 			return true;
 		} 
 		else 
@@ -129,6 +128,7 @@ class User extends App_Model
 	{
 		if ($user) 
 		{
+			$this->startTransaction();
 			if ($user['locked']) 
 			{
 				$this->push($this->prefixFriendRequests($user['id']), $user_id);
@@ -137,7 +137,7 @@ class User extends App_Model
 			{
 				$this->_follow($user_id, $user['id']);
 			}
-			return true;			
+			return $this->endTransaction();;			
 		} 
 		else 
 		{
@@ -410,6 +410,7 @@ class User extends App_Model
      */
     function sendToFollowers($message_id, $user_id)
     {
+		$this->startTransaction();	
         $followers = $this->getFollowers($user_id);
 		if ($followers) 
 		{
@@ -418,7 +419,7 @@ class User extends App_Model
 	            $this->push($this->prefixUserPrivate($follower), $message_id);
 	        }
 		}
-        return true;
+        return $this->endTransaction();
     }
    
     /**
@@ -467,16 +468,11 @@ class User extends App_Model
         $data['created'] = $now;
         $data['modified'] = $now;
         $data['time_zone'] = $this->defaultTimeZone;
-		if ($this->save($this->prefixUser($data['id']), $data)) 
-		{
-			$this->mode = null;
-			$this->save($this->prefixUserEmail($data['email']), $data['id']);
-			$this->save($this->prefixUsername($data['username']), $data['id']);
-        	return true;
-		} 
-		else {
-        	return false;
-		}
+		$this->startTransaction();
+		$this->save($this->prefixUser($data['id']), $data);
+		$this->join('UserEmail', $data['email'], $data);
+		$this->join('Username', $data['username'], $data);	
+		return $this->endTransaction();
     }
 
 	/**
@@ -491,18 +487,14 @@ class User extends App_Model
 		$this->mode = 'profile';		
 		$this->postData = $this->updateData($this->userData, $this->postData);
 		$this->postData['id'] = $user_id;
-		if ($this->save($this->prefixUser($this->postData['id']), $this->postData)) 
-		{
-			$this->delete($this->prefixUsername($this->userData['username']));
-			$this->delete($this->prefixUserEmail($this->userData['email']));
-			$this->save($this->prefixUserEmail($this->postData['email']), $this->userData['id'], false);
-			$this->save($this->prefixUsername($this->postData['username']), $this->userData['id'], false);			
-			return true;
-		} 
-		else 
-		{
-			return false;
-		}
+		$this->startTransaction();
+		$this->save($this->prefixUser($this->postData['id']), $this->postData);
+		$this->delete($this->prefixUsername($this->userData['username']));
+		$this->delete($this->prefixUserEmail($this->userData['email']));
+		$this->mode = 'join';
+		$this->join('UserEmail', $this->postData['email'], $this->userData);
+		$this->join('Username', $this->postData['username'], $this->userData);
+		return $this->endTransaction();
 	}
 
 	/**
@@ -515,14 +507,15 @@ class User extends App_Model
 	 */
 	function unfollow($username = null, $user_id)
 	{
-		$user = $this->getByUsername($username);	
-		$followers = $this->User->getFollowers($user['id']);
+		$this->startTransaction();
+		$user = $this->getByUsername($username);
+		$followers = $this->getFollowers($user['id']);
 		$followers = $this->removeFromArray($followers, $user_id);
 		$this->save($this->prefixFollower($user['id']), $followers);
-		$following = $this->User->getFollowing($user_id);
+		$following = $this->getFollowing($user_id);
 		$following = $this->removeFromArray($following, $user['id']);		
 		$this->save($this->prefixFollowing($user_id), $following);
-		return true;
+		return $this->endTransaction();
 	}
 	
 	/**
@@ -562,8 +555,12 @@ class User extends App_Model
 		}
 		if ($this->mode == 'profile') 
 		{
-			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));			
+			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));
 			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'A bio must be between 1 and 160 characters long'));
+		}
+		if ($this->mode == 'join') 
+		{
+			$this->validates_join();
 		}
 	    return (count($this->validationErrors) == 0);
 	}

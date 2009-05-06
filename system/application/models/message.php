@@ -45,29 +45,32 @@ class Message extends App_Model
 		$data['message'] = str_replace("\n", " ", $message['message']);	
 		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
 		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
-		if ($this->save($this->prefixMessage($data['id']), $data)) 
+		$this->startTransaction();
+		$this->save($this->prefixMessage($data['id']), $data);
+		$this->mode = null;
+		$this->addToUserPublic($user_id, $data['id']);
+		$this->addToUserPrivate($user_id, $data['id']);
+		if ($data['reply_to']) 
 		{
-			$this->mode = null;
-			$this->addToUserPublic($user_id, $data['id']);
-			$this->addToUserPrivate($user_id, $data['id']);
-			if ($data['reply_to']) 
-			{
-				$this->addToReplies($data['reply_to'], $data['id']);
-			}
-			if (($this->parent) AND (!$user['locked']))
-			{
-				++$this->parent['reply_count'];
-				$this->save($this->prefixMessage($this->parent['id']), $this->parent);
-			}
-			if (!$user['locked']) 
-			{
-				$this->addToPublicTimeline($data);
-			}
+			$this->addToReplies($data['reply_to'], $data['id']);
+		}
+		if (($this->parent) AND (!$user['locked']))
+		{
+			++$this->parent['reply_count'];
+			$this->save($this->prefixMessage($this->parent['id']), $this->parent);
+		}
+		if (!$user['locked']) 
+		{
+			$this->addToPublicTimeline($data);
+		}
+		$response = $this->endTransaction();
+		if ($response) 
+		{
         	return $data;
-		} 
+		}
 		else 
 		{
-			return false;
+			return false;			
 		}
     }
 

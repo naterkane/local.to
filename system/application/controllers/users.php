@@ -41,7 +41,7 @@ class Users extends App_Controller
 		{
 			$this->redirect('/home');
 		}
-		if ($this->User->delete($this->userData)) 
+		if ($this->User->deleteMe($this->userData)) 
 		{
         	$this->cookie->remove('user');
 			$this->redirect('/signin', 'Your account has been deleted.');

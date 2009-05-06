@@ -40,19 +40,7 @@ class Admin extends App_controller
 
 	function test() 
 	{
-		$old = $this->User->timezones;
-		$timeZones = timezone_identifiers_list();		
-		$return = array();
-		foreach ($old as $city => $zone) {
-			$match = array_search($city, $timeZones);
-			foreach ($timeZones as $key => $value) {
-				$pos = strpos($value, $city);
-				if ($pos !== false) {
-					echo "'" . $value . "'=>'" . $zone . "',<br>";
-				}
-			}
-		}
-		exit;
+		$user = $this->User->mem->get('user:5');
 	}
 
 }

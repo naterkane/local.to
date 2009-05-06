@@ -7,6 +7,7 @@
 */
 class App_Model extends Model {
 
+	protected $key;
 	protected $memcacheHost = 'localhost';
 	protected $memcachePort = '21201';
 	protected $prefixCookie = 'session';
@@ -29,7 +30,12 @@ class App_Model extends Model {
 	protected $prefixUserPrivate = 'private';
 	protected $groupId = 'groupId';	
 	protected $messageId = 'messageId';		
-	protected $reservedNames = array('users', 'groups', 'admin', 'profile', 'settings', 'messages', 'tests', 'welcome');		
+	protected $queryCount = 0;
+	protected $queryErrors = 0;
+	protected $queryLog = array();
+	protected $reservedNames = array('users', 'groups', 'admin', 'profile', 'settings', 'messages', 'tests', 'welcome');
+	protected $rollbackLog = array();	
+	protected $transactional = false;		
 	protected $userId = 'userId';
 	public $action;
 	public $id;	
@@ -59,11 +65,110 @@ class App_Model extends Model {
 	}
 
 	/**
+	 * Log a query for transactions
+	 *
+	 * @access protected
+	 * @param string $key
+	 * @param boolean $result	
+	 * @return 
+	 */	
+	protected function logQuery($key)
+	{
+		if ($this->transactional) 
+		{
+			$this->queryLog[$this->queryCount] = array();
+			$this->queryLog[$this->queryCount]['key'] = $key;
+			if (!is_null($key)) 
+			{
+				$data = $this->find($key);
+			}
+			else 
+			{
+				$data = null;
+			}
+			$this->queryLog[$this->queryCount]['rollback'] = $data;
+		}
+	}
+
+	/**
+	 * Log a query for transactions
+	 *
+	 * @access protected
+	 * @param string $key
+	 * @param boolean $result	
+	 * @return 
+	 */	
+	protected function logQueryResult($result, $data)
+	{
+		if ($this->transactional)
+		{
+			$this->queryLog[$this->queryCount]['result'] = $result;
+			$this->queryLog[$this->queryCount]['data_written'] = $data;			
+			if (!$result) 
+			{
+				$this->queryErrors++;
+			}
+			$this->queryCount++;
+		}
+	}
+
+	/**
 	 * Delete a record
 	 */
 	function delete($key) 
 	{
-		return @$this->mem->delete($key);
+		$this->logQuery($key);
+		$data = $this->mem->get(array($key));
+		if (!empty($data)) 
+		{
+			$result = $this->mem->delete($key);
+		}
+		else 
+		{
+			$result = false;
+		}
+		$this->logQueryResult($result, null);
+		return $result;
+	}
+	
+	/**
+	 * Do transaction
+	 *
+	 */
+	function endTransaction()
+	{
+		if ((!$this->transactional) || ($this->queryCount === 0))
+		{
+			return true;
+		}
+		$this->transactional = false;	
+		if ($this->queryErrors > 0) 
+		{
+			$queries = array_reverse($this->queryLog);
+			$i = 0;
+			foreach ($queries as $query) {								
+				if ($query['result']) 
+				{
+					if ($query['rollback']) 
+					{
+						$type = 'save';
+						$result = $this->save($query['key'], $query['rollback'], false);
+					} 
+					else 
+					{
+						$type = 'delete';
+						$result = $this->delete($query['key']);
+					}
+					$this->rollbackLog[$i]['key'] = $query['key'];
+					$this->rollbackLog[$i]['type'] = $type;
+					$this->rollbackLog[$i]['data'] = $query['rollback'];
+					$this->rollbackLog[$i]['result'] = $result;
+					$i++;
+				}
+			}
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -155,6 +260,17 @@ class App_Model extends Model {
 		{
 			return false;
 		}
+	}
+	
+	/**
+	 * Make a join
+	 */
+	function join($prefixName, $prefix, $data)
+	{
+		$this->mode = 'join';
+		$prefixName = 'prefix' . $prefixName;
+		$newPrefix = $this->{$prefixName}($prefix);
+		$this->save($newPrefix, $data);
 	}
 	
 	/**
@@ -518,6 +634,11 @@ class App_Model extends Model {
 		return array_merge(array(), $data);
 	}
 	
+	function rollbackLog()
+	{
+		return $this->rollbackLog;
+	}
+	
 	/**
 	 * Save a record
 	 *
@@ -527,9 +648,12 @@ class App_Model extends Model {
 	 * @access public
 	 */
 	function save($key, $data, $validate = true) 
-	{
-		$this->modelData = $data;
+	{		
 		$valid = true;
+		$newData = null;
+		$this->key = $key;
+		$this->modelData = $data;
+		$this->logQuery($key, 'save');		
 		if ($validate) 
 		{
 			$valid = $this->validate();
@@ -545,16 +669,11 @@ class App_Model extends Model {
 			}
 			if ($key) 
 			{
-				return $this->mem->set($key, $newData);
-			} 
-			else 
-			{
-				return false;
+				$valid = $this->mem->set($key, $newData);
 			}
-		} else {
-			return false;
 		}
-		
+		$this->logQueryResult($valid, $newData);					
+		return $valid;
 	}
 
 	/**
@@ -568,6 +687,26 @@ class App_Model extends Model {
                 $this->action = 'update';
         }
         return true;
+	}
+
+	/**
+	 * Transactional
+	 */
+	function startTransaction()
+	{
+		$this->transactional = true;
+		$this->queryLog = array();
+		$this->queryCount = 0;
+		$this->queryErrors = 0;		
+		$this->rollbackLog = array();			
+	}
+
+	/**
+	 * Show the query log
+	 */
+	function queryLog()
+	{
+		return $this->queryLog;
 	}
 	
 	/**
@@ -736,6 +875,22 @@ class App_Model extends Model {
 			{
 			       $this->validationErrors[$fieldName] = $options['message'];
 			}
+		}
+    }
+
+	/**
+	 * Validate a join
+	 * 
+	 */
+    function validates_join() 
+	{
+		if (empty($this->modelData['id'])) 
+		{
+			$this->validationErrors[$this->key] = 'An ID is needed for a join.';
+		}
+		else 
+		{
+			$this->modelData = $this->modelData['id'];
 		}
     }
 

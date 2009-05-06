@@ -26,18 +26,13 @@ class Group extends App_Model
 		$data['owner_id'] = $owner_id;
 		$data['public'] = 1;
 		$this->mode = 'add';
-		if ($this->save($this->prefixGroup($data['id']), $data)) 
-		{
-			$this->mode = null;
-			$this->save($this->prefixGroupName($data['name']), $data['id'], false);
-			$this->addMember($data['id'], $owner_id);
-			$this->push($this->prefixGroupMessages($data['id']), null);
-			return true;
-		} 
-		else 
-		{
-			return false;
-		}
+		$this->startTransaction();
+		$this->save($this->prefixGroup($data['id']), $data);
+		$this->mode = null;
+		$this->save($this->prefixGroupName($data['name']), $data['id'], false);
+		$this->addMember($data['id'], $owner_id);
+		$this->push($this->prefixGroupMessages($data['id']), null);
+		return $this->endTransaction();
 	}
 	
 	/**
@@ -317,6 +312,7 @@ class Group extends App_Model
 		$groups = $this->Group->matchGroups($messageData['message']);
 		if (!empty($groups)) 
 		{
+			$this->startTransaction();
 			foreach ($groups as $groupname) 
 			{
 				$group = $this->getByName($groupname);
@@ -334,7 +330,9 @@ class Group extends App_Model
 					}
 				}
 			}
+			return $this->endTransaction();
 		}
+		return false;
 	}
 
 	/**
@@ -349,18 +347,13 @@ class Group extends App_Model
 	function update($oldGroup, $newGroup, $user_id)
 	{
 		$this->mode = 'update';
-		$group = $this->updateData($oldGroup, $newGroup);		
-		if ($this->save($this->prefixGroup($oldGroup['id']), $group)) 
-		{
-			$this->mode = null;			
-			$this->delete($this->prefixGroupName($oldGroup['name']));
-			$this->save($this->prefixGroupName($newGroup['name']), $oldGroup['id']);
-			return true;
-		} 
-		else 
-		{
-			return false;
-		}
+		$group = $this->updateData($oldGroup, $newGroup);
+		$this->startTransaction();
+		$this->save($this->prefixGroup($oldGroup['id']), $group);
+		$this->mode = null;			
+		$this->delete($this->prefixGroupName($oldGroup['name']));
+		$this->save($this->prefixGroupName($newGroup['name']), $oldGroup['id']);
+		return $this->endTransaction();		
 	}	
 	
 	/**

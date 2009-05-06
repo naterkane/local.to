@@ -2,6 +2,7 @@
 	$name = $selenium->randomString(10);
 	$password = $selenium->randomString(10);	
 	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$count = $this->testingData['count'];		
 	$name_new = $selenium->randomString(10);
 	$email_new = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
 	$default_time_zone = 'US/Eastern';
@@ -18,11 +19,14 @@
 	$selenium->caseTitle('Change Profile');
 	$selenium->openPage('/admin/flush');		
 	//create account and sign in
-	$selenium->signOut();	
+	$selenium->signOut();
+	$selenium->write('verifyValue', 'testing_count', $count);		
 	$selenium->signUp($name, $password, $email);
+	$selenium->write('verifyValue', 'testing_count', $count + 4);	
 	$selenium->signIn($name, $password);
 	//go to settings	
 	$selenium->openPage('/settings');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyValue', 'username', $name);
 	$selenium->write('verifyValue', 'email', $email);
 	$selenium->write('verifyValue', 'time_zone', $default_time_zone);	
@@ -30,32 +34,38 @@
 	$selenium->write('type', 'username', '');
 	$selenium->write('type', 'email', '');	
 	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);
 	$selenium->write('verifyTextPresent', 'A username is required');
 	$selenium->write('verifyTextPresent', 'A valid email is required');
 	//try invalid email
 	$selenium->write('type', 'email', $name);	
 	$selenium->click('Update');	
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);
 	$selenium->write('verifyTextPresent', 'A valid email is required');
 	//try reserved username
 	$selenium->write('type', 'username', $reserved);
 	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);	
 	$selenium->write('verifyTextPresent', 'This is a reserved username');	
 	//too long username
 	$selenium->write('type', 'username', $too_long_name);
 	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);	
 	$selenium->write('verifyTextPresent', 'A username must be between 1 and 15 characters long');	
 	//bad characters in username
 	$selenium->write('type', 'username', $name . '!');
 	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);
 	$selenium->write('verifyTextPresent', 'A username may only be made up of numbers, letters, and underscores');	
 	//too long bio
 	$selenium->write('type', 'bio', $too_long_bio);
 	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);	
 	$selenium->write('verifyTextPresent', 'A bio must be between 1 and 160 characters long');	
 	//update record
@@ -67,8 +77,10 @@
 	$selenium->write('type', 'url', $url);
 	$selenium->write('select', 'time_zone', $time_zone);	
 	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', 'Your profile was updated.');
 	$selenium->openPage('/settings');	
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyValue', 'username', $name_new);
 	$selenium->write('verifyValue', 'email', $email_new);	
 	$selenium->write('verifyValue', 'bio', $bio);		
