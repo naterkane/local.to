@@ -2,7 +2,7 @@
 if (!empty($messages)) 
 {	
 	?>
-	<div class="box mesages">	
+
 		<div class="block" id="messages">
 			<?php
 	foreach ($messages as $message) 
@@ -17,7 +17,6 @@ if (!empty($messages))
 	}
 	?>
 		</div>
-	</div>
 	<?php
 }
 ?>

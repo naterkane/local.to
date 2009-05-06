@@ -33,29 +33,17 @@
 		<div class="clear"></div>
 		<div class="grid_16">
 			<ul class="nav main">
-			<?php
-			if (!empty($User)) {
-				?>
-				<li><a href="/home">Home</a></li>
-				<li><a href="/<?php echo $User["username"] ?>">Profile</a></li>
-				<li><a href="/groups">Groups</a></li>
-				<li><a href="/settings">Settings</a></li>
-				<li><a href="/public_timeline">Everyone</a></li>
-				<li><a href="/users/signout">Sign Out</a></li>
-				<?php
-			} else {
-				?>
-				<li><a href="/">Home</a></li>
-				<li><a href="/users/signin">Sign In</a></li>
-				<li><a href="/users/signup">Sign Up</a></li>
-				<?php
-			}
-			?>
+			<?php $this->load->view('static/navigation'); ?>
 			</ul>
 		</div>
 		<div class="clear"></div>
 		
 		<div class="grid_10">
+			<?php
+			if (!empty($static_view)) {
+			$this->load->view('static/'.$static_view);	
+			} else { 
+				?>
 			<div class="box"><div class="block"><h1>welcome!</h1></div></div>
 			<div class="grid_5 alpha"><div class="box alpha">
 				<h4>this is a heading</h4>
@@ -69,6 +57,10 @@
 				<p>Duis at nisl et dolor placerat ullamcorper. Nunc adipiscing dui in augue. Praesent rhoncus. Maecenas ligula sem, pretium vitae, vestibulum ut, imperdiet nec, magna. In ante. Curabitur non nibh. Curabitur ullamcorper adipiscing felis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. In aliquet commodo dolor. Etiam hendrerit vehicula justo.</p>
 				<p>Sed velit orci, venenatis id, dapibus vitae, lacinia quis, ante. Sed sit amet sapien. Curabitur tortor. Maecenas congue. Etiam non nunc sed turpis auctor vulputate. Integer ornare venenatis erat. In hac habitasse platea dictumst. In hac habitasse platea dictumst. Suspendisse potenti. Quisque urna nisi, rutrum non, faucibus vitae, eleifend eu, tortor. Etiam non libero. Morbi odio tellus, dictum quis, tincidunt eget, bibendum sed, lectus. Donec tincidunt venenatis nulla. Morbi quis orci. Ut dictum metus id ligula. Cras molestie. Nulla vel tortor. Cras lacus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Praesent in ante at nulla sagittis volutpat.</p>
 			</div></div>
+			<?php 
+			
+			
+			} ?>
 		</div>
 		<div class="grid_6">
 		{yield}

@@ -33,7 +33,38 @@ class App_Model extends Model {
 	protected $queryCount = 0;
 	protected $queryErrors = 0;
 	protected $queryLog = array();
-	protected $reservedNames = array('users', 'groups', 'admin', 'profile', 'settings', 'messages', 'tests', 'welcome');
+	/**
+	 * reservedNames should be compared to the defined routes to make sure that it includes any names that may be used by the system in a URI.
+	 * @var
+	 * @see /system/application/config/routes.php
+	 */
+	protected $reservedNames = array(
+									'delete',
+									'add',
+									'signin',
+									'signout',
+									'confirm',
+									'deny',
+									'reset',
+									'reset_password',
+									'change_password',
+									'friend_requests',
+									'public_timeline',
+									'home',
+									'default_controller',
+									'scaffolding_trigger',
+									'users', 
+									'groups', 
+									'admin', 
+									'profile', 
+									'settings', 
+									'messages', 
+									'tests', 
+									'testme',
+									'welcome', 
+									'about',
+									'user',
+									'group');
 	protected $rollbackLog = array();	
 	protected $transactional = false;		
 	protected $userId = 'userId';

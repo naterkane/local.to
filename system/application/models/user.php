@@ -226,7 +226,7 @@ class User extends App_Model
     function getFriendRequests($user_id, $idsOnly = false)
     {
 		$data = $this->find($this->prefixFriendRequests($user_id));
-		if ($idsOnly) 
+		if ($idsOnly || $data == false) 
 		{
 			return $data;
 		} 

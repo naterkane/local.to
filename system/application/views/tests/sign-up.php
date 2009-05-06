@@ -1,7 +1,7 @@
 <?php
 	$name = $selenium->randomString(10);
 	$password = $selenium->randomString(10);
-	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';
 	$too_long_name = $selenium->randomString(16);
 	$too_short_password = $selenium->randomString(5);	
 	$too_long_password = $selenium->randomString(26);	

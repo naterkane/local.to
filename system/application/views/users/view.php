@@ -1,20 +1,22 @@
-<div class="profile">
-<h2><?php echo $username ?></h2>
-<?php echo $form->input('user_id', array('value'=>$User['id'], 'type'=>'hidden')) ?>
-<?php 
+<div class="messages box">
+	<h2><?php echo (substr($username,-1) == "s")?$username."'":$username."'s"; ?> timeline</h2>
+	
+<?php echo $form->input('user_id', array('value'=>$User['id'], 'type'=>'hidden'));
 if ((!empty($User)) AND ($User['username'] != $username)) {
+	?><div class="box"><div class="block"><?php
 	if ($friend_status == 'follow') 
 	{
-		echo '<h3><a href="/users/follow/' . $username . '" id="follow">Follow</a></h3>';
+		echo '<p><a href="/users/follow/' . $username . '" id="follow" class="toggler">Follow</a></p>';
 	} 
 	elseif ($friend_status == 'following') 
 	{
-		echo '<h3><a href="/users/unfollow/' . $username . '" id="unfollow">Unfollow</a></h3>';
+		echo '<p><a href="/users/unfollow/' . $username . '" id="unfollow" class="toggler">Unfollow</a></p>';
 	}
 	else 
 	{
-		echo '<h3>Pending a friend request</h3>';
+		echo '<p>You have a submitted a friend request to '. $username .', it is currently pending.</p>';
 	}
+	?></div></div><?php
 }
 echo $this->load->view('messages/viewlist'); 
 ?>

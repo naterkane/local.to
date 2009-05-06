@@ -66,9 +66,19 @@ class Users extends App_Controller
 		{
 			if ($user['locked']) 
 			{
-				$this->load->library('Mail');				
-				$this->mail->send($user['email'], null, null, 'Welcome', 'http://' . $_SERVER['HTTP_HOST'] . '/friend_requests');
-				$message = 'A confirmation request has been sent to ' . $user['username'] . ' for confirmation.';				
+				try
+				{
+					$this->load->library('Mail');
+					ob_start(); // since debugging is set to '2', let's make sure we don't send anything to the browser until we set headers for the actual view.
+					$this->mail->send($user['email'], null, null, 'Welcome', 'http://' . $_SERVER['HTTP_HOST'] . '/friend_requests');
+					ob_end_clean();	
+				}
+				catch(Exception $e)
+				{
+					$this->redirect('/' . $username, 'Caught exception: ',  $e->getMessage(), "\n");
+				}
+				$message = 'A confirmation request has been sent to ' . $user['username'] . ' for confirmation.';	
+							
 			} 
 			else 
 			{
@@ -197,8 +207,17 @@ class Users extends App_Controller
         {
             if ($this->User->signUp($this->postData))
             {
-				$this->load->library('Mail');
-				$this->mail->send($this->postData['email'], null, null, 'Welcome', 'Welcome to the microblog!');
+				try
+				{
+					$this->load->library('Mail');
+					ob_start(); // since debugging is set to '2', let's make sure we don't send anything to the browser until we set headers for the actual view.
+					$this->mail->send($this->postData['email'], null, null, 'Welcome', 'Welcome to the microblog!');
+					ob_end_clean();	
+				}
+				catch(Exception $e)
+				{
+					$this->redirect('/signin', 'Caught exception: ',  $e->getMessage(), "\n");
+				}
                 $this->redirect('/signin', 'Your account has been created. Please sign in.');
             }
 			else 

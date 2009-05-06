@@ -1,10 +1,10 @@
 <?php
 	$name = $selenium->randomString(10);
 	$password = $selenium->randomString(10);	
-	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$name2 = $selenium->randomString(10);
 	$password2 = $selenium->randomString(10);	
-	$email2 = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$email2 = "nomcat+".$selenium->randomString(10) . '@wearenom.com';
 	$message = $selenium->randomString(10);
 	$message2 = $selenium->randomString(10);	
 	$message3 = $selenium->randomString(10);					

@@ -55,9 +55,9 @@ if ((is_array($message)) AND (!empty($message['message_html'])))
 					</a>
 				</span>
 			<?php endif ?>
-		<?php else: ?>
-		<span class="reply" id="reply<?php echo $message['id'] ?>"><a href="/home/<?php echo $message['id'] ?>">[Reply]</a></span>
 		<?php endif ?>
+		<span class="reply" id="reply<?php echo $message['id'] ?>"><a href="/home/<?php echo $message['id'] ?>">[Reply]</a></span>
+		<?php //endif ?>
 	</p>
 
 

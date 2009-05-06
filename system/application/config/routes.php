@@ -42,8 +42,13 @@
 
 $route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";
+
+// tests
 $route['tests/:any'] = "tests/index";
 $route['testme'] = "tests/testme";
+
+// static pages
+$route['about'] = "welcome/page/about";
 $route['home'] = "users/home";
 $route['home/(:any)'] = "users/home/$1";
 $route['group/(:any)'] = "groups/view/$1";
