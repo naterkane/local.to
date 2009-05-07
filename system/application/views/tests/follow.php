@@ -30,7 +30,7 @@
 	$selenium->write('clickAndWait', 'follow');
 	$selenium->write('verifyValue', 'testing_count', $count + 8);
 	$selenium->write('verifyTextPresent', 'A confirmation request has been sent to ' . $name . ' for confirmation.');
-	$selenium->write('verifyTextPresent', 'Pending a friend request');	
+	$selenium->write('verifyTextPresent', 'You have a submitted a friend request to');	
 	//try to follow a second time and get error
 	$selenium->write('openAndWait', '/follow/' . $name);	
 	$selenium->write('verifyTextPresent', $selenium->missingText);	

@@ -40,7 +40,6 @@ class Admin extends App_controller
 
 	function test() 
 	{
-		$user = $this->User->mem->get('user:5');
 	}
 
 }

@@ -309,7 +309,7 @@ class Group extends App_Model
 		$this->mode = null;
 		$sent = array();
 		$sent[] = $user_id;
-		$groups = $this->Group->matchGroups($messageData['message']);
+		$groups = $this->matchGroups($messageData['message']);
 		if (!empty($groups)) 
 		{
 			$this->startTransaction();
