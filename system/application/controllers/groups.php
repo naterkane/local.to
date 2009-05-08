@@ -54,7 +54,31 @@ class Groups extends App_Controller
 			$this->data['page_title'] = $group['name'] . ' Members';
 			$this->data['name'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
-			$this->data['members'] = $this->Group->getMembers($group['id']);
+			$members = $this->Group->getMembers($group['id']);
+			//var_dump($members);
+			$this->data['members'] = array();
+			foreach ($members as $member)
+			{
+				/**
+				 * lets strip some data that isn't needed out of here. 
+				 * 
+				 * @todo create a way of getting a users "public" info only and not returning anything that's sensitive.
+				 */ 
+				$member['password'] = null;
+				$member['passwordconfirm'] = null;
+				// this isn't really needed
+				$member['realname'] = (!empty($member['realname']))? $member['realname'] : $member['username'];
+				if ($this->User->isFollowing($member['id'], $this->userData['id'])):
+					$member['friend_status'] = 'following';
+				elseif ($this->User->isPendingFriendRequest($member['id'], $this->userData['id'])): 
+					$member['friend_status'] = 'pending';
+				else: 
+					$member['friend_status'] = 'follow';				
+				endif;
+				$this->data['members'][] = $member;
+			}
+			//var_dump($this->data['members']);
+			
 			$this->load->view('groups/members', $this->data);						
 		} 
 		else 
@@ -124,7 +148,7 @@ class Groups extends App_Controller
 		if ($group) 
 		{
 			$this->Group->addMember($group_id, $this->userData['id']);
-			$message = 'I just joined '. $group['name'] . ', <a href="/groups/' . $group["name"] . '">check it out</a>!';
+			$message = 'I just joined !'. $group['name'] . ', <a href="/groups/' . $group["name"] . '">check it out</a>!';
 			$message_id = $this->Message->add($message, $this->userData);
 			$this->User->sendToFollowers($message_id, $this->userData['id']);
 			$this->redirect('/group/' . $group['name']);

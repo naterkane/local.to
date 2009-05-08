@@ -204,8 +204,10 @@ class App_Model extends Model {
 
 	/**
 	 * Find a record
-	 *
+	 * 
 	 * @access public
+	 * @return 
+	 * @param object $key
 	 */
 	function find($key) 
 	{
