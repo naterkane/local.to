@@ -45,7 +45,7 @@ class App_loader extends CI_Loader
 	{
 		$this->passData = $vars;
 		$this->loadHelpers();
-		parent::view($view, $this->passData, $return);
+		parent::view('themes/'.config_item('theme').'/'.$view, $this->passData, $return);
 	}
 	
 

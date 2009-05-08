@@ -14,7 +14,7 @@ class Yielder {
 		if (!$ci->layout) {			
 			$ci->layout = 'default';
 		}
-		$layout = BASEPATH ."application/views/layouts/" . $ci->layout . ".php";
+		$layout = BASEPATH ."application/views/themes/".config_item('theme')."/layouts/" . $ci->layout . ".php";
 		$current_output = $ci->output->get_output();
 		$controller = $ci->uri->segment(1);
 		if (file_exists($layout)){

@@ -324,6 +324,9 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+//Theme
+$config['theme'] = 'default';
+
 //Tokyo Cabinet host settings
 $config['tt_host'] = 'microblog.dev.wearenom.com';
 $config['tt_host_local'] = '10.176.40.214';
