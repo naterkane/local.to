@@ -31,10 +31,13 @@ if ((is_array($message)) AND (!empty($message['message_html'])))
 
 
 <!-- -->
-	<a href="#" class="image">
-		<img src="img/photo_60x60.jpg" width="60" height="60" alt="photo" />
+	<a href="/<?php echo $message['username']?>" class="image">
+		<?php 
+		$author = $this->User->getByUsername($message['username']);
+		echo $gravatar->img( $author['email'],"60" ); ?>
 	</a>
-	<p class="author"><?php echo $html->link(!empty($User['realname'])?$User['realname']:$User['username'], '/' . $message['username']); ?> </p>
+	<?php //var_dump($author); ?>
+	<p class="author"><?php echo $html->link(!empty($message['realname'])?$message['realname']:$message['username'], '/' . $message['username']); ?> </p>
 	<p class="message_text"><?php echo $message['message_html'] ?></p>
 
 	<p class="meta">		
@@ -59,6 +62,6 @@ if ((is_array($message)) AND (!empty($message['message_html'])))
 		<span class="reply" id="reply<?php echo $message['id'] ?>"><a href="/home/<?php echo $message['id'] ?>">[Reply]</a></span>
 		<?php //endif ?>
 	</p>
-
+	<div class="clear"></div>
 
 <?php } ?>

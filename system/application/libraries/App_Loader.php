@@ -5,7 +5,7 @@
 class App_loader extends CI_Loader
 {
 
-	var $helpers = array('Html', 'Time_format', 'Selenium', 'Form');
+	var $helpers = array('Html', 'Time_format', 'Selenium', 'Form', 'Gravatar');
 	var $passData = array();
 
 	/**
