@@ -66,6 +66,7 @@ class App_Model extends Model {
 									'user',
 									'group');
 	protected $rollbackLog = array();	
+	protected $table;	
 	protected $transactional = false;		
 	protected $userId = 'userId';
 	public $action;

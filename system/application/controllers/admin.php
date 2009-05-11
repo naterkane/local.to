@@ -59,6 +59,10 @@ class Admin extends App_controller
 
 	function test() 
 	{
+		$user = $this->user->find();
+
+		$user = $this->tt->get();
+		
 	}
 
 }

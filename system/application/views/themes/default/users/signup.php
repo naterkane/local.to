@@ -1,7 +1,7 @@
 <div class="box">
 	<h2>Sign In</h2>
 	<div class="block">
-	<form action="/signup" method="post" accept-charset="utf-8">
+	<form action="/signup/<?php echo $invite_email ?>/<?php echo $invite_key ?>" method="post" accept-charset="utf-8">
 		<fieldset>
 		<p>
 			<label for="username">User Name</label>

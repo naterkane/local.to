@@ -199,14 +199,31 @@ class Users extends App_Controller
      * @return
      * @todo Move those load method calls to one place
      */
-    function signup()
+    function signup($email = null, $key = null)
     {
+		if ((!$email) || (!$key))
+		{
+			show_404();
+		}
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign Up';
+		$email_decode = base64_decode($email);
+		$this->load->model(array('Invite'));
+		$this->load->database();
+		$invite = $this->Invite->get($email_decode, $key);
+		if (empty($invite)) 
+		{
+			show_404();
+		}
+		if ($invite['activated'] == 1) 
+		{
+			$this->redirect('/signin', 'This invite has already been activated.');
+		}
         if ($this->postData)
         {
             if ($this->User->signUp($this->postData))
             {
+				$this->Invite->accept($email_decode, $key);
 				try
 				{
 					$this->load->library('Mail');
@@ -226,6 +243,12 @@ class Users extends App_Controller
                 $this->cookie->setFlash('There was an error signing up. Please see below for details.', 'error');
 			}
         }
+		else 
+		{
+			$this->data['email'] = $invite['email'];
+			$this->data['invite_email'] = $email;
+			$this->data['invite_key'] = $key;
+		}
         $this->load->view('users/signup', $this->data);
     }
    
