@@ -38,6 +38,11 @@ class Admin extends App_controller
 		$this->load->view('admin/memcache');
 	}
 
+	function showdata()
+	{
+		$this->load->view('admin/showdata');
+	}
+
 	function test() 
 	{
 	}
