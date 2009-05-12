@@ -5,11 +5,21 @@
 class Selenium
 {
 
+	public $admin_url;
 	public $errorText = 'An Error Was Encountered';	
 	public $missingText = '404 Page Not Found';	
 	public $noticeText = 'Notice';	
+	public $phpError = 'A PHP Error was encountered';	
+	public $url;	
 	public $warningText = 'Warning';
-	public $phpError = 'A PHP Error was encountered';
+
+	public function __construct()
+	{
+		$ci = get_instance();
+		$this->url = $ci->config->item('base_url');
+		$this->admin_url = $ci->config->item('admin_base_url');	
+		unset($ci);
+	}
 	
 	/**
 	 * ie Xpath fix
@@ -199,13 +209,17 @@ class Selenium
 	*/	
 	public function signUp($name, $password, $email)
 	{
-		$this->openPage('/signup');
+		$this->openPage('/admin/create_invite');
+		$this->write('storeValue', 'email', 'invite_email');	
+		$this->write('storeValue', 'key', 'invite_key');		
+		$this->openPage('/signup/${invite_email}/${invite_key}');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);
 		$this->write('type', 'passwordconfirm', $password);	
 		$this->write('type', 'email', $email);
 		$this->click('Sign Up');
 		$this->write('verifyTextPresent', 'Your account has been created. Please sign in.');		
+		$this->openPage('/admin/delete_invite/${invite_email}/${invite_key}');		
 	}
 	
 	/**

@@ -246,9 +246,9 @@ class Users extends App_Controller
 		else 
 		{
 			$this->data['email'] = $invite['email'];
-			$this->data['invite_email'] = $email;
-			$this->data['invite_key'] = $key;
 		}
+		$this->data['invite_email'] = $email;
+		$this->data['invite_key'] = $key;		
         $this->load->view('users/signup', $this->data);
     }
    

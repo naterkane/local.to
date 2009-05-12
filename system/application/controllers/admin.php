@@ -57,10 +57,40 @@ class Admin extends App_controller
 
 	}
 
+	function create_invite()
+	{
+		$testing = $this->testing();
+		if ($testing > 0) 
+		{
+			$this->layout = 'bare';
+			$this->load->model(array('Invite'));
+			$this->load->database();				
+			$this->data['email'] = "nomcat+" . $this->Invite->randomString(10) . '@wearenom.com';
+			$this->data['key'] = $this->Invite->randomString(9);
+			$this->Invite->create($this->data);		
+			$this->data['email'] = base64_encode($this->data['email']);
+			$this->load->view('admin/create_invite', $this->data);
+		}
+	}
+	
+	function delete_invite($email, $key)
+	{
+		$testing = $this->testing();
+		if ($testing > 0) 
+		{
+			$this->layout = 'bare';
+			$this->load->model(array('Invite'));
+			$this->load->database();
+			$data = array();				
+			$email = base64_decode($email);			
+			$this->Invite->delete($email, $key);		
+			$this->redirect('/home', 'Key has been deleted');
+		}
+	}
+
 	function test() 
 	{
 		$user = $this->user->find();
-
 		$user = $this->tt->get();
 		
 	}

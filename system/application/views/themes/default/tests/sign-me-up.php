@@ -8,8 +8,7 @@
 	$error = 'There was an error signing up. Please see below for details.';
 	$reserved = 'groups';
 	$selenium->caseTitle('Sign Me Up');
-	$selenium->signOut();	
-	$selenium->openPage('/signup');	
+	$selenium->signOut();
 	//sign up
 	$selenium->signUp($name, $password, $email);
 	$selenium->signIn($name, $password);
