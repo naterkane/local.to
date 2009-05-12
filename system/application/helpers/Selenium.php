@@ -6,6 +6,8 @@ class Selenium
 {
 
 	public $admin_url;
+	public $badRequest = 'Bad Request';
+	public $badCharacters = 'The URI you submitted has disallowed characters.';
 	public $errorText = 'An Error Was Encountered';	
 	public $missingText = '404 Page Not Found';	
 	public $noticeText = 'Notice';	
@@ -84,32 +86,21 @@ class Selenium
 		$this->write('verifyTextNotPresent', $this->missingText);
 		$this->write('verifyTextNotPresent', $this->phpError);
 		$this->write('verifyTextNotPresent', $this->errorText);
+		$this->write('verifyTextNotPresent', $this->badCharacters);	
+		$this->write('verifyTextNotPresent', $this->badRequest);				
 	}
 	
 	/**
-	 * Open page
+	 * Test that a bad characters error was thrown
 	 *
-	 * Includes calls to several methods useful to check if a page is loading properly
-	 * 
-	 * @access public	
-	 * @param string $path Relative path to open
+	 * @access public
+	 * @param string $url
+	 * @return 
 	 */
-	public function openPage($page)
+	public function badChar($url)
 	{
-		$this->write('openAndWait', $page);
-		$this->checkErrors();
-	}
-	
-	/**
-	 * Outputs the title of the test suite. There is no output if the constant ALL_SUITE is defined. 
-	 * 
-	 * @param string $title Title of suite
-	 * @access public	
-	 * @return
-	 */
-	public function suiteTitle($title)
-	{
-		echo '<tr><td><b>'.$title.'</b></td></tr>';
+		$this->write('openAndWait', $url);		
+		$this->write('verifyTextPresent', $this->badCharacters);	
 	}
 	
 	/**
@@ -146,6 +137,20 @@ class Selenium
 	{
 		$this->write('openAndWait', $path);
 		$this->write('verifyTextPresent', 'Sign In');
+	}
+
+	/**
+	 * Open page
+	 *
+	 * Includes calls to several methods useful to check if a page is loading properly
+	 * 
+	 * @access public	
+	 * @param string $path Relative path to open
+	 */
+	public function openPage($page)
+	{
+		$this->write('openAndWait', $page);
+		$this->checkErrors();
 	}
 
 	/**
@@ -220,6 +225,18 @@ class Selenium
 		$this->click('Sign Up');
 		$this->write('verifyTextPresent', 'Your account has been created. Please sign in.');		
 		$this->openPage('/admin/delete_invite/${invite_email}/${invite_key}');		
+	}
+	
+	/**
+	 * Outputs the title of the test suite. There is no output if the constant ALL_SUITE is defined. 
+	 * 
+	 * @param string $title Title of suite
+	 * @access public	
+	 * @return
+	 */
+	public function suiteTitle($title)
+	{
+		echo '<tr><td><b>'.$title.'</b></td></tr>';
 	}
 	
 	/**
