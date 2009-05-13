@@ -4,9 +4,9 @@
 */
 class Cookie {
 	
-	public $domain = '/';
-	public $expires;
-	public $name;
+	var $domain = '/';
+	var $expires;
+	var $name = 'Microblog';
 	
 	
 	/**
@@ -18,11 +18,37 @@ class Cookie {
 	 */
 	function __construct() 
 	{
-		$ci = get_instance();
-		$this->session = $ci->session;
-		$this->config = $ci->config;
-		$this->name = $this->config->item('sess_cookie_name');
-		unset($ci);
+		$this->controller =& get_instance();
+		$this->controller->load->model(array('Cookie_model'));
+		$this->Cookie_model = $this->controller->Cookie_model;
+		$this->check();
+	}
+
+	/**
+	 * Check if cookie is set, if not, set one
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function check()
+	{
+		if (!$this->exists()) 
+		{
+			$this->create();
+		}
+	}
+
+	/**
+	 * Create a new cookie
+	 *
+	 * @access public	
+	 * @return 
+	 */
+	function create()
+	{
+		$key = sha1(time() . $this->controller->randomString(10) . $this->controller->config->item('salt'));
+		setcookie($this->name, $key, $this->expires, $this->domain);
+		$this->set($this->controller->Cookie_model->prefixCookie($key), null);
 	}
 
 	/**
@@ -33,7 +59,11 @@ class Cookie {
 	 */
 	function delete() 
 	{
-		setcookie($this->name, '', time()-60000, $this->domain);
+		setcookie($this->name, '', time()-60000, $this->domain);		
+		if ($this->exists()) 
+		{
+			$this->controller->Cookie_model->delete($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
+		}
 	}
 	
 	/**
@@ -56,13 +86,19 @@ class Cookie {
 	function flashMessage()
 	{
 		$return = null;
-		$message = $this->get('microblog_message');
-		$type = $this->get('microblog_type');	
-		$this->remove('microblog_message');
-		$this->remove('microblog_type');		
-		if (($message) && ($type))
+		if ($this->exists()) 
 		{
-			$return = "<div id=\"flashMessage\" class=\"$type\">$message</div>\n";
+			$data = $this->getAllData();
+			if (!empty($data['flash_message'])) 
+			{
+				$return = "<div id=\"flashMessage\" class=\"" . $data['flash_type'] . "\">" . $data['flash_message'] . "</div>\n";
+				unset($data['flash_message']);
+			}
+			if (!empty($data['flash_type'])) 
+			{
+				unset($data['flash_type']);
+			}
+			$this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $data);
 		}
 		return $return;
 	}
@@ -76,8 +112,32 @@ class Cookie {
 	 * @return array|string|null
 	 */	
 	function get($key)
-	{	
-		return $this->session->userdata($key);
+	{		
+		$data = $this->getAllData();
+		if (isset($data[$key])) 
+		{
+			return $data[$key];
+		} 
+		else 
+		{
+			return;
+		}
+	}
+
+	/**
+	 * Get all keys and data stored in a cookie
+	 *
+	 * @access public
+	 * @return array|null
+	 */
+	function getAllData()
+	{
+		if ($this->exists()) 
+		{
+			return $this->controller->Cookie_model->find($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
+		} else {
+			return;
+		}		
 	}
 
 	/**
@@ -90,7 +150,15 @@ class Cookie {
 	 */
 	function remove($key)
 	{
-		return $this->session->unset_userdata($key);
+		if ($this->exists()) 
+		{
+			$cookie = $this->getAllData();
+			if (isset($cookie[$key])) 
+			{
+				unset($cookie[$key]);
+			}
+			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
+		}
 	}
 	
 	/**
@@ -103,7 +171,12 @@ class Cookie {
 	 */
 	function set($key, $data)
 	{
-		return $this->session->set_userdata($key, $data);
+		if ($this->exists()) 
+		{	
+			$cookie = $this->getAllData();
+			$cookie[$key] = $data;
+			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
+		}
 	}
 
 	/**
@@ -120,29 +193,12 @@ class Cookie {
 		{
 			$type = 'success';
 		}
-		$this->set('microblog_message', $message);
-		$this->set('microblog_type', $type);		
+		$data = $this->getAllData();
+		$this->set('flash_message', $message);
+		$this->set('flash_type', $type);
+		$data = $this->getAllData();
 	}
 
-	/**
-	 * Set a user data to a session
-	 *
-	 * @access public
-	 * @param array $user User data
-	 * @return 
-	 */
-	public function setUser($user = array())
-	{
-		$data = array();
-		$data['username'] = $user['username'];
-		$data['id'] = $user['id'];
-		$data['locked'] = $user['locked'];
-		$data['activated'] = $user['locked'];		
-		$data['email'] = $user['email'];		
-		$data['time_zone'] = $user['time_zone'];
-		$this->set('user', $data);
-	}
-	
 
 }
 ?>

@@ -151,7 +151,8 @@ class Users extends App_Controller
 		{
 			if ($this->User->updateProfile($this->userData['id'])) 
 			{
-				$this->cookie->setUser($this->postData);
+				$user = $this->User->get($this->userData['id']);
+				$this->cookie->set('user', $user);
 				$this->redirect('/settings', 'Your profile was updated.');
 			} 
 			else 
@@ -186,7 +187,7 @@ class Users extends App_Controller
             }
 			else 
 			{
-				$this->cookie->setUser($user);
+				$this->cookie->set('user', $user);
                 $this->redirect('/home');
 			}
         }
