@@ -82,18 +82,15 @@ class App_Controller extends Controller {
 	 *
 	 * @access public
 	 */ 
-    function getUserData($full = false) 
+    function getUserData() 
 	{
-		$this->userData = $this->cookie->get('user');
-		if ($full) 
-		{
-			$this->userData = $this->User->get($this->userData['id']);
-		} 
+		$user_id = $this->cookie->get('user');
+		$this->userData = $this->User->get($user_id);
         if (! empty($this->userData)) 
 		{
             $this->data['User'] = $this->userData;
-			$this->data['User']['following_count'] = count($this->User->getFollowing($this->userData['id']));
-			$this->data['User']['follower_count'] = count($this->User->getFollowers($this->userData['id']));
+			$this->data['User']['following_count'] = count($this->userData['following']);
+			$this->data['User']['follower_count'] = count($this->userData['followers']);
 			$this->data['User']['messages_count'] = count($this->Message->getPrivate($this->userData['id']));
 			if (isset($this->userData['time_zone'])) 
 			{

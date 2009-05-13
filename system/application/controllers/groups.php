@@ -68,13 +68,18 @@ class Groups extends App_Controller
 				$member['passwordconfirm'] = null;
 				// this isn't really needed
 				$member['realname'] = (!empty($member['realname']))? $member['realname'] : $member['username'];
-				if ($this->User->isFollowing($member['id'], $this->userData['id'])):
+				if ($this->User->isFollowing($member['id'], $this->userData['following']))
+				{
 					$member['friend_status'] = 'following';
-				elseif ($this->User->isPendingFriendRequest($member['id'], $this->userData['id'])): 
+				}
+				elseif ($this->User->isPendingFriendRequest($member['friend_requests'], $this->userData['id']))
+				{
 					$member['friend_status'] = 'pending';
-				else: 
-					$member['friend_status'] = 'follow';				
-				endif;
+				}
+				else
+				{ 
+					$member['friend_status'] = 'follow';
+				}
 				$this->data['members'][] = $member;
 			}
 			//var_dump($this->data['members']);
@@ -150,7 +155,7 @@ class Groups extends App_Controller
 			$this->Group->addMember($group_id, $this->userData['id']);
 			$message = 'I just joined !'. $group['name'] . ', <a href="/groups/' . $group["name"] . '">check it out</a>!';
 			$message_id = $this->Message->add($message, $this->userData);
-			$this->User->sendToFollowers($message_id, $this->userData['id']);
+			$this->User->sendToFollowers($message_id, $this->userData['followers']);
 			$this->redirect('/group/' . $group['name']);
 		} 
 		else 

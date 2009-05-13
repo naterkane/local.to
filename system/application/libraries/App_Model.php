@@ -11,9 +11,6 @@ class App_Model extends Model {
 	protected $memcacheHost = 'localhost';
 	protected $memcachePort = '21201';
 	protected $prefixCookie = 'session';
-	protected $prefixFollower = 'followers';
-	protected $prefixFollowing = 'following';	
-	protected $prefixFriendRequests = 'friendrequests';	
 	protected $prefixGroup = 'group';
 	protected $prefixGroupName = 'groupname';	
 	protected $prefixGroupMessages = 'groupmessages';
@@ -408,42 +405,6 @@ class App_Model extends Model {
 	{ 
 		return $this->prefixCookie . $this->prefixSeparator . $key; 
 	}
-
-	/**
-	 * Create a prefix for followers
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */
-	function prefixFollower($id)
-	{ 
-		return $this->prefixFollower . $this->prefixSeparator . $id; 
-	}
-	
-	/**
-	 * Create a prefix for followers
-	 * 
-	 * @access public
-	 * @param string $id
-	 * @return string
-	 */	
-	function prefixFollowing($id)
-	{ 
-		return $this->prefixFollowing . $this->prefixSeparator . $id; 
-	}
-
-	/**
-	 * Create a prefix for a follow request
-	 * 
-	 * @access public
-	 * @param string $id
-	 * @return string
-	 */	
-	function prefixFriendRequests($id)
-	{ 
-		return $this->prefixFriendRequests . $this->prefixSeparator . $id; 
-	}
 	
 	/**
 	 * Create a prefix for a group
@@ -700,12 +661,12 @@ class App_Model extends Model {
 	 * @access public
 	 */
 	function save($key, $data, $validate = true) 
-	{		
+	{
 		$valid = true;
 		$newData = null;
 		$this->key = $key;
 		$this->modelData = $data;
-		$this->logQuery($key, 'save');		
+		$this->logQuery($key, 'save');
 		if ($validate) 
 		{
 			$valid = $this->validate();

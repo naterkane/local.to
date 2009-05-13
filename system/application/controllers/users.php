@@ -16,7 +16,7 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$this->checkId($username);
-		if ($this->User->confirm($username, $this->userData['id'])) 
+		if ($this->User->confirm($username, $this->userData)) 
 		{
 			$this->redirect('/home', $username . ' is now following your posts.');
 		} 
@@ -62,7 +62,7 @@ class Users extends App_Controller
     {
         $this->mustBeSignedIn();
 		$user = $this->User->getByUsername($username);
-		if ($this->User->follow($user, $this->userData['id']))
+		if ($this->User->follow($user, $this->userData))
 		{
 			if ($user['locked']) 
 			{
@@ -102,7 +102,7 @@ class Users extends App_Controller
 	function friend_requests()
 	{
 		$this->mustBeSignedIn();
-		$this->data['requests'] = $this->User->getFriendRequests($this->userData['id']);
+		$this->data['requests'] = $this->User->getFriendRequests($this->userData['friend_requests']);
         $this->load->view('users/friend_requests', $this->data);		
 	}
 
@@ -129,7 +129,7 @@ class Users extends App_Controller
 		}
         $this->data['page_title'] = 'Home';
         $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
-		$this->data['following'] = $this->User->getFollowing($this->userData['id']);
+		$this->data['following'] = $this->userData['following'];
         $this->load->view('users/home', $this->data);
     }
 
@@ -142,7 +142,7 @@ class Users extends App_Controller
 	function settings()
 	{
 		$this->mustBeSignedIn();
-		$this->getUserData(true);
+		$this->getUserData();
         $this->data['page_title'] = 'Settings';
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
@@ -151,8 +151,6 @@ class Users extends App_Controller
 		{
 			if ($this->User->updateProfile($this->userData['id'])) 
 			{
-				$user = $this->User->get($this->userData['id']);
-				$this->cookie->set('user', $user);
 				$this->redirect('/settings', 'Your profile was updated.');
 			} 
 			else 
@@ -187,7 +185,7 @@ class Users extends App_Controller
             }
 			else 
 			{
-				$this->cookie->set('user', $user);
+				$this->cookie->set('user', $user['id']);
                 $this->redirect('/home');
 			}
         }
@@ -273,7 +271,7 @@ class Users extends App_Controller
     function unfollow($username = null)
     {
         $this->mustBeSignedIn();
-		if ($this->User->unfollow($username, $this->userData['id']))
+		if ($this->User->unfollow($username, $this->userData))
 		{
 			$this->redirect('/' . $username);
 		}
@@ -317,18 +315,19 @@ class Users extends App_Controller
      */
     function view($username = null)
     {	
+		$this->getUserData();
        	$user = $this->User->getByUsername($username);
         if ($user)
         {
             $this->getUserData();
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;
-            $this->data['messages'] = $this->Message->getPublic($user['id']);
-			if ($this->User->isFollowing($user['id'], $this->userData['id'])) 
+            $this->data['messages'] = $this->Message->getPublic($user['id']);			
+			if ($this->User->isFollowing($user['id'], $this->userData['following'])) 
 			{
 				$this->data['friend_status'] = 'following';
 			}
-			elseif ($this->User->isPendingFriendRequest($user['id'], $this->userData['id'])) 
+			elseif ($this->User->isPendingFriendRequest($user['friend_requests'], $this->userData['id'])) 
 			{
 				$this->data['friend_status'] = 'pending';
 			}

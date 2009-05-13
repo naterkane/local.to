@@ -22,7 +22,7 @@ class Messages extends App_Controller
 			{
 				$this->User->mode = null;
             	$this->Group->sendToMembers($message, $this->userData['id']);
-            	$this->User->sendToFollowers($message['id'], $this->userData['id']);
+            	$this->User->sendToFollowers($message['id'], $this->userData['followers']);
             	$this->redirect('/home');
 			}
 			else 
