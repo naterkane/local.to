@@ -106,24 +106,6 @@ class Message extends App_Model
 	}
 
     /**
-     * Get the messages of the people a user is following
-     *
-     * @return
-     * @param string $username
-     * @todo 
-     */
-    function getFollowed($user_id)
-    {		
-        return null;
-    }
-
-	function getForGroup($group_id)
-	{
-		$messages = $this->find($this->prefixGroupMessages($group_id));
-		return $this->getMany($messages);
-	}
-
-    /**
      * Get more than one message
      *
      * @return

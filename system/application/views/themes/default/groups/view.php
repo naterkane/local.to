@@ -26,7 +26,7 @@
 				<?php endif ?>
 				
 				<?php if ($is_owner): ?>
-				<a href="/groups/settings/<?php echo $name ?>" class="toggler">Edit <?php echo (substr($name,-1) == "s")?$name."'":$name."'s"; ?> Profile/a>
+				<a href="/groups/settings/<?php echo $name ?>" class="toggler">Edit <?php echo (substr($name,-1) == "s")?$name."'":$name."'s"; ?> Profile</a>
 				<?php endif ?>
 			</p>
 			<?php

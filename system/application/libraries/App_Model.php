@@ -13,8 +13,6 @@ class App_Model extends Model {
 	protected $prefixCookie = 'session';
 	protected $prefixGroup = 'group';
 	protected $prefixGroupName = 'groupname';	
-	protected $prefixGroupMessages = 'groupmessages';
-	protected $prefixGroupMembers = 'groupmembers';	
 	protected $prefixMessage = 'message';
 	protected $prefixPublic = 'timeline';
 	protected $prefixPublicThreaded = 'timelinethreaded';	
@@ -426,30 +424,6 @@ class App_Model extends Model {
 	function prefixGroupName($groupname)
 	{ 
 		return $this->prefixGroupName . $this->prefixSeparator . $groupname; 
-	}
-	
-	/**
-	 * Create a prefix for a group members
-	 * 
-	 * @access public
-	 * @param int $group_id
-	 * @return string
-	 */	
-	function prefixGroupMembers($group_id)
-	{ 
-		return $this->prefixGroupMembers . $this->prefixSeparator . $group_id; 
-	}
-	
-	/**
-	 * Create a prefix for a group messages
-	 * 
-	 * @access public
-	 * @param int $group_id
-	 * @return string
-	 */	
-	function prefixGroupMessages($group_id)
-	{ 
-		return $this->prefixGroupMessages . $this->prefixSeparator . $group_id; 
 	}
 	
 	/**

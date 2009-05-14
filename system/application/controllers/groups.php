@@ -54,7 +54,7 @@ class Groups extends App_Controller
 			$this->data['page_title'] = $group['name'] . ' Members';
 			$this->data['name'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
-			$members = $this->Group->getMembers($group['id']);
+			$members = $this->Group->getMembers($group['members']);
 			//var_dump($members);
 			$this->data['members'] = array();
 			foreach ($members as $member)
@@ -152,7 +152,7 @@ class Groups extends App_Controller
 		$group = $this->Group->get($group_id);
 		if ($group) 
 		{
-			$this->Group->addMember($group_id, $this->userData['id']);
+			$this->Group->addMember($group, $this->userData['id']);
 			$message = 'I just joined !'. $group['name'] . ', <a href="/groups/' . $group["name"] . '">check it out</a>!';
 			$message_id = $this->Message->add($message, $this->userData);
 			$this->User->sendToFollowers($message_id, $this->userData['followers']);
@@ -176,7 +176,7 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);
 		if ($group) {
-			$this->Group->removeMember($group_id, $this->userData['id']);
+			$this->Group->removeMember($group, $this->userData['id']);
 			$this->redirect('/group/' . $group['name']);
 		} else {
 			show_404();
@@ -201,9 +201,9 @@ class Groups extends App_Controller
 			$this->data = $group;
 			$this->data['page_title'] = $group['name'];
 			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
-			$this->data['member_count'] = $this->Group->getMemberCount($group['id']);
-			$this->data['messages'] = $this->Message->getForGroup($group['id']);
-			$this->data['imAMember'] = $this->Group->isMember($group['id'], $this->userData['id']);
+			$this->data['member_count'] = count($group['members']);			
+			$this->data['messages'] = $this->Message->getMany($group['messages']);
+			$this->data['imAMember'] = $this->Group->isMember($group['members'], $this->userData['id']);
 			$this->data['User'] = $user;
 			if ($this->data['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);

@@ -25,13 +25,13 @@ class Group extends App_Model
 		$data['id'] = $this->makeId($this->groupId);
 		$data['owner_id'] = $owner_id;
 		$data['public'] = 1;
+		$data['members'] = array($owner_id);
+		$data['messages'] = array();
 		$this->mode = 'add';
 		$this->startTransaction();
 		$this->save($this->prefixGroup($data['id']), $data);
 		$this->mode = null;
 		$this->save($this->prefixGroupName($data['name']), $data['id'], false);
-		$this->addMember($data['id'], $owner_id);
-		$this->push($this->prefixGroupMessages($data['id']), null);
 		return $this->endTransaction();
 	}
 	
@@ -43,9 +43,10 @@ class Group extends App_Model
 	 * @param string $member Member to add
 	 * @return boolean
 	 */
-	function addMember($group_id, $member_id = null)
+	function addMember($group, $member_id = null)
 	{
-		return $this->push($this->prefixGroupMembers($group_id), $member_id);
+		array_unshift($group['members'], $member_id);
+		return $this->save($this->prefixGroup($group['id']), $group);
 	}
 	
 	/**
@@ -108,40 +109,14 @@ class Group extends App_Model
 	 * @param int $group_id Name of group
 	 * @return array Members
 	 */
-	function getMembers($group_id)
+	function getMembers($member_ids)
 	{
-		$member_ids = $this->find($this->prefixGroupMembers($group_id));		
-		$members = null;
-		if ($member_ids) 
-		{
-			foreach ($member_ids as $member_id) {
-				$members[] = $this->User->get($member_id);
-			}
+		$members = array();
+		foreach ($member_ids as $member_id) {
+			$members[] = $this->User->get($member_id);
 		}
 		return $members;
 	}
-	
-	/**
-	 * Get Count of Members
-	 *
-	 * @access public
-	 * @param int $group_id
-	 * @return int
-	 */
-	function getMemberCount($group_id)
-	{
-		$member_ids = $this->find($this->prefixGroupMembers($group_id));
-		if ($member_ids) 
-		{
-			return count($member_ids);
-		} 
-		else 
-		{
-			return null;
-		}
-		return $count;
-	}
-	
 	
 	/**
 	 * Get Owner
@@ -165,29 +140,18 @@ class Group extends App_Model
 	 * @param array $members[optional] will use this array instead if supplied
 	 * @return boolean
 	 */
-	function isMember($id, $user_id, $members = array())
-	{	
-		if (empty($members)) 
-		{
-			$members = $this->getMembers($id);
-		}
-		if (is_array($members)) 
-		{
-			foreach ($members as $member) {
-				if (!empty($member['id'])) 
+	function isMember($members, $user_id)
+	{
+		foreach ($members as $member_id) {
+			if (!empty($member_id)) 
+			{
+				if ($member_id == $user_id) 
 				{
-					if ($member['id'] == $user_id) 
-					{
-						return true;
-					}
+					return true;
 				}
 			}
-			return false;
-		} 
-		else 
-		{
-			return false;
 		}
+		return false;
 	}
 	
 	/**
@@ -262,37 +226,23 @@ class Group extends App_Model
 	 * @param string $member Member to add
 	 * @return boolean
 	 */
-	function removeMember($group_id, $user_id)
+	function removeMember($group, $user_id)
 	{
 		if (!$this->isOwner($group_id, $user_id)) 
 		{
-			$group = $this->get($group_id);
 			$new_lineup = array();
-			$members = $this->find($this->prefixGroupMembers($group_id));
-			foreach ($members as $previous_member) 
+			foreach ($group['members'] as $previous_member) 
 			{
 				if ($previous_member != $user_id) 
 				{
 					$new_lineup[] = $previous_member;
 				}
 			}
-			return $this->save($this->prefixGroupMembers($group_id), $new_lineup);
+			$group['members'] = $new_lineup;
+			return $this->save($this->prefixGroup($group['id']), $group);
 		} else {
 			return false;
 		}		
-	}
-
-	/**
-	 * Send message to group message list
-	 *
-	 * @access public
-	 * @param int $message_id
-	 * @param int $group_id
-	 * @return boolean
-	 */
-	function sendTo($group_id, $message_id)
-	{
-		return $this->push($this->prefixGroupMessages($group_id), $message_id);
 	}
 	
 	/**
@@ -316,17 +266,18 @@ class Group extends App_Model
 			foreach ($groups as $groupname) 
 			{
 				$group = $this->getByName($groupname);
-				$this->sendTo($group['id'], $messageData['id']);
+				array_unshift($group['messages'], $messageData['id']);				
+				$this->save($this->prefixGroup($group['id']), $group);				
 				if ($group) 
 				{
-					$members = $this->getMembers($group['id']);
-					foreach ($members as $member) {
-						if (!in_array($member['id'], $sent)) 
+					foreach ($group['members'] as $member_id) {
+						if (!in_array($member_id, $sent)) 
 						{
+							$member = $this->User->get($member_id);
 							array_unshift($member['private'], $messageData['id']);
 							array_unshift($member['public'], $messageData['id']);
-							$this->save($this->prefixUser($member['id']), $member);							
-							$sent[] = $member['id'];
+							$this->User->save($this->prefixUser($member_id), $member);
+							$sent[] = $member_id;
 						}
 					}
 				}
