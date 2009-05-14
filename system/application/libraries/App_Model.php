@@ -22,9 +22,7 @@ class App_Model extends Model {
 	protected $prefixSeparator = ':';	
 	protected $prefixUser = 'user';
 	protected $prefixUsername = 'username';
-	protected $prefixUserEmail = 'useremail';	
-	protected $prefixUserPublic = 'public';
-	protected $prefixUserPrivate = 'private';
+	protected $prefixUserEmail = 'useremail';
 	protected $groupId = 'groupId';	
 	protected $messageId = 'messageId';		
 	protected $queryCount = 0;
@@ -535,31 +533,6 @@ class App_Model extends Model {
 	function prefixUsername($username)
 	{ 
 		return $this->prefixUsername . $this->prefixSeparator . $username; 
-	}
-	
-
-	/**
-	 * Create a prefix for user messages
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */
-	function prefixUserPrivate($username)
-	{ 
-		return $this->prefixUserPrivate . $this->prefixSeparator . $username; 
-	}
-
-	/**
-	 * Create a prefix for user messages
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */
-	function prefixUserPublic($username)
-	{ 
-		return $this->prefixUserPublic . $this->prefixSeparator . $username; 
 	}
 
 	/**

@@ -33,7 +33,7 @@
 	$selenium->write('type', 'message', $message);
 	$selenium->click('Update');
 	$selenium->openPage('/public_timeline');	
-	$selenium->write('verifyValue', 'testing_count', $count + 8);
+	$selenium->write('verifyValue', 'testing_count', $count + 6);
 	$selenium->write('verifyTextNotPresent', $message_long);
 	$selenium->openPage('/' . $name);	
 	$selenium->write('verifyTextPresent', $message);
@@ -44,13 +44,13 @@
 	$selenium->write('assertChecked', 'locked');		
 	$selenium->write('click', 'locked');	
 	$selenium->click('Update');
-	$selenium->write('verifyValue', 'testing_count', $count + 8);	
+	$selenium->write('verifyValue', 'testing_count', $count + 6);	
 	$selenium->write('assertNotChecked', 'locked');
 	$selenium->write('verifyTextPresent', 'Your profile was updated.');
 	$selenium->openPage('/home');	
 	$selenium->write('type', 'message', $message2);
 	$selenium->click('Update');
-	$selenium->write('verifyValue', 'testing_count', $count + 11);	
+	$selenium->write('verifyValue', 'testing_count', $count + 9);	
 	$selenium->openPage('/public_timeline');	
 	$selenium->write('verifyTextPresent', $message2);
 	$selenium->openPage('/' . $name);	

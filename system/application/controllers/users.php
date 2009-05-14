@@ -4,7 +4,33 @@
  */
 class Users extends App_Controller
 {
-   
+  
+	/**
+	 * Update a password
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function change_password()
+	{
+		$this->mustBeSignedIn();
+        $this->data['page_title'] = 'Update Password';
+		if ($this->postData) 
+		{
+			if ($this->User->changePassword($this->userData['id'], $this->userData['password']))
+			{
+				$this->cookie->set('user', $this->User->modelData);
+				$this->redirect('/home', 'Your password was updated.');
+			} 
+			else 
+			{
+				$this->setErrors(array('User'));
+				$this->cookie->setFlash('There was an error updating your password. See below for more details.', 'error');
+			}
+		}
+		$this->load->view('users/change_password', $this->data);
+	}
+ 
 	/**
 	 * Confirm a friend request
 	 *
@@ -25,7 +51,6 @@ class Users extends App_Controller
 			$this->redirect('/home', 'There was problem adding this follower', 'error');
 		}
 	}
-	
 
 	/**
 	 * Delete an account
@@ -128,7 +153,7 @@ class Users extends App_Controller
 			}
 		}
         $this->data['page_title'] = 'Home';
-        $this->data['messages'] = $this->Message->getPrivate($this->userData['id']);
+        $this->data['messages'] = $this->Message->getMany($this->userData['private']);
 		$this->data['following'] = $this->userData['following'];
         $this->load->view('users/home', $this->data);
     }
@@ -281,32 +306,6 @@ class Users extends App_Controller
 		}
     } 
 
-	/**
-	 * Update a password
-	 *
-	 * @access public
-	 * @return 
-	 */
-	function change_password()
-	{
-		$this->mustBeSignedIn();
-        $this->data['page_title'] = 'Update Password';
-		if ($this->postData) 
-		{
-			if ($this->User->changePassword($this->userData['id'], $this->userData['password']))
-			{
-				$this->cookie->set('user', $this->User->modelData);
-				$this->redirect('/home', 'Your password was updated.');
-			} 
-			else 
-			{
-				$this->setErrors(array('User'));
-				$this->cookie->setFlash('There was an error updating your password. See below for more details.', 'error');
-			}
-		}
-		$this->load->view('users/change_password', $this->data);
-	}
-
     /**
      * View a users public page
      *
@@ -322,7 +321,7 @@ class Users extends App_Controller
             $this->getUserData();
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;
-            $this->data['messages'] = $this->Message->getPublic($user['id']);			
+            $this->data['messages'] = $this->Message->getMany($user['public']);			
 			if ($this->User->isFollowing($user['id'], $this->userData['following'])) 
 			{
 				$this->data['friend_status'] = 'following';

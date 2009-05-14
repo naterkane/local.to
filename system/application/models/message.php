@@ -35,7 +35,6 @@ class Message extends App_Model
 			$data['reply_to_username'] = $message['reply_to_username'];	
 			$this->parent = $this->getOne($message['reply_to']);
 		}
-		$user_id = $user['id'];
 		$time = time();
 		$this->loadModels(array('Group'));
 		$data['id'] = $this->makeId($this->messageId);	
@@ -48,8 +47,9 @@ class Message extends App_Model
 		$this->startTransaction();
 		$this->save($this->prefixMessage($data['id']), $data);
 		$this->mode = null;
-		$this->addToUserPublic($user_id, $data['id']);
-		$this->addToUserPrivate($user_id, $data['id']);
+		array_unshift($user['private'], $data['id']);
+		array_unshift($user['public'], $data['id']);
+		$this->save($this->prefixUser($user['id']), $user);
 		if ($data['reply_to']) 
 		{
 			$this->addToReplies($data['reply_to'], $data['id']);
@@ -90,32 +90,6 @@ class Message extends App_Model
 		}
 		$this->push($this->prefixPublic(), $message['id']);
 		$this->trim($this->prefixPublic(), 0, 1000);
-	}
-
-	/**
-	 * Add to message to user's private facing list
-	 *
-	 * @access public
-	 * @param int $user_id	
-	 * @param int $message_id
-	 * @return 
-	 */
-	function addToUserPrivate($user_id, $message_id)
-	{
-		return $this->push($this->prefixUserPrivate($user_id), $message_id);
-	}
-
-	/**
-	 * Add to message to user's public facing list
-	 *
-	 * @access public
-	 * @param int $user_id	
-	 * @param int $message_id
-	 * @return 
-	 */
-	function addToUserPublic($user_id, $message_id)
-	{
-		return $this->push($this->prefixUserPublic($user_id), $message_id);
 	}
 	
 	/**
@@ -188,32 +162,6 @@ class Message extends App_Model
 		}
 		return $message;
 	}
-
-    /**
-     * Get Private messages 
-	 *
-     * @access public
-     * @param int $user_id
-     * @return array Messages
-     */
-    function getPrivate($user_id)
-    {
-        $messages = $this->find($this->prefixUserPrivate($user_id));
-        return $this->getMany($messages);
-    }
-
-    /**
-     * Get Messages for user
-     *
-     * @access public
-     * @param int $user_id
-     * @return array Messages
-     */
-    function getPublic($user_id)
-    {
-        $messages = $this->find($this->prefixUserPublic($user_id));
-        return $this->getMany($messages);
-    }
    
     /**
      * Get replies to a message

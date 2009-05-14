@@ -39,7 +39,6 @@ class Messages extends App_Controller
 	function delete($id)
 	{
 		//remember to decrease thread count if message is reply to
-		return false;
 	}
 
 	/**

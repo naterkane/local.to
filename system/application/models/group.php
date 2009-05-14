@@ -323,8 +323,9 @@ class Group extends App_Model
 					foreach ($members as $member) {
 						if (!in_array($member['id'], $sent)) 
 						{
-							$this->push($this->prefixUserPublic($member['id']), $messageData['id']);
-							$this->push($this->prefixUserPrivate($member['id']), $messageData['id']);
+							array_unshift($member['private'], $messageData['id']);
+							array_unshift($member['public'], $messageData['id']);
+							$this->save($this->prefixUser($member['id']), $member);							
 							$sent[] = $member['id'];
 						}
 					}

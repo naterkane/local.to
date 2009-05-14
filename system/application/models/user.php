@@ -117,8 +117,6 @@ class User extends App_Model
 			$this->delete($this->prefixUser($data['id']));
 			$this->delete($this->prefixUsername($data['username']));
 			$this->delete($this->prefixUserEmail($data['email']));
-			$this->delete($this->prefixUserPrivate($data['id']));
-			$this->delete($this->prefixUserPublic($data['id']));
 			return true;
 		} 
 		else 
@@ -339,20 +337,19 @@ class User extends App_Model
     /**
      * Send messages to followes
      *
-     * @todo Might need to check to see if any data got returned to followers, that return should be meaningful
-     * @param int $message_id
+     * @param int $message_id     
+	 * @param array $followers An array of follower ids
      * @return boolean
      */
     function sendToFollowers($message_id, $followers)
     {
 		$this->startTransaction();	
-		if ($followers) 
-		{
-			foreach ($followers as $follower)
-	        {
-	            $this->push($this->prefixUserPrivate($follower), $message_id);
-	        }
-		}
+		foreach ($followers as $follower_id)
+        {
+			$follower = $this->get($follower_id);			
+			array_unshift($follower['private'], $message_id);
+            $this->save($this->prefixUser($follower['id']), $follower);
+        }
         return $this->endTransaction();
     }
 
@@ -404,7 +401,9 @@ class User extends App_Model
         $data['time_zone'] = $this->defaultTimeZone;
 		$data['followers'] = array();
 		$data['following'] = array();
-		$data['friend_requests'] = array();		
+		$data['friend_requests'] = array();
+		$data['public'] = array();
+		$data['private'] = array();		
 		$this->startTransaction();
 		$this->save($this->prefixUser($data['id']), $data);
 		$this->join('UserEmail', $data['email'], $data);

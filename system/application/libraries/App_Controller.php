@@ -91,7 +91,7 @@ class App_Controller extends Controller {
             $this->data['User'] = $this->userData;
 			$this->data['User']['following_count'] = count($this->userData['following']);
 			$this->data['User']['follower_count'] = count($this->userData['followers']);
-			$this->data['User']['messages_count'] = count($this->Message->getPrivate($this->userData['id']));
+			$this->data['User']['messages_count'] = count($this->userData['private']);
 			if (isset($this->userData['time_zone'])) 
 			{
 				date_default_timezone_set($this->userData['time_zone']);
