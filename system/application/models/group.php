@@ -5,6 +5,8 @@
 class Group extends App_Model
 {
 
+	protected $idGenerator = 'groupId';
+
 	/**
 	 * Get all groups
 	 */
@@ -22,7 +24,7 @@ class Group extends App_Model
 	 */
 	function add($data = array(), $owner_id)
 	{
-		$data['id'] = $this->makeId($this->groupId);
+		$data['id'] = $this->makeId($this->idGenerator);
 		$data['owner_id'] = $owner_id;
 		$data['public'] = 1;
 		$data['members'] = array($owner_id);

@@ -7,7 +7,13 @@
 */
 class App_Model extends Model {
 
+	protected static $queryCount = 0;
+	protected static $queryErrors = 0;
+	protected static $queryLog = array();
+	protected static $rollbackLog = array();
+	static protected $transactional = false;		
 	protected $key;
+	protected $idGenerator;
 	protected $memcacheHost = 'localhost';
 	protected $memcachePort = '21201';
 	protected $prefixCookie = 'session';
@@ -20,12 +26,7 @@ class App_Model extends Model {
 	protected $prefixSeparator = ':';	
 	protected $prefixUser = 'user';
 	protected $prefixUsername = 'username';
-	protected $prefixUserEmail = 'useremail';
-	protected $groupId = 'groupId';	
-	protected $messageId = 'messageId';		
-	protected $queryCount = 0;
-	protected $queryErrors = 0;
-	protected $queryLog = array();
+	protected $prefixUserEmail = 'useremail';	
 	/**
 	 * reservedNames should be compared to the defined routes to make sure that it includes any names that may be used by the system in a URI.
 	 * @var
@@ -58,10 +59,7 @@ class App_Model extends Model {
 									'about',
 									'user',
 									'group');
-	protected $rollbackLog = array();	
 	protected $table;	
-	protected $transactional = false;		
-	protected $userId = 'userId';
 	public $action;
 	public $id;	
 	public $locked = false;	
@@ -99,10 +97,10 @@ class App_Model extends Model {
 	 */	
 	protected function logQuery($key)
 	{
-		if ($this->transactional) 
+		if (self::$transactional) 
 		{
-			$this->queryLog[$this->queryCount] = array();
-			$this->queryLog[$this->queryCount]['key'] = $key;
+			self::$queryLog[self::$queryCount] = array();
+			self::$queryLog[self::$queryCount]['key'] = $key;
 			if (!is_null($key)) 
 			{
 				$data = $this->find($key);
@@ -111,7 +109,7 @@ class App_Model extends Model {
 			{
 				$data = null;
 			}
-			$this->queryLog[$this->queryCount]['rollback'] = $data;
+			self::$queryLog[self::$queryCount]['rollback'] = $data;
 		}
 	}
 
@@ -125,15 +123,15 @@ class App_Model extends Model {
 	 */	
 	protected function logQueryResult($result, $data)
 	{
-		if ($this->transactional)
+		if (self::$transactional)
 		{
-			$this->queryLog[$this->queryCount]['result'] = $result;
-			$this->queryLog[$this->queryCount]['data_written'] = $data;			
+			self::$queryLog[self::$queryCount]['result'] = $result;
+			self::$queryLog[self::$queryCount]['data_written'] = $data;			
 			if (!$result) 
 			{
-				$this->queryErrors++;
+				self::$queryErrors++;
 			}
-			$this->queryCount++;
+			self::$queryCount++;
 		}
 	}
 
@@ -162,14 +160,14 @@ class App_Model extends Model {
 	 */
 	function endTransaction()
 	{
-		if ((!$this->transactional) || ($this->queryCount === 0))
+		if ((!self::$transactional) || (self::$queryCount === 0))
 		{
 			return true;
 		}
-		$this->transactional = false;	
-		if ($this->queryErrors > 0) 
+		self::$transactional = false;	
+		if (self::$queryErrors > 0) 
 		{
-			$queries = array_reverse($this->queryLog);
+			$queries = array_reverse(self::$queryLog);
 			$i = 0;
 			foreach ($queries as $query) {								
 				if ($query['result']) 
@@ -184,10 +182,10 @@ class App_Model extends Model {
 						$type = 'delete';
 						$result = $this->delete($query['key']);
 					}
-					$this->rollbackLog[$i]['key'] = $query['key'];
-					$this->rollbackLog[$i]['type'] = $type;
-					$this->rollbackLog[$i]['data'] = $query['rollback'];
-					$this->rollbackLog[$i]['result'] = $result;
+					self::$rollbackLog[$i]['key'] = $query['key'];
+					self::$rollbackLog[$i]['type'] = $type;
+					self::$rollbackLog[$i]['data'] = $query['rollback'];
+					self::$rollbackLog[$i]['result'] = $result;
 					$i++;
 				}
 			}
@@ -596,7 +594,7 @@ class App_Model extends Model {
 	
 	function rollbackLog()
 	{
-		return $this->rollbackLog;
+		return self::$rollbackLog;
 	}
 	
 	/**
@@ -654,11 +652,11 @@ class App_Model extends Model {
 	 */
 	function startTransaction()
 	{
-		$this->transactional = true;
-		$this->queryLog = array();
-		$this->queryCount = 0;
-		$this->queryErrors = 0;		
-		$this->rollbackLog = array();			
+		self::$transactional = true;
+		self::$queryLog = array();
+		self::$queryCount = 0;
+		self::$queryErrors = 0;
+		self::$rollbackLog = array();			
 	}
 
 	/**
@@ -666,7 +664,7 @@ class App_Model extends Model {
 	 */
 	function queryLog()
 	{
-		return $this->queryLog;
+		return self::$queryLog;
 	}
 	
 	/**
@@ -1040,6 +1038,5 @@ class App_Model extends Model {
 				}
 			}
     }
-	
 }
 ?>

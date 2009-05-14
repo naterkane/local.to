@@ -5,6 +5,7 @@
 class Message extends App_Model
 {
 
+	protected $idGenerator = 'messageId';
 	private $parent;
 
     /**
@@ -37,7 +38,7 @@ class Message extends App_Model
 		}
 		$time = time();
 		$this->loadModels(array('Group'));
-		$data['id'] = $this->makeId($this->messageId);	
+		$data['id'] = $this->makeId($this->idGenerator);	
 		$data['time'] = $time;
 		$data['user_id'] = $user['id'];
 		$data['reply_count'] = 0;		
@@ -49,7 +50,7 @@ class Message extends App_Model
 		$this->mode = null;
 		array_unshift($user['private'], $data['id']);
 		array_unshift($user['public'], $data['id']);
-		$this->save($this->prefixUser($user['id']), $user);
+		$this->User->save($this->prefixUser($user['id']), $user);
 		if ($data['reply_to']) 
 		{
 			$this->addToReplies($data['reply_to'], $data['id']);
