@@ -7,7 +7,7 @@
 		endif;
 		?> Timeline</h2>
 	<?php echo $form->input('user_id', array('value'=>$User['id'], 'type'=>'hidden'));
-	if ($User['username'] != $username) {
+	if (!empty($User) && $User['username'] != $username) {
 		?><div class="box"><div class="block"><?php
 		if ($friend_status == 'follow') 
 		{
@@ -23,10 +23,8 @@
 		}
 		?></div></div><?php
 	}
-	echo $this->load->view('messages/viewlist'); 
 	?>
-	<div class="box">
-		<?php $this->load->view('static/toggle_threading'); ?>
-	</div>
+	<?php $this->load->view('messages/viewlist'); ?>
+	<?php $this->load->view('static/toggle_threading'); ?>
 	<div class="clear"></div>
 </div>

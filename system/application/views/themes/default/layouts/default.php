@@ -38,10 +38,10 @@
 		</div>
 		<div class="clear"></div>
 		<div class="grid_4">
+			
+			<?php if (!empty($User)): ?>
 			<div class="box">
 				<?php $this->load->view('users/sidebarprofile'); ?>
-			
-			
 				<ul class="menu">
 					<li>
 						<a href="/home">Home</a>
@@ -57,6 +57,9 @@
 					</li>
 				</ul>
 			</div>
+			<?php else: ?>
+			<?php $this->load->view('users/signin'); ?>
+			<?php endif; ?>
 		</div>
 		<div class="grid_12">
 		{yield}

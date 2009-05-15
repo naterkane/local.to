@@ -10,18 +10,23 @@ if ((is_array($message)) AND (!empty($message['message_html'])))
 	</a>
 	<p class="author"><?php echo $html->link(!empty($message['realname'])?$message['realname']:$message['username'], '/' . $message['username']); ?> </p>
 	<p class="message_text"><?php echo $message['message_html'] ?></p>
-	<p class="meta">		
+	<p class="meta">
+		<?php echo $html->link($time_format->timeAgo($message['time']) . ' ago', '/' . $message['username'] . '/status/' . $message['id'], array('id'=>'messagelink' . $message['id']));?>		
 		<?php if ($message['reply_to'] && empty($remove_reply_context)): ?>
-		<span class="replyto">In reply to <a href="<?php echo '/' . $message['reply_to_username'] . '/status/' . $message['reply_to'] ?>">this message</a></span>
+		<span class="replyto">in reply to <a href="<?php 
+					echo '/' . $message['reply_to_username'] . '/status/' . $message['reply_to']; 
+					?>"><?php 
+					echo (substr($message['reply_to_username'],-1) == "s")?$message['reply_to_username']."'":$message['reply_to_username']."'s";
+					?> message</a></span> 
 		<?php endif; ?>
-		<?php echo $html->link($time_format->timeAgo($message['time']) . ' ago', '/' . $message['username'] . '/status/' . $message['id'], array('id'=>'messagelink' . $message['id']));?>
+		
 		<?php if (empty($message['reply_to'])): ?>
 			<?php if ($message['reply_count'] > 0): ?>
-				<span id="reply_count<?php echo $message['id'] ?>">
-					<a href="<?php echo '/' . $message['username'] . '/status/' . $message['id'] ?>">
+				&mdash; <span id="reply_count<?php echo $message['id'] ?>">
+					(<a href="<?php echo '/' . $message['username'] . '/status/' . $message['id'] ?>">
 					<?php echo $message['reply_count']; ?>
 					<?php echo ($message['reply_count'] > 1)?"replies":"reply";?>
-					</a>
+					</a>)
 				</span>
 			<?php endif ?>
 		<?php endif ?>
