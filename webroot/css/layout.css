@@ -353,7 +353,9 @@ input.search.button {
 	width:28%;
 	margin-left:2%;
 }
-
+input.button {
+	width:28%;
+}
 /* messages
 ----------------------------------------------- */
 .messages {

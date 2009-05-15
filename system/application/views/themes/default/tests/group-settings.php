@@ -1,8 +1,8 @@
 <?php
 	$name = $selenium->randomString(10);
 	$password = $selenium->randomString(10);	
-	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
-	$email_new = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';		
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
+	$email_new = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$group_name = $selenium->randomString(10);
 	$group_name_new = $selenium->randomString(10);
 	$desc = $selenium->randomString(10);

@@ -18,6 +18,8 @@ class Mail
 		$ci->config->item('username');
 		$this->mail->Username = $ci->config->item('username');
 		$this->mail->Password = $ci->config->item('password');
+		$this->mail->AddReplyTo = $ci->config->item('replyto_email');
+		//$this->mail->Header = $this->mail->HeaderLine();
 		$this->mail->Host = $ci->config->item('host');
 		$this->mail->Port = $ci->config->item('port');
 		$this->from_email = $ci->config->item('from_email');

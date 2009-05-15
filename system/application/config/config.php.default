@@ -124,7 +124,7 @@ $config['subclass_prefix'] = 'App_';
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
 */
-$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
+$config['permitted_uri_chars'] = 'a-z 0-9~%.:_=+-';
 
 
 /*
@@ -344,12 +344,12 @@ $config['layout'] = 'default';
 $config['debug'] = 1;	
 
 //mail settings
-$config['host'] =  '';
-$config['port'] = '';
-$config['username'] = '';
-$config['password'] = '';
-$config['from_email'] = '';
-$config['from_name'] = '';
+$config['host'] =  'smtp.gmail.com';
+$config['port'] = '465';
+$config['username'] = 'nomcat@wearenom.com';
+$config['password'] = 'nomcat';
+$config['from_email'] = 'nomcat@wearenom.com';
+$config['from_name'] = 'NomCat Admin';
 
 
 /* End of file config.php */

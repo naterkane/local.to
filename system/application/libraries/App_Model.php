@@ -14,7 +14,7 @@ class App_Model extends Model {
 	static protected $transactional = false;		
 	protected $key;
 	protected $idGenerator;
-	protected $memcacheHost = 'localhost';
+	protected $memcacheHost = '67.23.9.219';
 	protected $memcachePort = '21201';
 	protected $prefixCookie = 'session';
 	protected $prefixGroup = 'group';
@@ -83,7 +83,7 @@ class App_Model extends Model {
 		$port = $ci->config->item('tt_host_port');
 		$this->tt->connect($host, $port);
 		$this->mem = new Memcache;
-		$this->mem->connect($host, $port) or die ("Could not connect to memcached through tc");		
+		$this->mem->addServer($host, $port,true,1000,10000) or die ("Could not connect to memcached through tc");		
 		unset($ci);
 	}
 

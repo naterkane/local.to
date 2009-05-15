@@ -1,10 +1,10 @@
 <?php
 	$name = $selenium->randomString(10);
 	$password = $selenium->randomString(10);	
-	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';
 	$name2 = $selenium->randomString(10);
 	$password2 = $selenium->randomString(10);	
-	$email2 = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$email2 = "nomcat+".$selenium->randomString(10) . '@wearenom.com';
 	$group = $selenium->randomString(10);
 	$group_long = $selenium->randomString(16);		
 	$group_message = "This is a !$group test.";

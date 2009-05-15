@@ -4,7 +4,7 @@
 	$message = $selenium->randomString(10);
 	$message2 = $selenium->randomString(10);	
 	$message_long = $selenium->randomString(141);	
-	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';		
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$count = $this->testingData['count'];		
 	$selenium->caseTitle('Add Message');	
 	$selenium->signOut();	

@@ -395,8 +395,9 @@ class User extends App_Model
         $now = time();
         $this->mode = 'signup';
 		$data['id'] = $this->makeId($this->idGenerator);
-        $data['locked'] = 1;
+        $data['locked'] = 0;
         $data['activated'] = 1;
+		$data['threading'] = 0;
         $data['created'] = $now;
         $data['modified'] = $now;
         $data['time_zone'] = $this->defaultTimeZone;
@@ -411,6 +412,26 @@ class User extends App_Model
 		$this->join('Username', $data['username'], $data);	
 		return $this->endTransaction();
     }
+
+	/**
+	 * Update threding preference
+	 * 
+	 * @return 
+	 * @param integer $user_id
+	 * @param string $setting
+	 */
+	function updateThreading($user_id,$setting)
+	{
+		
+		$data['threading'] = $setting;
+		$data['id'] = $user_id;
+		$data['modified'] = time();
+		$data = $this->updateData($this->userData, $data);
+		//var_dump($data);
+		$this->startTransaction();
+		$this->save($this->prefixUser($data['id']), $data);
+		return $this->endTransaction();
+	}
 
 	/**
 	 * Update profile

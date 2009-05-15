@@ -7,7 +7,7 @@
 	$message3 = $blank . $selenium->randomString(10);
 	$message4 = $blank . $selenium->randomString(10);		
 	$message_long = $selenium->randomString(141);	
-	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';		
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$selenium->caseTitle('Add Message');
 	$selenium->signOut();	
 	$selenium->signUp($name, $password, $email);

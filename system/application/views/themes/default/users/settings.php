@@ -1,10 +1,9 @@
 <div class="box">
 	<h2>Settings</h2>
-	<h3><?php echo $User['username'] ?>'s settings</h3>
 	<div class="block">
 		<form class="grid_9 alpha" action="/settings" method="post" accept-charset="utf-8">
 			<fieldset>
-				<legend>Account Information</legend>
+				<legend>Edit Your Account Information</legend>
 				<p>
 					<label for="username">Real Name</label>
 					<?php echo $form->input('realname') ?>
@@ -45,7 +44,12 @@
 					<?php echo $form->checkbox('locked'); ?>
 				</p>
 				<p>
-					<input type="submit" value="Update"/>
+					<label for="locked">Enable Threading</label>	
+					<?php echo $form->checkbox('threading'); ?>
+				</p>
+				<p>
+					<input type="submit" value="Update" class="button" />
+					<a href="/home" class="toggler">Cancel</a>
 				</p>
 			</fieldset>
 		</form>

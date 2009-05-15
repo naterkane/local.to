@@ -18,6 +18,7 @@ class Message extends App_Model
      */
     function add($message = array(), $user = array())
     {
+		//var_dump($user['private']);
 		if ((empty($message)) || (empty($user)))
 		{
 			return false;
@@ -27,27 +28,41 @@ class Message extends App_Model
 		{
 			$this->mode = 'post';
 			$data['reply_to'] = null;
-			$data['reply_to_username'] = null;			
+			$data['reply_to_username'] = null;		
 		}
 		else 
 		{
 			$this->mode = 'reply';
-			$data['reply_to'] = $message['reply_to'];
-			$data['reply_to_username'] = $message['reply_to_username'];	
 			$this->parent = $this->getOne($message['reply_to']);
+			if (!empty($this->parent['reply_to']))
+			{
+				$this->parent = $this->getOne($this->parent['reply_to']);
+				$data['reply_to'] = $this->parent['reply_to'];
+				//$data['reply_to_username'] = $this->parent['reply_to_username'];
+			}
+			else
+			{
+				$data['reply_to'] = $message['reply_to'];
+				
+			}
+			$data['reply_to_username'] = $message['reply_to_username'];	
+			
 		}
 		$time = time();
 		$this->loadModels(array('Group'));
 		$data['id'] = $this->makeId($this->idGenerator);	
 		$data['time'] = $time;
 		$data['user_id'] = $user['id'];
-		$data['reply_count'] = 0;		
+		
+		$data['replies'] = array();	
+		
 		$data['message'] = str_replace("\n", " ", $message['message']);	
 		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
 		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
 		$this->startTransaction();
 		$this->save($this->prefixMessage($data['id']), $data);
 		$this->mode = null;
+		//var_dump($user['private']);
 		array_unshift($user['private'], $data['id']);
 		array_unshift($user['public'], $data['id']);
 		$this->User->save($this->prefixUser($user['id']), $user);
@@ -115,12 +130,25 @@ class Message extends App_Model
     function getMany($messages = array())
     {
         $return = array();
+		$threading = false;
+		if ($User && $User['threaded'] == 1)
+		{
+			$threading = true;
+		}
 		if (($messages) AND (is_array($messages))) {
 			foreach ($messages as $id)
 	        {
 				if ($id) 
 				{
 					$return[] = $this->getOne($id);
+					if ($threading && !empty($id[reply_to]))
+					{
+						foreach($this->getMany($this->prefixReplies($id[reply_to])) as $replyid)
+						{
+							$return[]['replies'][] = $this->getOne($replyid); 
+						}
+						
+					}
 				}
 	        }
 		}

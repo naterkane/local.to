@@ -199,6 +199,27 @@ class Cookie {
 		$data = $this->getAllData();
 	}
 
+	/**
+	 * Set a user data to a session
+	 *
+	 * @access public
+	 * @param array $user User data
+	 * @return 
+	 * @depreciated
+	 */
+	public function setUser($user = array())
+	{
+		$data = array();
+		$data['username'] = $user['username'];
+		$data['id'] = $user['id'];
+		$data['locked'] = $user['locked'];
+		$data['activated'] = $user['locked'];	
+		$data['threading'] = $user['threading'];	
+		$data['email'] = $user['email'];		
+		$data['time_zone'] = $user['time_zone'];
+		$this->set('user', $data);
+	}
+	
 
 }
 ?>

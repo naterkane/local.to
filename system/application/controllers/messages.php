@@ -17,17 +17,47 @@ class Messages extends App_Controller
         $this->mustBeSignedIn();
         if ($this->postData)
         {
-			$message = $this->Message->add($this->postData, $this->userData);
+			try{
+			$message = $this->Message->add($this->postData, $this->userData, false);
+			//var_dump($message);
+			//exit;
+			}
+			catch(Exception $e)
+			{
+				$this->redirect('/home',$e->getMessage().'\n');	
+			}
+			//var_dump($message);
 			if ($message) 
 			{
 				$this->User->mode = null;
             	$this->Group->sendToMembers($message, $this->userData['id']);
             	$this->User->sendToFollowers($message['id'], $this->userData['followers']);
-            	$this->redirect('/home');
+				if (!empty($message['reply_to']))
+				{
+					
+					//$this->Message->save()
+					//var_dump($this->Message->getOne($message['reply_to']));
+					try
+					{	
+					$parentmessage = $this->Message->getOne($message['reply_to']);
+					//$parentmessage['replies'] = (!is_array($parentmessage['replies']))? array():$parentmessage['replies'];
+					
+					array_push($parentmessage['replies'],$message['id']);
+					
+					
+					$this->Message->save($this->Message->prefixMessage($parentmessage['id']),$parentmessage,false);
+					$this->Message->addToReplies($message['reply_to'],$message['id']);
+					}
+					catch(Exception $e)
+					{
+						$this->redirect('/home',$e->getMessage().'\n');	
+					}
+				}
+				$this->redirect('/home');
 			}
 			else 
 			{
-            	$this->redirect('/home', 'There was an error adding your message.', 'error');
+				$this->redirect('/home', 'There was an error adding your message.', 'error');
 			}
         }
         else
@@ -46,11 +76,11 @@ class Messages extends App_Controller
 	 *
 	 * @access public
 	 */
-	function public_timeline($threaded = false)
+	function public_timeline()
 	{
 		$this->getUserData();
         $this->data['page_title'] = 'Public Timeline';		
-		if ($threaded) 
+		if (!empty($User) && ($User['threaded'] == 1) )
 		{
 			$this->data['messages'] = $this->Message->getTimelineThreaded();
 		} 

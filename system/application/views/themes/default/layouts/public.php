@@ -23,8 +23,8 @@
 	?></title>
 </head>
 <body>
+	<?php echo $this->cookie->flashMessage(); ?>
 	<div class="container_16">
-		<?php echo $this->cookie->flashMessage(); ?>
 		<div class="grid_16">
 			<h1 id="branding">
 				<a href="/">MicroBlog</a>

@@ -36,7 +36,7 @@
 				</p>
 				<p>
 					<input type="submit" value="Update" class="button" />
-					<a href="/groups/<?php echo $name?>" class="toggler">Cancel</a>
+					<a href="/group/<?php echo $name?>" class="toggler">Cancel</a>
 				</p>
 			</fieldset>
 		</form>

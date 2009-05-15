@@ -1,10 +1,10 @@
 <?php
 	$name = $selenium->randomString(10);
 	$password = $selenium->randomString(10);	
-	$email = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$count = $this->testingData['count'];		
 	$name_new = $selenium->randomString(10);
-	$email_new = $selenium->randomString(10) . '@' . $selenium->randomString(10) . '.com';	
+	$email_new = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$default_time_zone = 'US/Eastern';
 	$time_zone = '(GMT+09:00) Tokyo';
 	$time_zone_value = 'Asia/Tokyo';	

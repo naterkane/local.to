@@ -146,7 +146,7 @@ class Users extends App_Controller
 				$user = $this->User->get($message['user_id']);
 				if ($user) 
 				{
-					$this->data['reply_to'] = $user['id'];
+					$this->data['reply_to'] = $message['id'];
 					$this->data['reply_to_username'] = $user['username'];
 					$this->data['message'] = '@' . $user['username'] . ' ';
 				}
@@ -189,6 +189,39 @@ class Users extends App_Controller
 			$this->setData($this->userData);
 		}
 		$this->load->view('users/settings', $this->data);
+	}
+ 
+ 	/**
+ 	 * Set the threading preference for a user
+ 	 * 
+ 	 * @return 
+ 	 * @param object $setting
+ 	 * @param object $uri
+ 	 */
+ 	function threading($setting,$uri)
+	{
+		$this->mustBeSignedIn();
+		if ($setting != ("enable" || "disable"))
+			$this->redirect('/home');
+			
+		$this->getUserData();
+		$this->setData($this->userData);	
+		$key = md5($this->randomString(5));
+		$this->userData['update_key'] = $key;
+		$this->cookie->set('update_key', $key);
+		$data = $this->userData;
+		
+		$data['threading'] = ($setting == "enable")?1:0;
+		if ($this->User->updateThreading($this->userData['id'],$data['threading']))
+		{
+			$this->cookie->setUser($data);
+			$this->redirect(base64_decode($uri),"You have {$setting}d threading");
+		}
+		else
+		{
+			$this->redirect(base64_decode($uri),"You have {$setting}d threading");
+		}
+		
 	}
  
     /**
