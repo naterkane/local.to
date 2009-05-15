@@ -1,11 +1,8 @@
 <div class="messages box">
-	<h2><?php 
-		if (!empty($realname)):
-			echo (substr($realname,-1) == "s")?$realname."'":$realname."'s"; 
-		else:
-			echo (substr($username,-1) == "s")?$username."'":$username."'s"; 
-		endif;
-		?> Timeline</h2>
+	<h2><?php
+		$author = $this->User->getByUsername($username);
+		echo $gravatar->img( $author['email'],"60" ); ?>
+		<?php echo $username; ?></h2>
 	<?php echo $form->input('user_id', array('value'=>$User['id'], 'type'=>'hidden'));
 	if (!empty($User) && $User['username'] != $username) {
 		?><div class="box"><div class="block"><?php

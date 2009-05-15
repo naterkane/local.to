@@ -6,6 +6,7 @@ class App_Controller extends Controller {
    
     var $data = array();
 	var $layout = 'default';				//leave empty for default	
+	var $sidebar = 'users/sidebarprofile';
     var $postData = array();
     var $userData = array();
 	var $testingData;

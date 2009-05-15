@@ -1,14 +1,16 @@
 <?php
 if ((is_array($message)) AND (!empty($message['message_html'])))
 {
-?>
-<a href="/<?php echo $message['username']?>" class="image">
-		<?php 
+	echo $username;
+	echo $user;
+	//if (!empty($username) && $username != $message['username']){
+		?><a href="/<?php echo $message['username']?>" class="image"><?php 
 		$author = $this->User->getByUsername($message['username']);
 		echo $gravatar->img( $author['email'],"60" ); 
-		?>
-	</a>
+		?></a>
 	<p class="author"><?php echo $html->link(!empty($message['realname'])?$message['realname']:$message['username'], '/' . $message['username']); ?> </p>
+	<?php 
+	//} ?>
 	<p class="message_text"><?php echo $message['message_html'] ?></p>
 	<p class="meta">
 		<?php echo $html->link($time_format->timeAgo($message['time']) . ' ago', '/' . $message['username'] . '/status/' . $message['id'], array('id'=>'messagelink' . $message['id']));?>		

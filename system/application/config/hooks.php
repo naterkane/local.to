@@ -23,6 +23,13 @@ $hook['post_controller'][] = array(
 	'filepath' => 'hooks',
 	'params' => array('layout')
 );
+$hook['post_controller'][] = array(
+	'class' => 'Yielder',
+	'function' => 'setsidebar',
+	'filename' => 'yielder.php',
+	'filepath' => 'hooks',
+	'params' => array('sidebar')
+);
 /* End of file hooks.php */
 /* Location: ./system/application/config/hooks.php */
 ?>

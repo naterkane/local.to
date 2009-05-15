@@ -348,7 +348,9 @@ class Users extends App_Controller
     function view($username = null)
     {	
 		$this->getUserData();
+		
        	$user = $this->User->getByUsername($username);
+		$this->sidebar = "users/userprofile";
         if ($user)
         {
             $this->getUserData();

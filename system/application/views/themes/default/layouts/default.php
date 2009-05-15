@@ -38,16 +38,38 @@
 		</div>
 		<div class="clear"></div>
 		<div class="grid_4">
-			
-			<?php if (!empty($User)): ?>
 			<div class="box">
-				<?php $this->load->view('users/sidebarprofile'); ?>
+				
+				<?php $user = $this->User->getByUsername($username);
+				//var_dump($user); 
+				//echo $this->sidebar; 
+				$this->load->view($this->sidebar,array('user'=>$user)); ?>
+				
+			
+			<?php 
+			if (!empty($user)): ?>
+			</div>
+			<div class="box following">
+				<h2>Following</h2>
+				<?php if (count($user['following'])):?>
+				<ul>
+					<?php foreach($user['following'] as $following){
+						$following = $this->User->get($following);
+						?>
+					<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $gravatar->img( $following['email'],"24" ); ?></a></li>
+					<?php } ?>
+				</ul>
+				<?php else: ?>
+					<p><?php echo $username ?> is not currently following anyone.</p>
+				<?php endif; ?>
+			</div>
+			<?php elseif (!empty($User)): ?>
 				<ul class="menu">
 					<li>
 						<a href="/home">Home</a>
 					</li>
 					<li>
-						<a href="#">@<?php echo $User['username'] ?></a>
+						<a href="/<?php echo $User['username'] ?>">@<?php echo $User['username'] ?></a>
 					</li>
 					<li>
 						<a href="#">Private Mesages</a>
@@ -56,6 +78,22 @@
 						<a href="/public_timeline">Everyone</a>
 					</li>
 				</ul>
+				
+			</div>
+			
+			<div class="box following">
+				<h2>Following</h2>
+				<?php if (count($User['following'])):?>
+				<ul>
+					<?php foreach($User['following'] as $following){
+						$following = $this->User->get($following);
+						?>
+					<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $gravatar->img( $following['email'],"24" ); ?></a></li>
+					<?php } ?>
+				</ul>
+				<?php else: ?>
+					<p>You are not currently following anyone, take a look at the <a href="/public_timeline">public timeline</a> to see if anyone catches your eye.</p>
+				<?php endif; ?>
 			</div>
 			<?php else: ?>
 			<?php $this->load->view('users/signin'); ?>
