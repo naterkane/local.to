@@ -29,6 +29,8 @@ class Group extends App_Model
 		$data['public'] = 1;
 		$data['members'] = array($owner_id);
 		$data['messages'] = array();
+		$owner = $this->User->get($owner_id);
+		$data['time_zone'] = $owner['time_zone'];
 		$this->mode = 'add';
 		$this->startTransaction();
 		$this->save($this->prefixGroup($data['id']), $data);
