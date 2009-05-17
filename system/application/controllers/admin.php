@@ -18,9 +18,16 @@ class Admin extends App_controller
 	
 	function stats()
 	{
-		$all = $this->User->tt->fwmkeys('', 1000);	
+		
+		foreach($this->User->tt->fwmkeys('', 1000) as $key)
+		{
+			$all[$key] = unserialize($this->User->tt->get($key));
+			if (is_array($all[$key]))
+				ksort($all[$key]);
+		}	
+		ksort($all);
 		$stats = $this->User->tt->stat();
-		echo "<a href=\"/admin/flush\">Flush again</a> <a href=\"/admin/flush\">Go to Tests</a><br>";		
+		echo "<a href=\"/admin/flush\">Flush again</a> <a href=\"/admin/flush\">Go to Tests</a> <a href=\"/admin/showdata\">Reloads</a><br>";		
 		echo "<pre>";
 		print_r($all);
 		print_r($stats);
