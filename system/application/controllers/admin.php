@@ -21,7 +21,10 @@ class Admin extends App_controller
 		
 		foreach($this->User->tt->fwmkeys('', 1000) as $key)
 		{
-			$all[$key] = unserialize($this->User->tt->get($key));
+			$all[$key] = $this->User->tt->get($key);
+			if ($all[$key]!="")
+				unserialize($all[$key]);
+			
 			if (is_array($all[$key]))
 				ksort($all[$key]);
 		}	
