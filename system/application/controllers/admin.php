@@ -140,7 +140,7 @@ class Admin extends App_controller
 				$this->load->model(array('Invite'));
 				$this->load->database();				
 				$this->data['email'] = "nomcat+" . $this->Invite->randomString(10) . '@wearenom.com';
-				$this->data['key'] = base64_encode(preg_replace('/@/',$this->Invite->randomString(9),$data['email']));
+				$this->data['key'] = base64_encode(preg_replace('/@/',$this->Invite->randomString(9),$this->data['email']));
 				$this->Invite->create($this->data);		
 				$this->data['email'] = base64_encode($this->data['email']);
 				$this->load->view('admin/create_invite', $this->data);
