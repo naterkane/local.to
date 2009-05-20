@@ -72,8 +72,7 @@ class App_Controller extends Controller {
 	 */
 	function countAllRecords()
 	{
-		$this->User->mem->set('stupidHackToMakeCountingNullRecordsWork', 'ugh');
-		$count = count($this->User->tt->fwmkeys('', 1000000)) - 1;
+		$count = count($this->User->tt->fwmkeys('', 1000000));
 		return $count;
 	}
 	

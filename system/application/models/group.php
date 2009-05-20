@@ -146,9 +146,9 @@ class Group extends App_Model
 	 */
 	function isMember($members, $user_id)
 	{
-		if (!is_array($members))
-			return false;
-			
+		if (!is_array($members)){
+			return false;			
+		}
 		foreach ($members as $member_id) {
 			if (!empty($member_id)) 
 			{

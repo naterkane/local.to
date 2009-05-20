@@ -18,7 +18,6 @@ class Message extends App_Model
      */
     function add($message = array(), $user = array())
     {
-		//var_dump($user['private']);
 		if ((empty($message)) || (empty($user)))
 		{
 			return false;

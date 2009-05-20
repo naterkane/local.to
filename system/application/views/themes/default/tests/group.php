@@ -38,7 +38,7 @@
 	$selenium->write('type', 'name', $group);
 	$selenium->click('Add');
 	$selenium->write('verifyTextPresent', $group);
-	$selenium->openPage('/groups/members/' . $group);		
+	$selenium->openPage('/groups/members/' . $group);	
 	$selenium->write('verifyTextPresent', $name);	
 	//check that settings are accessible
 	$selenium->openPage('/group/' . $group);		
@@ -94,8 +94,8 @@
 	//make sure message is present in other user's private page			
 	$selenium->write('verifyTextPresent', $group_message);
 	//make sure message is present timeline		
-	$selenium->openPage('/public_timeline');		
-	$selenium->write('verifyTextNotPresent', $group_message);
+	$selenium->openPage('/public_timeline');
+	$selenium->write('verifyTextPresent', $group_message);
 	//unsubscribe from group
 	$selenium->signOut();	
 	$selenium->signIn($name2, $password2);	

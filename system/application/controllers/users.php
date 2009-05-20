@@ -353,7 +353,6 @@ class Users extends App_Controller
     function view($username = null)
     {	
 		$this->getUserData();
-		
        	$user = $this->User->getByUsername($username);
 		$this->sidebar = "users/userprofile";
         if ($user)
@@ -361,19 +360,8 @@ class Users extends App_Controller
             $this->getUserData();
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;
-            $this->data['messages'] = $this->Message->getMany($user['public']);			
-			if ($this->User->isFollowing($user['id'], $this->userData['following'])) 
-			{
-				$this->data['friend_status'] = 'following';
-			}
-			elseif ($this->User->isPendingFriendRequest($user['friend_requests'], $this->userData['id'])) 
-			{
-				$this->data['friend_status'] = 'pending';
-			}
-			else 
-			{
-				$this->data['friend_status'] = 'follow';				
-			}
+            $this->data['messages'] = $this->Message->getMany($user['public']);
+			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
             $this->load->view('users/view', $this->data);
         }
         else

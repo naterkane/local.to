@@ -1,4 +1,4 @@
-<!--<a href="/<?php echo $user['username']; ?>" class="image"><? echo $gravatar->img( $user['email'],"48" ); ?></a> -->
+<!--<a href="/<?php echo $user['username']; ?>" class="image"><?php echo $gravatar->img( $user['email'],"48" ); ?></a> -->
 <?php //$user = $this->User->getByUsername($username); ?>
 <p id="profile_name"><strong>Name</strong> <?php echo (!empty($user['realname']))?$user['realname']:$user['username'];  ?></p>
 <?php echo (!empty($user['location']))? '<p id="profile_location"><strong>Location</strong> '.$user['location'].'</p>': "";  ?>

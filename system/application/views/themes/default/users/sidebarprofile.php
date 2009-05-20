@@ -1,4 +1,4 @@
-<a href="/<?php echo $user['username']; ?>" class="image"><? echo $gravatar->img( $user['email'],"48" ); ?></a> <a href="/<?php echo $user['username']; ?>" id="profile_username"><?php echo $user['username'];  ?></a>
+<a href="/<?php echo $user['username']; ?>" class="image"><?php echo $gravatar->img( $user['email'],"48" ); ?></a> <a href="/<?php echo $user['username']; ?>" id="profile_username"><?php echo $user['username'];  ?></a>
 <?php echo (!empty($user['location']))? '<p id="profile_location">'.$user['location'].'</p>': "";  ?>
 <?php echo (!empty($user['bio']))? '<p id="profile_bio">'.$user['bio'].'</p>': "";  ?>
 

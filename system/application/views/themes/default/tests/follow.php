@@ -24,7 +24,7 @@
 	$selenium->write('assertNotChecked', 'locked');		
 	$selenium->write('click', 'locked');
 	$selenium->click('Update');
-	$selenium->write('verifyValue', 'testing_count', $count + 10);
+	$selenium->write('verifyValue', 'testing_count', $count + 4);
 	$selenium->write('verifyTextPresent', 'Your profile was updated.');
 	$selenium->write('assertChecked', 'locked');	
 	//create second account	

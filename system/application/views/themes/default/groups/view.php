@@ -18,7 +18,7 @@
 			<?php if (!empty($location)) echo "<p><strong>Location:</strong> $location</p>"; ?>
 			<p>
 				<?php if (!$is_owner): ?>
-					<?php if ($imAMember): ?>
+					<?php if ($im_a_member): ?>
 							<a href="/groups/unsubscribe/<?php echo $id ?>" id="unsubscribe" class="toggler">Unsubscribe</a>
 					<?php else: ?>
 							<a href="/groups/subscribe/<?php echo $id ?>" id="subscribe" class="toggler">Subscribe</a>

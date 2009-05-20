@@ -18,7 +18,7 @@ class Admin extends App_controller
 	
 	function stats()
 	{
-		
+		$all = array();
 		foreach($this->User->tt->fwmkeys('', 1000) as $key)
 		{
 			$all[$key] = $this->User->tt->get($key);
@@ -26,15 +26,29 @@ class Admin extends App_controller
 				$all[$key] = unserialize($all[$key]);
 			
 			if (is_array($all[$key]))
-				ksort($all[$key]);
+			{
+				ksort($all[$key]);				
+			}
 		}	
 		ksort($all);
-		$stats = $this->User->tt->stat();
 		echo "<a href=\"/admin/flush\">Flush again</a> <a href=\"/admin/flush\">Go to Tests</a> <a href=\"/admin/showdata\">Reloads</a><br>";		
+		echo "<table border=\"1\" cellspacing=\"5\" cellpadding=\"5\">\n";
+		echo "<tr><th>Count (" . count($all) . ")</th><th>Key</th><th>Value</th></tr>\n";
+		$i = 1;
+		foreach ($all as $key => $value) {
+			echo "<tr><td>$i</td>";
+			echo "<td>$key</td>";
+			echo "<td><pre>";
+			print_r($value);
+			echo "<pre></td></tr>\n";
+			$i++;
+		}
+		echo "<tr><td>&nbsp;</td><td>Stats</td><td>";
 		echo "<pre>";
-		print_r($all);
-		print_r($stats);
+		print_r($this->User->tt->stat());
 		echo "</pre>";
+		echo "</td></tr>";
+		echo "</table>";
 		exit;
 	}
 

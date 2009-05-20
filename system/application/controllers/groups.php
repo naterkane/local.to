@@ -59,7 +59,7 @@ class Groups extends App_Controller
 			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 			$this->data['member_count'] = count($group['members']);			
 			$this->data['messages'] = $this->Message->getMany($group['messages']);
-			$this->data['imAMember'] = $this->Group->isMember($group['members'], $this->userData['id']);
+			$this->data['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
 			$this->data['User'] = $user;
 			if ($this->data['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);
@@ -74,6 +74,7 @@ class Groups extends App_Controller
 	/**
 	 * View members
 	 *
+	 * @todo create a way of getting a users "public" info only and not returning anything that's sensitive.	
 	 * @access public
 	 * @param string $name
 	 * @return 
@@ -85,38 +86,22 @@ class Groups extends App_Controller
 		if ($group) 
 		{
 			$this->data = $group;
+			$this->data['User'] = $this->userData;
+			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
+			$this->data['im_a_member'] = in_array($this->userData['id'], $group['members']);			
 			$this->data['page_title'] = $group['name'] . ' Members';
 			$this->data['groupname'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
 			$members = $this->Group->getMembers($group['members']);
-			//var_dump($members);
 			$this->data['members'] = array();
 			foreach ($members as $member)
 			{
-				/**
-				 * lets strip some data that isn't needed out of here. 
-				 * 
-				 * @todo create a way of getting a users "public" info only and not returning anything that's sensitive.
-				 */ 
 				$member['password'] = null;
 				$member['passwordconfirm'] = null;
-				// this isn't really needed
 				$member['realname'] = (!empty($member['realname']))? $member['realname'] : $member['username'];
-				if ($this->User->isFollowing($member['id'], $this->userData['following']))
-				{
-					$member['friend_status'] = 'following';
-				}
-				elseif ($this->User->isPendingFriendRequest($member['friend_requests'], $this->userData['id']))
-				{
-					$member['friend_status'] = 'pending';
-				}
-				else
-				{ 
-					$member['friend_status'] = 'follow';
-				}
+				$member['friend_status'] = $this->User->getFriendStatus($member, $this->userData);
 				$this->data['members'][] = $member;
 			}
-			//var_dump($this->data['members']);
 			if (empty($sidebar))
 			{
 				$this->load->view('groups/members', $this->data);

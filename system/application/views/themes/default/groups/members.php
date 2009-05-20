@@ -1,9 +1,9 @@
 <div class="box">
 	<h2><?php echo $name ?> </h2>
 	<div class="block">
-		<p><a href="/group/<?php echo $name ?>" class="toggler">back to <?php echo $name ?> home</a>
+		<p><a href="/group/<?php echo $name ?>" class="toggler">back to <?php echo $name ?> home</a>			
 			<?php if (!$is_owner): ?>
-				<?php if ($imAMember): ?>
+				<?php if ($im_a_member): ?>
 						<a href="/groups/unsubscribe/<?php echo $id ?>" id="unsubscribe" class="toggler">Unsubscribe</a>
 				<?php else: ?>
 						<a href="/groups/subscribe/<?php echo $id ?>" id="subscribe" class="toggler">Subscribe</a>

@@ -208,6 +208,29 @@ class User extends App_Model
 		}
 		return $return;
     }
+
+	/**
+	 * Get all of a users friend requests
+	 *
+	 * @param array $you The other user
+	 * @param array $me The logged in user	
+	 * @return string 'following,' 'pending,' 'follow'
+	 */
+    function getFriendStatus($you, $me)
+    {
+		if ($this->isFollowing($you['id'], $me['following']))
+		{
+			return 'following';
+		}
+		elseif ($this->isPendingFriendRequest($you['friend_requests'], $me['id']))
+		{
+			return 'pending';
+		}
+		else
+		{ 
+			return 'follow';
+		}
+    }
    
     /**
      * Hash a password
