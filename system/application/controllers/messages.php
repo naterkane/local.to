@@ -17,16 +17,7 @@ class Messages extends App_Controller
         $this->mustBeSignedIn();
         if ($this->postData)
         {
-			try{
-			$message = $this->Message->add($this->postData, $this->userData, false);
-			//var_dump($message);
-			//exit;
-			}
-			catch(Exception $e)
-			{
-				$this->redirect('/home',$e->getMessage().'\n');	
-			}
-			//var_dump($message);
+			$message = $this->Message->add($this->postData, $this->userData);
 			if ($message) 
 			{
 				$this->User->mode = null;
@@ -34,24 +25,10 @@ class Messages extends App_Controller
             	$this->User->sendToFollowers($message['id'], $this->userData['followers']);
 				if (!empty($message['reply_to']))
 				{
-					
-					//$this->Message->save()
-					//var_dump($this->Message->getOne($message['reply_to']));
-					try
-					{	
 					$parentmessage = $this->Message->getOne($message['reply_to']);
-					//$parentmessage['replies'] = (!is_array($parentmessage['replies']))? array():$parentmessage['replies'];
-					
-					array_push($parentmessage['replies'],$message['id']);
-					
-					
+					array_push($parentmessage['replies'], $message['id']);					
 					$this->Message->save($this->Message->prefixMessage($parentmessage['id']),$parentmessage,false);
 					$this->Message->addToReplies($message['reply_to'],$message['id']);
-					}
-					catch(Exception $e)
-					{
-						$this->redirect('/home',$e->getMessage().'\n');	
-					}
 				}
 				$this->redirect('/home');
 			}
@@ -69,6 +46,50 @@ class Messages extends App_Controller
 	function delete($id)
 	{
 		//remember to decrease thread count if message is reply to
+	}
+
+	public function direct()
+	{
+        $this->mustBeSignedIn();
+        if ($this->postData)
+        {
+			$message = $this->Message->addDm($this->postData, $this->userData);
+			if ($message) 
+			{
+				$this->redirect('/inbox');
+			}
+			else 
+			{
+				$this->redirect('/inbox', 'There was an error adding your message.', 'error');
+			}
+        }
+        else
+        {
+            $this->redirect('/home');
+        }
+	}
+	
+	public function inbox()
+	{
+		$this->mustBeSignedIn();
+		$this->data['page_title'] = 'Inbox';
+		$this->data['message'] = null;
+		$this->data['dm'] = true;
+		$this->data['messages'] = $this->Message->getMany($this->userData['inbox']);
+		$this->data['friend_select'] = $this->User->friendSelect($this->userData['followers']);	
+		$this->load->view('messages/inbox', $this->data);
+	}
+	
+	public function sent()
+	{
+		$this->mustBeSignedIn();
+		$this->data['page_title'] = 'Sent';		
+		$this->data['dm'] = true;	
+		$this->data['sent'] = true;			
+		$this->data['message'] = null;
+		$this->data['messages'] = $this->Message->getMany($this->userData['sent']);		
+		$this->data['friend_select'] = $this->User->friendSelect($this->userData['followers']);			
+		$this->load->view('messages/sent', $this->data);		
 	}
 
 	/**
@@ -115,7 +136,7 @@ class Messages extends App_Controller
 		$this->data['message'] = $this->Message->getOne($message_id);
 		$this->data['messages'] = $this->Message->getReplies($message_id);		
 		$user = $this->User->getByUserName($username);
-		if (($this->data['message']) AND ($user['username'] == $username)) {
+		if (($this->data['message']) AND ($user['username'] == $username) AND (!isset($this->data['message']['to']))) {
 			$this->load->view('messages/view', $this->data);
 		} else{
 			show_404();

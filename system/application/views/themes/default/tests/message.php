@@ -6,7 +6,7 @@
 	$message_long = $selenium->randomString(141);	
 	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$count = $this->testingData['count'];		
-	$selenium->caseTitle('Add Message');	
+	$selenium->caseTitle('DM');	
 	$selenium->signOut();	
 	$selenium->write('verifyValue', 'testing_count', $count);	
 	$selenium->signUp($name, $password, $email);

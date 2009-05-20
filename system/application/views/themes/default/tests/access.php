@@ -13,5 +13,9 @@
 	$selenium->mustBeLoggedIn('/unfollow/123');	
 	$selenium->mustBeLoggedIn('/confirm/123');
 	$selenium->mustBeLoggedIn('/deny/123');	
+	$selenium->mustBeLoggedIn('/inbox');
+	$selenium->mustBeLoggedIn('/sent');
+	$selenium->mustBeLoggedIn('/messages/add');
+	$selenium->mustBeLoggedIn('/messages/direct');	
 	$selenium->openPage('/admin/flush');	
 ?>

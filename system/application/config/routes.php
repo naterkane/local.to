@@ -66,6 +66,8 @@ $route['reset_password'] = "users/reset_password";
 $route['reset/(:any)'] = "users/reset/$1";
 $route['change_password'] = "users/change_password";
 $route['request_invite'] = "admin/request_invite";
+$route['inbox'] = "messages/inbox";
+$route['sent'] = "messages/sent";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

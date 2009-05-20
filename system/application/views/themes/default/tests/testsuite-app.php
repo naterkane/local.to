@@ -2,7 +2,8 @@
 	$selenium->suiteTitle('Microblog Tests (FLUSH YOUR DATABASE BEFORE USING)');
 	$selenium->addTestCase('Sign Up', 'sign-up');
 	$selenium->addTestCase('Change Settings', 'settings');	
-	$selenium->addTestCase('Add Message', 'add-message');
+	$selenium->addTestCase('Message', 'message');
+	$selenium->addTestCase('Direct Message', 'dm');		
 	$selenium->addTestCase('Threading', 'threading');	
 	$selenium->addTestCase('Follow', 'follow');
 	$selenium->addTestCase('Add Group and Subscribe', 'group');

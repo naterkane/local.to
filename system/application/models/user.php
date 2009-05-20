@@ -155,6 +155,25 @@ class User extends App_Model
 		}
 	}
 	
+	/**
+	 * Get list of followers for dms
+	 *
+	 * @access public
+	 * @param array $followers
+	 * @return array key=>value pairings for select
+	 */
+	public function friendSelect($friends = array())
+	{
+		$return = array();
+		foreach ($friends as $friend) {
+			$data = $this->get($friend);
+			if ($data) 
+			{
+				$return[$data['username']] = $data['username'];
+			}
+		}
+		return $return;
+	}
 	
 	/**
 	 * Get a User's data by id
@@ -428,7 +447,9 @@ class User extends App_Model
 		$data['following'] = array();
 		$data['friend_requests'] = array();
 		$data['public'] = array();
-		$data['private'] = array();		
+		$data['private'] = array();	
+		$data['inbox'] = array();
+		$data['sent'] = array();
 		$this->startTransaction();
 		$this->save($this->prefixUser($data['id']), $data);
 		$this->join('UserEmail', $data['email'], $data);

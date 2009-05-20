@@ -9,7 +9,7 @@
 		</form>
 	</div>
 	</div>
-	<?php echo $this->load->view('messages/viewlist',$this->userData) ?>
+	<?php echo $this->load->view('messages/viewlist', $this->userData) ?>
 	<div class="box">
 		<?php $this->load->view('users/toggle_threading',array('threading'=>$this->userData['threading'])); ?>
 	</div>

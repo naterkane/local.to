@@ -8,60 +8,111 @@ class Message extends App_Model
 	protected $idGenerator = 'messageId';
 	private $parent;
 
+	/**
+	 * Return response
+	 * Used to return a response from adding regular and dm messages
+	 *
+	 * @access private
+	 * @param array $data
+	 * @return array|boolean
+	 */
+	private function returnResponse($data)
+	{
+		$response = $this->endTransaction();
+		if ($response) 
+		{
+        	return $data;
+		}
+		else 
+		{
+			return false;			
+		}
+	}
+	
+	
+	/**
+	 * Set up a message
+	 * Set up data for regular messages and dms. Also sets up validation values
+	 *
+	 * @access private
+	 * @param array $data
+	 * @param array $message
+	 * @param array $user
+	 * @param boolean $direct_message [optional] Defaults to false			
+	 * @param array $to [optional] Recipient of dm	
+	 * @return array Message data
+	 */
+	private function setUpMessage($data, $message, $user, $direct_message = false, $to = array())
+	{
+		if ($direct_message) 
+		{
+			$this->mode = 'dm';
+			$data['reply_to'] = null;
+			$data['reply_to_username'] = null;
+			if (isset($to['id'])) 
+			{
+				$data['to'] = $to['id'];
+			}
+			else 
+			{
+				$data['to'] = null;				
+			}
+		}
+		else 
+		{
+			$data['to'] = null;
+			if ((empty($message['reply_to'])) && (empty($message['reply_username']))) 
+			{
+				$this->mode = 'post';
+				$data['reply_to'] = null;
+				$data['reply_to_username'] = null;		
+			}
+			else 
+			{
+				$this->mode = 'reply';
+				$this->parent = $this->getOne($message['reply_to']);
+				if (!empty($this->parent['reply_to']))
+				{
+					$this->parent = $this->getOne($this->parent['reply_to']);
+					$data['reply_to'] = $this->parent['reply_to'];
+				}
+				else
+				{
+					$data['reply_to'] = $message['reply_to'];
+
+				}
+				$data['reply_to_username'] = $message['reply_to_username'];		
+			}
+			
+		}
+		$data['id'] = $this->makeId($this->idGenerator);	
+		$data['time'] = time();
+		$data['user_id'] = $user['id'];
+		$data['replies'] = array();	
+		$data['message'] = str_replace("\n", " ", $message['message']);	
+		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
+		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
+		return $data;
+	}
+
     /**
      * Add a new message
      *
-     * @todo add transactions
      * @param array $message
      * @param array $user
 	 * @return boolean|data
      */
-    function add($message = array(), $user = array())
+    public function add($message = array(), $user = array())
     {
 		if ((empty($message)) || (empty($user)))
 		{
 			return false;
 		}
-		$data = array();		
-		if ((empty($message['reply_to'])) && (empty($message['reply_username']))) 
-		{
-			$this->mode = 'post';
-			$data['reply_to'] = null;
-			$data['reply_to_username'] = null;		
-		}
-		else 
-		{
-			$this->mode = 'reply';
-			$this->parent = $this->getOne($message['reply_to']);
-			if (!empty($this->parent['reply_to']))
-			{
-				$this->parent = $this->getOne($this->parent['reply_to']);
-				$data['reply_to'] = $this->parent['reply_to'];
-				//$data['reply_to_username'] = $this->parent['reply_to_username'];
-			}
-			else
-			{
-				$data['reply_to'] = $message['reply_to'];
-				
-			}
-			$data['reply_to_username'] = $message['reply_to_username'];	
-			
-		}
-		$time = time();
-		$this->loadModels(array('Group'));
-		$data['id'] = $this->makeId($this->idGenerator);	
-		$data['time'] = $time;
-		$data['user_id'] = $user['id'];
-		
-		$data['replies'] = array();	
-		
-		$data['message'] = str_replace("\n", " ", $message['message']);	
-		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
-		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
+		$data = array();	
+		$data = $this->setUpMessage($data, $message, $user);
 		$this->startTransaction();
 		$this->save($this->prefixMessage($data['id']), $data);
 		$this->mode = null;
-		//var_dump($user['private']);
 		array_unshift($user['private'], $data['id']);
 		array_unshift($user['public'], $data['id']);
 		$this->User->save($this->prefixUser($user['id']), $user);
@@ -78,15 +129,35 @@ class Message extends App_Model
 		{
 			$this->addToPublicTimeline($data);
 		}
-		$response = $this->endTransaction();
-		if ($response) 
+		return $this->returnResponse($data);
+    }
+
+	/**
+     * Add a new direct message
+     *
+     * @param array $message
+     * @param array $user
+	 * @return boolean|data
+     */
+    public function addDm($message = array(), $user = array())
+    {
+		if ((empty($message)) || (empty($user)) || (!isset($message['to'])))
 		{
-        	return $data;
+			return false;
 		}
-		else 
+		$data = array();	
+		$to = $this->User->getByUsername($message['to']);
+		$data = $this->setUpMessage($data, $message, $user, true, $to);
+		$this->startTransaction();
+		if ($this->save($this->prefixMessage($data['id']), $data)) 
 		{
-			return false;			
+			$this->mode = null;
+			array_unshift($user['sent'], $data['id']);
+			$this->User->save($this->prefixUser($user['id']), $user);
+			array_unshift($to['inbox'], $data['id']);
+			$this->User->save($this->prefixUser($to['id']), $to);
 		}
+		return $this->returnResponse($data);
     }
 
 	/**
@@ -96,7 +167,7 @@ class Message extends App_Model
 	 * @param int $message_id
 	 * @return 
 	 */
-	function addToPublicTimeline($message)
+    public function addToPublicTimeline($message)
 	{
 		if (empty($message['reply_to'])) 
 		{
@@ -115,7 +186,7 @@ class Message extends App_Model
 	 * @param int $message_id
 	 * @return 
 	 */
-	function addToReplies($reply_to, $message_id)
+    public function addToReplies($reply_to, $message_id)
 	{
 		return $this->push($this->prefixReplies($reply_to), $message_id);
 	}
@@ -123,10 +194,11 @@ class Message extends App_Model
     /**
      * Get more than one message
      *
-     * @return
+	 * @access public
      * @param object $messages
+     * @return array of messages
      */
-    function getMany($messages = array())
+    public function getMany($messages = array())
     {
         $return = array();
 		$threading = false;
@@ -162,7 +234,7 @@ class Message extends App_Model
      * @param int $message_id
      * @return array Message
      */
-	function getOne($message_id)
+    public function getOne($message_id)
 	{
 		$message = $this->find($this->prefixMessage($message_id));
 		$user = null;
@@ -177,10 +249,11 @@ class Message extends App_Model
     /**
      * Get replies to a message
      *
+     * @access public
      * @param int $messages
      * @return array Messages
      */
-    function getReplies($message_id)
+    public function getReplies($message_id)
     {
         $messages = $this->find($this->prefixReplies($message_id));
         return $this->getMany($messages);
@@ -189,10 +262,11 @@ class Message extends App_Model
     /**
      * Get Public Timeline
      *
-     * @todo figure out how the end and start values work
+     * @todo Clip the timeline at a limited number of messages
+     * @access public
      * @return array Messages
      */
-    function getTimeline()
+    public function getTimeline()
     {
         $messages = $this->find($this->prefixPublic());
         return $this->getMany($messages);
@@ -201,10 +275,11 @@ class Message extends App_Model
     /**
      * Get Public Timeline Threaded
      *
-     * @todo figure out how the end and start values work
+     * @todo Clip the timeline at a limited number of messages
+     * @access public
      * @return array Messages
      */
-    function getTimelineThreaded()
+    public function getTimelineThreaded()
     {
         $messages = $this->find($this->prefixPublicThreaded());
         return $this->getMany($messages);
@@ -213,9 +288,10 @@ class Message extends App_Model
     /**
      * Is a message is a real message
      *
+     * @access public
      * @return boolean
      */
-    function isAMessage()
+    public function isAMessage()
     {
 		if (empty($this->parent))
 		{
@@ -227,12 +303,25 @@ class Message extends App_Model
 		}
     }
 
+	/**
+	 * Is a user a follower
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function isFollower()
+	{
+		return true;
+	}
+	
+
     /**
      * Is a message a not a reply
      *
+     * @access public
      * @return boolean
      */
-    function isNotAReply()
+    public function isNotAReply()
     {
 		if (empty($this->parent['reply_to']))
 		{
@@ -243,13 +332,14 @@ class Message extends App_Model
 			return false;
 		}
     }
-
+	
     /**
      * Is a message's owner correct?
      *
+     * @access public
      * @return boolean
      */
-    function userOwnsMessage()
+    public function userOwnsMessage()
     {
 		$user = $this->User->get($this->parent['user_id']);
 		if ($user['username'] == $this->modelData['reply_to_username']) 
@@ -268,10 +358,10 @@ class Message extends App_Model
 	 * @access public
 	 * @return boolean
 	 */	
-	function validate()
+    public function validate()
 	{
-		$this->setAction();		
-		if (($this->mode == 'post') || ($this->mode == 'reply'))
+		$this->setAction();	
+		if (($this->mode == 'post') || ($this->mode == 'reply') || ($this->mode == 'dm'))
 		{
 			$this->validates_length_of('message', array('min'=>1, 'max'=>140, 'message'=>'A message must be between 1 and 140 characters'));
 			$this->validates_presence_of('message', array('message'=>'A message must be between 1 and 140 characters'));
@@ -281,6 +371,11 @@ class Message extends App_Model
 			$this->validates_callback('isNotAReply', 'reply_to', array('message'=>'You can not reply to a reply'));
 			$this->validates_callback('isAMessage', 'reply_to', array('message'=>'The message does not exist'));
 			$this->validates_callback('userOwnsMessage', 'reply_to', array('message'=>'The user does not own this message'));
+		}
+		if ($this->mode == 'dm') 
+		{
+			$this->validates_presence_of('to', array('message'=>'A recipient is required'));			
+			$this->validates_callback('isFollower', 'to', array('message'=>'This user is not following you'));
 		}
 	    return (count($this->validationErrors) == 0);
 	}
