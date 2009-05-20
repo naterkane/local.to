@@ -39,20 +39,54 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * View a group
+	 *
+	 * @todo Check if group exists
+	 * @access public
+	 * @param string $name	
+	 * @return 
+	 */
+	function view($groupname = null)
+	{
+		$this->getUserData();
+		if ($groupname) {
+			$this->getUserData();
+			$group = $this->Group->getByName($groupname);
+			$user = $this->data['User'];
+			$this->data = $group;
+			$this->data['page_title'] = $group['name'];
+			$this->data['groupname'] = $group['name'];
+			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+			$this->data['member_count'] = count($group['members']);			
+			$this->data['messages'] = $this->Message->getMany($group['messages']);
+			$this->data['imAMember'] = $this->Group->isMember($group['members'], $this->userData['id']);
+			$this->data['User'] = $user;
+			if ($this->data['member_count'] > 0) {
+				$this->load->view('groups/view', $this->data);
+			} else {
+				show_404();
+			}
+		} else {
+			show_404();
+		}
+	}
+
+	/**
 	 * View members
 	 *
 	 * @access public
 	 * @param string $name
 	 * @return 
 	 */
-	function members($name = null)
+	function members($groupname = null, $sidebar = null)
 	{
 		$this->getUserData();		
-		$group = $this->Group->getByName($name);
+		$group = $this->Group->getByName($groupname);
 		if ($group) 
 		{
+			$this->data = $group;
 			$this->data['page_title'] = $group['name'] . ' Members';
-			$this->data['name'] = $group['name'];
+			$this->data['groupname'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
 			$members = $this->Group->getMembers($group['members']);
 			//var_dump($members);
@@ -83,8 +117,13 @@ class Groups extends App_Controller
 				$this->data['members'][] = $member;
 			}
 			//var_dump($this->data['members']);
-			
-			$this->load->view('groups/members', $this->data);						
+			if (empty($sidebar))
+			{
+				$this->load->view('groups/members', $this->data);
+			}
+			else{
+				return $this->data;
+			}						
 		} 
 		else 
 		{
@@ -153,8 +192,9 @@ class Groups extends App_Controller
 		if ($group) 
 		{
 			$this->Group->addMember($group, $this->userData['id']);
-			$message = 'I just joined !'. $group['name'] . ', <a href="/groups/' . $group["name"] . '">check it out</a>!';
-			$message_id = $this->Message->add($message, $this->userData);
+			$this->User->addGroup($this->userData['id'],$group_id);
+			$message = 'I just became a member of the group !'. $group['name'];
+			$message_id = $this->Message->add($message, $this->userData,false);
 			$this->User->sendToFollowers($message_id, $this->userData['followers']);
 			$this->redirect('/group/' . $group['name']);
 		} 
@@ -177,43 +217,11 @@ class Groups extends App_Controller
 		$group = $this->Group->get($group_id);
 		if ($group) {
 			$this->Group->removeMember($group, $this->userData['id']);
+			$this->User->removeGroup($this->userData['id'],$group_id);
 			$this->redirect('/group/' . $group['name']);
 		} else {
 			show_404();
 		}		
 	}	
-
-	/**
-	 * View a group
-	 *
-	 * @todo Check if group exists
-	 * @access public
-	 * @param string $name	
-	 * @return 
-	 */
-	function view($name = null)
-	{
-		$this->getUserData();
-		if ($name) {
-			$this->getUserData();
-			$group = $this->Group->getByName($name);
-			$user = $this->data['User'];
-			$this->data = $group;
-			$this->data['page_title'] = $group['name'];
-			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
-			$this->data['member_count'] = count($group['members']);			
-			$this->data['messages'] = $this->Message->getMany($group['messages']);
-			$this->data['imAMember'] = $this->Group->isMember($group['members'], $this->userData['id']);
-			$this->data['User'] = $user;
-			if ($this->data['member_count'] > 0) {
-				$this->load->view('groups/view', $this->data);
-			} else {
-				show_404();
-			}
-		} else {
-			show_404();
-		}
-	}
-
 }
 ?>

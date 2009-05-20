@@ -17,6 +17,16 @@
 	$selenium->write('verifyValue', 'testing_count', $count + 4);	
 	$selenium->signIn($name, $password);
 	$selenium->signOut();	
+	//lock settings
+	$selenium->signOut();	
+	$selenium->signIn($name, $password);
+	$selenium->openPage('/settings');
+	$selenium->write('assertNotChecked', 'locked');		
+	$selenium->write('click', 'locked');
+	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 10);
+	$selenium->write('verifyTextPresent', 'Your profile was updated.');
+	$selenium->write('assertChecked', 'locked');	
 	//create second account	
 	$selenium->signOut();	
 	$selenium->signUp($name2, $password2, $email2);

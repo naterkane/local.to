@@ -22,7 +22,7 @@ class App_Controller extends Controller {
     function __construct() 
 	{
         parent::Controller();
-        $this->load->library(array('Load_helpers'));
+        $this->load->library(array('Load_helpers','Util'));
         $this->load->model(array('User', 'Message', 'Group'));
         if ($_POST) 
 		{
@@ -214,8 +214,7 @@ class App_Controller extends Controller {
 	{
 		return $this->config->item('debug');
 	}
-	
-   
+
 }
 
 ?>

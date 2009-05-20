@@ -1,18 +1,24 @@
+<div class="box members">
+	<h2>Members</h2>
+	<?php if (!empty($members) && $members[0] != false): ?>
+	<ul>
+		<?php foreach ($members as $member){ 
+		
+		?>
+		
+		<li><a href="/<?php echo $member['username']; ?>" alt="<?php echo $member['username']; ?>"><?php echo $gravatar->img( $member['email'],"24" ); ?></a></li>
+		<?php } ?>
+	</ul>
+	<?php else: ?>
+		<p>You are not currently following anyone, take a look at the <a href="/public_timeline">public timeline</a> to see if anyone catches your eye.</p>
+	<?php endif; ?>
+</div>
+
+<!--
 <div class="box">
 	<h2><?php echo $name ?> </h2>
 	<div class="block">
-		<p><a href="/group/<?php echo $name ?>" class="toggler">back to <?php echo $name ?> home</a>
-			<?php if (!$is_owner): ?>
-				<?php if ($imAMember): ?>
-						<a href="/groups/unsubscribe/<?php echo $id ?>" id="unsubscribe" class="toggler">Unsubscribe</a>
-				<?php else: ?>
-						<a href="/groups/subscribe/<?php echo $id ?>" id="subscribe" class="toggler">Subscribe</a>
-				<?php endif ?>
-			<?php endif ?>
-			<?php if ($is_owner): ?>
-			<a href="/groups/settings/<?php echo $name ?>" class="toggler">Edit <?php echo (substr($name,-1) == "s")?$name."'":$name."'s"; ?> Profile</a>
-			<?php endif ?>
-		</p>
+		<p><a href="/group/<?php echo $name ?>" class="toggler">back to <?php echo $name ?> home</a></p>
 	<?php if (!empty($members) && $members[0] != false): ?>
 		<table summary="This table includes the members of the <?php echo $name ?> group">
 			<colgroup>
@@ -64,4 +70,4 @@
 	
 	<?php endif ?>
 	</div>
-</div>
+</div>-->

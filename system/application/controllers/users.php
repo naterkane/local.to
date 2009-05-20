@@ -138,6 +138,8 @@ class Users extends App_Controller
     function home($replyTo = null)
     {
         $this->mustBeSignedIn();
+		
+		$this->data['message'] ="";
 		if ($replyTo) 
 		{
 			$message = $this->Message->getOne($replyTo);
@@ -151,11 +153,13 @@ class Users extends App_Controller
 					$this->data['message'] = '@' . $user['username'] . ' ';
 				}
 			}
+			//$this->data['message'] = "@".$message['reply_to_username']." ";
 		}
         $this->data['page_title'] = 'Home';
         $this->data['messages'] = $this->Message->getMany($this->userData['private']);
 		$this->data['following'] = $this->userData['following'];
         $this->load->view('users/home', $this->data);
+		
     }
 
 	/**
@@ -203,23 +207,24 @@ class Users extends App_Controller
 		$this->mustBeSignedIn();
 		if ($setting != ("enable" || "disable"))
 			$this->redirect('/home');
-			
+		
+		//$this->load->helper('Util');	
 		$this->getUserData();
 		$this->setData($this->userData);	
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
 		$this->cookie->set('update_key', $key);
 		$data = $this->userData;
-		
+		//echo $this->util->base64_url_decode($uri);
 		$data['threading'] = ($setting == "enable")?1:0;
 		if ($this->User->updateThreading($this->userData['id'],$data['threading']))
 		{
-			$this->cookie->setUser($data);
-			$this->redirect(base64_decode($uri),"You have {$setting}d threading");
+			//$this->cookie->setUser($data);
+			$this->redirect($this->util->base64_url_decode($uri),"You have {$setting}d threading");
 		}
 		else
 		{
-			$this->redirect(base64_decode($uri),"You have {$setting}d threading");
+			$this->redirect($this->util->base64_url_decode($uri),"Something went wrong! You have not {$setting}d threading");
 		}
 		
 	}
@@ -377,6 +382,7 @@ class Users extends App_Controller
         }
     }
    
+  
 }
 
 ?>

@@ -1,10 +1,10 @@
 <div class="messages box">
-	<h2><?php
+	<h3><?php
 		$author = $this->User->getByUsername($username);
 		echo $gravatar->img( $author['email'],"60" ); ?>
-		<?php echo $username; ?></h2>
-	<?php echo $form->input('user_id', array('value'=>$User['id'], 'type'=>'hidden'));
-	if (!empty($User) && $User['username'] != $username) {
+		<?php echo $username; ?></h3>
+	<?php echo $form->input('user_id', array('value'=>$this->userData['id'], 'type'=>'hidden'));
+	if (!empty($this->userData) && $this->userData['username'] != $username) {
 		?><div class="box"><div class="block"><?php
 		if ($friend_status == 'follow') 
 		{
@@ -22,6 +22,6 @@
 	}
 	?>
 	<?php $this->load->view('messages/viewlist'); ?>
-	<?php $this->load->view('static/toggle_threading'); ?>
+	<?php $this->load->view('users/toggle_threading',array('threading'=>0)); ?>
 	<div class="clear"></div>
 </div>

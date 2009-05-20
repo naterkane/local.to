@@ -36,34 +36,54 @@
 			<?php $this->load->view('static/navigation'); ?>
 			</ul>
 		</div>
-		<div class="clear"></div>
+		<?php if (empty($this->userData) && isset($username)): ?>
 		<div class="grid_4">
-			<div class="box">
+			<div class="block">
+				<h3><a href="/request_account" class="toggler success">Join today!</a></h3>
+				<p>Already using <?php echo $this->config->item('service_name')?>? <a href="/signin">Sign in here</a>.</p>
+			</div>
+		</div>
+		<div class="grid_12">
+			<div class="block">
+			<h3>Hey there! <strong><?php echo $username ?></strong> is using <?php echo $this->config->item('service_name')?></h3>
+			<p><?php echo $this->config->item('service_name')?> is a free service that lets you keep in touch with people through the exchange of quick, frequent answers to one simple question: What are you doing? Join today to start receiving <?php echo $username ?>'s updates.</p>
+			</div>
+		</div>
+		<?php endif; ?>
+		<div class="clear"></div>
+		
+		<div class="grid_4">
+			
 				
-				<?php $user = $this->User->getByUsername($username);
+				<?php $user = (!empty($username))?$this->User->getByUsername($username):$this->userData;
 				//var_dump($user); 
 				//echo $this->sidebar; 
-				$this->load->view($this->sidebar,array('user'=>$user)); ?>
+				
 				
 			
-			<?php 
 			if (!empty($user)): ?>
+			<div class="box">
+			<?php $this->load->view($this->sidebar,array('user'=>$user)); ?>
 			</div>
 			<div class="box following">
 				<h2>Following</h2>
 				<?php if (count($user['following'])):?>
 				<ul>
-					<?php foreach($user['following'] as $following){
-						$following = $this->User->get($following);
-						?>
-					<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $gravatar->img( $following['email'],"24" ); ?></a></li>
-					<?php } ?>
+					<?php 
+					foreach($user['following'] as $following)
+					{
+						$following = $this->User->get($following);?>
+						<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $gravatar->img( $following['email'],"24" ); ?></a></li><?php 
+					} 
+					?>
 				</ul>
 				<?php else: ?>
-					<p><?php echo $username ?> is not currently following anyone.</p>
+					<p><?php echo $user['username'] ?> is not currently following anyone.</p>
 				<?php endif; ?>
 			</div>
-			<?php elseif (!empty($User)): ?>
+			<?php 
+			elseif (!empty($User)): ?>
+			<div class="box">
 				<ul class="menu">
 					<li>
 						<a href="/home">Home</a>

@@ -22,8 +22,8 @@ class Admin extends App_controller
 		foreach($this->User->tt->fwmkeys('', 1000) as $key)
 		{
 			$all[$key] = $this->User->tt->get($key);
-			if ($all[$key]!="")
-				unserialize($all[$key]);
+			if ($this->User->isSerialized($all[$key]))
+				$all[$key] = unserialize($all[$key]);
 			
 			if (is_array($all[$key]))
 				ksort($all[$key]);
@@ -93,7 +93,7 @@ class Admin extends App_controller
 	 */
 	function create_invite()
 	{
-		
+		//$this->load->helper('Util');
 		if ($this->postData){
 			
 			$this->load->model(array('Invite'));
@@ -114,7 +114,7 @@ class Admin extends App_controller
 					$message = "Welcome to ". $this->config->item("base_url") ."!\n\nPlease kindly accept our invitation to ". $this->config->item("base_url") ." by following this link\n". $this->config->item("base_url")."signup/".base64_encode($data['email'])."/".$data['key'];
 					$this->mail->send($data['email'], null, null, 'Welcome to '.$this->config->item('base_url'), $message);
 					ob_end_clean();	
-					$this->redirect("/signup/".base64_encode($data['email'])."/".$data['key'],"We've got your info, please click the link in the email we've sent to <strong>".$data['email']."</strong>.");
+					$this->redirect("/signup/".$this->util->base64_url_encode($data['email'])."/".$data['key'],"We've got your info, please click the link in the email we've sent to <strong>".$data['email']."</strong>.");
 				
 				}		
 				catch(Exception $e)
@@ -136,13 +136,14 @@ class Admin extends App_controller
 			$testing = $this->testing();
 			if ($testing > 0) 
 			{
+				
 				$this->layout = 'bare';
 				$this->load->model(array('Invite'));
 				$this->load->database();				
 				$this->data['email'] = "nomcat+" . $this->Invite->randomString(10) . '@wearenom.com';
-				$this->data['key'] = base64_encode(preg_replace('/@/',$this->Invite->randomString(9),$this->data['email']));
+				$this->data['key'] = $this->util->base64_url_encode(preg_replace('/@/',$this->Invite->randomString(9),$this->data['email']));
 				$this->Invite->create($this->data);		
-				$this->data['email'] = base64_encode($this->data['email']);
+				$this->data['email'] = $this->util->base64_url_encode($this->data['email']);
 				$this->load->view('admin/create_invite', $this->data);
 			}
 		}

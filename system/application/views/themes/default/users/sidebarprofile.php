@@ -1,10 +1,10 @@
-<a href="/<?php echo $User['username']; ?>" class="image"><? echo $gravatar->img( $User['email'],"48" ); ?></a> <a href="/<?php echo $User['username']; ?>" id="profile_username"><?php echo $User['username'];  ?></a>
-<?php echo (!empty($User['location']))? '<p id="profile_location">'.$User['location'].'</p>': "";  ?>
-<?php echo (!empty($User['bio']))? '<p id="profile_bio">'.$User['bio'].'</p>': "";  ?>
+<a href="/<?php echo $user['username']; ?>" class="image"><? echo $gravatar->img( $user['email'],"48" ); ?></a> <a href="/<?php echo $user['username']; ?>" id="profile_username"><?php echo $user['username'];  ?></a>
+<?php echo (!empty($user['location']))? '<p id="profile_location">'.$user['location'].'</p>': "";  ?>
+<?php echo (!empty($user['bio']))? '<p id="profile_bio">'.$user['bio'].'</p>': "";  ?>
 
-<?php echo (!empty($User['url']))? '<p id="profile_url"><a href="'.$User['url'].'" rel="me nofollow">'.$User['url'].'</a></p>': "";  ?>
+<?php echo (!empty($user['url']))? '<p id="profile_url"><a href="'.$user['url'].'" rel="me nofollow">'.$user['url'].'</a></p>': "";  ?>
 
 <p>
-	Following: <?php echo $User['following_count'] ?> 
-	Followers: <?php echo $User['follower_count'] ?>
+	Following: <?php echo count($user['following']) ?> 
+	Followers: <?php echo count($user['followers']) ?>
 </p>

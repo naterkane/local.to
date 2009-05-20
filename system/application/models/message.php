@@ -72,7 +72,7 @@ class Message extends App_Model
 		}
 		if (($this->parent) AND (!$user['locked']))
 		{
-			++$this->parent['reply_count'];
+			array_push($this->parent['replies'],$data['id']);
 			$this->save($this->prefixMessage($this->parent['id']), $this->parent);
 		}
 		if (!$user['locked']) 
@@ -131,19 +131,20 @@ class Message extends App_Model
     {
         $return = array();
 		$threading = false;
-		if ($User && $User['threaded'] == 1)
+		if ($this->userData && $this->userData['threading'] == 1)
 		{
 			$threading = true;
+			//echo"poop";
 		}
 		if (($messages) AND (is_array($messages))) {
-			foreach ($messages as $id)
+			foreach ($messages as $message)
 	        {
-				if ($id) 
+				if ($message) 
 				{
-					$return[] = $this->getOne($id);
-					if ($threading && !empty($id[reply_to]))
+					$return[] = $this->getOne($message);
+					if ($threading && !empty($message['reply_to']))
 					{
-						foreach($this->getMany($this->prefixReplies($id[reply_to])) as $replyid)
+						foreach($this->getMany($this->prefixReplies($message['reply_to'])) as $replyid)
 						{
 							$return[]['replies'][] = $this->getOne($replyid); 
 						}

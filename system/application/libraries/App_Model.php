@@ -1038,5 +1038,23 @@ class App_Model extends Model {
 				}
 			}
     }
+	
+		/**
+	 * 
+	 * @return 
+	 * @param object $input
+	 */
+	public function base64_url_encode($input) {
+    	return strtr(base64_encode($input), '+/=', '-_,');
+    }
+
+	/**
+	 * 
+	 * @return 
+	 * @param object $input
+	 */
+	public function base64_url_decode($input) {
+	    return base64_decode(strtr($input, '-_,', '+/='));
+    }
 }
 ?>

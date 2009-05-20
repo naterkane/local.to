@@ -1,8 +1,6 @@
 <?php
 if ((is_array($message)) AND (!empty($message['message_html'])))
 {
-	echo $username;
-	echo $user;
 	//if (!empty($username) && $username != $message['username']){
 		?><a href="/<?php echo $message['username']?>" class="image"><?php 
 		$author = $this->User->getByUsername($message['username']);
@@ -23,11 +21,11 @@ if ((is_array($message)) AND (!empty($message['message_html'])))
 		<?php endif; ?>
 		
 		<?php if (empty($message['reply_to'])): ?>
-			<?php if ($message['reply_count'] > 0): ?>
+			<?php if (count($message['replies']) > 0): ?>
 				&mdash; <span id="reply_count<?php echo $message['id'] ?>">
 					(<a href="<?php echo '/' . $message['username'] . '/status/' . $message['id'] ?>">
-					<?php echo $message['reply_count']; ?>
-					<?php echo ($message['reply_count'] > 1)?"replies":"reply";?>
+					<?php echo count($message['replies']); ?>
+					<?php echo (count($message['replies']) > 1)?"replies":"reply";?>
 					</a>)
 				</span>
 			<?php endif ?>

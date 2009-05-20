@@ -433,6 +433,44 @@ class User extends App_Model
 		return $this->endTransaction();
 	}
 
+	function removeGroup($user_id,$group_id)
+	{
+		$data = $this->userData;
+		if (!is_array($data['groups']))
+			$data['groups'] = array();
+		
+		
+		if ($key = array_search($group_id,$data['groups']) && $key > 0)
+		{
+			unset($data['groups'][$key]);
+			$data['groups'] = array_values($data['groups']);
+		}
+			
+		$data['id'] = $user_id;
+		$data['modified'] = time();
+		$data = $this->updateData($this->userData, $data);
+		$this->startTransaction();
+		$this->save($this->prefixUser($data['id']), $data);
+		return $this->endTransaction();
+	}
+
+	function addGroup($user_id,$group_id)
+	{
+		$data = $this->userData;
+		if (!is_array($data['groups']))
+			$data['groups'] = array();
+		
+		if (!in_array($group_id,$data['groups']))
+			array_push($data['groups'],$group_id);
+			
+		$data['id'] = $user_id;
+		$data['modified'] = time();
+		$data = $this->updateData($this->userData, $data);
+		$this->startTransaction();
+		$this->save($this->prefixUser($data['id']), $data);
+		return $this->endTransaction();
+	}
+
 	/**
 	 * Update profile
 	 *

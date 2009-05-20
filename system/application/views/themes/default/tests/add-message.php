@@ -41,11 +41,11 @@
 	$selenium->write('verifyTextPresent', $message);
 	//post second message to timeline by unlocking
 	$selenium->openPage('/settings');
-	$selenium->write('assertChecked', 'locked');		
+	$selenium->write('assertNotChecked', 'locked');		
 	$selenium->write('click', 'locked');	
 	$selenium->click('Update');
 	$selenium->write('verifyValue', 'testing_count', $count + 6);	
-	$selenium->write('assertNotChecked', 'locked');
+	$selenium->write('assertChecked', 'locked');
 	$selenium->write('verifyTextPresent', 'Your profile was updated.');
 	$selenium->openPage('/home');	
 	$selenium->write('type', 'message', $message2);
