@@ -23,7 +23,7 @@
 	$selenium->write('type', 'message', $message2);	
 	$selenium->click('Update');
 	$selenium->write('verifyTextPresent', $message2);
-	$selenium->write('clickAndWait', 'xpath=//a[text()="this message"]');	
+	$selenium->write('clickAndWait', 'xpath=//a[text()="'.$name.'\'s message"]');	
 	$selenium->openPage('/home');
 	//try to post to a reply to a non-existant username and fail miserably
 	$selenium->write('clickAndWait', 'xpath=//a[text()="[Reply]"]');	
@@ -41,7 +41,11 @@
 	$selenium->write('verifyTextNotPresent', $message3);	
 	//test threading view
 	$selenium->openPage('/settings');
-	$selenium->write('assertChecked', 'locked');		
+	$selenium->write('assertNotChecked', 'locked');		
+	$selenium->write('click', 'locked');	
+	$selenium->click('Update');
+	$selenium->write('assertChecked', 'locked');	
+	$selenium->write('verifyTextPresent', 'Your profile was updated.');
 	$selenium->write('click', 'locked');	
 	$selenium->click('Update');
 	$selenium->write('assertNotChecked', 'locked');	
@@ -60,7 +64,9 @@
 	$selenium->write('verifyTextPresent', $message4);
 	$selenium->openPage('/public_timeline');	
 	$selenium->write('verifyTextPresent', $message4);
-	$selenium->openPage('/public_timeline_threaded');		
-	$selenium->write('verifyTextNotPresent', $message4);	
+	$selenium->write('clickAndWait', 'xpath=//a[text()="On"]');
+	$selenium->write('verifyTextPresent', $message4);	
+	$selenium->write('clickAndWait', 'xpath=//a[text()="Off"]');
+	$selenium->write('verifyTextPresent', $message4);
 	$selenium->openPage('/admin/flush');
 ?>
