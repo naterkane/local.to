@@ -6,14 +6,14 @@
 	<meta http-equiv="Expires" content="-1" />
 	<meta name="robots" content="noindex,nofollow" />	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link rel="stylesheet" type="text/css" media="screen, projection" href="/css/styles.css?<?php echo time();?>" />
 	<link rel="stylesheet" type="text/css" media="all" href="/css/reset.css?<?php echo time();?>" />
-	<link rel="stylesheet" type="text/css" media="all" href="/css/text.css?<?php echo time();?>" />
-		<link rel="stylesheet" type="text/css" href="/css/960.css?<?php echo time();?>" media="screen" />
-		<link rel="stylesheet" type="text/css" href="/css/layout.css?<?php echo time();?>" media="screen" />
-		<link rel="stylesheet" type="text/css" href="/css/nav.css?<?php echo time();?>" media="screen" />
-		<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/css/ie6.css?<?php echo time();?>" media="screen" /><![endif]-->
-		<!--[if gte IE 7]><link rel="stylesheet" type="text/css" href="/css/ie.css?<?php echo time();?>" media="screen" /><![endif]-->
+	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/text.css" />
+		<link rel="stylesheet" type="text/css" href="/assets/css/960.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/assets/css/layout.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/assets/css/nav.css" media="screen" />
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="/assets/css/styles.css" />
+		<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/assets/css/ie6.css" media="screen" /><![endif]-->
+		<!--[if gte IE 7]><link rel="stylesheet" type="text/css" href="/assets/css/ie.css" media="screen" /><![endif]-->
 	<title><?php 
 		if (!empty($page_title)): 
 			echo $page_title;

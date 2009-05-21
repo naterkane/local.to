@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	#RewriteBase /
+
+	RewriteRule ^load\.(css|js)$ load.php?ext=$1 [NC,L,QSA]
+</IfModule>
