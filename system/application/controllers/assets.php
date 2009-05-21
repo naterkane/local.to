@@ -28,7 +28,7 @@ class Assets extends App_controller
 	
 	private function setHeader($file)
 	{
-		$file = split(".",$file);
+		$file = split('[.]',$file);
 		$ext = $file[count($file)-1];
 		$ctype = '';// content type
 		switch ($ext) {
