@@ -6,6 +6,7 @@ class Message extends App_Model
 {
 
 	protected $idGenerator = 'messageId';
+	private $to = array();
 	private $parent;
 	
     /**
@@ -18,22 +19,30 @@ class Message extends App_Model
     public function add($message, $user)
     {
 		$this->startTransaction();
-		$to_user = array();
-		$data = $this->setUpMessage($message, $user, $to_user);
+		$this->loadModels(array('Group'));		
+		$data = $this->setUpMessage($message, $user);
 		if ($data['dm']) 
 		{
 			if ($this->save($this->prefixMessage($data['id']), $data))
 			{
 				$this->mode = null;
-				$this->User->addToInbox($to_user, $data['id']);
-				$this->User->addToSent($user, $data['id']);
+				if ($data['dm_group']) 
+				{
+					$this->Group->addToInbox($this->to, $data['id']);
+					$this->User->addToSent($user, $data['id']);					
+					$this->Group->addToMemberInboxes($this->to['members'], $data['id']);					
+				}
+				else 
+				{
+					$this->User->addToInbox($this->to, $data['id']);					
+					$this->User->addToSent($user, $data['id']);					
+				}
 			}
 		}
 		else 
 		{
 			if ($this->save($this->prefixMessage($data['id']), $data))
 			{
-				$this->loadModels(array('Group'));
 				$this->mode = null;
 				$this->User->addToPublicAndPrivate($user, $data['id']);				
 				if (!$user['locked']) 
@@ -206,6 +215,23 @@ class Message extends App_Model
 		return in_array($this->modelData['to'], $this->userData['followers']);
 	}
 	
+	/**
+	 * Is a user a member of group
+	 * used for validating group DMs
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function isGroupMember()
+	{
+		if (isset($this->to['members'])) 
+		{
+			return $this->Group->isMember($this->to['members'], $this->userData['id']);
+		}
+		return false;
+	}
+	
+	
     /**
      * Is a message a not a reply
      *
@@ -236,11 +262,14 @@ class Message extends App_Model
 	 * @param array $to [optional] Recipient of dm	
 	 * @return array Message data
 	 */
-	public function setUpMessage($message, $user, &$to_user)
+	public function setUpMessage($message, $user)
 	{
 		$data = array();
 		//check if the message is a dm even not sent through dm form
 		$parts = split(" ", $message['message'], 3);
+		$data['dm_group'] = false;	
+		$data['to'] = null;
+		$data['dm'] = false;			
 		if ((strtolower($parts[0]) == 'd') AND isset($parts[1]) AND isset($parts[2]))
 		{
 			$data['dm'] = true;
@@ -250,14 +279,28 @@ class Message extends App_Model
 		}
 		if (isset($message['to'])) //if it's a dm of some sort
 		{
-			$this->mode = 'dm';
-			$data['dm'] = true;
+			if ($data['to'][0] == '!') 
+			{
+				$data['dm_group'] = true;
+			}		
 			$data['reply_to'] = null;
 			$data['reply_to_username'] = null;			
-			$to_user = $this->User->getByUsername($message['to']);			
-			if (isset($to_user['id'])) 
+			if ($data['dm_group']) 
 			{
-				$data['to'] = $to_user['id'];
+				$this->mode = 'dm_group';
+				$data['dm'] = true;	//set this twice				
+				$groupname = str_replace('!', '', $data['to']);
+				$this->to = $this->Group->getByName($groupname);
+			} 
+			else 
+			{
+				$this->mode = 'dm';
+				$data['dm'] = true;	//set this twice
+				$this->to = $this->User->getByUsername($message['to']);
+			}
+			if (isset($this->to['id'])) 
+			{
+				$data['to'] = $this->to['id'];
 			}
 			else 
 			{
@@ -267,7 +310,8 @@ class Message extends App_Model
 		else //otherwise check if it is a reply
 		{
 			$data['to'] = null;
-			$data['dm'] = false;			
+			$data['dm'] = false;	
+			$data['group_dm'] = false;			
 			if ((empty($message['reply_to'])) && (empty($message['reply_username']))) 
 			{
 				$this->mode = 'post';
@@ -331,7 +375,7 @@ class Message extends App_Model
     public function validate()
 	{
 		$this->setAction();	
-		if (($this->mode == 'post') || ($this->mode == 'reply') || ($this->mode == 'dm'))
+		if (($this->mode == 'post') || ($this->mode == 'reply') || ($this->mode == 'dm') || $this->mode == 'dm_group')
 		{
 			$this->validates_length_of('message', array('min'=>1, 'max'=>140, 'message'=>'A message must be between 1 and 140 characters'));
 			$this->validates_presence_of('message', array('message'=>'A message must be between 1 and 140 characters'));
@@ -346,7 +390,12 @@ class Message extends App_Model
 		{
 			$this->validates_presence_of('to', array('message'=>'A recipient is required'));			
 			$this->validates_callback('isFollower', 'to', array('message'=>'This user is not following you'));
-		}		
+		}
+		if ($this->mode == 'dm_group') 
+		{
+			$this->validates_presence_of('to', array('message'=>'A recipient is required'));
+			$this->validates_callback('isGroupMember', 'to', array('message'=>'You can not post to this group'));			
+		}
 	    return (count($this->validationErrors) == 0);
 	}
 

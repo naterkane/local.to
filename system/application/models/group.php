@@ -29,6 +29,7 @@ class Group extends App_Model
 		$data['public'] = 1;
 		$data['members'] = array($owner_id);
 		$data['messages'] = array();
+		$data['inbox'] = array();		
 		$owner = $this->User->get($owner_id);
 		$data['time_zone'] = $owner['time_zone'];
 		$this->mode = 'add';
@@ -52,6 +53,39 @@ class Group extends App_Model
 		array_unshift($group['members'], $member_id);
 		return $this->save($this->prefixGroup($group['id']), $group);
 	}
+	
+	/**
+	 * Add to inbox
+	 *
+	 * @access public
+	 * @param array $group 
+	 * @param array $message_id 
+	 * @return
+	 */
+	public function addToInbox(&$group, $message_id)
+	{
+		$this->addTo('inbox', 'prefixGroup', $group, $message_id);
+	}
+	
+	/**
+	 * Add group dms to member inboxes
+	 *
+	 * @access public
+	 * @param array $members Member ids
+	 * @param int $member_id	
+	 * @return 
+	 */
+	public function addToMemberInboxes($members = array(), $message_id)
+	{
+		foreach ($members as $member) {
+			$user = $this->User->get($member);
+			if ($user) 
+			{
+				$this->User->addToInbox($user, $message_id);
+			}
+		}
+	}
+	
 	
 	/**
 	 * Find a group by id

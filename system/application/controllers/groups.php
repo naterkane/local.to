@@ -11,7 +11,7 @@ class Groups extends App_Controller
 	 * @access public
 	 * @return 
 	 */
-	function add()
+	public function add()
 	{
 		$this->mustBeSignedIn();
 		$this->data['page_title'] = 'Add a group';
@@ -27,11 +27,50 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * View a group's inbox
+	 *
+	 * @todo Check if group exists
+	 * @todo Change that bad hand-off of user data
+	 * @todo Merge with view	
+	 * @access public
+	 * @param string $name	
+	 * @return
+	 */
+	public function inbox($groupname = null)
+	{
+		$this->mustBeSignedIn();
+		if ($groupname) {
+			$group = $this->Group->getByName($groupname);
+			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
+			{
+				show_404();
+			}			
+			$user = $this->data['User'];
+			$this->data = $group; //necessary, but should be removed, this was accidently coded to overwriter user data
+			$this->data['page_title'] = $group['name'] . ' Inbox';
+			$this->data['groupname'] = $group['name'];
+			$this->data['message'] = 'd !' . $group['name'] . ' ';			
+			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+			$this->data['member_count'] = count($group['members']);			
+			$this->data['messages'] = $this->Message->getMany($group['inbox']);
+			$this->data['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+			$this->data['User'] = $user;
+			if ($this->data['member_count'] > 0) {
+				$this->load->view('groups/inbox', $this->data);
+			} else {
+				show_404();
+			}
+		} else {
+			show_404();
+		}
+	}
+
+	/**
 	 * List all groups
 	 *
 	 * @access public
 	 */
-	function index()
+	public function index()
 	{		
 		$this->getUserData();		
 		$this->data['groups'] = $this->Group->getAll();
@@ -42,15 +81,16 @@ class Groups extends App_Controller
 	 * View a group
 	 *
 	 * @todo Check if group exists
+	 * @todo Change that bad hand-off of user data
+	 * @todo Merge with inbox		
 	 * @access public
 	 * @param string $name	
-	 * @return 
+	 * @return
 	 */
-	function view($groupname = null)
+	public function view($groupname = null)
 	{
 		$this->getUserData();
 		if ($groupname) {
-			$this->getUserData();
 			$group = $this->Group->getByName($groupname);
 			$user = $this->data['User'];
 			$this->data = $group;

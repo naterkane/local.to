@@ -370,7 +370,5 @@ class Users extends App_Controller
         }
     }
    
-  
 }
-
 ?>

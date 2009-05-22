@@ -46,7 +46,7 @@ class User extends App_Model
 	 * @access public
 	 * @param array $user 
 	 * @param array $message_id 
-	 * @return array $user
+	 * @return
 	 */
 	public function addToInbox(&$user, $message_id)
 	{
@@ -59,7 +59,7 @@ class User extends App_Model
 	 * @access public
 	 * @param array $user 
 	 * @param array $message_id 
-	 * @return array $user
+	 * @return
 	 */
 	public function addToSent(&$user, $message_id)
 	{
@@ -72,7 +72,7 @@ class User extends App_Model
 	 * @access public
 	 * @param array $user 
 	 * @param array $message_id 
-	 * @return array $user
+	 * @return
 	 */
 	public function addToPrivate(&$user, $message_id)
 	{
@@ -85,7 +85,7 @@ class User extends App_Model
 	 * @access public
 	 * @param array $user 
 	 * @param array $message_id 
-	 * @return array $user
+	 * @return
 	 */
 	public function addToPublic(&$user, $message_id)
 	{
@@ -98,7 +98,7 @@ class User extends App_Model
 	 * @access public
 	 * @param array $user 
 	 * @param array $message_id 
-	 * @return array $user
+	 * @return
 	 */
 	public function addToPublicAndPrivate(&$user, $message_id)
 	{

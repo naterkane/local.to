@@ -7,6 +7,7 @@
 	$selenium->addTestCase('Threading', 'threading');	
 	$selenium->addTestCase('Follow', 'follow');
 	$selenium->addTestCase('Add Group and Subscribe', 'group');
+	$selenium->addTestCase('Add Group and DM', 'group-dm');	
 	$selenium->addTestCase('Add Group and Change Profile', 'group-settings');	
 	$selenium->addTestCase('Access', 'access');	
 	$selenium->addTestCase('Disallowed Characters', 'characters');		

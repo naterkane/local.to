@@ -36,27 +36,6 @@ class Messages extends App_Controller
 	{
 		//remember to decrease thread count if message is reply to
 	}
-
-	public function direct()
-	{
-        $this->mustBeSignedIn();
-        if ($this->postData)
-        {
-			$message = $this->Message->addDm($this->postData, $this->userData);
-			if ($message) 
-			{
-				$this->redirect('/inbox');
-			}
-			else 
-			{
-				$this->redirect('/inbox', 'There was an error adding your message.', 'error');
-			}
-        }
-        else
-        {
-            $this->redirect('/home');
-        }
-	}
 	
 	public function inbox()
 	{
