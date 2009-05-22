@@ -34,11 +34,96 @@ class User extends App_Model
 	 * @param array $following Data of user following
 	 * @return boolean
 	 */
-	public function addFriendRequest($followed, $following)
+	public function addFriendRequest(&$followed, $following)
 	{
 		array_unshift($followed['friend_requests'], $following['id']);
 		return $this->save($this->prefixUser($followed['id']), $followed);
+	}	
+	
+	/**
+	 * Add to inbox
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return array $user
+	 */
+	public function addToInbox(&$user, $message_id)
+	{
+		$this->addTo('inbox', 'prefixUser', $user, $message_id);
 	}
+	
+	/**
+	 * Add to sent
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return array $user
+	 */
+	public function addToSent(&$user, $message_id)
+	{
+		$this->addTo('sent', 'prefixUser', $user, $message_id);
+	}
+	
+	/**
+	 * Add to private
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return array $user
+	 */
+	public function addToPrivate(&$user, $message_id)
+	{
+		$this->addTo('private', 'prefixUser', $user, $message_id);
+	}
+		
+	/**
+	 * Add to public
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return array $user
+	 */
+	public function addToPublic(&$user, $message_id)
+	{
+		$this->addTo('public', 'prefixUser', $user, $message_id);
+	}
+	
+	/**
+	 * Add to public and private
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return array $user
+	 */
+	public function addToPublicAndPrivate(&$user, $message_id)
+	{
+		$this->addToPublic($user, $message_id);
+		$this->addToPrivate($user, $message_id);
+	}
+
+	public function addGroup($user_id,$group_id)
+	{
+		$data = $this->userData;
+		if (!is_array($data['groups']))
+		{
+			$data['groups'] = array();
+		}
+		if (!in_array($group_id,$data['groups']))
+		{
+			array_push($data['groups'],$group_id);
+		}	
+		$data['id'] = $user_id;
+		$data['modified'] = time();
+		$data = $this->updateData($this->userData, $data);
+		$this->startTransaction();
+		$this->save($this->prefixUser($data['id']), $data);
+		return $this->endTransaction();
+	}	
 
 	/**
 	 * Change password
@@ -466,12 +551,10 @@ class User extends App_Model
 	 */
 	function updateThreading($user_id,$setting)
 	{
-		
 		$data['threading'] = $setting;
 		$data['id'] = $user_id;
 		$data['modified'] = time();
 		$data = $this->updateData($this->userData, $data);
-		//var_dump($data);
 		$this->startTransaction();
 		$this->save($this->prefixUser($data['id']), $data);
 		return $this->endTransaction();
@@ -481,31 +564,14 @@ class User extends App_Model
 	{
 		$data = $this->userData;
 		if (!is_array($data['groups']))
+		{
 			$data['groups'] = array();
-		
-		
+		}
 		if ($key = array_search($group_id,$data['groups']) && $key > 0)
 		{
 			unset($data['groups'][$key]);
 			$data['groups'] = array_values($data['groups']);
 		}
-			
-		$data['id'] = $user_id;
-		$data['modified'] = time();
-		$data = $this->updateData($this->userData, $data);
-		$this->startTransaction();
-		$this->save($this->prefixUser($data['id']), $data);
-		return $this->endTransaction();
-	}
-
-	function addGroup($user_id,$group_id)
-	{
-		$data = $this->userData;
-		if (!is_array($data['groups']))
-			$data['groups'] = array();
-		
-		if (!in_array($group_id,$data['groups']))
-			array_push($data['groups'],$group_id);
 			
 		$data['id'] = $user_id;
 		$data['modified'] = time();

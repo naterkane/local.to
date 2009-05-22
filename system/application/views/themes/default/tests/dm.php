@@ -81,5 +81,33 @@
 	$selenium->write('verifyTextNotPresent', $message);	
 	$selenium->openPage('/inbox');
 	$selenium->write('verifyTextPresent', $message);
+	//sign in as first user and send a dm to the send user with tags
+	$selenium->signOut();
+	$selenium->signIn($name, $password);	
+	$selenium->openPage('/home');	
+	$selenium->write('type', 'message', 'd ' . $name2 . ' ' . $message2);
+	$selenium->click('Update');
+	$selenium->openPage('/public_timeline');
+	$selenium->write('verifyValue', 'testing_count', $count + 10);
+	$selenium->write('verifyTextNotPresent', $message2);
+	$selenium->openPage('/' . $name);
+	$selenium->write('verifyTextNotPresent', $message2);
+	$selenium->openPage('/home');
+	$selenium->write('verifyTextNotPresent', $message2);
+	$selenium->openPage('/' . $name2);
+	$selenium->write('verifyTextNotPresent', $message2);	
+	$selenium->openPage('/inbox');
+	$selenium->write('verifyTextNotPresent', $message2);	
+	$selenium->openPage('/sent');
+	$selenium->write('verifyTextPresent', $message2);	
+	//sign in as second user and check inbox
+	$selenium->signOut();
+	$selenium->signIn($name2, $password2);	
+	$selenium->openPage('/home');
+	$selenium->write('verifyTextNotPresent', $message2);
+	$selenium->openPage('/sent');
+	$selenium->write('verifyTextNotPresent', $message2);	
+	$selenium->openPage('/inbox');
+	$selenium->write('verifyTextPresent', $message2);
 	$selenium->openPage('/admin/flush');
 ?>

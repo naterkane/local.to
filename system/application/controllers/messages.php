@@ -16,21 +16,10 @@ class Messages extends App_Controller
     {
         $this->mustBeSignedIn();
         if ($this->postData)
-        {
-			$message = $this->Message->add($this->postData, $this->userData);
-			if ($message) 
+        {	
+			if ($this->Message->add($this->postData, $this->userData)) 
 			{
-				$this->User->mode = null;
-            	$this->Group->sendToMembers($message, $this->userData['id']);
-            	$this->User->sendToFollowers($message['id'], $this->userData['followers']);
-				if (!empty($message['reply_to']))
-				{
-					$parentmessage = $this->Message->getOne($message['reply_to']);
-					array_push($parentmessage['replies'], $message['id']);					
-					$this->Message->save($this->Message->prefixMessage($parentmessage['id']),$parentmessage,false);
-					$this->Message->addToReplies($message['reply_to'],$message['id']);
-				}
-				$this->redirect('/home');
+				$this->redirect('/home');				
 			}
 			else 
 			{

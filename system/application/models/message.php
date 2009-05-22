@@ -7,158 +7,51 @@ class Message extends App_Model
 
 	protected $idGenerator = 'messageId';
 	private $parent;
-
-	/**
-	 * Return response
-	 * Used to return a response from adding regular and dm messages
-	 *
-	 * @access private
-	 * @param array $data
-	 * @return array|boolean
-	 */
-	private function returnResponse($data)
-	{
-		$response = $this->endTransaction();
-		if ($response) 
-		{
-        	return $data;
-		}
-		else 
-		{
-			return false;			
-		}
-	}
 	
-	
-	/**
-	 * Set up a message
-	 * Set up data for regular messages and dms. Also sets up validation values
-	 *
-	 * @access private
-	 * @param array $data
-	 * @param array $message
-	 * @param array $user
-	 * @param boolean $direct_message [optional] Defaults to false			
-	 * @param array $to [optional] Recipient of dm	
-	 * @return array Message data
-	 */
-	private function setUpMessage($data, $message, $user, $direct_message = false, $to = array())
-	{
-		if ($direct_message) 
-		{
-			$this->mode = 'dm';
-			$data['reply_to'] = null;
-			$data['reply_to_username'] = null;
-			if (isset($to['id'])) 
-			{
-				$data['to'] = $to['id'];
-			}
-			else 
-			{
-				$data['to'] = null;				
-			}
-		}
-		else 
-		{
-			$data['to'] = null;
-			if ((empty($message['reply_to'])) && (empty($message['reply_username']))) 
-			{
-				$this->mode = 'post';
-				$data['reply_to'] = null;
-				$data['reply_to_username'] = null;		
-			}
-			else 
-			{
-				$this->mode = 'reply';
-				$this->parent = $this->getOne($message['reply_to']);
-				if (!empty($this->parent['reply_to']))
-				{
-					$this->parent = $this->getOne($this->parent['reply_to']);
-					$data['reply_to'] = $this->parent['reply_to'];
-				}
-				else
-				{
-					$data['reply_to'] = $message['reply_to'];
-
-				}
-				$data['reply_to_username'] = $message['reply_to_username'];		
-			}
-			
-		}
-		$data['id'] = $this->makeId($this->idGenerator);	
-		$data['time'] = time();
-		$data['user_id'] = $user['id'];
-		$data['replies'] = array();	
-		$data['message'] = str_replace("\n", " ", $message['message']);	
-		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
-		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
-		return $data;
-	}
-
     /**
      * Add a new message
      *
      * @param array $message
      * @param array $user
-	 * @return boolean|data
+	 * @return boolean
      */
-    public function add($message = array(), $user = array())
+    public function add($message, $user)
     {
-		if ((empty($message)) || (empty($user)))
-		{
-			return false;
-		}
-		$data = array();	
-		$data = $this->setUpMessage($data, $message, $user);
 		$this->startTransaction();
-		$this->save($this->prefixMessage($data['id']), $data);
-		$this->mode = null;
-		array_unshift($user['private'], $data['id']);
-		array_unshift($user['public'], $data['id']);
-		$this->User->save($this->prefixUser($user['id']), $user);
-		if ($data['reply_to']) 
+		$to_user = array();
+		$data = $this->setUpMessage($message, $user, $to_user);
+		if ($data['dm']) 
 		{
-			$this->addToReplies($data['reply_to'], $data['id']);
+			if ($this->save($this->prefixMessage($data['id']), $data))
+			{
+				$this->mode = null;
+				$this->User->addToInbox($to_user, $data['id']);
+				$this->User->addToSent($user, $data['id']);
+			}
 		}
-		if (($this->parent) AND (!$user['locked']))
+		else 
 		{
-			array_push($this->parent['replies'],$data['id']);
-			$this->save($this->prefixMessage($this->parent['id']), $this->parent);
+			if ($this->save($this->prefixMessage($data['id']), $data))
+			{
+				$this->loadModels(array('Group'));
+				$this->mode = null;
+				$this->User->addToPublicAndPrivate($user, $data['id']);				
+				if (!$user['locked']) 
+				{
+					$this->addToPublicTimeline($data);
+				}
+				$this->User->mode = null;
+		    	$this->Group->sendToMembers($data, $this->userData['id']);
+		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);
+				if (isset($data['reply_to']))
+				{
+					$parentmessage = $this->getOne($data['reply_to']);
+					$this->addToReplies($parentmessage, $data['id']);
+				}
+			}
 		}
-		if (!$user['locked']) 
-		{
-			$this->addToPublicTimeline($data);
-		}
-		return $this->returnResponse($data);
-    }
-
-	/**
-     * Add a new direct message
-     *
-     * @param array $message
-     * @param array $user
-	 * @return boolean|data
-     */
-    public function addDm($message = array(), $user = array())
-    {
-		if ((empty($message)) || (empty($user)) || (!isset($message['to'])))
-		{
-			return false;
-		}
-		$data = array();	
-		$to = $this->User->getByUsername($message['to']);
-		$data = $this->setUpMessage($data, $message, $user, true, $to);
-		$this->startTransaction();
-		if ($this->save($this->prefixMessage($data['id']), $data)) 
-		{
-			$this->mode = null;
-			array_unshift($user['sent'], $data['id']);
-			$this->User->save($this->prefixUser($user['id']), $user);
-			array_unshift($to['inbox'], $data['id']);
-			$this->User->save($this->prefixUser($to['id']), $to);
-		}
-		return $this->returnResponse($data);
-    }
+		return $this->endTransaction();	
+	}
 
 	/**
 	 * Add to public timeline
@@ -179,16 +72,16 @@ class Message extends App_Model
 	}
 	
 	/**
-	 * Add to message to message's replies
+	 * Add to replies
 	 *
 	 * @access public
-	 * @param int $user_id	
-	 * @param int $message_id
-	 * @return 
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return array $message
 	 */
-    public function addToReplies($reply_to, $message_id)
+	public function addToReplies(&$message, $id)
 	{
-		return $this->push($this->prefixReplies($reply_to), $message_id);
+		return $this->addTo('replies', 'prefixMessage', $message, $id);
 	}
 
     /**
@@ -205,7 +98,6 @@ class Message extends App_Model
 		if ($this->userData && $this->userData['threading'] == 1)
 		{
 			$threading = true;
-			//echo"poop";
 		}
 		if (($messages) AND (is_array($messages))) {
 			foreach ($messages as $message)
@@ -311,10 +203,9 @@ class Message extends App_Model
 	 */
 	public function isFollower()
 	{
-		return true;
+		return in_array($this->modelData['to'], $this->userData['followers']);
 	}
 	
-
     /**
      * Is a message a not a reply
      *
@@ -332,6 +223,85 @@ class Message extends App_Model
 			return false;
 		}
     }
+	
+	/**
+	 * Set up a message
+	 * Set up data for regular messages and dms. Also sets up validation values
+	 *
+	 * @access private
+	 * @param array $data
+	 * @param array $message
+	 * @param array $user
+	 * @param boolean $direct_message [optional] Defaults to false			
+	 * @param array $to [optional] Recipient of dm	
+	 * @return array Message data
+	 */
+	public function setUpMessage($message, $user, &$to_user)
+	{
+		$data = array();
+		//check if the message is a dm even not sent through dm form
+		$parts = split(" ", $message['message'], 3);
+		if ((strtolower($parts[0]) == 'd') AND isset($parts[1]) AND isset($parts[2]))
+		{
+			$data['dm'] = true;
+			$data['to'] = $parts[1];
+			$message['to'] = $parts[1];
+			$message['message'] = $parts[2];
+		}
+		if (isset($message['to'])) //if it's a dm of some sort
+		{
+			$this->mode = 'dm';
+			$data['dm'] = true;
+			$data['reply_to'] = null;
+			$data['reply_to_username'] = null;			
+			$to_user = $this->User->getByUsername($message['to']);			
+			if (isset($to_user['id'])) 
+			{
+				$data['to'] = $to_user['id'];
+			}
+			else 
+			{
+				$data['to'] = null;				
+			}
+		}
+		else //otherwise check if it is a reply
+		{
+			$data['to'] = null;
+			$data['dm'] = false;			
+			if ((empty($message['reply_to'])) && (empty($message['reply_username']))) 
+			{
+				$this->mode = 'post';
+				$data['reply_to'] = null;
+				$data['reply_to_username'] = null;		
+			}
+			else 
+			{
+				$this->mode = 'reply';
+				$this->parent = $this->getOne($message['reply_to']);
+				if (!empty($this->parent['reply_to']))
+				{
+					$this->parent = $this->getOne($this->parent['reply_to']);
+					$data['reply_to'] = $this->parent['reply_to'];
+				}
+				else
+				{
+					$data['reply_to'] = $message['reply_to'];
+
+				}
+				$data['reply_to_username'] = $message['reply_to_username'];		
+			}
+			
+		}
+		//set up the rest of the message		
+		$data['id'] = $this->makeId($this->idGenerator);
+		$data['time'] = time();
+		$data['user_id'] = $user['id'];
+		$data['replies'] = array();	
+		$data['message'] = str_replace("\n", " ", $message['message']);	
+		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
+		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
+		return $data;
+	}
 	
     /**
      * Is a message's owner correct?
@@ -376,7 +346,7 @@ class Message extends App_Model
 		{
 			$this->validates_presence_of('to', array('message'=>'A recipient is required'));			
 			$this->validates_callback('isFollower', 'to', array('message'=>'This user is not following you'));
-		}
+		}		
 	    return (count($this->validationErrors) == 0);
 	}
 

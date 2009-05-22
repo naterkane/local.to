@@ -136,9 +136,43 @@ class App_Model extends Model {
 	}
 
 	/**
+	 * Add to a nested array
+	 *
+	 * @access public
+	 * @param string $arrayName
+	 * @param string $prefix
+	 * @param array $data Passed by reference	
+	 * @param int $id
+	 * @return array $data
+	 */
+	public function addTo($arrayName, $prefix, &$data, $id)
+	{
+		array_unshift($data[$arrayName], $id);
+		$this->save($this->{$prefix}($data['id']), $data);
+	}
+	
+	/**
+	 * 
+	 * @return 
+	 * @param object $input
+	 */
+	public function base64_url_encode($input) {
+    	return strtr(base64_encode($input), '+/=', '-_,');
+    }
+
+	/**
+	 * 
+	 * @return 
+	 * @param object $input
+	 */
+	public function base64_url_decode($input) {
+	    return base64_decode(strtr($input, '-_,', '+/='));
+    }
+
+	/**
 	 * Delete a record
 	 */
-	function delete($key) 
+	public function delete($key) 
 	{
 		$this->logQuery($key);
 		$data = $this->mem->get(array($key));
@@ -158,7 +192,7 @@ class App_Model extends Model {
 	 * Do transaction
 	 *
 	 */
-	function endTransaction()
+	public function endTransaction()
 	{
 		if ((!self::$transactional) || (self::$queryCount === 0))
 		{
@@ -201,7 +235,7 @@ class App_Model extends Model {
 	 * @return 
 	 * @param object $key
 	 */
-	function find($key) 
+	public function find($key) 
 	{
 		$data = $this->mem->get($key);
 		if ($this->isSerialized($data)) 
@@ -1038,23 +1072,6 @@ class App_Model extends Model {
 				}
 			}
     }
-	
-		/**
-	 * 
-	 * @return 
-	 * @param object $input
-	 */
-	public function base64_url_encode($input) {
-    	return strtr(base64_encode($input), '+/=', '-_,');
-    }
 
-	/**
-	 * 
-	 * @return 
-	 * @param object $input
-	 */
-	public function base64_url_decode($input) {
-	    return base64_decode(strtr($input, '-_,', '+/='));
-    }
 }
 ?>
