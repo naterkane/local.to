@@ -145,9 +145,16 @@ class App_Model extends Model {
 	 * @param int $id
 	 * @return array $data
 	 */
-	public function addTo($arrayName, $prefix, &$data, $id)
+	public function addTo($arrayName, $prefix, &$data, $id, $push = false)
 	{
-		array_unshift($data[$arrayName], $id);
+		if ($push) 
+		{
+			$data[$arrayName][] = $id;
+		}
+		else
+		{
+			array_unshift($data[$arrayName], $id);
+		}
 		$this->save($this->{$prefix}($data['id']), $data);
 	}
 	

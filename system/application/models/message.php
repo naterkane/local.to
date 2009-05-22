@@ -90,7 +90,7 @@ class Message extends App_Model
 	 */
 	public function addToReplies(&$message, $id)
 	{
-		return $this->addTo('replies', 'prefixMessage', $message, $id);
+		return $this->addTo('replies', 'prefixMessage', $message, $id, true);
 	}
 
     /**
