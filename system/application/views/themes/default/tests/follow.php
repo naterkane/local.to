@@ -39,7 +39,7 @@
 	$selenium->openPage('/' . $name);		
 	$selenium->write('clickAndWait', 'follow');
 	$selenium->write('verifyValue', 'testing_count', $count + 7);
-	$selenium->write('verifyTextPresent', 'A confirmation request has been sent to ' . $name . ' for confirmation.');
+	$selenium->write('verifyTextPresent', 'A confirmation request has been sent to ' . $name . '.');
 	$selenium->write('verifyTextPresent', 'You have a submitted a friend request to');	
 	//try to follow a second time and get error
 	$selenium->write('openAndWait', '/follow/' . $name);	
@@ -129,7 +129,7 @@
 	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');	
 	$selenium->write('type', 'message', $message3);
 	$selenium->click('Update');
-	$selenium->write('verifyValue', 'testing_count', $count + 13);
+	$selenium->write('verifyValue', 'testing_count', $count + 12);
 	$selenium->openPage('/');
 	$selenium->write('verifyTextPresent', $message3);
 	$selenium->signOut();
@@ -137,5 +137,5 @@
 	$selenium->signOut();	
 	$selenium->signIn($name2, $password2);		
 	$selenium->write('verifyTextPresent', $message3);	
-	$selenium->openPage('/admin/flush');	
+	//$selenium->openPage('/admin/flush');	
 ?>

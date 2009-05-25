@@ -6,9 +6,10 @@ class Message extends App_Model
 {
 
 	protected $idGenerator = 'messageId';
+	protected $name = 'Message';	
 	private $to = array();
 	private $parent;
-	
+		
     /**
      * Add a new message
      *
@@ -23,7 +24,7 @@ class Message extends App_Model
 		$data = $this->setUpMessage($message, $user);
 		if ($data['dm']) 
 		{
-			if ($this->save($this->prefixMessage($data['id']), $data))
+			if ($this->save($data))
 			{
 				$this->mode = null;
 				if ($data['dm_group']) 
@@ -41,10 +42,10 @@ class Message extends App_Model
 		}
 		else 
 		{
-			if ($this->save($this->prefixMessage($data['id']), $data))
+			if ($this->save($data))
 			{
 				$this->mode = null;
-				$this->User->addToPublicAndPrivate($user, $data['id']);				
+				$this->User->addToPublicAndPrivate($user, $data['id']);	
 				if (!$user['locked']) 
 				{
 					$this->addToPublicTimeline($data);
@@ -73,11 +74,19 @@ class Message extends App_Model
 	{
 		if (empty($message['reply_to'])) 
 		{
-			$this->push($this->prefixPublicThreaded(), $message['id']);
-	        $this->trim($this->prefixPublicThreaded(), 0, 1000);			
+			$name = 'timeline_threaded';
 		}
-		$this->push($this->prefixPublic(), $message['id']);
-		$this->trim($this->prefixPublic(), 0, 1000);
+		else 
+		{
+			$name = 'timeline';
+		}
+		$pt = $this->find(null, array('override'=>$name));		
+		if (empty($pt['messages'])) 
+		{
+			$pt['messages'] = array();
+		}
+		array_unshift($pt['messages'], $message['id']);
+		return $this->save($pt, array('override'=>'timeline', 'validate'=>false));
 	}
 	
 	/**
@@ -90,7 +99,7 @@ class Message extends App_Model
 	 */
 	public function addToReplies(&$message, $id)
 	{
-		return $this->addTo('replies', 'prefixMessage', $message, $id, true);
+		return $this->addTo('replies', $message, $id, true);
 	}
 
     /**
@@ -137,7 +146,7 @@ class Message extends App_Model
      */
     public function getOne($message_id)
 	{
-		$message = $this->find($this->prefixMessage($message_id));
+		$message = $this->find($message_id);
 		$user = null;
 		if (!empty($message)) 
 		{
@@ -156,7 +165,7 @@ class Message extends App_Model
      */
     public function getReplies($message_id)
     {
-        $messages = $this->find($this->prefixReplies($message_id));
+        $messages = $this->find($message_id);
         return $this->getMany($messages);
     }
 
@@ -169,8 +178,8 @@ class Message extends App_Model
      */
     public function getTimeline()
     {
-        $messages = $this->find($this->prefixPublic());
-        return $this->getMany($messages);
+        $pt = $this->find(null, array('override'=>'timeline'));
+        return $this->getMany($pt['messages']);
     }
 
     /**
@@ -182,8 +191,8 @@ class Message extends App_Model
      */
     public function getTimelineThreaded()
     {
-        $messages = $this->find($this->prefixPublicThreaded());
-        return $this->getMany($messages);
+        $pt = $this->find(null, array('override'=>'timeline_threaded'));
+        return $this->getMany($pt['messages']);
     }
 
     /**

@@ -33,25 +33,26 @@
 	$selenium->write('type', 'message', $message);
 	$selenium->click('Update');
 	$selenium->openPage('/public_timeline');
-	$selenium->write('verifyValue', 'testing_count', $count + 8);
+	$selenium->write('verifyValue', 'testing_count', $count + 7);
 	$selenium->write('verifyTextNotPresent', $message_long);
+	$selenium->write('verifyTextPresent', $message);	
 	$selenium->openPage('/' . $name);	
 	$selenium->write('verifyTextPresent', $message);
 	$selenium->openPage('/home');
 	$selenium->write('verifyTextPresent', $message);
-	//post second message to timeline by unlocking
+	//lock account and post second message
 	$selenium->openPage('/settings');
 	$selenium->write('assertNotChecked', 'locked');		
 	$selenium->write('click', 'locked');
 	$selenium->click('Update');
-	$selenium->write('verifyValue', 'testing_count', $count + 8);	
+	$selenium->write('verifyValue', 'testing_count', $count + 7);	
 	$selenium->write('assertChecked', 'locked');
 	$selenium->write('verifyTextPresent', 'Your profile was updated.');
 	$selenium->openPage('/home');	
 	$selenium->write('type', 'message', $message2);
 	$selenium->click('Update');
 	$selenium->openPage('/public_timeline');
-	$selenium->write('verifyValue', 'testing_count', $count + 9);	
+	$selenium->write('verifyValue', 'testing_count', $count + 8);	
 	$selenium->write('verifyTextNotPresent', $message2);
 	$selenium->openPage('/' . $name);	
 	$selenium->write('verifyTextPresent', $message2);

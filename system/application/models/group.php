@@ -5,15 +5,8 @@
 class Group extends App_Model
 {
 
+	protected $name = 'Group';
 	protected $idGenerator = 'groupId';
-
-	/**
-	 * Get all groups
-	 */
-	function getAllGroups(){
-		echo $this->prefixGroup("all");
-		return parent::find($this->prefixGroup("all"));
-	}
 	
 	/**
 	 * Add a group
@@ -34,9 +27,10 @@ class Group extends App_Model
 		$data['time_zone'] = $owner['time_zone'];
 		$this->mode = 'add';
 		$this->startTransaction();
-		$this->save($this->prefixGroup($data['id']), $data);
-		$this->mode = null;
-		$this->save($this->prefixGroupName($data['name']), $data['id'], false);
+		if ($this->save($data)) 
+		{
+			$this->save($data, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
+		}
 		return $this->endTransaction();
 	}
 	
@@ -51,7 +45,7 @@ class Group extends App_Model
 	function addMember($group, $member_id = null)
 	{
 		array_unshift($group['members'], $member_id);
-		return $this->save($this->prefixGroup($group['id']), $group);
+		return $this->save($group);
 	}
 	
 	/**
@@ -64,7 +58,7 @@ class Group extends App_Model
 	 */
 	public function addToInbox(&$group, $message_id)
 	{
-		$this->addTo('inbox', 'prefixGroup', $group, $message_id);
+		$this->addTo('inbox', $group, $message_id);
 	}
 	
 	/**
@@ -98,7 +92,7 @@ class Group extends App_Model
 	{
 		if ($group_id) 
 		{
-			return $this->find($this->prefixGroup($group_id));
+			return $this->find($group_id);
 		}
 	}
 	
@@ -110,12 +104,17 @@ class Group extends App_Model
 	 */
 	function getAll($max = 2000)
 	{
-		$prefix = $this->prefixGroupName(null);
+		$prefix = $this->makeFindPrefix(null, array('prefixValue'=>'name'));
 		$groups = $this->tt->fwmkeys($prefix, $max);
 		sort($groups);
 		$return = array();
 		foreach ($groups as $key => $value) {
-			$return[$key] = str_replace($prefix, '', $value);
+			$name = str_replace($prefix, '', $value);
+			$group = $this->getByName($name);
+			if ($group) 
+			{
+				$return[$group['id']] = $group['name'];
+			}
 		}
 		return $return;
 	}
@@ -132,7 +131,7 @@ class Group extends App_Model
 		$return = null;
 		if ($name) 
 		{
-			$group_id = $this->find($this->prefixGroupName($name));
+			$group_id = $this->find($name, array('prefixValue'=>'name'));			
 			if ($group_id) 
 			{
 				return $this->get($group_id);
@@ -165,7 +164,7 @@ class Group extends App_Model
 	 */
 	function getOwner($group_id)
 	{
-		$group = $this->find($this->prefixGroup($group_id));
+		$group = $this->find($group_id);
 		return $this->getValue($group, 'owner_id');		
 	}
 	
@@ -280,7 +279,7 @@ class Group extends App_Model
 				}
 			}
 			$group['members'] = $new_lineup;
-			return $this->save($this->prefixGroup($group['id']), $group);
+			return $this->save($group);
 		} else {
 			return false;
 		}		
@@ -308,7 +307,7 @@ class Group extends App_Model
 			{
 				$group = $this->getByName($groupname);
 				array_unshift($group['messages'], $messageData['id']);				
-				$this->save($this->prefixGroup($group['id']), $group);				
+				$this->save($group);				
 				if ($group) 
 				{
 					foreach ($group['members'] as $member_id) {
@@ -317,7 +316,7 @@ class Group extends App_Model
 							$member = $this->User->get($member_id);
 							array_unshift($member['private'], $messageData['id']);
 							array_unshift($member['public'], $messageData['id']);
-							$this->User->save($this->prefixUser($member_id), $member);
+							$this->User->save($member);
 							$sent[] = $member_id;
 						}
 					}
@@ -342,10 +341,13 @@ class Group extends App_Model
 		$this->mode = 'update';
 		$group = $this->updateData($oldGroup, $newGroup);
 		$this->startTransaction();
-		$this->save($this->prefixGroup($oldGroup['id']), $group);
+		if ($this->save($group)) 
+		{
+			$this->delete($oldGroup['name'], array('prefixValue'=>'name'));
+			$this->save($group, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
+		}
+		
 		$this->mode = null;			
-		$this->delete($this->prefixGroupName($oldGroup['name']));
-		$this->save($this->prefixGroupName($newGroup['name']), $oldGroup['id']);
 		return $this->endTransaction();		
 	}	
 	

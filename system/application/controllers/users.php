@@ -102,7 +102,7 @@ class Users extends App_Controller
 				{
 					$this->redirect('/' . $username, 'Caught exception: ',  $e->getMessage(), "\n");
 				}
-				$message = 'A confirmation request has been sent to ' . $user['username'] . ' for confirmation.';	
+				$message = 'A confirmation request has been sent to ' . $user['username'] . '.';	
 							
 			} 
 			else 

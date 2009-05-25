@@ -16,17 +16,8 @@ class App_Model extends Model {
 	protected $idGenerator;
 	protected $memcacheHost = '67.23.9.219';
 	protected $memcachePort = '21201';
-	protected $prefixCookie = 'session';
-	protected $prefixGroup = 'group';
-	protected $prefixGroupName = 'groupname';	
-	protected $prefixMessage = 'message';
-	protected $prefixPublic = 'timeline';
-	protected $prefixPublicThreaded = 'timelinethreaded';	
-	protected $prefixReplies = 'replies';	
-	protected $prefixSeparator = ':';	
-	protected $prefixUser = 'user';
-	protected $prefixUsername = 'username';
-	protected $prefixUserEmail = 'useremail';	
+	protected $name;
+	protected $prefixSeparator = ':';
 	/**
 	 * reservedNames should be compared to the defined routes to make sure that it includes any names that may be used by the system in a URI.
 	 * @var
@@ -145,7 +136,7 @@ class App_Model extends Model {
 	 * @param int $id
 	 * @return array $data
 	 */
-	public function addTo($arrayName, $prefix, &$data, $id, $push = false)
+	public function addTo($arrayName, &$data, $id, $push = false)
 	{
 		if ($push) 
 		{
@@ -155,7 +146,7 @@ class App_Model extends Model {
 		{
 			array_unshift($data[$arrayName], $id);
 		}
-		$this->save($this->{$prefix}($data['id']), $data);
+		$this->save($data);
 	}
 	
 	/**
@@ -177,10 +168,18 @@ class App_Model extends Model {
     }
 
 	/**
-	 * Delete a record
-	 */
-	public function delete($key) 
+     * Delete a record
+     *
+     * @param array $data Message data
+     * @param array $options 
+	 * [override] string Override the entire key, e.g. 'publictimeline'	
+	 * [prefixName] string Override the first part of the prefix, the class name
+	 * [prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id			
+	 * @return boolean
+     */
+	public function delete($value = null, $options = array())
 	{
+		$key = $this->makeFindPrefix($value, $options);		
 		$this->logQuery($key);
 		$data = $this->mem->get(array($key));
 		if (!empty($data)) 
@@ -236,20 +235,24 @@ class App_Model extends Model {
 	}
 
 	/**
-	 * Find a record
-	 * 
-	 * @access public
-	 * @return 
-	 * @param object $key
-	 */
-	public function find($key) 
+     * Find a record
+     *
+     * @param array $data Message data
+     * @param array $options 
+	 * [override] string Override the entire key, e.g. 'publictimeline'	
+	 * [prefixName] string Override the first part of the prefix, the class name
+	 * [prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id			
+	 * @return boolean
+     */
+	public function find($value = null, $options = array())
 	{
+		$key = $this->makeFindPrefix($value, $options);
 		$data = $this->mem->get($key);
 		if ($this->isSerialized($data)) 
 		{
 			$data = unserialize($data);
 		}
-		return $data;
+		return $data;	
 	}
 
 	/**
@@ -428,124 +431,56 @@ class App_Model extends Model {
 		}
 		return $last_id;
 	}
-	
-	/**
-	 * Create a prefix for cookie
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */
-	function prefixCookie($key)
-	{ 
-		return $this->prefixCookie . $this->prefixSeparator . $key; 
-	}
-	
-	/**
-	 * Create a prefix for a group
-	 * 
-	 * @access public
-	 * @param string $id
-	 * @return string
-	 */	
-	function prefixGroup($id)
-	{ 
-		return $this->prefixGroup . $this->prefixSeparator . $id; 
-	}
-	
-	/**
-	 * Create a prefix for a group name
-	 * 
-	 * @access public
-	 * @param string $groupname
-	 * @return string
-	 */	
-	function prefixGroupName($groupname)
-	{ 
-		return $this->prefixGroupName . $this->prefixSeparator . $groupname; 
-	}
-	
-	/**
-	 * Create a prefix for a message
-	 * 
-	 * @access public
-	 * @param int $id	
-	 * @return string
-	 */	
-	function prefixMessage($id)
-	{ 
-		return $this->prefixMessage . $this->prefixSeparator  . $id; 
-	}
-	
-	/**
-	 * Create a prefix for public messages
-	 * 
-	 * @access public
-	 * @return string
-	 */	
-	function prefixPublic()
-	{ 
-		return $this->prefixPublic; 
-	}
-	
-	/**
-	 * Create a prefix for public messages threaded
-	 * 
-	 * @access public
-	 * @return string
-	 */	
-	function prefixPublicThreaded()
-	{ 
-		return $this->prefixPublicThreaded; 
-	}
-	
-	
-	/**
-	 * Create a prefix for replies
-	 * 
-	 * @access public
-	 * @param int $id
-	 * @return string
-	 */	
-	function prefixReplies($id)
-	{ 
-		return $this->prefixReplies . $this->prefixSeparator  . $id; 
-	}	
 
-	/**
-	 * Create a prefix for user data
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */	
-	function prefixUser($id)
-	{ 
-		return $this->prefixUser . $this->prefixSeparator . $id; 
-	}
-
-	/**
-	 * Create a prefix for a username
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */	
-	function prefixUserEmail($email)
-	{ 
-		return $this->prefixUserEmail . $this->prefixSeparator . $email; 
+	protected function makeFindPrefix($value = null, $options = array())
+	{
+		if (!isset($options['prefixName'])) 
+		{
+			$options['prefixName'] = $this->name;
+		}
+		if (!isset($options['prefixValue'])) 
+		{
+			$options['prefixValue'] = 'id';
+		}
+		if (!isset($options['override'])) 
+		{
+			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
+		}		
+		else 
+		{
+			$prefix = $options['override'];
+		}		
+		return $prefix;
 	}
 	
-	/**
-	 * Create a prefix for a username
-	 * 
-	 * @access public
-	 * @param string $username
-	 * @return string
-	 */	
-	function prefixUsername($username)
-	{ 
-		return $this->prefixUsername . $this->prefixSeparator . $username; 
+	protected function makeSavePrefix($data = array(), $options = array())
+	{
+		if (!isset($options['validate'])) 
+		{
+			$options['validate'] = false;
+		}
+		if (!isset($options['prefixName'])) 
+		{
+			$options['prefixName'] = $this->name;
+		}
+		if (!isset($options['prefixValue'])) 
+		{
+			$options['prefixValue'] = 'id';
+		}		
+		if (!isset($options['override'])) 
+		{
+			$value = null;
+			if (isset($data[$options['prefixValue']])) 
+			{
+				$value = $data[$options['prefixValue']];
+			}
+			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
+		}		
+		else 
+		{
+			$prefix = $options['override'];
+		}
+		return $prefix;
 	}
 
 	/**
@@ -638,22 +573,34 @@ class App_Model extends Model {
 		return self::$rollbackLog;
 	}
 	
-	/**
-	 * Save a record
-	 *
-	 * @todo See find() above
-	 * @todo Should reflect the actual outcome of the save, right now always returns true if data validates	
+    /**
+     * Save a record
+     *
+     * @param array $data Message data
+     * @param array $options 
+	 * [validate] boolean Validate the save
+	 * [override] string Override the entire key, e.g. 'publictimeline'	
+	 * [prefixName] string Override the first part of the prefix, the class name
+	 * [prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id
+	 * [saveOnly] string Key from Data you wish to save if you don't want to save the whole array
 	 * @return boolean
-	 * @access public
-	 */
-	function save($key, $data, $validate = true) 
+     */
+	function save($data, $options = array()) 
 	{
+		$this->key = $this->makeSavePrefix($data, $options);		
+		if (!isset($options['validate'])) 
+		{
+			$options['validate'] = true;
+		}
+		if (isset($options['saveOnly'])) 
+		{
+			$data = $data[$options['saveOnly']];
+		}
 		$valid = true;
-		$newData = null;
-		$this->key = $key;
+		$newData = null;	
 		$this->modelData = $data;
-		$this->logQuery($key, 'save');
-		if ($validate) 
+		$this->logQuery($this->key, 'save');
+		if ($options['validate']) 
 		{
 			$valid = $this->validate();
 		}
@@ -666,9 +613,9 @@ class App_Model extends Model {
 			{
 				$newData = $this->modelData;
 			}
-			if ($key) 
+			if ($this->key) 
 			{
-				$valid = $this->mem->set($key, $newData);
+				$valid = $this->mem->set($this->key, $newData);
 			}
 		}
 		$this->logQueryResult($valid, $newData);					
@@ -1070,7 +1017,7 @@ class App_Model extends Model {
 			{
 				$this->userData[$fieldName] = null;
 			}
-			$record = $this->find($fieldValue);
+			$record = self::find($fieldValue, array('prefixValue'=>$fieldName));
 			if ($record) 
 			{
 				if ($this->postData[$fieldName] != $this->userData[$fieldName]) 

@@ -4,10 +4,12 @@
 */
 class Cookie {
 	
+	var $cookie;
 	var $domain = '/';
 	var $expires;
 	var $name = 'Microblog';
-	
+	var $randomString;
+	var $salt;	
 	
 	/**
 	 * Constructor
@@ -18,9 +20,12 @@ class Cookie {
 	 */
 	function __construct() 
 	{
-		$this->controller =& get_instance();
-		$this->controller->load->model(array('Cookie_model'));
-		$this->Cookie_model = $this->controller->Cookie_model;
+		$ci = get_instance();
+		$ci->load->model(array('Cookie_model'));
+		$this->cookie = $ci->Cookie_model;
+		$this->salt = $ci->config->item('salt');
+		$this->randomString = $ci->randomString(10);		
+		unset($ci);
 		$this->check();
 	}
 
@@ -46,9 +51,10 @@ class Cookie {
 	 */
 	function create()
 	{
-		$key = sha1(time() . $this->controller->randomString(10) . $this->controller->config->item('salt'));
-		setcookie($this->name, $key, $this->expires, $this->domain);
-		$this->set($this->controller->Cookie_model->prefixCookie($key), null);
+		$key = array();
+		$key['id'] = sha1(time() . $this->randomString . $this->salt);
+		setcookie($this->name, $key['id'], $this->expires, $this->domain);
+		$this->cookie->save($key);
 	}
 
 	/**
@@ -62,7 +68,7 @@ class Cookie {
 		setcookie($this->name, '', time()-60000, $this->domain);		
 		if ($this->exists()) 
 		{
-			$this->controller->Cookie_model->delete($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
+			$this->cookie->delete($_COOKIE[$this->name]);
 		}
 	}
 	
@@ -74,7 +80,12 @@ class Cookie {
 	 */
 	function exists()
 	{
-		return isset($_COOKIE[$this->name]);
+		if (!isset($_COOKIE[$this->name])) 
+		{
+			return false;
+		}
+		$cookie = $this->cookie->find($_COOKIE[$this->name]);
+		return isset($cookie['id']);
 	}
 	
 	/**
@@ -98,7 +109,7 @@ class Cookie {
 			{
 				unset($data['flash_type']);
 			}
-			$this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $data);
+			$this->cookie->save($data);
 		}
 		return $return;
 	}
@@ -134,7 +145,7 @@ class Cookie {
 	{
 		if ($this->exists()) 
 		{
-			return $this->controller->Cookie_model->find($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]));
+			return $this->cookie->find($_COOKIE[$this->name]);
 		} else {
 			return;
 		}		
@@ -157,7 +168,7 @@ class Cookie {
 			{
 				unset($cookie[$key]);
 			}
-			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
+			return $this->cookie->save($cookie);
 		}
 	}
 	
@@ -174,8 +185,11 @@ class Cookie {
 		if ($this->exists()) 
 		{	
 			$cookie = $this->getAllData();
-			$cookie[$key] = $data;
-			return $this->controller->Cookie_model->save($this->controller->Cookie_model->prefixCookie($_COOKIE[$this->name]), $cookie);
+			if ($key != 'id') 
+			{
+				$cookie[$key] = $data;
+			}
+			return $this->cookie->save($cookie);
 		}
 	}
 
@@ -193,10 +207,8 @@ class Cookie {
 		{
 			$type = 'success';
 		}
-		$data = $this->getAllData();
 		$this->set('flash_message', $message);
 		$this->set('flash_type', $type);
-		$data = $this->getAllData();
 	}
 
 	/**
