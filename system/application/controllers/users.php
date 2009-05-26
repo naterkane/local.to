@@ -359,7 +359,7 @@ class Users extends App_Controller
             $this->getUserData();
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;
-        	$this->data['messages'] = Page::make('Message', $this->userData['public']);
+        	$this->data['messages'] = Page::make('Message', $user['public']);
 			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
             $this->load->view('users/view', $this->data);
         }
@@ -368,6 +368,21 @@ class Users extends App_Controller
             show_404();
         }
     }
+
+	public function rss($username = null)
+	{
+       	$user = $this->User->getByUsername($username);
+        if ($user)
+        {
+			$this->data['user'] = $user;
+        	$this->data['messages'] = Page::make('Message', $this->userData['public']);
+            $this->load->view('users/view.rss', $this->data);
+        }
+        else
+        {
+            show_404();
+        }
+	}
    
 }
 ?>
