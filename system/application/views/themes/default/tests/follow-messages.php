@@ -31,17 +31,17 @@
 	$selenium->write('type', 'message', $message2);
 	$selenium->click('Update');	
 	$selenium->openPage('/home');
+	$selenium->write('verifyValue', 'testing_count', $count + 11);	
 	$selenium->write('verifyTextPresent', $message2);
 	$selenium->write('type', 'message', $message3);
 	$selenium->click('Update');	
 	$selenium->openPage('/home');
-	$selenium->write('verifyValue', 'testing_count', $count + 11);	
-	$selenium->write('verifyTextPresent', $message3);		
 	$selenium->write('verifyValue', 'testing_count', $count + 12);	
+	$selenium->write('verifyTextPresent', $message3);			
 	//follow first account
 	$selenium->openPage('/' . $name);
 	$selenium->write('clickAndWait', 'follow');
-	$selenium->write('verifyValue', 'testing_count', $count + 13);
+	$selenium->write('verifyValue', 'testing_count', $count + 12);
 	$selenium->write('verifyTextPresent', 'You are now following ' . $name);	
 	$selenium->openPage('/home');	
 	$selenium->write('verifyTextPresent', $message);

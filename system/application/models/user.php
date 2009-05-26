@@ -37,7 +37,8 @@ class User extends App_Model
 	 */
 	public function addFollowedMessages($followed, $following)
 	{
-		$following['private'] = array_merge($following['private'], $followed['public']);		
+		$public = array_slice($followed['public'], 0, 20);
+		$following['private'] = array_merge($following['private'], $public);		
 		rsort($following['private']);
 		return $this->save($following);
 	}
