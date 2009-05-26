@@ -10,3 +10,5 @@
 	Following: <?php echo count($user['following']); ?> 
 	Followers: <?php echo count($user['followers']);?>
 </p>
+
+<p><a href="<?php echo $this->config->item('base_url') ?>rss/user/<?php echo $username ?>">RSS feed of <?php echo $username ?>'s updates</a></p>

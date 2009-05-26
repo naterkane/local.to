@@ -357,6 +357,7 @@ class Users extends App_Controller
         if ($user)
         {
             $this->getUserData();
+			$this->data['rss_updates'] = true;
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;
         	$this->data['messages'] = Page::make('Message', $user['public']);
@@ -374,9 +375,11 @@ class Users extends App_Controller
        	$user = $this->User->getByUsername($username);
         if ($user)
         {
+			$this->layout = 'rss';	
 			$this->data['user'] = $user;
-        	$this->data['messages'] = Page::make('Message', $this->userData['public']);
-            $this->load->view('users/view.rss', $this->data);
+			$this->data['page_title'] = $username;	
+        	$this->data['messages'] = Page::make('Message', $user['public']);
+            $this->load->view('users/view.rss.php', $this->data);
         }
         else
         {

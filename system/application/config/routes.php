@@ -68,6 +68,7 @@ $route['change_password'] = "users/change_password";
 $route['request_invite'] = "admin/request_invite";
 $route['inbox'] = "messages/inbox";
 $route['sent'] = "messages/sent";
+$route['rss/user/(:any)'] = "users/rss/$1";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

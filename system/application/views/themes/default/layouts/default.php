@@ -6,7 +6,9 @@
 	<meta http-equiv="Expires" content="-1" />
 	<meta name="robots" content="noindex,nofollow" />	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	
+	<?php if (!empty($rss_updates)): ?>
+	<link rel="alternate" href="<?php echo $this->config->item('base_url') ?>rss/user/<?php echo $username ?>" title="<?php echo $username ?>'s Updates" type="application/rss+xml" />
+	<?php endif ?>
 	<link rel="stylesheet" type="text/css" media="all" href="/css/reset.css?<?php echo time();?>" />
 	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/text.css" />
 		<link rel="stylesheet" type="text/css" href="/assets/css/960.css" media="screen" />
