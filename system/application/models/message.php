@@ -106,7 +106,7 @@ class Message extends App_Model
      * Get more than one message
      *
 	 * @access public
-     * @param object $messages
+     * @param array $messages
      * @return array of messages
      */
     public function getMany($messages = array(), $start = null, $end = null)

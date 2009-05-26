@@ -73,7 +73,8 @@ class Groups extends App_Controller
 	public function index()
 	{		
 		$this->getUserData();		
-		$this->data['groups'] = $this->Group->getAll();
+		$groups = $this->Group->getAll();
+       	$this->data['groups'] = Page::make('Group', $groups['all'], array('method'=>'getMany'));
 		$this->load->view('groups/index', $this->data);
 	}
 

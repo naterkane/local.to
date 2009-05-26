@@ -30,6 +30,7 @@ class Group extends App_Model
 		if ($this->save($data)) 
 		{
 			$this->save($data, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
+			$this->addToGroupList($data['name']);
 		}
 		return $this->endTransaction();
 	}
@@ -46,6 +47,25 @@ class Group extends App_Model
 	{
 		array_unshift($group['members'], $member_id);
 		return $this->save($group);
+	}
+	
+	/**
+	 * Add to group message
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function addToGroupList($name = null)
+	{
+		if (!$name) 
+		{
+			return false;
+		}
+		$groups = $this->getAll();
+		$groups['all'][] = $name;
+		sort($groups['all']);
+		return $this->save($groups, array('override'=>'groups', 'validate'=>false));
 	}
 	
 	/**
@@ -100,23 +120,16 @@ class Group extends App_Model
 	 * Find all groups
 	 *
 	 * @access public
-	 * @return array $groups
+	 * @return array $group_ids
 	 */
-	function getAll($max = 2000)
+	function getAll()
 	{
-		$prefix = $this->makeFindPrefix(null, array('prefixValue'=>'name'));
-		$groups = $this->tt->fwmkeys($prefix, $max);
-		sort($groups);
-		$return = array();
-		foreach ($groups as $key => $value) {
-			$name = str_replace($prefix, '', $value);
-			$group = $this->getByName($name);
-			if ($group) 
-			{
-				$return[$group['id']] = $group['name'];
-			}
+		$groups = $this->find(null, array('override'=>'groups'));
+		if (empty($groups['all'])) 
+		{
+			$groups['all'] = array();
 		}
-		return $return;
+		return $groups;
 	}
 	
 	/**
@@ -138,6 +151,32 @@ class Group extends App_Model
 			}
 		}
 	}
+	
+    /**
+     * Get more than one group
+     *
+	 * @access public
+     * @param array $groups_ids
+     * @return array of groups
+     */
+    public function getMany($groupnames = array(), $start = null, $end = null)
+    {
+		if (($start !== null) && ($end !== null) && (is_array($groupnames)))
+		{
+			$groupnames = array_slice($groupnames, $start, $end);	
+		}
+        $return = array();
+		if (($groupnames) AND (is_array($groupnames))) {
+			foreach ($groupnames as $name)
+	        {
+				if ($name) 
+				{
+					$return[] = $this->getByName($name);
+				}
+	        }
+		}
+        return $return;
+    }
 	
 	/**
 	 * Get Members
