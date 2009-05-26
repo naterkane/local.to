@@ -93,7 +93,14 @@ class Groups extends App_Controller
 		$this->getUserData();
 		if ($groupname) {
 			$group = $this->Group->getByName($groupname);
-			$user = $this->data['User'];
+			if (isset($this->data['User'])) 
+			{
+				$user = $this->data['User'];
+			}
+			else 
+			{
+				$user = array();
+			}
 			$this->data = $group;
 			$this->data['page_title'] = $group['name'];
 			$this->data['groupname'] = $group['name'];
