@@ -150,8 +150,14 @@ class Group extends App_Model
 	{
 		$members = array();
 		foreach ($member_ids as $member_id) {
-			$members[] = $this->User->get($member_id);
-		}
+			$member = array();
+			$member = $this->User->get($member_id);
+			$member['password'] = null;
+			$member['passwordconfirm'] = null;			
+			$member['realname'] = (!empty($member['realname']))? $member['realname'] : $member['username'];	
+			$member['friend_status'] = $this->User->getFriendStatus($member, $this->userData);
+			$members[] = $member;
+		}		
 		return $members;
 	}
 	

@@ -132,16 +132,7 @@ class Groups extends App_Controller
 			$this->data['page_title'] = $group['name'] . ' Members';
 			$this->data['groupname'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
-			$members = $this->Group->getMembers($group['members']);
-			$this->data['members'] = array();
-			foreach ($members as $member)
-			{
-				$member['password'] = null;
-				$member['passwordconfirm'] = null;
-				$member['realname'] = (!empty($member['realname']))? $member['realname'] : $member['username'];
-				$member['friend_status'] = $this->User->getFriendStatus($member, $this->userData);
-				$this->data['members'][] = $member;
-			}
+        	$this->data['members'] = Page::make('Group', $group['members'], array('method'=>'getMembers'));
 			if (empty($sidebar))
 			{
 				$this->load->view('groups/members', $this->data);

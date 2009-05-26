@@ -58,6 +58,7 @@
 		<?php endforeach ?>
 			</tbody>
 		</table>
+		<?php echo Page::links($html) ?>
 	<?php else:?>
 		it looks like there aren't any members yet.
 	
