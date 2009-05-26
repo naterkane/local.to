@@ -137,5 +137,5 @@
 	$selenium->signOut();	
 	$selenium->signIn($name2, $password2);		
 	$selenium->write('verifyTextPresent', $message3);	
-	//$selenium->openPage('/admin/flush');	
+	$selenium->openPage('/admin/flush');	
 ?>

@@ -28,6 +28,21 @@ class User extends App_Model
 	}
 
 	/**
+	 * Add a followed messages to inbox
+	 *
+	 * @access public
+	 * @param array $followed user data
+	 * @param array $following user data	
+	 * @return boolean
+	 */
+	public function addFollowedMessages($followed, $following)
+	{
+		$following['private'] = array_merge($following['private'], $followed['public']);		
+		rsort($following['private']);
+		return $this->save($following);
+	}
+
+	/**
 	 * Add a friend request
 	 *
 	 * @access public
@@ -232,6 +247,7 @@ class User extends App_Model
 			else 
 			{
 				$this->_follow($followed, $following);
+				$this->addFollowedMessages($followed, $following);
 			}
 			return $this->endTransaction();;			
 		} 

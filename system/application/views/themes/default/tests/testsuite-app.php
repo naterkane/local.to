@@ -7,6 +7,7 @@
 	$selenium->addTestCase('Direct Message', 'dm');		
 	$selenium->addTestCase('Threading', 'threading');	
 	$selenium->addTestCase('Follow', 'follow');
+	$selenium->addTestCase('Follow and message add', 'follow-messages');	
 	$selenium->addTestCase('Add Group and Subscribe', 'group');
 	$selenium->addTestCase('Add Group and DM', 'group-dm');	
 	$selenium->addTestCase('Add Group and Change Profile', 'group-settings');	
