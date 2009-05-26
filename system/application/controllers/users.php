@@ -138,8 +138,7 @@ class Users extends App_Controller
     function home($replyTo = null)
     {
         $this->mustBeSignedIn();
-		
-		$this->data['message'] ="";
+		$this->data['message'] = null;
 		if ($replyTo) 
 		{
 			$message = $this->Message->getOne($replyTo);
@@ -153,10 +152,10 @@ class Users extends App_Controller
 					$this->data['message'] = '@' . $user['username'] . ' ';
 				}
 			}
-			//$this->data['message'] = "@".$message['reply_to_username']." ";
 		}
         $this->data['page_title'] = 'Home';
-        $this->data['messages'] = $this->Message->getMany($this->userData['private']);
+		$this->data['next'] = null;
+        $this->data['messages'] = page::make('Message', $this->userData['private']);
 		$this->data['following'] = $this->userData['following'];
         $this->load->view('users/home', $this->data);
 		
@@ -360,7 +359,7 @@ class Users extends App_Controller
             $this->getUserData();
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;
-            $this->data['messages'] = $this->Message->getMany($user['public']);
+        	$this->data['messages'] = page::make('Message', $this->userData['public']);
 			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
             $this->load->view('users/view', $this->data);
         }

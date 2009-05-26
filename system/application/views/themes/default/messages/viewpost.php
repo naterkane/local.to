@@ -1,4 +1,4 @@
-<?php if ((is_array($message)) AND (!empty($message['message_html']))) :?>
+<?php if ((is_array($message)) AND ($message['message_html'] !== null)) :?>
 	<?php 
 	if (empty($sent)) 
 	{

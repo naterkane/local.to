@@ -3,6 +3,7 @@
 	$selenium->addTestCase('Sign Up', 'sign-up');
 	$selenium->addTestCase('Change Settings', 'settings');	
 	$selenium->addTestCase('Message', 'message');
+	$selenium->addTestCase('Pagination', 'pagination');	
 	$selenium->addTestCase('Direct Message', 'dm');		
 	$selenium->addTestCase('Threading', 'threading');	
 	$selenium->addTestCase('Follow', 'follow');

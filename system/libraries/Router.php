@@ -197,6 +197,7 @@ class CI_Router {
 	 */	
 	function _validate_request($segments)
 	{
+		
 		// Does the requested controller exist in the root folder?
 		if (file_exists(APPPATH.'controllers/'.$segments[0].EXT))
 		{

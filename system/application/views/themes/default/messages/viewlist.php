@@ -4,6 +4,7 @@ if (!empty($messages))
 ?>
 		<div class="block" id="messages">
 			<?php
+			$i = 1;
 	foreach ($messages as $message) 
 	{
 		if (!empty($message))
@@ -29,7 +30,8 @@ if (!empty($messages))
 							<?php $this->load->view('messages/viewpost', array('message'=>$this->Message->getOne($reply))); ?>
 						</div>	
 					<?php endforeach ?>
-				<?php endif ?>
+					hello
+				<?php endif ?>				
 			<?php
 			}
 		}
@@ -39,6 +41,9 @@ if (!empty($messages))
 		}
 	}
 	?>
+		<?php if (page::$showNext): ?>
+			<div id="more"><?php echo $html->link(page::$nextText, page::$next) ?></div>
+		<?php endif ?>
 		</div>
 	<?php
 }

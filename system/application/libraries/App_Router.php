@@ -5,16 +5,40 @@
 class App_router extends CI_Router
 {
 	
-	var $config;	
-	var $routes 		= array();
-	var $error_routes	= array();
-	var $class			= '';
-	var $method			= 'index';
-	var $directory		= '';
-	var $uri_protocol 	= 'auto';
-	var $default_controller;
-	var $scaffolding_request = FALSE; // Must be set to FALSE
-	
+	public $class;	
+	public $config;	
+	public $default_controller;	
+	public $directory;
+	public $error_routes = array();	
+	public $method = 'index';
+	public $routes = array();	
+	public $scaffolding_request = FALSE; // Must be set to FALSE
+	public $uri_protocol = 'auto';	
+
+	public function _parse_routes()
+	{
+		$count = count($this->uri->segments);
+		require_once(APPPATH . '/libraries/Page.php');
+		new Page();
+		page::$end = page::$offset;
+		if (isset($this->uri->segments[$count - 2]) && isset($this->uri->segments[$count - 1])) 
+		{
+			if (($this->uri->segments[$count - 2] == 'page') && (is_numeric($this->uri->segments[$count - 1])))
+			{
+				if ($this->uri->segments[$count - 1] > 1) 
+				{
+					page::$page = $this->uri->segments[$count - 1];
+					page::$start = (page::$page - 1) * page::$offset;
+					page::$end = (page::$offset * page::$page) - 1;
+				}
+				unset($this->uri->segments[$count - 2]);
+				unset($this->uri->segments[$count - 1]);
+			}		
+		}
+		page::$next = '/' . implode('/', $this->uri->segments) . '/page/';
+		page::$next .= page::$page + 1;
+		parent::_parse_routes();
+	}
 	
 	/**
 	 * Validates the supplied segments.  Attempts to determine the path to
@@ -24,10 +48,9 @@ class App_router extends CI_Router
 	 * @param	array
 	 * @return	array
 	 */	
-	function _validate_request($segments)
+	public function _validate_request($segments)
 	{
 		// Does the requested controller exist in the root folder?
-
 		if (file_exists(APPPATH.'controllers/'.$segments[0].EXT))
 		{
 			return $segments;

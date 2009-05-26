@@ -72,7 +72,7 @@ class Message extends App_Model
 	 */
     public function addToPublicTimeline($message)
 	{
-		if (empty($message['reply_to'])) 
+		if (!empty($message['reply_to'])) 
 		{
 			$name = 'timeline_threaded';
 		}
@@ -80,7 +80,7 @@ class Message extends App_Model
 		{
 			$name = 'timeline';
 		}
-		$pt = $this->find(null, array('override'=>$name));		
+		$pt = $this->find(null, array('override'=>$name));
 		if (empty($pt['messages'])) 
 		{
 			$pt['messages'] = array();
@@ -109,8 +109,12 @@ class Message extends App_Model
      * @param object $messages
      * @return array of messages
      */
-    public function getMany($messages = array())
+    public function getMany($messages = array(), $start = null, $end = null)
     {
+		if (($start !== null) && ($end !== null) && (is_array($messages)))
+		{
+			$messages = array_slice($messages, $start, $end);	
+		}
         $return = array();
 		$threading = false;
 		if ($this->userData && $this->userData['threading'] == 1)
@@ -178,8 +182,7 @@ class Message extends App_Model
      */
     public function getTimeline()
     {
-        $pt = $this->find(null, array('override'=>'timeline'));
-        return $this->getMany($pt['messages']);
+        return $this->find(null, array('override'=>'timeline'));
     }
 
     /**
@@ -191,8 +194,7 @@ class Message extends App_Model
      */
     public function getTimelineThreaded()
     {
-        $pt = $this->find(null, array('override'=>'timeline_threaded'));
-        return $this->getMany($pt['messages']);
+        return $this->find(null, array('override'=>'timeline_threaded'));
     }
 
     /**
