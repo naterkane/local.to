@@ -41,9 +41,7 @@ if (!empty($messages))
 		}
 	}
 	?>
-		<?php if (page::$showNext): ?>
-			<div id="more"><?php echo $html->link(page::$nextText, page::$next) ?></div>
-		<?php endif ?>
+		<?php echo Page::links($html) ?>
 		</div>
 	<?php
 }

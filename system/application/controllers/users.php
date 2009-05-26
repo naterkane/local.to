@@ -155,7 +155,7 @@ class Users extends App_Controller
 		}
         $this->data['page_title'] = 'Home';
 		$this->data['next'] = null;
-        $this->data['messages'] = page::make('Message', $this->userData['private']);
+        $this->data['messages'] = Page::make('Message', $this->userData['private']);
 		$this->data['following'] = $this->userData['following'];
         $this->load->view('users/home', $this->data);
 		
@@ -359,7 +359,7 @@ class Users extends App_Controller
             $this->getUserData();
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;
-        	$this->data['messages'] = page::make('Message', $this->userData['public']);
+        	$this->data['messages'] = Page::make('Message', $this->userData['public']);
 			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
             $this->load->view('users/view', $this->data);
         }

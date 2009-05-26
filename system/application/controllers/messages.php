@@ -43,7 +43,7 @@ class Messages extends App_Controller
 		$this->data['page_title'] = 'Inbox';
 		$this->data['message'] = null;
 		$this->data['dm'] = true;
-        $this->data['messages'] = page::make('Message', $this->userData['inbox']);
+        $this->data['messages'] = Page::make('Message', $this->userData['inbox']);
 		$this->data['friend_select'] = $this->User->friendSelect($this->userData['followers']);	
 		$this->load->view('messages/inbox', $this->data);
 	}
@@ -55,7 +55,7 @@ class Messages extends App_Controller
 		$this->data['dm'] = true;	
 		$this->data['sent'] = true;			
 		$this->data['message'] = null;
-        $this->data['messages'] = page::make('Message', $this->userData['sent']);
+        $this->data['messages'] = Page::make('Message', $this->userData['sent']);
 		$this->data['friend_select'] = $this->User->friendSelect($this->userData['followers']);			
 		$this->load->view('messages/sent', $this->data);		
 	}
@@ -72,12 +72,12 @@ class Messages extends App_Controller
 		if (!empty($User) && ($User['threaded'] == 1) )
 		{
         	$pt = $this->Message->getTimelineThreaded();
-        	$this->data['messages'] = page::make('Message', $pt['messages']);
+        	$this->data['messages'] = Page::make('Message', $pt['messages']);
 		} 
 		else 
 		{
         	$pt = $this->Message->getTimeline();
-        	$this->data['messages'] = page::make('Message', $pt['messages']);
+        	$this->data['messages'] = Page::make('Message', $pt['messages']);
 		}
 		$this->load->view('messages/public_timeline', $this->data);
 	}

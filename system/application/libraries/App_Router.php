@@ -17,26 +17,9 @@ class App_router extends CI_Router
 
 	public function _parse_routes()
 	{
-		$count = count($this->uri->segments);
 		require_once(APPPATH . '/libraries/Page.php');
 		new Page();
-		page::$end = page::$offset;
-		if (isset($this->uri->segments[$count - 2]) && isset($this->uri->segments[$count - 1])) 
-		{
-			if (($this->uri->segments[$count - 2] == 'page') && (is_numeric($this->uri->segments[$count - 1])))
-			{
-				if ($this->uri->segments[$count - 1] > 1) 
-				{
-					page::$page = $this->uri->segments[$count - 1];
-					page::$start = (page::$page - 1) * page::$offset;
-					page::$end = (page::$offset * page::$page) - 1;
-				}
-				unset($this->uri->segments[$count - 2]);
-				unset($this->uri->segments[$count - 1]);
-			}		
-		}
-		page::$next = '/' . implode('/', $this->uri->segments) . '/page/';
-		page::$next .= page::$page + 1;
+		Page::setup($this->uri->segments);
 		parent::_parse_routes();
 	}
 	
