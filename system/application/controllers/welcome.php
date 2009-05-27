@@ -9,7 +9,6 @@ class Welcome extends App_Controller {
 	 */
 	function index() {
 		$this->layout = 'public';
-		$this->getUserData();
 		if ($this->userData) 
 		{
 			$this->redirect('/home');

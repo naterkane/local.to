@@ -170,7 +170,6 @@ class Users extends App_Controller
 	function settings()
 	{
 		$this->mustBeSignedIn();
-		$this->getUserData();
         $this->data['page_title'] = 'Settings';
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
@@ -205,10 +204,9 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		if ($setting != ("enable" || "disable"))
-			$this->redirect('/home');
-		
-		//$this->load->helper('Util');	
-		$this->getUserData();
+		{
+			$this->redirect('/home');			
+		}
 		$this->setData($this->userData);	
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
@@ -351,12 +349,10 @@ class Users extends App_Controller
      */
     function view($username = null)
     {	
-		$this->getUserData();
        	$user = $this->User->getByUsername($username);
 		$this->sidebar = "users/userprofile";
         if ($user)
         {
-            $this->getUserData();
 			$this->data['rss_updates'] = true;
             $this->data['page_title'] = $username;
             $this->data['username'] = $username;

@@ -33,6 +33,7 @@ class App_Controller extends Controller {
 			$this->testingData['testing'] = true;
 			$this->testingData['count'] = $this->countAllRecords();
 		}
+		$this->getUserData();
     }
 
 	/**
@@ -117,7 +118,6 @@ class App_Controller extends Controller {
      */
     function mustBeSignedIn() 
 	{
-        $this->getUserData();
         if ( empty($this->userData)) 
 		{
             $this->redirect('/signin', 'You must sign in to view this page.', 'error');

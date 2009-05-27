@@ -72,7 +72,6 @@ class Groups extends App_Controller
 	 */
 	public function index()
 	{		
-		$this->getUserData();		
 		$groups = $this->Group->getAll();
        	$this->data['groups'] = Page::make('Group', $groups['all'], array('method'=>'getMany'));
 		$this->load->view('groups/index', $this->data);
@@ -90,7 +89,6 @@ class Groups extends App_Controller
 	 */
 	public function view($groupname = null)
 	{
-		$this->getUserData();
 		if ($groupname) {
 			$group = $this->Group->getByName($groupname);
 			if (isset($this->data['User'])) 
@@ -129,7 +127,6 @@ class Groups extends App_Controller
 	 */
 	function members($groupname = null, $sidebar = null)
 	{
-		$this->getUserData();		
 		$group = $this->Group->getByName($groupname);
 		if ($group) 
 		{

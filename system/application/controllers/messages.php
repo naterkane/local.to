@@ -67,7 +67,6 @@ class Messages extends App_Controller
 	 */
 	function public_timeline()
 	{
-		$this->getUserData();
         $this->data['page_title'] = 'Public Timeline';		
 		if (!empty($User) && ($User['threaded'] == 1) )
 		{
@@ -102,7 +101,6 @@ class Messages extends App_Controller
 	 */
 	function view($username = null, $message_id = null)
 	{
-		$this->getUserData();
 		$this->data['message'] = $this->Message->getOne($message_id);
 		$this->data['messages'] = $this->Message->getReplies($message_id);		
 		$user = $this->User->getByUserName($username);
