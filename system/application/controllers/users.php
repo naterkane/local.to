@@ -236,6 +236,7 @@ class Users extends App_Controller
     {
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign In';
+		$this->data['redirect'] = $this->getRedirect();		
         if ($this->postData)
         {
             $user = $this->User->signIn($this->postData);
@@ -246,7 +247,7 @@ class Users extends App_Controller
 			else 
 			{
 				$this->cookie->set('user', $user['id']);
-                $this->redirect('/home');
+                $this->redirect($this->data['redirect']);
 			}
         }
         $this->load->view('users/signin', $this->data);

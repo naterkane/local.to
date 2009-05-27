@@ -4,13 +4,14 @@
  */
 class App_Controller extends Controller {
    
-    var $data = array();
-	var $layout = 'default';				//leave empty for default	
-	var $sidebar = 'users/sidebarprofile';
-    var $postData = array();
-    var $userData = array();
-	var $testingData;
-	var $validationErrors = array();
+    public $data = array();
+	public $layout = 'default';				//leave empty for default	
+	public $sidebar = 'users/sidebarprofile';
+	public $params = array();
+    public $postData = array();
+    public $userData = array();
+	public $testingData;
+	public $validationErrors = array();
    
 	/**
 	 * Constructor
@@ -19,7 +20,7 @@ class App_Controller extends Controller {
 	 *
 	 * @access public
 	 */
-    function __construct() 
+    public function __construct() 
 	{
         parent::Controller();
         $this->load->library(array('Load_helpers','Util'));
@@ -33,6 +34,7 @@ class App_Controller extends Controller {
 			$this->testingData['testing'] = true;
 			$this->testingData['count'] = $this->countAllRecords();
 		}
+		$this->params = $this->uri->params;
 		$this->getUserData();
     }
 
@@ -43,7 +45,7 @@ class App_Controller extends Controller {
 	 * @param $id to check
 	 * @return 
 	 */
-	function checkId($id = null, $redirect = '/home')
+	public function checkId($id = null, $redirect = '/home')
 	{
 		if (!$id) 
 		{
@@ -57,7 +59,7 @@ class App_Controller extends Controller {
 	 * @access public
 	 * @return 
 	 */
-	function checkPost()
+	public function checkPost()
 	{
 		if (!$this->postData) 
 		{
@@ -71,19 +73,34 @@ class App_Controller extends Controller {
 	 * @access public
 	 * @return int
 	 */
-	function countAllRecords()
+	public function countAllRecords()
 	{
 		$count = count($this->User->tt->fwmkeys('', 1000000));
 		return $count;
 	}
-	
+
+	/**
+	 * Get redirect param from url
+	 *
+	 * @access public
+	 * @param string $default Url to redirect id none is supplied by query string
+	 * @return string
+	 */
+	public function getRedirect($redirect = '/home')
+	{
+		if (isset($this->params['redirect'])) 
+		{
+			$redirect = $this->params['redirect'];
+		}
+		return $redirect;
+	}
 
 	/**
 	 * Get a users data from cookie
 	 *
 	 * @access public
 	 */ 
-    function getUserData() 
+    public function getUserData() 
 	{
 		$user_id = $this->cookie->get('user');
 		$this->userData = $this->User->get($user_id);
@@ -106,7 +123,7 @@ class App_Controller extends Controller {
 	 * @return boolean
 	 * @access public
 	 */
-	function isTesting()
+	public function isTesting()
 	{
 		return ini_get('display_errors');
 	}
@@ -116,18 +133,18 @@ class App_Controller extends Controller {
      *
      * If not, sends to login
      */
-    function mustBeSignedIn() 
+    public function mustBeSignedIn() 
 	{
         if ( empty($this->userData)) 
-		{
-            $this->redirect('/signin', 'You must sign in to view this page.', 'error');
+		{			
+            $this->redirect('/signin?redirect=' . urlencode($_SERVER['REQUEST_URI']), 'You must sign in to view this page.', 'error');
         }
     }
    
     /**
      * Checks to see if a user is not signed in
      */
-    function mustNotBeSignedIn() 
+    public function mustNotBeSignedIn() 
 	{
         if (! empty($this->userData)) 
 		{
@@ -142,7 +159,7 @@ class App_Controller extends Controller {
 	* @return string 
 	* @access public
 	*/
-	public function randomString($length) 
+	public public function randomString($length) 
 	{
 		$randstr = null;
 		srand();
@@ -163,7 +180,7 @@ class App_Controller extends Controller {
      * @param todo Use CakePHP's redirect here
      * @access public
      */
-    function redirect($url, $message=null, $type = null) 
+    public function redirect($url, $message=null, $type = null) 
 	{
 		$this->cookie->setFlash($message, $type);
         header("Location: http://".$_SERVER['HTTP_HOST'].$url, TRUE, 302);
@@ -177,7 +194,7 @@ class App_Controller extends Controller {
 	 * @param array $data
 	 * @access public
 	 */
-	function setData($data = array())
+	public function setData($data = array())
 	{
 		foreach ($data as $field => $value) 
 		{
@@ -192,7 +209,7 @@ class App_Controller extends Controller {
 	 * @param array $models[optional]
 	 * @access public
 	 */
-	function setErrors($models = array())
+	public function setErrors($models = array())
 	{
 		foreach ($models as $model) 
 		{
@@ -209,7 +226,7 @@ class App_Controller extends Controller {
 	 * @access public
 	 * @return boolean
 	 */
-	function testing()
+	public function testing()
 	{
 		return $this->config->item('debug');
 	}

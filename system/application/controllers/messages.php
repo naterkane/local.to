@@ -15,15 +15,16 @@ class Messages extends App_Controller
     function add()
     {
         $this->mustBeSignedIn();
+		$redirect = $this->getRedirect();
         if ($this->postData)
         {	
 			if ($this->Message->add($this->postData, $this->userData)) 
 			{
-				$this->redirect('/home');				
+				$this->redirect($redirect, 'Your message has been sent.');				
 			}
 			else 
 			{
-				$this->redirect('/home', 'There was an error adding your message.', 'error');
+				$this->redirect($redirect, 'There was an error adding your message.', 'error');
 			}
         }
         else

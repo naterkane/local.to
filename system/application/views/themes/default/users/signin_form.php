@@ -1,5 +1,11 @@
 <div class="block">
-	<form action="/signin" method="post" accept-charset="utf-8">
+	<?php
+	if (empty($redirect)) 
+	{
+		$redirect = '/';
+	}
+	?>
+	<form action="/signin?redirect=<?php echo $redirect ?>" method="post" accept-charset="utf-8">
 		<fieldset class="login">
 		<!--<legend>Login Information</legend>-->
 		<p>
