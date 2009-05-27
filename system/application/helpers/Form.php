@@ -127,6 +127,7 @@ class Form extends Html
 		else
 		{
 			$options = $this->setOptions('value', $this->getElementValue($name), $options);			
+			$options['value'] = html_entity_decode($options['value']);
 		}
 		return sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
 	}

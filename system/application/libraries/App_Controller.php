@@ -23,18 +23,20 @@ class App_Controller extends Controller {
     public function __construct() 
 	{
         parent::Controller();
-        $this->load->library(array('Load_helpers','Util'));
+        $this->load->library(array('Load_helpers','Util', 'Sanitize'));
         $this->load->model(array('User', 'Message', 'Group'));
+		$_COOKIE = Sanitize::clean($_COOKIE);
+		$this->params = Sanitize::clean($this->params, array('odd_spaces'=>false, 'encode'=>false));	
         if ($_POST) 
 		{
-            $this->postData = $this->input->xss_clean($_POST);
+			$_POST = Sanitize::clean($_POST);
+			$this->postData = $_POST;						
         }
 		if ($this->testing()) 
 		{
 			$this->testingData['testing'] = true;
 			$this->testingData['count'] = $this->countAllRecords();
-		}
-		$this->params = $this->uri->params;
+		}		
 		$this->getUserData();
     }
 
