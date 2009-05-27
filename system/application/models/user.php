@@ -18,12 +18,12 @@ class User extends App_Model
 	 * @param array $following Data of user following
 	 * @return 
 	 */
-	private function _follow($followed, $following)
+	private function _follow(&$followed, &$following)
 	{
 		array_unshift($followed['followers'], $following['id']);
 		$this->save($followed);
 		array_unshift($following['following'], $followed['id']);
-		$this->save($following);		
+		$this->save($following);	
 		return true;
 	}
 
