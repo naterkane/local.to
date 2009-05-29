@@ -4,6 +4,30 @@
 */
 class Admin extends App_controller
 {
+
+	/**
+	 * Delete cookie, used for cookie tests
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function cookie($type = null)
+	{
+		if ($type == 'user_agent') 
+		{
+			$cookie = $this->cookie->getAllData();
+			$cookie['user_agent'] = 'x';
+			$this->Cookie_model->save($cookie);
+		}
+		if ($type == 'ip') 
+		{
+			$cookie = $this->cookie->getAllData();
+			$cookie['user_agent'] = 'ip';
+			$this->Cookie_model->save($cookie);
+		}		
+		exit;
+	}
+	
 	
 	/**
 	 * Flushes the database

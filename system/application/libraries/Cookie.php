@@ -41,6 +41,18 @@ class Cookie {
 		{
 			$this->create();
 		}
+		else 
+		{
+			$data = $this->getAllData();
+			if ($_SERVER['HTTP_USER_AGENT'] != $data['user_agent']) 
+			{
+				$this->delete();
+			}
+			if ($_SERVER['REMOTE_ADDR'] != $data['ip']) 
+			{
+				$this->delete();
+			}
+		}
 	}
 
 	/**
@@ -51,10 +63,13 @@ class Cookie {
 	 */
 	function create()
 	{
-		$key = array();
-		$key['id'] = sha1(time() . $this->randomString . $this->salt);
-		setcookie($this->name, $key['id'], $this->expires, $this->domain);
-		$this->cookie->save($key);
+		$cookie = array();
+		$cookie['id'] = sha1(time() . $this->randomString . $this->salt);
+		$cookie['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+		$cookie['ip'] = $_SERVER['REMOTE_ADDR'];
+		$cookie['last_accessed'] = time();		
+		setcookie($this->name, $cookie['id'], $this->expires, $this->domain);
+		$this->cookie->save($cookie);
 	}
 
 	/**
