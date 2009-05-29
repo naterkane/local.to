@@ -352,21 +352,35 @@ class Group extends App_Model
 			foreach ($groups as $groupname) 
 			{
 				$group = $this->getByName($groupname);
-				array_unshift($group['messages'], $messageData['id']);				
-				$this->save($group);				
-				if ($group) 
+								
+				if ($group && !empty($group['members'])) 
 				{
-					foreach ($group['members'] as $member_id) {
-						if (!in_array($member_id, $sent)) 
-						{
-							$member = $this->User->get($member_id);
-							array_unshift($member['private'], $messageData['id']);
-							array_unshift($member['public'], $messageData['id']);
-							$this->User->save($member);
-							$sent[] = $member_id;
-						}
+					array_unshift($group['messages'], $messageData['id']);				
+					$this->save($group);
+					
+					/**
+					 * check to make sure that the user sending the message is a member of the group before posting to group member's feeds.
+					 */
+					if (in_array($user_id,$group['members']))
+					{
+						foreach ($group['members'] as $member_id) {
+							if (!in_array($member_id, $sent)) 
+							{
+								$member = $this->User->get($member_id);
+								array_unshift($member['private'], $messageData['id']);
+								array_unshift($member['public'], $messageData['id']);
+								$this->User->save($member);
+								$sent[] = $member_id;
+							}
+						}	
+					}
+					else{
+					/**
+					 * @todo if the posting user isn't a member of a group, add this message to group's "mentions"
+					 */
 					}
 				}
+				
 			}
 			return $this->endTransaction();
 		}
