@@ -284,17 +284,7 @@ class Users extends App_Controller
             if ($this->User->signUp($this->postData))
             {
 				$this->Invite->accept($email_decode, $key);
-				try
-				{
-					$this->load->library('Mail');
-					ob_start(); // since debugging is set to '2', let's make sure we don't send anything to the browser until we set headers for the actual view.
-					$this->mail->send($this->postData['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to '.$this->config->item('service_name').'!');
-					ob_end_clean();	
-				}
-				catch(Exception $e)
-				{
-					$this->redirect('/signin', 'Caught exception: ',  $e->getMessage(), "\n");
-				}
+				$this->sendEmail($this->postData['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to '.$this->config->item('service_name').'!', $redirect = '/signin');
                 $this->redirect('/signin', 'Your account has been created. Please sign in.');
             }
 			else 

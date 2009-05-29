@@ -123,23 +123,17 @@ class User extends App_Model
 		$this->addToPrivate($user, $message_id);
 	}
 
-	public function addGroup($user_id, $group_id)
+	public function addGroup(&$user, $group_id)
 	{
-		$data = $this->userData;
-		if (!is_array($data['groups']))
+		if (!is_array($user['groups']))
 		{
-			$data['groups'] = array();
+			$user['groups'] = array();
 		}
-		if (!in_array($group_id,$data['groups']))
+		if (!in_array($group_id, $user['groups']))
 		{
-			array_push($data['groups'],$group_id);
-		}	
-		$data['id'] = $user_id;
-		$data['modified'] = time();
-		$data = $this->updateData($this->userData, $data);
-		$this->startTransaction();
-		$this->save($data);
-		return $this->endTransaction();
+			array_push($user['groups'], $group_id);
+		}
+		return $this->save($user);
 	}	
 
 	/**
@@ -556,6 +550,7 @@ class User extends App_Model
 		$this->startTransaction();
 		if ($this->save($data)) 
 		{
+			$this->insertId = $data['id'];
 			$this->save($data, array('prefixValue'=>'email', 'saveOnly'=>'id', 'validate'=>false));
 			$this->save($data, array('prefixValue'=>'username', 'saveOnly'=>'id', 'validate'=>false));
 		}

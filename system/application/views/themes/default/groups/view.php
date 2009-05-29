@@ -17,7 +17,7 @@
 			<?php if (!empty($desc)) echo "<p>$desc</p>"; ?>
 			<?php if (!empty($location)) echo "<p><strong>Location:</strong> $location</p>"; ?>
 			<p>
-				<?php if (!$is_owner): ?>
+				<?php if (!$is_owner && $this->userData): ?>
 					<?php if ($im_a_member): ?>
 							<a href="/groups/unsubscribe/<?php echo $id ?>" id="unsubscribe" class="toggler">Unsubscribe</a>
 					<?php else: ?>

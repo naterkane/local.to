@@ -147,10 +147,20 @@ class Group_Invite extends App_Model
 	 */
 	public function makeResponse()
 	{
-		$this->message = count($this->successes) . ' invites(s) added. ';
+		if (!empty($this->successes)) 
+		{
+			$this->message .= count($this->successes) . ' invites(s) added. ';
+		}
 		if (!empty($this->failures)) 
 		{
-			$this->message .= count($this->failures) . ' not added: ' . implode(', ', $this->failures) . '.';
+			if ($this->failures[0]) 
+			{
+				$this->message .= count($this->failures) . ' email(s) not added. Emails not added: ' . implode(', ', $this->failures) . '. ';
+			}
+			else 
+			{
+				$this->message .= 'You must provide an email address.'; 
+			}
 		}
 	}
 	

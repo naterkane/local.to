@@ -16,13 +16,34 @@ class Groups extends App_Controller
 	{
 		$this->load->model(array('Group_Invite'));
 		$invite = $this->Group_Invite->get($key);
-		if (empty($invite)) 
+		$group = $this->Group->get($invite['group_id']);		
+		if (empty($invite) || empty($group)) 
 		{
 			show_404();
 		}
 		if (empty($this->userData)) 
 		{	
-			$this->load->view('users/signup');
+	        $this->layout = 'public';
+			$this->data['page_title'] = 'Sign Up';			
+			$this->data['key'] = $key;
+			if ($this->postData) 
+			{
+	            if ($this->User->signUp($this->postData))
+	            {
+					$user = $this->User->get($this->User->insertId);
+					$this->Group->addMember($group, $user['id']);
+					$this->User->addGroup($user, $group_id);
+					$this->Group_Invite->delete($invite['key'], false);
+					$this->sendEmail($user['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to ' . $this->config->item('service_name').'!', $redirect = '/signin');
+	                $this->redirect('/signin?redirect=' . urlencode('/group/' . $group['name']), 'Your account has been created. Please sign in.');
+	            }
+				else 
+				{
+					$this->setErrors(array('User'));
+	                $this->cookie->setFlash('There was an error signing up. Please see below for details.', 'error');
+				}
+			}
+			$this->load->view('groups/accept', $this->data);
 		}
 		else 
 		{
@@ -150,7 +171,7 @@ class Groups extends App_Controller
 		$this->load->model(array('Group_Invite'));		
 		$this->data['page_title'] = 'Group Invites';
 		$this->data['group'] = $this->Group->getByName($groupname);
-		if ((!$this->data['group']) && (!$this->Group->isOwner($this->data['group']['id'], $this->userData['id'])))
+		if ((!$this->data['group']) || (!$this->Group->isOwner($this->data['group']['id'], $this->userData['id'])))
 		{
 			show_404();
 		}
@@ -164,46 +185,6 @@ class Groups extends App_Controller
 		}
 		$this->data['invite_list'] = $this->Group_Invite->getMany($this->data['group']['invites']);
 		$this->load->view('groups/invites', $this->data);
-	}
-	
-	/**
-	 * View a group
-	 *
-	 * @todo Check if group exists
-	 * @todo Change that bad hand-off of user data
-	 * @todo Merge with inbox		
-	 * @access public
-	 * @param string $name	
-	 * @return
-	 */
-	public function view($groupname = null)
-	{		
-		if ($groupname) {
-			$group = $this->Group->getByName($groupname);
-			if (isset($this->data['User'])) 
-			{
-				$user = $this->data['User'];
-			}
-			else 
-			{
-				$user = array();
-			}
-			$this->data = $group;
-			$this->data['page_title'] = $group['name'];
-			$this->data['groupname'] = $group['name'];
-			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
-			$this->data['member_count'] = count($group['members']);			
-			$this->data['messages'] = $this->Message->getMany($group['messages']);
-			$this->data['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
-			$this->data['User'] = $user;
-			if ($this->data['member_count'] > 0) {
-				$this->load->view('groups/view', $this->data);
-			} else {
-				show_404();
-			}
-		} else {
-			show_404();
-		}
 	}
 
 	/**
@@ -303,7 +284,7 @@ class Groups extends App_Controller
 		if ($group) 
 		{
 			$this->Group->addMember($group, $this->userData['id']);
-			$this->User->addGroup($this->userData['id'],$group_id);
+			$this->User->addGroup($this->userData, $group_id);
 			$message = 'I just became a member of the group !'. $group['name'];
 			$message_id = $this->Message->add($message, $this->userData,false);
 			$this->User->sendToFollowers($message_id, $this->userData['followers']);
@@ -334,5 +315,45 @@ class Groups extends App_Controller
 			show_404();
 		}		
 	}	
+	
+	/**
+	 * View a group
+	 *
+	 * @todo Check if group exists
+	 * @todo Change that bad hand-off of user data
+	 * @todo Merge with inbox		
+	 * @access public
+	 * @param string $name	
+	 * @return
+	 */
+	public function view($groupname = null)
+	{		
+		if ($groupname) {
+			$group = $this->Group->getByName($groupname);
+			if (isset($this->data['User'])) 
+			{
+				$user = $this->data['User'];
+			}
+			else 
+			{
+				$user = array();
+			}
+			$this->data = $group;
+			$this->data['page_title'] = $group['name'];
+			$this->data['groupname'] = $group['name'];
+			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+			$this->data['member_count'] = count($group['members']);			
+			$this->data['messages'] = $this->Message->getMany($group['messages']);
+			$this->data['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+			$this->data['User'] = $user;
+			if ($this->data['member_count'] > 0) {
+				$this->load->view('groups/view', $this->data);
+			} else {
+				show_404();
+			}
+		} else {
+			show_404();
+		}
+	}
 }
 ?>

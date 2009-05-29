@@ -11,6 +11,7 @@
 	$selenium->addTestCase('Add Group and Subscribe', 'group');
 	$selenium->addTestCase('Add Group and DM', 'group-dm');	
 	$selenium->addTestCase('Add Group and Change Profile', 'group-settings');	
+	$selenium->addTestCase('Add Group and Add Members', 'group-members');		
 	$selenium->addTestCase('Sanitize Data', 'santize');	
 	$selenium->addTestCase('Access', 'access');	
 	$selenium->addTestCase('Disallowed Characters', 'characters');		

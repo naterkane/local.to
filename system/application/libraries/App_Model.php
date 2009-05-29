@@ -57,7 +57,8 @@ class App_Model extends Model {
 	public $modelData = array();
 	public $mode;
 	public $validate = true;
-	public $validationErrors = array();	
+	public $validationErrors = array();
+	public $insertId;		
 
 	function __construct()
 	{
