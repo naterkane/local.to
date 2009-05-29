@@ -108,7 +108,7 @@ class Messages extends App_Controller
 		if (($this->data['message']) AND ($user['username'] == $username) AND (!isset($this->data['message']['to']))) {
 			$this->load->view('messages/view', $this->data);
 		} else{
-			show_404();
+			$this->show404();
 		}
 	}
 

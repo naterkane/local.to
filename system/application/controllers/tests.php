@@ -24,7 +24,7 @@ class Tests extends App_Controller
 				$this->load->view('tests/' . $this->uri->segments[2]);			
 			}
         } else {
-        	show_404();
+        	$this->show404();
         }
 	}
 	

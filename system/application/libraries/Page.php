@@ -85,13 +85,14 @@ class Page
 			self::$showPrevious = true;
 		}		
 		$return = $ci->$model->$method($data, self::$start, self::$end);
-		unset($ci);
 		if (empty($return) AND self::$page > 1)
 		{
-			show_404();
+			$ci->show404();
+			unset($ci);			
 		}
 		else 
 		{
+			unset($ci);
 			return $return;
 		}
 	}

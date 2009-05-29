@@ -19,7 +19,7 @@ class Groups extends App_Controller
 		$group = $this->Group->get($invite['group_id']);		
 		if (empty($invite) || empty($group)) 
 		{
-			show_404();
+			$this->show404();
 		}
 		if (empty($this->userData)) 
 		{	
@@ -124,7 +124,7 @@ class Groups extends App_Controller
 			$group = $this->Group->getByName($groupname);
 			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
 			{
-				show_404();
+				$this->show404();
 			}			
 			$user = $this->data['User'];
 			$this->data = $group; //necessary, but should be removed, this was accidently coded to overwriter user data
@@ -139,10 +139,10 @@ class Groups extends App_Controller
 			if ($this->data['member_count'] > 0) {
 				$this->load->view('groups/inbox', $this->data);
 			} else {
-				show_404();
+				$this->show404();
 			}
 		} else {
-			show_404();
+			$this->show404();
 		}
 	}
 
@@ -173,7 +173,7 @@ class Groups extends App_Controller
 		$this->data['group'] = $this->Group->getByName($groupname);
 		if ((!$this->data['group']) || (!$this->Group->isOwner($this->data['group']['id'], $this->userData['id'])))
 		{
-			show_404();
+			$this->show404();
 		}
 		if ($this->postData) 
 		{
@@ -219,7 +219,7 @@ class Groups extends App_Controller
 		} 
 		else 
 		{
-			show_404();
+			$this->show404();
 		}
 	}
 
@@ -261,12 +261,12 @@ class Groups extends App_Controller
 			} 
 			else 
 			{
-				show_404();
+				$this->show404();
 			}
 		} 
 		else 
 		{
-			show_404();
+			$this->show404();
 		}
 	}
 
@@ -292,7 +292,7 @@ class Groups extends App_Controller
 		} 
 		else 
 		{
-			show_404();
+			$this->show404();
 		}
 	}
 	
@@ -312,7 +312,7 @@ class Groups extends App_Controller
 			$this->User->removeGroup($this->userData['id'],$group_id);
 			$this->redirect('/group/' . $group['name']);
 		} else {
-			show_404();
+			$this->show404();
 		}		
 	}	
 	
@@ -349,10 +349,10 @@ class Groups extends App_Controller
 			if ($this->data['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);
 			} else {
-				show_404();
+				$this->show404();
 			}
 		} else {
-			show_404();
+			$this->show404();
 		}
 	}
 }

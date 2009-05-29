@@ -113,7 +113,7 @@ class Users extends App_Controller
 		}
 		else
 		{
-			show_404();
+			$this->show404();
 		}
     }
    
@@ -263,7 +263,7 @@ class Users extends App_Controller
     {
 		if ((!$email) || (!$key))
 		{
-			show_404();
+			$this->show404();
 		}
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign Up';
@@ -273,7 +273,7 @@ class Users extends App_Controller
 		$invite = $this->Invite->get($email_decode, $key);
 		if (empty($invite)) 
 		{
-			show_404();
+			$this->show404();
 		}
 		if ($invite['activated'] == 1) 
 		{
@@ -328,7 +328,7 @@ class Users extends App_Controller
 		}
 		else
 		{
-			show_404();
+			$this->show404();
 		}
     } 
 
@@ -353,7 +353,7 @@ class Users extends App_Controller
         }
         else
         {
-            show_404();
+            $this->show404();
         }
     }
 
@@ -371,7 +371,7 @@ class Users extends App_Controller
         }
         else
         {
-            show_404();
+            $this->show404();
         }
 	}
    

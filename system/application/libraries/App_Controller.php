@@ -66,7 +66,7 @@ class App_Controller extends Controller {
 	{
 		if (!$this->postData) 
 		{
-			show_404();
+			$this->show404();
 		}
 	}
  
@@ -151,7 +151,7 @@ class App_Controller extends Controller {
 	{
         if (! empty($this->userData)) 
 		{
-            show_404();
+            $this->show404();
         }
     }
  
@@ -250,6 +250,25 @@ class App_Controller extends Controller {
 				$this->validationErrors[$field] = $error;
 			}
 		}
+	}
+
+	/**
+	 * Show 404
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function show404()
+	{
+		if (empty($this->exceptions)) 
+		{
+        	$this->load->library(array('Exceptions'));
+		}
+		$heading = "404 Page Not Found";
+		$message = "The page you requested was not found.";
+		//log_message('error', '404 Page Not Found --> '.$page);
+		echo $this->exceptions->show_error($heading, $message, 'error_404');
+		exit;
 	}
 	
 	/**
