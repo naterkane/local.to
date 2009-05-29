@@ -21,7 +21,7 @@
 		if (!empty($page_title)): 
 			echo $page_title;
 		else:
-			echo $this->config->item('site_name');
+			echo $this->config->item('service_name');
 		endif; 
 	?></title>
 </head>
@@ -30,7 +30,7 @@
 	<div class="container_16">
 		<div class="grid_16">
 			<h1 id="branding">
-				<a href="/"><?php echo $this->config->item('site_name') ?></a>
+				<a href="/"><?php echo $this->config->item('service_name') ?></a>
 			</h1>
 		</div>
 		<div class="clear"></div>

@@ -18,7 +18,7 @@
 		if (!empty($page_title)): 
 			echo $page_title;
 		else:
-			echo "microblog";
+			echo $this->config->item('service_name');
 		endif; 
 	?></title>
 </head>
@@ -27,7 +27,7 @@
 	<div class="container_16">
 		<div class="grid_16">
 			<h1 id="branding">
-				<a href="/">MicroBlog</a>
+				<a href="/"><?php echo $this->config->item('service_name'); ?></a>
 			</h1>
 		</div>
 		<div class="clear"></div>
