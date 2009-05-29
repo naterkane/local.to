@@ -30,9 +30,9 @@
 				<?php endif ?>
 			</p>
 			<?php
-			// end move to sidebaqr
-			?>
+			// end move to sidebar
 			
+			if ($im_a_member): ?>
 			<form action="/messages/add" method="post" accept-charset="utf-8">
 			<h3>Post a message to <?php echo $name ?></h3>
 				<fieldset>
@@ -42,7 +42,7 @@
 				echo $this->load->view('messages/postform',$messagedata) ?>
 				</fieldset>
 			</form>
-	
+			<?php endif; ?>
 		</div>
 	</div>
 	<?php echo $this->load->view('messages/viewlist'); ?>
