@@ -179,7 +179,7 @@ class App_Model extends Model {
      */
 	public function delete($value = null, $options = array())
 	{
-		$key = $this->makeFindPrefix($value, $options);		
+		$key = $this->makeFindPrefix($value, $options);	
 		$this->logQuery($key);
 		$data = $this->mem->get(array($key));
 		if (!empty($data)) 

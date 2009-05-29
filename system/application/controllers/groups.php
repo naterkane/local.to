@@ -6,6 +6,44 @@ class Groups extends App_Controller
 {
 
 	/**
+	 * Accept an invite
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return 
+	 */
+	public function accept($key = null)
+	{
+		$this->load->model(array('Group_Invite'));
+		$invite = $this->Group_Invite->get($key);
+		if (empty($invite)) 
+		{
+			show_404();
+		}
+		if (empty($this->userData)) 
+		{	
+			$this->load->view('users/signup');
+		}
+		else 
+		{
+			$group = $this->Group->get($invite['group_id']);
+			if ($this->Group->isMember($group['members'], $this->userData['id']))
+			{
+				$this->redirect('/group/' . $group['name'], 'You are already a member of this group.');
+			}
+			if ($this->Group->addMember($group, $this->userData['id'])) 
+			{
+				$this->Group_Invite->delete($invite['key'], false);
+				$this->redirect('/group/' . $group['name'], 'Welcome to ' . $group['name'] . '!');
+			}
+			else 
+			{
+				$this->redirect('/home', 'There was a problem joining this group');
+			}
+		}
+	}
+
+	/**
 	 * Add a new group
 	 *
 	 * @access public
@@ -25,6 +63,28 @@ class Groups extends App_Controller
 		} 
 		$this->load->view('groups/add', $this->data);
 	}
+
+	/**
+	 * Delete an invite
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return 
+	 */
+	public function deleteinvite($key = null)
+	{
+		$this->mustBeSignedIn();
+		$this->load->model(array('Group_Invite'));		
+		$redirect = $this->getRedirect();
+		if ($this->Group_Invite->delete($key)) 
+		{
+			$this->redirect($redirect, 'Invitation successfully deleted.');	
+		}
+		else {
+			$this->redirect($redirect, 'The invitation could not be delete.', 'error');	
+		}
+	}
+	
 
 	/**
 	 * View a group's inbox
@@ -78,6 +138,35 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * Invite users
+	 *
+	 * @access public
+	 * @param string $groupname
+	 * @return 
+	 */
+	public function invites($groupname = null)
+	{
+		$this->mustBeSignedIn();
+		$this->load->model(array('Group_Invite'));		
+		$this->data['page_title'] = 'Group Invites';
+		$this->data['group'] = $this->Group->getByName($groupname);
+		if ((!$this->data['group']) && (!$this->Group->isOwner($this->data['group']['id'], $this->userData['id'])))
+		{
+			show_404();
+		}
+		if ($this->postData) 
+		{
+			$this->Group_Invite->addMany($this->postData['invites'], $this->data['group']);
+			foreach ($this->Group_Invite->successes as $invite) {
+				$this->sendEmail($invite['email'], null, null, 'Invitation to join' . $this->data['group']['name'], $this->config->item('base_url') . 'groups/accept/' . $invite['key']);
+			}
+			$this->redirect($_SERVER['REQUEST_URI'], $this->Group_Invite->message);			
+		}
+		$this->data['invite_list'] = $this->Group_Invite->getMany($this->data['group']['invites']);
+		$this->load->view('groups/invites', $this->data);
+	}
+	
+	/**
 	 * View a group
 	 *
 	 * @todo Check if group exists
@@ -88,7 +177,7 @@ class Groups extends App_Controller
 	 * @return
 	 */
 	public function view($groupname = null)
-	{
+	{		
 		if ($groupname) {
 			$group = $this->Group->getByName($groupname);
 			if (isset($this->data['User'])) 
@@ -127,6 +216,7 @@ class Groups extends App_Controller
 	 */
 	function members($groupname = null, $sidebar = null)
 	{
+		$this->mustBeSignedIn();		
 		$group = $this->Group->getByName($groupname);
 		if ($group) 
 		{

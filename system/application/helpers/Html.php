@@ -251,5 +251,21 @@ class Html
 		return sprintf($this->tags['link'], $url, $this->_parseAttributes($htmlAttributes), $title); 
 	}
 
+	/**
+	 * Create a redirect query string to send a user back to requesting page
+	 *
+	 * @access public
+	 * @param string $uri To override default
+	 * @return 
+	 */
+	public function sendMeHere($url = null)
+	{
+		if (!$url) 
+		{
+			$url = urlencode($_SERVER['REQUEST_URI']);
+		}
+		return '?redirect=' . $url;
+	}
+	
 }
 ?>

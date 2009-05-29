@@ -10,7 +10,6 @@ class Mail
 	
 	function __construct()
 	{
-		//*
 		require_once(APPPATH . 'libraries/phpmailer/Phpmailer.php');
 		$this->mail = new Phpmailer();
 		$this->mail->IsSMTP();
@@ -28,7 +27,6 @@ class Mail
 		$this->mail->SMTPAuth = true;
 		$this->mail->SMTPSecure = "ssl";
 		unset($ci);
-		//*/
 	}
 	
 	/**
@@ -43,7 +41,6 @@ class Mail
 	 */
 	function send($to, $from_email = null, $from_name = null, $subject = null, $message = null)
 	{
-		//*
 		if (!$from_email) 
 		{
 			$from_email = $this->from_email;
@@ -56,8 +53,7 @@ class Mail
 		$this->mail->SetFrom($from_email, $from_name);
 		$this->mail->Subject = $subject;
 		$this->mail->Body = $message;
-		$this->mail->Send();
-		//*/
+		echo $this->mail->Send();
 	}
 	
 }
