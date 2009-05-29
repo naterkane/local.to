@@ -288,7 +288,7 @@ class Users extends App_Controller
 				{
 					$this->load->library('Mail');
 					ob_start(); // since debugging is set to '2', let's make sure we don't send anything to the browser until we set headers for the actual view.
-					$this->mail->send($this->postData['email'], null, null, 'Welcome', 'Welcome to the microblog!');
+					$this->mail->send($this->postData['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to '.$this->config->item('service_name').'!');
 					ob_end_clean();	
 				}
 				catch(Exception $e)
@@ -376,6 +376,7 @@ class Users extends App_Controller
 			$this->data['user'] = $user;
 			$this->data['page_title'] = $username;	
         	$this->data['messages'] = Page::make('Message', $user['public']);
+			
             $this->load->view('users/view.rss.php', $this->data);
         }
         else
