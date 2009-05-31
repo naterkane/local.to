@@ -28,5 +28,16 @@ class Util
 	public function base64_url_decode($input) {
 	    return base64_decode(strtr($input, '-_', '+/='));
     }
+	
+	/**
+	 * compares a string against the request URI
+	 * @return 
+	 * @param object $string
+	 */
+	public function isSection($string)
+	{
+		return stristr($_SERVER['REQUEST_URI'],$string);
+	}
+	
 }
 ?>

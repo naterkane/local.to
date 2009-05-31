@@ -33,6 +33,16 @@ class App_router extends CI_Router
 	 */	
 	public function _validate_request($segments)
 	{
+		// are we trying to view a specific page?
+		if(count($segments) > 2 && $segments[count($segments)-2]=="page" && is_numeric($segments[count($segments)-1]))
+		{
+			var_dump($segments);
+			echo "<br>";
+			$segments = array_slice($segments,0,count($segments)-2);
+			var_dump($segments);
+			exit;
+		}
+
 		// Does the requested controller exist in the root folder?
 		if (file_exists(APPPATH.'controllers/'.$segments[0].EXT))
 		{
@@ -80,6 +90,10 @@ class App_router extends CI_Router
 				$segments[2] = $username;
 				$segments[3] = $time;				
 			} 
+			elseif (isset($segments[1]) && isset($segments[2]) && ($segments[1] == 'page') && is_numeric($segments[2]))
+			{
+				
+			}
 			else 
 			{
 				$username = $segments[0];

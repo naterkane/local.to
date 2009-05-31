@@ -103,9 +103,9 @@ class Message extends App_Model
 		return $this->addTo('replies', $message, $id, true);
 	}
 
-    /**
-     * Get more than one message
-     *
+	/**
+	 * Get more than one message
+	 *
 	 * @access public
      * @param array $messages
      * @return array of messages
@@ -168,7 +168,7 @@ class Message extends App_Model
      * @param int $messages
      * @return array Messages
      */
-    public function getReplies($message_id)
+    public function getReplies($message_id,$start = null)
     {
         $messages = $this->find($message_id);
         return $this->getMany($messages);
@@ -181,7 +181,7 @@ class Message extends App_Model
      * @access public
      * @return array Messages
      */
-    public function getTimeline()
+    public function getTimeline($start = null)
     {
         return $this->find(null, array('override'=>'timeline'));
     }

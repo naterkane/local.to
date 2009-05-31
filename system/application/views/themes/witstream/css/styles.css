@@ -1,0 +1,47 @@
+#flashMessage {
+	font-size: 1.2em;
+	padding: 0.8em;
+	background: #fff6bf;
+	color: #514721;
+	border: 2px solid #ffd324;
+	text-align: center;
+}
+
+.success {
+	background: #e6efc2;	
+	border-color: #c6d880;
+	color: #264409;
+}
+
+.error {
+	background: #fbe3e4;	
+	border-color:#fbc2c4;
+	color: #8a1f11;
+}
+
+.neutral {
+	background-color: #ffffdd;	
+	border-color: #4F4800;
+}
+.profile .message .author {
+	display:none;
+}
+.message .author a{
+	font-weight: bold;
+}
+
+.message .meta {
+	display:block;
+	font-size: 0.8em;
+	font-style:oblique;
+}
+
+.inline-error {
+	color: #E2147F;	
+	font-weight: bold;	
+}
+
+#single_post .message_text{
+	font-size: 300%;
+	display: block;
+}
