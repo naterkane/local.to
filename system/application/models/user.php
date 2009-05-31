@@ -518,6 +518,27 @@ class User extends App_Model
             return false;
         }
     }
+
+	/**
+	 * SMS a user
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return boolean
+	 */
+	public function sms($to = array(), $from = array(), $message = null)
+	{
+		if (!empty($this->mail)) 
+		{
+			unset($this->mail);
+		}
+		$this->load->library('Mail');		
+		if ($to['device_updates'] && $to['phone']  && $to['carrier'])
+		{
+			return $this->mail->sms($to['phone'] . $to['carrier'], $from['email'], $message);
+		}
+		return true;
+	}
     
     /**
      * Create a new user
@@ -547,6 +568,9 @@ class User extends App_Model
 		$data['private'] = array();	
 		$data['inbox'] = array();
 		$data['sent'] = array();
+		$data['carrier'] = array();
+		$data['device_updates'] = false;
+		$data['phone'] = null;				
 		$this->startTransaction();
 		if ($this->save($data)) 
 		{

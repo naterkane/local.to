@@ -40,6 +40,19 @@
 					<?php echo $form->error('time_zone') ?>				
 				</p>
 				<p>
+					<label for="timezone">Carriers</label>	
+					<?php echo $form->select('carrier', $carriers) ?>
+					<?php echo $form->error('carrier') ?>		
+				</p>
+				<p>
+					<label for="locked">Device Updates</label>	
+					<?php echo $form->checkbox('device_updates'); ?>
+				</p>
+				<p>
+					<label for="locked">Phone</label>	
+					<?php echo $form->input('phone'); ?>
+				</p>								
+				<p>
 					<label for="locked">Lock Account</label>	
 					<?php echo $form->checkbox('locked'); ?>
 				</p>

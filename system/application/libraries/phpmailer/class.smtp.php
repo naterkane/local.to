@@ -540,6 +540,7 @@ class SMTP {
     }
 
     $useVerp = ($this->do_verp ? "XVERP" : "");
+	
     fputs($this->smtp_conn,"MAIL FROM:<" . $from . ">" . $useVerp . $this->CRLF);
 
     $rply = $this->get_lines();

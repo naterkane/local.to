@@ -90,17 +90,17 @@ class Group extends App_Model
 	 * @param int $member_id	
 	 * @return 
 	 */
-	public function addToMemberInboxes($members = array(), $message_id)
+	public function dm($members = array(), $sender, $message_id)
 	{
 		foreach ($members as $member) {
 			$user = $this->User->get($member);
 			if ($user) 
 			{
 				$this->User->addToInbox($user, $message_id);
+				$this->User->sms($user, $sender, $message_id);
 			}
 		}
 	}
-	
 	
 	/**
 	 * Find a group by id

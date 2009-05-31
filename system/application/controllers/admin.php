@@ -203,10 +203,10 @@ class Admin extends App_controller
 	}
 
 	function test() 
-	{
-		$user = $this->user->find();
-		$user = $this->tt->get();
-		
+	{	
+		$this->load->library(array('Mail'));
+		echo $this->mail->sms('', $user['email'], $data['message']);
+		exit;
 	}
 
 }

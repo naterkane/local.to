@@ -4,7 +4,6 @@
  */
 class Users extends App_Controller
 {
-  
 	/**
 	 * Update a password
 	 *
@@ -170,6 +169,8 @@ class Users extends App_Controller
 	function settings()
 	{
 		$this->mustBeSignedIn();
+		$this->load->library(array('Mail'));
+		$this->data['carriers'] = $this->mail->carriers;
         $this->data['page_title'] = 'Settings';
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
