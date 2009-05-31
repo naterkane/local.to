@@ -70,7 +70,7 @@ class Mail
 		$this->mail->AddAddress($to);
 		$this->mail->SetFrom($from);
 		$this->mail->Body = $message;
-		return $this->mail->Send();
+		$this->mail->Send();
 	}
 	
 }
