@@ -31,7 +31,7 @@ class Message extends App_Model
 				{
 					$this->Group->addToInbox($this->to, $data['id']);
 					$this->User->addToSent($user, $data['id']);					
-					$this->Group->dm($this->to['members'], $user, $data['id']);
+					$this->Group->dm($this->to['members'], $user, $data['message']);
 				}
 				else 
 				{
