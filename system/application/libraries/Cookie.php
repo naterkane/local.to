@@ -44,11 +44,11 @@ class Cookie {
 		else 
 		{
 			$data = $this->getAllData();
-			if ($_SERVER['HTTP_USER_AGENT'] != $data['user_agent']) 
+			if (!empty($data['user_agent']) && $_SERVER['HTTP_USER_AGENT'] != $data['user_agent']) 
 			{
 				$this->delete();
 			}
-			if ($_SERVER['REMOTE_ADDR'] != $data['ip']) 
+			if (!empty($data['ip']) && $_SERVER['REMOTE_ADDR'] != $data['ip']) 
 			{
 				$this->delete();
 			}
