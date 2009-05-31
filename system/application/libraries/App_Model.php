@@ -248,7 +248,18 @@ class App_Model extends Model {
 	public function find($value = null, $options = array())
 	{
 		$key = $this->makeFindPrefix($value, $options);
-		$data = $this->mem->get($key);
+		try
+		{
+			// ob_start();
+			$data = $this->mem->get($key);
+			// ob_end_clean();
+		}
+		catch(Exception $e)
+		{
+			
+			$this->log_message("error",$e);
+			return null;
+		}
 		if ($this->isSerialized($data)) 
 		{
 			$data = unserialize($data);
@@ -615,8 +626,18 @@ class App_Model extends Model {
 				$newData = $this->modelData;
 			}
 			if ($this->key) 
-			{
-				$valid = $this->mem->set($this->key, $newData);
+			{	
+				try
+				{
+					// ob_start();
+					$valid = $this->mem->set($this->key, $newData);
+					// ob_end_clean();
+				}
+				catch(Exception $e)
+				{
+					$this->log_message("error",$e);
+					//$this->flashMessage = $valid;
+				}
 			}
 		}
 		$this->logQueryResult($valid, $newData);					
