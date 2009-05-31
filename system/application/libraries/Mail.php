@@ -24,7 +24,7 @@ class Mail
 		$this->mail->Port = $ci->config->item('port');
 		$this->from_email = $ci->config->item('from_email');
 		$this->from_name = $ci->config->item('from_name');		
-		$this->mail->SMTPDebug = 2;
+		$this->mail->SMTPDebug = 0;
 		$this->mail->SMTPAuth = true;
 		$this->mail->SMTPSecure = "ssl";
 		unset($ci);
