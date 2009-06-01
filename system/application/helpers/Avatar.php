@@ -6,22 +6,44 @@ class Avatar extends Html
 {
 	
 	public $defaultPath = '/img/avatar';
-	
-	public function show($user = array(), $size = '48')
+
+	public function group($user = array(), $size = '48')
 	{
-		if (empty($user['username']) || empty($user['id'])) 
+		return $this->make($user, $size, true);
+	}
+	
+	private function make($data = array(), $size = '48', $group = false)
+	{
+		$dir = null;
+		if ($group) 
+		{
+			$field = 'name';
+			$dir .= 'group_';
+		}
+		else 
+		{
+			$field = 'username';
+			$dir .= 'user_';			
+		}
+		if (empty($data[$field]) || empty($data['id'])) 
 		{
 			$path = $this->defaultPath . '_' . $size . '.jpg';
 		}
 		else 
 		{
-			$path = '/uploads/' . $user['id'] . '/' . $user['username'] . '_' . $size . '.jpg';
+			$dir .= $data['id'];
+			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.jpg';
 		}
 		if (!file_exists(WEBROOT . $path)) 
 		{
 			$path = $this->defaultPath . '_' . $size . '.jpg';			
 		}
-		return '<img src="' . $path . '" alt="' . $user['username'] . '" />';
+		return '<img src="' . $path . '" alt="' . $data[$field] . '" />';
+	}
+	
+	public function user($user = array(), $size = '48')
+	{
+		return $this->make($user, $size);
 	}
 
 }

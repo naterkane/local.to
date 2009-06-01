@@ -6,7 +6,7 @@
 		
 		?>
 		
-		<li><a href="/<?php echo $member['username']; ?>" alt="<?php echo $member['username']; ?>"><?php echo $avatar->show($member, "24" ); ?></a></li>
+		<li><a href="/<?php echo $member['username']; ?>" alt="<?php echo $member['username']; ?>"><?php echo $avatar->user($member, "24" ); ?></a></li>
 		<?php } ?>
 	</ul>
 	<?php else: ?>

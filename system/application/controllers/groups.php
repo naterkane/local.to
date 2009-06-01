@@ -86,6 +86,24 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * Avatar management
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function avatar($groupname = null)
+	{
+		$this->mustBeSignedIn();
+        $this->data['page_title'] = 'Upload Avatar';		
+		$this->data['group'] = $this->Group->getByName($groupname);
+		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
+		{
+			$this->show404();
+		}
+		$this->_avatar($this->data['group']['id'], $this->data['group']['name'], 'group');
+	}
+
+	/**
 	 * Delete an invite
 	 *
 	 * @access public
@@ -125,7 +143,7 @@ class Groups extends App_Controller
 			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
 			{
 				$this->show404();
-			}			
+			}	
 			$user = $this->data['User'];
 			$this->data = $group; //necessary, but should be removed, this was accidently coded to overwriter user data
 			$this->data['page_title'] = $group['name'] . ' Inbox';
@@ -171,7 +189,7 @@ class Groups extends App_Controller
 		$this->load->model(array('Group_Invite'));		
 		$this->data['page_title'] = 'Group Invites';
 		$this->data['group'] = $this->Group->getByName($groupname);
-		if ((!$this->data['group']) || (!$this->Group->isOwner($this->data['group']['id'], $this->userData['id'])))
+		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
 		{
 			$this->show404();
 		}

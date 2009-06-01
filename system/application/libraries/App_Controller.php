@@ -41,6 +41,22 @@ class App_Controller extends Controller {
 		$this->getUserData();
     }
 
+	public function _avatar($id, $name, $type = 'user')
+	{
+		if (!empty($_FILES)) 
+		{
+			$this->load->library(array('Uploader', 'Avatar'));
+			$this->uploader->upload('avatar', $type . '_' . $id,  $name . '_' . 'original');
+			if (!$this->uploader->isError()) 
+			{
+				$file = $this->uploader->getLastUploadInfo();
+				$this->avatar->makeAll($file['dir'], $this->uploader->getName(), $name);
+			}
+			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results());
+		}
+		$this->load->view('users/avatar');
+	}
+
 	/**
 	 * CheckID 
 	 *

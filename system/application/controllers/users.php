@@ -14,18 +14,7 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
         $this->data['page_title'] = 'Upload Avatar';
-		if (!empty($_FILES)) 
-		{
-			$this->load->library(array('Uploader', 'Avatar'));
-			$this->uploader->upload('avatar', $this->userData['id'] , $this->userData['username'] . '_' . 'original');
-			if (!$this->uploader->isError()) 
-			{
-				$file = $this->uploader->getLastUploadInfo();
-				$this->avatar->makeAll($file['dir'], $this->uploader->getName(), $this->userData['username']);
-			}
-			$this->redirect('/avatar', $this->uploader->results());
-		}
-		$this->load->view('users/avatar');
+		$this->_avatar($this->userData['id'], $this->userData['username']);
 	}
 	
 	/**

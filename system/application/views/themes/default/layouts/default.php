@@ -99,7 +99,7 @@
 					foreach($user['following'] as $following)
 					{
 						$following = $this->User->get($following);?>
-						<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->show($following, "24" ); ?></a></li><?php 
+						<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->user($following, "24" ); ?></a></li><?php 
 					} 
 					?>
 				</ul>
@@ -134,7 +134,7 @@
 					<?php foreach($User['following'] as $following){
 						$following = $this->User->get($following);
 						?>
-					<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->show($following['username'], "24" ); ?></a></li>
+					<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->user($following['username'], "24" ); ?></a></li>
 					<?php } ?>
 				</ul>
 				<?php else: ?>
