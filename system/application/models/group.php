@@ -15,23 +15,23 @@ class Group extends App_Model
 	 * @param array $data
 	 * @return boolean
 	 */
-	function add($data = array(), $owner_id)
+	function add($data = array(), $owner)
 	{
 		$data['id'] = $this->makeId($this->idGenerator);
-		$data['owner_id'] = $owner_id;
+		$data['owner_id'] = $owner['id'];
 		$data['public'] = 1;
-		$data['members'] = array($owner_id);
+		$data['members'] = array($owner['id']);
 		$data['messages'] = array();
 		$data['inbox'] = array();	
 		$data['invites'] = array();				
-		$owner = $this->User->get($owner_id);
 		$data['time_zone'] = $owner['time_zone'];
 		$this->mode = 'add';
 		$this->startTransaction();
 		if ($this->save($data)) 
 		{
 			$this->save($data, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
-			$this->addToGroupList($data['name']);
+			$this->addToGroupList($data['name']);			
+			$this->User->addGroup($owner, $data['id']);			
 		}
 		return $this->endTransaction();
 	}
@@ -44,9 +44,9 @@ class Group extends App_Model
 	 * @param string $member Member to add
 	 * @return boolean
 	 */
-	function addMember(&$group, $member_id = null)
+	function addMember(&$group, &$member)
 	{
-		array_unshift($group['members'], $member_id);
+		array_unshift($group['members'], $member['id']);
 		return $this->save($group);
 	}
 	

@@ -570,7 +570,8 @@ class User extends App_Model
 		$data['sent'] = array();
 		$data['carrier'] = array();
 		$data['device_updates'] = false;
-		$data['phone'] = null;				
+		$data['phone'] = null;
+		$data['groups'] = array();
 		$this->startTransaction();
 		if ($this->save($data)) 
 		{

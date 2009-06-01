@@ -31,7 +31,7 @@ class Groups extends App_Controller
 	            if ($this->User->signUp($this->postData))
 	            {
 					$user = $this->User->get($this->User->insertId);
-					$this->Group->addMember($group, $user['id']);
+					$this->Group->addMember($group, $user);
 					$this->User->addGroup($user, $group_id);
 					$this->Group_Invite->delete($invite['key'], false);
 					$this->sendEmail($user['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to ' . $this->config->item('service_name').'!', $redirect = '/signin');
@@ -52,7 +52,7 @@ class Groups extends App_Controller
 			{
 				$this->redirect('/group/' . $group['name'], 'You are already a member of this group.');
 			}
-			if ($this->Group->addMember($group, $this->userData['id'])) 
+			if ($this->Group->addMember($group, $this->userData)) 
 			{
 				$this->Group_Invite->delete($invite['key'], false);
 				$this->redirect('/group/' . $group['name'], 'Welcome to ' . $group['name'] . '!');
@@ -75,7 +75,7 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$this->data['page_title'] = 'Add a group';
 		if ($this->postData) {
-			if ($this->Group->add($this->postData, $this->userData['id'])) {
+			if ($this->Group->add($this->postData, $this->userData)) {
 				$this->redirect('/group/' . $this->postData['name']);
 			} else {
 				$this->setErrors(array('Group'));
@@ -301,7 +301,7 @@ class Groups extends App_Controller
 		$group = $this->Group->get($group_id);
 		if ($group) 
 		{
-			$this->Group->addMember($group, $this->userData['id']);
+			$this->Group->addMember($group, $this->userData);
 			$this->User->addGroup($this->userData, $group_id);
 			$message = 'I just became a member of the group !'. $group['name'];
 			$message_id = $this->Message->add($message, $this->userData,false);
