@@ -131,7 +131,7 @@ class Form extends Html
 		}
 		return sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
 	}
-
+	
 	function select($name, $values, $options=array())
 	{
 		$fieldValue = $this->getElementValue($name);
@@ -166,7 +166,6 @@ class Form extends Html
 			return $this->input('testing_' . $fieldName, array('value'=>$this->testingData[$fieldName], 'type'=>'hidden'));
 		}
 	}
-	
 
 	/**
 	 * Creates a textarea 

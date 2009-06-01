@@ -70,6 +70,7 @@ $route['inbox'] = "messages/inbox";
 $route['sent'] = "messages/sent";
 $route['rss/user/(:any)'] = "users/rss/$1";
 $route['img/(:any)'] = "assets/img/$1";
+$route['avatar'] = "users/avatar";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

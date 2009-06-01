@@ -97,7 +97,7 @@
 					foreach($user['following'] as $following)
 					{
 						$following = $this->User->get($following);?>
-						<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $gravatar->img( $following['email'],"24" ); ?></a></li><?php 
+						<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->show($following, "24" ); ?></a></li><?php 
 					} 
 					?>
 				</ul>

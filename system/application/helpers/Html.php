@@ -18,6 +18,7 @@ class Html
 			'form' => '<form %s>',
 			'formend' => '</form>',
 			'input' => '<input name="%s" %s/>',
+			'upload' => '<input name="%s" %s/>',			
 			'textarea' => '<textarea name="%s" %s>%s</textarea>',
 			'hidden' => '<input type="hidden" name="%s" %s/>',
 			'checkbox' => '<input type="checkbox" name="%s" %s/>',

@@ -19,6 +19,7 @@ else
 }
 
 //set path constants
+define('WEBROOT', dirname(__FILE__));
 define('EXT', '.'.pathinfo(__FILE__, PATHINFO_EXTENSION));
 define('FCPATH', __FILE__);
 define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));

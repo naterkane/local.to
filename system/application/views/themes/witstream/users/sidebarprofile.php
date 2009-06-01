@@ -1,4 +1,4 @@
-<a href="/<?php echo $user['username']; ?>" class="image"><?php echo $gravatar->img( $user['email'],"50" ); ?></a> <div class="meta"><a href="/<?php echo $user['username']; ?>" class="profile_username"><?php echo (!empty($user['realname']))?$user['realname']:$user['username'];  ?></a>
+<a href="/<?php echo $user['username']; ?>" class="image"><?php echo $avatar->show($user, "50" ); ?></a> <div class="meta"><a href="/<?php echo $user['username']; ?>" class="profile_username"><?php echo (!empty($user['realname']))?$user['realname']:$user['username'];  ?></a>
 <?php echo (!empty($user['location']))? '<span class="profile_location">'.$user['location'].'</span>': "";  ?>
 <?php echo (!empty($user['url']))? '<a href="'.$user['url'].'" class="profile_url" rel="me nofollow">'.$user['url'].'</a>': "";  ?>
 <?php echo (!empty($user['bio']))? '<span class="profile_bio">'.$user['bio'].'</span>': "";  ?>

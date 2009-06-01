@@ -1,4 +1,4 @@
-<a href="/<?php echo $group['name']; ?>" class="image"><?php echo $gravatar->img( $group['email'],"48" ); ?></a> <a href="/<?php echo $group['name']; ?>" id="group_name"><?php echo $group['name'];  ?></a>
+<a href="/<?php echo $group['name']; ?>" class="image"><?php echo $avatar->show($group, "48" ); ?></a> <a href="/<?php echo $group['name']; ?>" id="group_name"><?php echo $group['name'];  ?></a>
 <?php echo (!empty($group['location']))? '<p id="profile_location">'.$group['location'].'</p>': "";  ?>
 <?php echo (!empty($group['bio']))? '<p id="profile_bio">'.$group['bio'].'</p>': "";  ?>
 

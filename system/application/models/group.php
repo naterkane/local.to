@@ -90,14 +90,14 @@ class Group extends App_Model
 	 * @param int $member_id	
 	 * @return 
 	 */
-	public function dm($members = array(), $sender, $message_id)
-	{
+	public function dm($members = array(), $sender, $message)
+	{		
 		foreach ($members as $member) {
 			$user = $this->User->get($member);
 			if ($user) 
 			{
-				$this->User->addToInbox($user, $message_id);
-				$this->User->sms($user, $sender, $message_id);
+				$this->User->addToInbox($user, $message['id']);
+				$this->User->sms($user, $sender, $message['message']);
 			}
 		}
 	}

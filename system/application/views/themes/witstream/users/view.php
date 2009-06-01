@@ -1,7 +1,7 @@
 <div class="messages box">
 	<h3><?php
 		$author = $this->User->getByUsername($username);
-		echo $gravatar->img( $author['email'],"60" ); ?>
+		echo $avatar->show($author, "48" ); ?>
 		<?php echo $username; ?></h3>
 	<?php echo $form->input('user_id', array('value'=>$this->userData['id'], 'type'=>'hidden'));
 	if (!empty($this->userData) && $this->userData['username'] != $username) {
