@@ -4,6 +4,7 @@
 	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$count = $this->testingData['count'];		
 	$name_new = $selenium->randomString(10);
+	$long_realname = $selenium->randomString(26);	
 	$email_new = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$default_time_zone = 'US/Eastern';
 	$time_zone = '(GMT+09:00) Tokyo';
@@ -48,7 +49,13 @@
 	$selenium->click('Update');
 	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);	
-	$selenium->write('verifyTextPresent', 'This is a reserved username');	
+	$selenium->write('verifyTextPresent', 'This is a reserved username');
+	//too long name
+	$selenium->write('type', 'realname', $long_realname);
+	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 4);		
+	$selenium->write('verifyTextPresent', $error);	
+	$selenium->write('verifyTextPresent', 'A name must be fewer than 25 characters');		
 	//too long username
 	$selenium->write('type', 'username', $too_long_name);
 	$selenium->click('Update');

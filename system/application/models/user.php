@@ -717,6 +717,7 @@ class User extends App_Model
 		if (($this->mode == 'signup') OR  ($this->mode == 'profile'))
 		{
 			$this->setAction();
+			$this->validates_length_of('realname', array('min'=>0, 'max'=>25, 'message'=>'A name must be fewer than 25 characters'));
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required'));
 			$this->validates_uniqueness_of('email', array('message'=>'Email is already in use'));
 			$this->validates_presence_of('email', array('message'=>'A valid email is required'));
