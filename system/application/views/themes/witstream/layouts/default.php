@@ -56,15 +56,20 @@
 			
 				
 			<?php $user = (!empty($username))?$this->User->getByUsername($username):$this->userData;
-			//var_dump($user); 
-			//echo $this->sidebar; 
+
+			if (!empty($group)): ?>
+			<div class="box profile">
+				<?php
+				$this->load->view('groups/profilesidebar',array('group'=>$group));
+				 ?>
+			</div>
+				<?php
+				$this->load->view('groups/memberssidebar',array('group'=>$group));
 				
-				
-			
-			if (!empty($user)): ?>
+			elseif (!empty($user)): ?>
 			
 			<div class="box profile">
-			<?php $this->load->view($this->sidebar,array('user'=>$user)); ?>
+				<?php $this->load->view($this->sidebar,array('user'=>$user)); ?>
 			</div>
 				<?php if (!empty($User)  && $user['username'] == $this->userData['username']): ?>
 				<div class="box">
@@ -74,10 +79,7 @@
 							<a href="/home">Home</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/naterkane"))?' class="current"':""; ?>>
-							<a href="/<?php echo $User['username'] ?>">@<?php echo $User['username'] ?></a>
-						</li>
-						<li>
-							<a href="#">Mentions</a>
+							<a href="/replies">@<?php echo $User['username'] ?></a>
 						</li>
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
 							<a href="/inbox">Private Mesages</a>
@@ -91,7 +93,13 @@
 				<?php endif; ?>
 			<div class="box following">
 				<h2>Following</h2>
-				<?php if (count($user['following'])):?>
+				<?php if (count($user['following'])>0):
+				shuffle($user['following']);
+				if (count($user['following'])>25)
+				{
+					$user['following'] = array_slice($user['following'],0,25);
+				}
+				?>
 				<ul>
 					<?php 
 					foreach($user['following'] as $following)
@@ -110,7 +118,7 @@
 			<?php endif; ?>
 		</div>
 		<div id="content" class="grid_8">
-		{yield}
+		{yield}	
 		</div>
 		<?php $this->load->view('layouts/footer'); ?>
 	</div>

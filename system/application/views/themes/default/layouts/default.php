@@ -57,32 +57,29 @@
 		
 		<div class="grid_4">
 			
+			<?php $user = (!empty($username))?$this->User->getByUsername($username):$this->userData;
+			//var_dump($user); 
+			//echo $this->sidebar; 
 				
-				<?php $user = (!empty($username))?$this->User->getByUsername($username):$this->userData;
-				//var_dump($user); 
-				//echo $this->sidebar; 
-				
-				
-			
 			if (!empty($user)): ?>
 			<div class="box">
 			<?php $this->load->view($this->sidebar,array('user'=>$user)); ?>
 			</div>
-				<?php if (!empty($User)  && $user['username'] == $this->userData['username']): ?>
+				<?php if (!empty($User) && $user['username'] == $this->userData['username']): ?>
 				<div class="box">
 					<ul class="menu">
 						
 						<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>>
 							<a href="/home">Home</a>
 						</li>
-						<li<?php echo ($this->util->isSection("/naterkane"))?' class="current"':""; ?>>
-							<a href="/<?php echo $User['username'] ?>">@<?php echo $User['username'] ?></a>
+						<li<?php echo ($this->util->isSection("/".$User['username']))?' class="current"':""; ?>>
+							<a href="/<?php echo $User['username'] ?>">@<?php echo $User['username'] ?>  (<?php echo (!empty($this->userData['public']))?count($this->userData['public']):"0"; ?>)</a>
 						</li>
-						<li>
-							<a href="#">Mentions</a>
+						<li<?php echo ($this->util->isSection("/replies"))?' class="current"':""; ?>>
+							<a href="/replies">Mentions</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
-							<a href="/inbox">Private Mesages</a>
+							<a href="/inbox">Private Mesages (<?php echo (!empty($this->userData['inbox']))?count($this->userData['inbox']):"0"; ?>)</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/public_timeline"))?' class="current"':""; ?>>
 							<a href="/public_timeline">Everyone</a>

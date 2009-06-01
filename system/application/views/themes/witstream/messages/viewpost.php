@@ -11,8 +11,8 @@
 	$message['email'] = $user['email'];
 	?>
 	<a href="/<?php echo $message['username']?>" class="image"><?php echo $avatar->user($message, "48" ); ?></a>
-	<p class="author"><?php echo $html->link(!empty($user['realname'])?$user['realname']:$user['username'], '/' . $user['username']); ?></p>
-	<p class="message_text"><?php echo $message['message_html'] ?></p>
+	<p class="author"><?php echo $html->link(!empty($message['realname'])?$message['realname']:$message['username'], '/' . $message['username']); ?></p>
+	<p class="message-text"><?php echo $message['message_html'] ?></p>
 	<p class="meta">
 	<?php if (empty($message['to'])): ?>
 		<?php echo $html->link($time_format->timeAgo($message['time']) . ' ago', '/' . $message['username'] . '/status/' . $message['id'], array('id'=>'messagelink' . $message['id']));?>		

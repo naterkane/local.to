@@ -13,7 +13,8 @@ jQuery(document).ready(function(){
 			"border-bottom-style": "solid",
 			"border-bottom-color": "rgba(0, 0, 0, 0.15)",
 			"width": "100%",
-			"cursor": "pointer"
+			"cursor": "pointer",
+			"zindex": "99999"
 		})
 		jQuery("#flashMessage").slideDown(1000);
 		var hideFlashMessage = setTimeout(function(){jQuery("#flashMessage").slideUp(1000);},3000);

@@ -1,4 +1,5 @@
 <div class="messages box">
+	<div class="top">
 	<h3><?php
 		$author = $this->User->getByUsername($username);
 		echo $avatar->user($author, "48" ); ?>
@@ -21,7 +22,10 @@
 		?></div></div><?php
 	}
 	?>
+	</div>
 	<?php $this->load->view('messages/viewlist'); ?>
+	<div class="threading">
 	<?php $this->load->view('users/toggle_threading',array('threading'=>0)); ?>
+	</div>
 	<div class="clear"></div>
 </div>

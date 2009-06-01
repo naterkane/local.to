@@ -6,5 +6,5 @@
 	<?php echo $form->input('reply_to_username', array('type'=>'hidden')) ?>	
 </p>
 <p>
-	<button class="button" value="">Update</button>
+	<button class="button" value="">Post</button>
 </p>
