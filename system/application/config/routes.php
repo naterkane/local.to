@@ -62,7 +62,6 @@ $route['friend_requests'] = "users/friend_requests";
 $route['settings'] = "users/settings";
 $route['public_timeline'] = "messages/public_timeline";
 $route['public_timeline_threaded'] = "messages/public_timeline_threaded";
-$route['reset_password'] = "users/reset_password";
 $route['reset/(:any)'] = "users/reset/$1";
 $route['change_password'] = "users/change_password";
 $route['request_invite'] = "admin/request_invite";
@@ -71,6 +70,8 @@ $route['sent'] = "messages/sent";
 $route['rss/user/(:any)'] = "users/rss/$1";
 $route['img/(:any)'] = "assets/img/$1";
 $route['avatar'] = "users/avatar";
+$route['recover_password'] = "users/recover_password";
+$route['reset_password/(:any)'] = "users/reset_password/$1";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

@@ -18,7 +18,6 @@ class Mail
 		$ci->config->item('username');
 		$this->mail->Username = $ci->config->item('username');
 		$this->mail->Password = $ci->config->item('password');
-		$this->mail->AddReplyTo = 'Microblog';
 		//$this->mail->Header = $this->mail->HeaderLine();
 		$this->mail->Host = $ci->config->item('host');
 		$this->mail->Port = $ci->config->item('port');
@@ -27,6 +26,7 @@ class Mail
 		$this->mail->SMTPDebug = 0;
 		$this->mail->SMTPAuth = true;
 		$this->mail->SMTPSecure = "ssl";
+		$this->mail->do_debug = 0;
 		unset($ci);
 	}
 	
@@ -51,7 +51,7 @@ class Mail
 			$from_name = $this->from_name;
 		}
 		$this->mail->AddAddress($to);
-		$this->mail->SetFrom('Microblog', null);
+		$this->mail->SetFrom($this->from_email, null);
 		$this->mail->Subject = $subject;
 		$this->mail->Body = $message;
 		$this->mail->Send();

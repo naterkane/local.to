@@ -291,6 +291,26 @@ class User extends App_Model
     }
 
 	/**
+	 * Get a User's data by email
+	 *
+	 * @param int $email[optional]
+	 * @return 	array $user_data
+	 */
+	function getByEmail($email = null)
+	{
+		$return = null;
+		if ($email) 
+		{
+			$user_id = $this->find($email, array('prefixValue'=>'email'));
+			if ($user_id) 
+			{
+				$return = $this->find($user_id);
+			}
+		}
+		return $return;
+	}
+
+	/**
 	 * Get a User's data by username
 	 *
 	 * @param int $username[optional]
@@ -472,7 +492,31 @@ class User extends App_Model
 			return true;
 		}
 	}
-	
+
+	/**
+	 * Reset Password
+	 *
+	 * @access public
+	 * @param array $user
+	 * @param array $data New password data	
+	 * @return 
+	 */
+	function resetPassword(&$user, $data)
+	{
+		$this->mode = 'reset_password';
+		$this->modelData = $data;
+		if ($this->validate()) 
+		{
+			$this->mode = null;
+			$user['password'] = $this->modelData['password'];
+			unset($this->modelData['passwordconfirm']);						
+			return $this->save($user);
+		}
+		else 
+		{
+			return false;
+		}
+	}	
 
     /**
      * Send messages to followes
@@ -684,12 +728,12 @@ class User extends App_Model
 		}
 		if ($this->mode == 'change_password') 
 		{
-			$this->validates_callback('passwordMatches', 'old_password', array('message'=>'Your password password does not match the one on record'));			
+			$this->validates_callback('passwordMatches', 'old_password', array('message'=>'Your password does not match the one on record'));
 			$this->modelData['password'] = $this->modelData['new_password'];
 			$this->modelData['passwordconfirm'] = $this->modelData['new_password_confirm'];
 			unset($this->modelData['passwordconfirm']);			
 		}		
-		if (($this->mode == 'signup') || ($this->mode == 'change_password'))
+		if (($this->mode == 'signup') || ($this->mode == 'change_password') || ($this->mode == 'reset_password'))
 		{
 			$this->validates_length_of('password', array('min'=>6, 'max'=>25, 'message'=>'A password must be between 6 and 25 characters long'));
 			$this->validates_callback('passwordUsernameDoNotMatch', 'password', array('message'=>'Your password cannot be the same as your username'));

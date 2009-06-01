@@ -371,6 +371,87 @@ class Users extends App_Controller
         }
     }
 
+	/**
+	 * Recover password
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function recover_password()
+	{
+		if (!empty($this->postData['email']))
+		{
+			$user = $this->User->getByEmail($this->postData['email']);
+			if ($user) 
+			{
+				$this->load->model(array('Email_key'));
+				$key = $this->randomString(10);			
+				$data = array();
+				$data['id'] = md5($key);
+				$data['id_unhashed'] = $key;
+				$data['user_id'] = $user['id'];
+				$data['created'] = time();			
+				$this->Email_key->save($data);
+				$this->load->library('Mail');			
+				$this->mail->send($user['email'], null, null, 'Reset your password', 'http://' . $_SERVER['HTTP_HOST'] . '/reset_password/' . $data['id_unhashed']);
+				$this->redirect('/recover_password', 'An email has been sent to ' . $user['email'] . ' with instructions on how to reset your password.', 'error');
+			}
+			else 
+			{
+				$this->redirect('/recover_password', 'Email not found.', 'error');
+			}
+		}
+		$this->load->view('users/recover_password');
+	}
+	
+	/**
+	 * Reset password
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return 
+	 */
+	public function reset_password($key = null)
+	{
+		if (!$key) 
+		{
+			$this->show404();
+		}
+		else 
+		{
+			$this->load->model(array('Email_key'));
+			$data = $this->Email_key->find(md5($key));
+			$user = $this->User->get($data['user_id']);
+			if (empty($data) || empty($user)) 
+			{
+				$this->show404();
+			} 
+			else 
+			{
+				if ($this->postData) 
+				{
+					if ($this->User->resetPassword($user, $this->postData)) 
+					{
+						$this->Email_key->delete(md5($key));
+						$this->load->library(array('Mail'));
+						$this->mail->send($user['email'], null, null, 'Your password has been updated', '');						
+						$this->redirect('/signin', 'Your password has been updated. Please sign in.');
+					} 
+					else 
+					{
+						$this->cookie->setFlash('There was an error updating your password. Please see below for details');
+					}
+				}
+				$this->load->view('users/reset_password');
+			}
+		}
+	}
+	
+	/**
+	 * RSS feed of user's messages
+	 * @param string $username
+	 * @return null
+	 */
 	public function rss($username = null)
 	{
        	$user = $this->User->getByUsername($username);
