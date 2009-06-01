@@ -5,7 +5,7 @@
 			<fieldset>
 				<legend>Edit Your Account Information</legend>
 				<p>
-					<label for="username">Real Name</label>
+					<label for="realname">Real Name</label>
 					<?php echo $form->input('realname') ?>
 					<?php echo $form->error('realname') ?>
 				</p>
@@ -15,41 +15,41 @@
 					<?php echo $form->error('username') ?>
 				</p>
 				<p>
-					<label for="username">Email</label>
+					<label for="email">Email</label>
 					<?php echo $form->input('email') ?>
 					<?php echo $form->error('email') ?>		
 				</p>
 				<p>
-					<label for="username">Url</label>
+					<label for="url">Url</label>
 					<?php echo $form->input('url') ?>
 					<?php echo $form->error('url') ?>		
 				</p>
 				<p>
-					<label for="username">Bio</label>
+					<label for="bio">Bio</label>
 					<?php echo $form->input('bio') ?>
 					<?php echo $form->error('bio') ?>		
 				</p>	
 				<p>
-					<label for="username">Location</label>
+					<label for="location">Location</label>
 					<?php echo $form->input('location') ?>
 					<?php echo $form->error('location') ?>		
 				</p>
 				<p>
-					<label for="timezone">Time Zone</label>	
+					<label for="time_zone">Time Zone</label>	
 					<?php echo $form->timezones('time_zone') ?>
 					<?php echo $form->error('time_zone') ?>				
 				</p>
 				<p>
-					<label for="timezone">Carriers</label>	
+					<label for="carrier">Carriers</label>	
 					<?php echo $form->select('carrier', $carriers) ?>
 					<?php echo $form->error('carrier') ?>		
 				</p>
 				<p>
-					<label for="locked">Device Updates</label>	
+					<label for="device_updates">Device Updates</label>	
 					<?php echo $form->checkbox('device_updates'); ?>
 				</p>
 				<p>
-					<label for="locked">Phone</label>	
+					<label for="phone">Phone</label>	
 					<?php echo $form->input('phone'); ?>
 				</p>								
 				<p>
@@ -57,7 +57,7 @@
 					<?php echo $form->checkbox('locked'); ?>
 				</p>
 				<p>
-					<label for="locked">Enable Threading</label>	
+					<label for="threading">Enable Threading</label>	
 					<?php echo $form->checkbox('threading'); ?>
 				</p>
 				<p>

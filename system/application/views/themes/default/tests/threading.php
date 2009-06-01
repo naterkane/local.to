@@ -38,35 +38,17 @@
 	$selenium->write('type', 'reply_to', 'blah');		
 	$selenium->click('Update');
 	$selenium->write('verifyTextPresent', 'There was an error adding your message.');
-	$selenium->write('verifyTextNotPresent', $message3);	
-	//test threading view
-	$selenium->openPage('/settings');
-	$selenium->write('assertNotChecked', 'locked');		
-	$selenium->write('click', 'locked');	
-	$selenium->click('Update');
-	$selenium->write('assertChecked', 'locked');	
-	$selenium->write('verifyTextPresent', 'Your profile was updated.');
-	$selenium->write('click', 'locked');	
-	$selenium->click('Update');
-	$selenium->write('assertNotChecked', 'locked');	
-	$selenium->write('verifyTextPresent', 'Your profile was updated.');
-	$selenium->openPage('/home');	
+	$selenium->write('verifyTextNotPresent', $message3);
+	//add a reply
+	$selenium->openPage('/home');
+	$selenium->write('clickAndWait', 'xpath=//a[text()="[Reply]"]');	
 	$selenium->write('type', 'message', $message3);		
 	$selenium->click('Update');
 	$selenium->write('verifyTextPresent', $message3);
-	$selenium->openPage('/public_timeline');	
-	$selenium->write('verifyTextPresent', $message3);
-	$selenium->openPage('/public_timeline_threaded');		
-	$selenium->write('verifyTextPresent', $message3);
-	$selenium->write('clickAndWait', 'xpath=//a[text()="[Reply]"]');	
-	$selenium->write('type', 'message', $message4);		
-	$selenium->click('Update');
-	$selenium->write('verifyTextPresent', $message4);
-	$selenium->openPage('/public_timeline');	
-	$selenium->write('verifyTextPresent', $message4);
-	$selenium->write('clickAndWait', 'xpath=//a[text()="On"]');
-	$selenium->write('verifyTextPresent', $message4);	
-	$selenium->write('clickAndWait', 'xpath=//a[text()="Off"]');
-	$selenium->write('verifyTextPresent', $message4);
-	$selenium->openPage('/admin/flush');
+	//check message is not on timeline
+	$selenium->openPage('/public_timeline');
+	$selenium->write('verifyTextNotPresent', $message3);
+	$selenium->write('clickAndWait', 'xpath=//html/body/div/div[6]/div/div[2]/p/a');		
+	$selenium->write('verifyTextPresent', $message3);		
+	$selenium->openPage('/admin/flush');	
 ?>

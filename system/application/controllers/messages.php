@@ -12,7 +12,7 @@ class Messages extends App_Controller
      * @todo Find out where `<script>` tags are being set to `[removed]` and make sure they're just escaped like other tags.
      * @return
      */
-    function add()
+    public function add()
     {
         $this->mustBeSignedIn();
 		$redirect = $this->getRedirect();
@@ -72,12 +72,12 @@ class Messages extends App_Controller
 		if (!empty($User) && ($User['threaded'] == 1) )
 		{
         	$pt = $this->Message->getTimelineThreaded();
-        	$this->data['messages'] = Page::make('Message', $pt['messages']);
+        	$this->data['messages'] = Page::make('Message', $pt);
 		} 
 		else 
 		{
         	$pt = $this->Message->getTimeline();
-        	$this->data['messages'] = Page::make('Message', $pt['messages']);
+        	$this->data['messages'] = Page::make('Message', $pt);
 		}
 		$this->load->view('messages/public_timeline', $this->data);
 	}
@@ -103,7 +103,7 @@ class Messages extends App_Controller
 	function view($username = null, $message_id = null)
 	{
 		$this->data['message'] = $this->Message->getOne($message_id);
-		$this->data['messages'] = $this->Message->getReplies($message_id);		
+		$this->data['messages'] = $this->Message->getReplies($this->data['message']['replies']);		
 		$user = $this->User->getByUserName($username);
 		if (($this->data['message']) AND ($user['username'] == $username) AND (!isset($this->data['message']['to']))) {
 			$this->load->view('messages/view', $this->data);

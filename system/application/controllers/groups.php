@@ -242,6 +242,28 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * Mentions
+	 *
+	 * @access public
+	 * @return null
+	 */
+	public function mentions($groupname = null)
+	{
+		$this->mustBeSignedIn();
+		$group = $this->Group->getByName($groupname);
+		if ($group) 
+		{
+			$this->data['page_title'] = 'Mentions';	
+	        $this->data['messages'] = Page::make('Message', $group['mentions']);
+			$this->load->view('groups/mentions', $this->data);
+		} 
+		else 
+		{
+			$this->show404;
+		}
+	}
+
+	/**
 	 * Update a user profile
 	 *
 	 * @access public

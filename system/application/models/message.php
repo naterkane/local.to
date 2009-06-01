@@ -7,8 +7,9 @@ class Message extends App_Model
 
 	protected $idGenerator = 'messageId';
 	protected $name = 'Message';	
-	private $mentions = array();		
+	private $groupMentions = array();		
 	private $to = array();
+	private $userMentions = array();	
 	private $parent;
 
     /**
@@ -22,7 +23,7 @@ class Message extends App_Model
     {
 		$this->startTransaction();
 		$this->loadModels(array('Group'));		
-		$data = $this->setUpMessage($message, $user);
+		$data = $this->parse($message, $user);
 		if ($data['dm']) 
 		{
 			if ($this->save($data))
@@ -55,14 +56,22 @@ class Message extends App_Model
 				$this->User->mode = null;
 		    	$this->Group->sendToMembers($data, $this->userData['id']);
 		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);
-				foreach ($this->mentions as $mention_username => $user_mention) {
+				foreach ($this->userMentions as $mention_username => $user_mention) {
 					//query here just in case the user is mentioning herself, which would reset the data
 					$mention = $this->User->getByUsername($mention_username);
 					if ($mention) 
 					{
 						$this->User->addToMentions($mention, $data['id']);
-					}
-				}		
+					}					
+				}
+				foreach ($this->groupMentions as $mention_groupname => $group_mention) {
+					//query here just in case the user is mentioning herself, which would reset the data
+					$group_mention = $this->Group->getByName($mention_groupname);
+					if ($group_mention) 
+					{
+						$this->Group->addToMentions($group_mention, $data['id']);
+					}					
+				}				
 				if (isset($data['reply_to']))
 				{
 					$parentmessage = $this->getOne($data['reply_to']);
@@ -82,20 +91,23 @@ class Message extends App_Model
 	 */
     public function addToPublicTimeline($message)
 	{
+		$pt = $this->find(null, array('override'=>'timeline'));
+		if (!isset($pt['threaded'])) 
+		{
+			$pt['threaded'] = array();
+		}
+		if (!isset($pt['unthreaded'])) 
+		{
+			$pt['unthreaded'] = array();
+		}		
 		if (!empty($message['reply_to'])) 
 		{
-			$name = 'timeline_threaded';
+			array_unshift($pt['threaded'], $message['id']);
 		}
 		else 
 		{
-			$name = 'timeline';
+			array_unshift($pt['unthreaded'], $message['id']);
 		}
-		$pt = $this->find(null, array('override'=>$name));
-		if (empty($pt['messages'])) 
-		{
-			$pt['messages'] = array();
-		}
-		array_unshift($pt['messages'], $message['id']);
 		return $this->save($pt, array('override'=>'timeline', 'validate'=>false));
 	}
 	
@@ -177,10 +189,9 @@ class Message extends App_Model
      * @param int $messages
      * @return array Messages
      */
-    public function getReplies($message_id,$start = null)
+    public function getReplies($message_ids, $start = null)
     {
-        $messages = $this->find($message_id);
-        return $this->getMany($messages);
+        return $this->getMany($message_ids);
     }
 
     /**
@@ -192,7 +203,8 @@ class Message extends App_Model
      */
     public function getTimeline($start = null)
     {
-        return $this->find(null, array('override'=>'timeline'));
+        $pt = $this->find(null, array('override'=>'timeline'));
+		return $pt['unthreaded'];
     }
 
     /**
@@ -204,7 +216,8 @@ class Message extends App_Model
      */
     public function getTimelineThreaded()
     {
-        return $this->find(null, array('override'=>'timeline_threaded'));
+        $pt = $this->find(null, array('override'=>'timeline'));
+		return $pt['threaded'];
     }
 
     /**
@@ -270,7 +283,7 @@ class Message extends App_Model
 			return false;
 		}
     }
-	
+
 	/**
 	 * Set up a message
 	 * Set up data for regular messages and dms. Also sets up validation values
@@ -283,7 +296,7 @@ class Message extends App_Model
 	 * @param array $to [optional] Recipient of dm	
 	 * @return array Message data
 	 */
-	public function setUpMessage($message, $user)
+	public function parse($message, $user)
 	{
 		$data = array();
 		//check if the message is a dm even not sent through dm form
@@ -366,17 +379,36 @@ class Message extends App_Model
 		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
 		if ($data['message'] != $data['message_html']) 
 		{
-			$parts = explode(' ', $data['message']);
-			foreach ($parts as $part) {
-				if ($part[0] == '@') 
-				{
-					$username = str_replace('@', '', $part);
-					$this->mentions[$username] = array(); //set to id so that each user only gets one mention
-				}
+			$this->parseMentions($data, '@', 'userMentions');
+		}
+		$temp = $data['message_html'];
+		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
+		if ($temp != $data['message_html']) 
+		{
+			$this->parseMentions($data, '!', 'groupMentions');
+		}
+		return $data;
+	}
+	
+	/**
+	 * Parse a message to look for mentions
+	 *
+	 * @access private
+	 * @param array $data
+	 * @param string $separator @ or !	
+	 * @param string $property userMention, groupMention, etc.
+	 * @return 
+	 */
+	private function parseMentions($data, $separator, $property)
+	{
+		$parts = explode(' ', $data['message']);
+		foreach ($parts as $part) {
+			if ($part[0] == $separator) 
+			{
+				$username = str_replace($separator, '', $part);
+				$this->{$property}[$username] = array(); //set to id so that each user only gets one mention
 			}
 		}
-		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
-		return $data;
 	}
 	
     /**

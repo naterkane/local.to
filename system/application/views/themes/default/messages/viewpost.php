@@ -21,7 +21,7 @@
 		<?php endif; ?>
 		<?php if (empty($message['reply_to'])): ?>
 			<?php if (count($message['replies']) > 0): ?>
-				&mdash; <span id="reply_count<?php echo $message['id'] ?>">(<a href="<?php echo '/' . $message['username'] . '/status/' . $message['id'] ?>"><?php echo count($message['replies']); ?><?php echo (count($message['replies']) > 1)?"replies":"reply";?></a>)</span>
+				&mdash; <span id="reply_count<?php echo $message['id'] ?>">(<a href="<?php echo '/' . $message['username'] . '/status/' . $message['id'] ?>" id="reply-link-<?php echo $message['id'] ?>"><?php echo count($message['replies']); ?><?php echo (count($message['replies']) > 1)?" replies":" reply";?></a>)</span>
 			<?php endif ?>
 		<?php endif ?>
 		<span class="reply" id="reply<?php echo $message['id'] ?>"><a href="/home/<?php echo (!empty($message['reply_to']))?$message['reply_to']:$message['id']; ?>">[Reply]</a></span>

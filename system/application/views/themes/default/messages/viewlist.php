@@ -30,7 +30,6 @@ if (!empty($messages))
 							<?php $this->load->view('messages/viewpost', array('message'=>$this->Message->getOne($reply))); ?>
 						</div>	
 					<?php endforeach ?>
-					hello
 				<?php endif ?>				
 			<?php
 			}

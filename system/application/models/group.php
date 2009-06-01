@@ -25,6 +25,7 @@ class Group extends App_Model
 		$data['inbox'] = array();	
 		$data['invites'] = array();				
 		$data['time_zone'] = $owner['time_zone'];
+		$data['mentions'] = array();		
 		$this->mode = 'add';
 		$this->startTransaction();
 		if ($this->save($data)) 
@@ -80,6 +81,19 @@ class Group extends App_Model
 	public function addToInbox(&$group, $message_id)
 	{
 		$this->addTo('inbox', $group, $message_id);
+	}
+
+	/**
+	 * Add to mentions
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return
+	 */
+	public function addToMentions(&$group_mention, $message_id)
+	{
+		$this->addTo('mentions', $group_mention, $message_id);
 	}
 	
 	/**
