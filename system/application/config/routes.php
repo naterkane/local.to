@@ -72,6 +72,7 @@ $route['img/(:any)'] = "assets/img/$1";
 $route['avatar'] = "users/avatar";
 $route['recover_password'] = "users/recover_password";
 $route['reset_password/(:any)'] = "users/reset_password/$1";
+$route['mentions'] = "users/mentions";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

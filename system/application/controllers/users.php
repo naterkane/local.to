@@ -174,203 +174,19 @@ class Users extends App_Controller
     }
 
 	/**
-	 * Update a user profile
+	 * Mentions
 	 *
 	 * @access public
-	 * @return 
+	 * @return null
 	 */
-	function settings()
+	public function mentions()
 	{
 		$this->mustBeSignedIn();
-		$this->load->library(array('Mail'));
-		$this->data['carriers'] = $this->mail->carriers;
-        $this->data['page_title'] = 'Settings';
-		$key = md5($this->randomString(5));
-		$this->userData['update_key'] = $key;
-		$this->cookie->set('update_key', $key);
-		if ($this->postData) 
-		{
-			if ($this->User->updateProfile($this->userData['id'])) 
-			{
-				$this->redirect('/settings', 'Your profile was updated.');
-			} 
-			else 
-			{
-				$this->setErrors(array('User'));
-				$this->cookie->setFlash('There was an error updating your profile. See below for more details.', 'error');
-			}
-		}
-		else 
-		{
-			$this->setData($this->userData);
-		}
-		$this->load->view('users/settings', $this->data);
+		$this->data['page_title'] = 'Mentions';	
+        $this->data['messages'] = Page::make('Message', $this->userData['mentions']);
+		$this->load->view('users/mentions', $this->data);
 	}
- 
- 	/**
- 	 * Set the threading preference for a user
- 	 * 
- 	 * @return 
- 	 * @param object $setting
- 	 * @param object $uri
- 	 */
- 	function threading($setting,$uri)
-	{
-		$this->mustBeSignedIn();
-		if ($setting != ("enable" || "disable"))
-		{
-			$this->redirect('/home');			
-		}
-		$this->setData($this->userData);	
-		$key = md5($this->randomString(5));
-		$this->userData['update_key'] = $key;
-		$this->cookie->set('update_key', $key);
-		$data = $this->userData;
-		//echo $this->util->base64_url_decode($uri);
-		$data['threading'] = ($setting == "enable")?1:0;
-		if ($this->User->updateThreading($this->userData['id'],$data['threading']))
-		{
-			//$this->cookie->setUser($data);
-			$this->redirect($this->util->base64_url_decode($uri),"You have {$setting}d threading");
-		}
-		else
-		{
-			$this->redirect($this->util->base64_url_decode($uri),"Something went wrong! You have not {$setting}d threading");
-		}
-		
-	}
- 
-    /**
-     * Sign in a user
-     * 
-     * @return
-     * @todo Move those load method calls to one place
-     */
-    function signin()
-    {
-        $this->layout = 'public';
-		$this->data['page_title'] = 'Sign In';
-		$this->data['redirect'] = $this->getRedirect();		
-        if ($this->postData)
-        {
-            $user = $this->User->signIn($this->postData);
-            if (empty($user))
-            {
-				$this->cookie->setFlash('The username and password do not match any in our records.', 'error');
-            }
-			else 
-			{
-				$this->cookie->set('user', $user['id']);
-                $this->redirect($this->data['redirect']);
-			}
-        }
-        $this->load->view('users/signin', $this->data);
-    }
-
-    /**
-     * Sign up a new user
-     * 
-     * @return
-     * @todo Move those load method calls to one place
-     */
-    function signup($email = null, $key = null)
-    {
-		if ((!$email) || (!$key))
-		{
-			$this->show404();
-		}
-        $this->layout = 'public';
-		$this->data['page_title'] = 'Sign Up';
-		$email_decode = base64_decode($email);
-		$this->load->model(array('Invite'));
-		$this->load->database();
-		$invite = $this->Invite->get($email_decode, $key);
-		if (empty($invite)) 
-		{
-			$this->show404();
-		}
-		if ($invite['activated'] == 1) 
-		{
-			$this->redirect('/signin', 'This invite has already been activated.');
-		}
-        if ($this->postData)
-        {
-            if ($this->User->signUp($this->postData))
-            {
-				$this->Invite->accept($email_decode, $key);
-				$this->sendEmail($this->postData['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to '.$this->config->item('service_name').'!', $redirect = '/signin');
-                $this->redirect('/signin', 'Your account has been created. Please sign in.');
-            }
-			else 
-			{
-				$this->setErrors(array('User'));
-                $this->cookie->setFlash('There was an error signing up. Please see below for details.', 'error');
-			}
-        }
-		else 
-		{
-			$this->data['email'] = $invite['email'];
-		}
-		$this->data['invite_email'] = $email;
-		$this->data['invite_key'] = $key;		
-        $this->load->view('users/signup', $this->data);
-    }
-   
-    /**
-     * Sign out a user
-     * 
-     * @return
-     */
-    function signout()
-    {
-        $this->cookie->remove('user');
-        $this->redirect('/signin', 'You have successfully signed out.');
-    }
-
-    /**
-     * unFollow a user
-     *
-     * @todo check if user is not yourself
-     * @param string $username
-     */
-    function unfollow($username = null)
-    {
-        $this->mustBeSignedIn();
-		if ($this->User->unfollow($username, $this->userData))
-		{
-			$this->redirect('/' . $username);
-		}
-		else
-		{
-			$this->show404();
-		}
-    } 
-
-    /**
-     * View a users public page
-     *
-     * @param string $username
-     * @return
-     */
-    function view($username = null)
-    {	
-       	$user = $this->User->getByUsername($username);
-		$this->sidebar = "users/userprofile";
-        if ($user)
-        {
-			$this->data['rss_updates'] = true;
-            $this->data['page_title'] = $username;
-            $this->data['username'] = $username;
-        	$this->data['messages'] = Page::make('Message', $user['public']);
-			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
-            $this->load->view('users/view', $this->data);
-        }
-        else
-        {
-            $this->show404();
-        }
-    }
-
+	
 	/**
 	 * Recover password
 	 *
@@ -469,6 +285,204 @@ class Users extends App_Controller
             $this->show404();
         }
 	}
+
+	/**
+	 * Update a user profile
+	 *
+	 * @access public
+	 * @return 
+	 */
+	function settings()
+	{
+		$this->mustBeSignedIn();
+		$this->load->library(array('Mail'));
+		$this->data['carriers'] = $this->mail->carriers;
+        $this->data['page_title'] = 'Settings';
+		$key = md5($this->randomString(5));
+		$this->userData['update_key'] = $key;
+		$this->cookie->set('update_key', $key);
+		if ($this->postData) 
+		{
+			if ($this->User->updateProfile($this->userData['id'])) 
+			{
+				$this->redirect('/settings', 'Your profile was updated.');
+			} 
+			else 
+			{
+				$this->setErrors(array('User'));
+				$this->cookie->setFlash('There was an error updating your profile. See below for more details.', 'error');
+			}
+		}
+		else 
+		{
+			$this->setData($this->userData);
+		}
+		$this->load->view('users/settings', $this->data);
+	}
+  
+    /**
+     * Sign in a user
+     * 
+     * @return
+     * @todo Move those load method calls to one place
+     */
+    function signin()
+    {
+        $this->layout = 'public';
+		$this->data['page_title'] = 'Sign In';
+		$this->data['redirect'] = $this->getRedirect();		
+        if ($this->postData)
+        {
+            $user = $this->User->signIn($this->postData);
+            if (empty($user))
+            {
+				$this->cookie->setFlash('The username and password do not match any in our records.', 'error');
+            }
+			else 
+			{
+				$this->cookie->set('user', $user['id']);
+                $this->redirect($this->data['redirect']);
+			}
+        }
+        $this->load->view('users/signin', $this->data);
+    }
+
+    /**
+     * Sign up a new user
+     * 
+     * @return
+     * @todo Move those load method calls to one place
+     */
+    function signup($email = null, $key = null)
+    {
+		if ((!$email) || (!$key))
+		{
+			$this->show404();
+		}
+        $this->layout = 'public';
+		$this->data['page_title'] = 'Sign Up';
+		$email_decode = base64_decode($email);
+		$this->load->model(array('Invite'));
+		$this->load->database();
+		$invite = $this->Invite->get($email_decode, $key);
+		if (empty($invite)) 
+		{
+			$this->show404();
+		}
+		if ($invite['activated'] == 1) 
+		{
+			$this->redirect('/signin', 'This invite has already been activated.');
+		}
+        if ($this->postData)
+        {
+            if ($this->User->signUp($this->postData))
+            {
+				$this->Invite->accept($email_decode, $key);
+				$this->sendEmail($this->postData['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to '.$this->config->item('service_name').'!', $redirect = '/signin');
+                $this->redirect('/signin', 'Your account has been created. Please sign in.');
+            }
+			else 
+			{
+				$this->setErrors(array('User'));
+                $this->cookie->setFlash('There was an error signing up. Please see below for details.', 'error');
+			}
+        }
+		else 
+		{
+			$this->data['email'] = $invite['email'];
+		}
+		$this->data['invite_email'] = $email;
+		$this->data['invite_key'] = $key;		
+        $this->load->view('users/signup', $this->data);
+    }
    
+    /**
+     * Sign out a user
+     * 
+     * @return
+     */
+    function signout()
+    {
+        $this->cookie->remove('user');
+        $this->redirect('/signin', 'You have successfully signed out.');
+    }
+
+ 	/**
+ 	 * Set the threading preference for a user
+ 	 * 
+ 	 * @return 
+ 	 * @param object $setting
+ 	 * @param object $uri
+ 	 */
+ 	function threading($setting,$uri)
+	{
+		$this->mustBeSignedIn();
+		if ($setting != ("enable" || "disable"))
+		{
+			$this->redirect('/home');			
+		}
+		$this->setData($this->userData);	
+		$key = md5($this->randomString(5));
+		$this->userData['update_key'] = $key;
+		$this->cookie->set('update_key', $key);
+		$data = $this->userData;
+		//echo $this->util->base64_url_decode($uri);
+		$data['threading'] = ($setting == "enable")?1:0;
+		if ($this->User->updateThreading($this->userData['id'],$data['threading']))
+		{
+			//$this->cookie->setUser($data);
+			$this->redirect($this->util->base64_url_decode($uri),"You have {$setting}d threading");
+		}
+		else
+		{
+			$this->redirect($this->util->base64_url_decode($uri),"Something went wrong! You have not {$setting}d threading");
+		}
+		
+	}
+
+    /**
+     * unFollow a user
+     *
+     * @todo check if user is not yourself
+     * @param string $username
+     */
+    function unfollow($username = null)
+    {
+        $this->mustBeSignedIn();
+		if ($this->User->unfollow($username, $this->userData))
+		{
+			$this->redirect('/' . $username);
+		}
+		else
+		{
+			$this->show404();
+		}
+    } 
+
+    /**
+     * View a users public page
+     *
+     * @param string $username
+     * @return
+     */
+    function view($username = null)
+    {	
+       	$user = $this->User->getByUsername($username);
+		$this->sidebar = "users/userprofile";
+        if ($user)
+        {
+			$this->data['rss_updates'] = true;
+            $this->data['page_title'] = $username;
+            $this->data['username'] = $username;
+        	$this->data['messages'] = Page::make('Message', $user['public']);
+			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
+            $this->load->view('users/view', $this->data);
+        }
+        else
+        {
+            $this->show404();
+        }
+    }
+
 }
 ?>

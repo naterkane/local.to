@@ -82,6 +82,19 @@ class User extends App_Model
 	{
 		$this->addTo('sent', $user, $message_id);
 	}
+
+	/**
+	 * Add to mentions
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return
+	 */
+	public function addToMentions(&$user_mention, $message_id)
+	{
+		$this->addTo('mentions', $user_mention, $message_id);
+	}
 	
 	/**
 	 * Add to private
@@ -616,6 +629,7 @@ class User extends App_Model
 		$data['device_updates'] = false;
 		$data['phone'] = null;
 		$data['groups'] = array();
+		$data['mentions'] = array();
 		$this->startTransaction();
 		if ($this->save($data)) 
 		{

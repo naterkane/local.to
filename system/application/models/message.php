@@ -7,9 +7,10 @@ class Message extends App_Model
 
 	protected $idGenerator = 'messageId';
 	protected $name = 'Message';	
+	private $mentions = array();		
 	private $to = array();
 	private $parent;
-		
+
     /**
      * Add a new message
      *
@@ -54,6 +55,14 @@ class Message extends App_Model
 				$this->User->mode = null;
 		    	$this->Group->sendToMembers($data, $this->userData['id']);
 		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);
+				foreach ($this->mentions as $mention_username => $user_mention) {
+					//query here just in case the user is mentioning herself, which would reset the data
+					$mention = $this->User->getByUsername($mention_username);
+					if ($mention) 
+					{
+						$this->User->addToMentions($mention, $data['id']);
+					}
+				}		
 				if (isset($data['reply_to']))
 				{
 					$parentmessage = $this->getOne($data['reply_to']);
@@ -355,6 +364,17 @@ class Message extends App_Model
 		$data['replies'] = array();	
 		$data['message'] = str_replace("\n", " ", $message['message']);	
 		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
+		if ($data['message'] != $data['message_html']) 
+		{
+			$parts = explode(' ', $data['message']);
+			foreach ($parts as $part) {
+				if ($part[0] == '@') 
+				{
+					$username = str_replace('@', '', $part);
+					$this->mentions[$username] = array(); //set to id so that each user only gets one mention
+				}
+			}
+		}
 		$data['message_html'] = preg_replace(GROUP_MATCH, "'\\1!<a href=\"/group/\\2\">\\2</a>'", $data['message_html']);
 		return $data;
 	}
