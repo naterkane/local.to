@@ -387,6 +387,7 @@ class Message extends App_Model
 		{
 			$this->parseMentions($data, '!', 'groupMentions');
 		}
+		$data['message_html'] = preg_replace(URL_MATCH, '<a href="$1">$1</a>', $data['message_html']);		
 		return $data;
 	}
 	

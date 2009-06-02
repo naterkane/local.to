@@ -204,9 +204,7 @@ class Admin extends App_controller
 
 	function test() 
 	{	
-		$this->load->library(array('Mail'));
-		echo $this->mail->sms('', $user['email'], $data['message']);
-		exit;
+
 	}
 
 }

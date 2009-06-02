@@ -41,6 +41,7 @@ define('MESSAGE_MATCH', '/(^|\s+)@([A-Za-z0-9]{1,64})/e');
 define('GROUP_MATCH', '/(^|\s)!([A-Za-z0-9]{1,64})/e');
 define('DM_MATCH', '/^[(d|D)(m|M?)]{1}.\s(\w+)\s.*?/e');
 define('VALID_EMAIL', "/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i");
+define('URL_MATCH', '@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@');
 define('ALPHANUM', '/^\w+$/');
 
 /* End of file constants.php */
