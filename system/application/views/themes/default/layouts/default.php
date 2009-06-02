@@ -76,7 +76,7 @@
 							<a href="/<?php echo $User['username'] ?>">@<?php echo $User['username'] ?>  (<?php echo (!empty($this->userData['public']))?count($this->userData['public']):"0"; ?>)</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/replies"))?' class="current"':""; ?>>
-							<a href="/replies">Mentions</a>
+							<a href="/mentions">Mentions <?php if($User['mentions']){ echo "(" . count($User['mentions']) . ")";} ?></a>
 						</li>
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
 							<a href="/inbox">Private Mesages (<?php echo (!empty($this->userData['inbox']))?count($this->userData['inbox']):"0"; ?>)</a>
