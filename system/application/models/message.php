@@ -142,6 +142,29 @@ class Message extends App_Model
 	}
 
 	/**
+	 * Favorite a message
+	 *
+	 * @access public
+	 * @param int $message_id
+	 * @param array $user	
+	 * @return boolean
+	 */
+	public function favorite($message_id = null, $user = array())
+	{
+		$message = $this->find($message_id);
+		if (empty($message) || !isset($user['favorites'])) 
+		{
+			return false;
+		}
+		if (in_array($message_id, $user['favorites'])) 
+		{
+			return false;
+		}
+		return $this->User->addTo('favorites', $user, $message_id);
+	}
+	
+
+	/**
 	 * Get more than one message
 	 *
 	 * @access public
@@ -412,6 +435,29 @@ class Message extends App_Model
 				$this->{$property}[$username] = array(); //set to id so that each user only gets one mention
 			}
 		}
+	}
+
+	/**
+	 * Unfavorite a message
+	 *
+	 * @access public
+	 * @param int $message_id
+	 * @param array $user	
+	 * @return boolean
+	 */
+	public function unfavorite($message_id = null, $user = array())
+	{
+		$message = $this->find($message_id);
+		if (empty($message) || !isset($user['favorites'])) 
+		{
+			return false;
+		}
+		if (!in_array($message_id, $user['favorites'])) 
+		{
+			return false;
+		}
+		$user['favorites'] = $this->User->removeFromArray($user['favorites'], $message_id);
+		return $this->User->save($user);
 	}
 	
     /**

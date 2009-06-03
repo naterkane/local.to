@@ -172,6 +172,26 @@ class Html
 	}
 
 	/**
+	 * Make a favorite link
+	 *
+	 * @access public
+	 * @param array $message
+	 * @param array $user	
+	 * @return 
+	 */
+	public function favorite($message, $user)
+	{
+		if (in_array($message['id'], $user['favorites'])) 
+		{
+			return $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere());
+		}
+		else 
+		{
+			return $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere());			
+		}
+	}
+
+	/**
 	 * Convenience method for htmlspecialchars.
 	 *
 	 * @param string $text Text to wrap through htmlspecialchars

@@ -78,6 +78,9 @@
 						<li<?php echo ($this->util->isSection("/replies"))?' class="current"':""; ?>>
 							<a href="/mentions">Mentions <?php if($User['mentions']){ echo "(" . count($User['mentions']) . ")";} ?></a>
 						</li>
+						<li<?php echo ($this->util->isSection("/favorites"))?' class="current"':""; ?>>
+							<a href="/Favorites">Favorites <?php if($User['favorites']){ echo "(" . count($User['favorites']) . ")";} ?></a>
+						</li>						
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
 							<a href="/inbox">Private Mesages (<?php echo (!empty($this->userData['inbox']))?count($this->userData['inbox']):"0"; ?>)</a>
 						</li>

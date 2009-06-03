@@ -74,6 +74,7 @@ $route['avatar'] = "users/avatar";
 $route['recover_password'] = "users/recover_password";
 $route['reset_password/(:any)'] = "users/reset_password/$1";
 $route['mentions'] = "users/mentions";
+$route['favorites'] = "users/favorites";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

@@ -11,6 +11,7 @@ class User extends App_Model
         'created' => null, //Date record was created as timestamp [int]
 		'device_updates' => false, 	//Does the user receive device updates [boolean]
 		'email' => null, 	//User's email [string]		
+		'favorites' => array(), //Array of message ids of user's favorite posts [array]
 		'followers' => array(), //Array of user ids of users subscribed to [array]
 		'following' => array(), //Array of user ids of users that subscribe to this user [array]
 		'friend_requests' => array(), //Array of user ids indicating pending requests for subscriptions [array]

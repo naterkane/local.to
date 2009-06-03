@@ -166,7 +166,7 @@ class App_Model extends Model {
 		{
 			array_unshift($data[$arrayName], $id);
 		}
-		$this->save($data);
+		return $this->save($data);
 	}
 	
 	/**

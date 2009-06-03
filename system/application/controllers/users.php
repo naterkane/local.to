@@ -88,6 +88,20 @@ class Users extends App_Controller
 			$this->redirect('/home', 'There was a problem deleting your account.');
 		}		
 	}
+
+	/**
+	 * Favorites
+	 *
+	 * @access public
+	 * @return null
+	 */
+	public function favorites()
+	{
+		$this->mustBeSignedIn();
+		$this->data['page_title'] = 'Favorites';	
+        $this->data['messages'] = Page::make('Message', $this->userData['favorites']);
+		$this->load->view('users/favorites', $this->data);
+	}
 	
     /**
      * Follow a user

@@ -33,6 +33,29 @@ class Messages extends App_Controller
         }
     }
 
+	/**
+	 * Favorite a message
+	 *
+	 * @access public
+	 * @param id $message_id
+	 * @return 
+	 */
+	public function favorite($message_id = null)
+	{
+		$this->mustBeSignedIn();
+		$this->checkId($message_id);
+		$redirect = $this->getRedirect();
+		if ($this->Message->favorite($message_id, $this->userData)) 
+		{
+			$message = 'The message added to your favorites';
+		} 
+		else 
+		{
+			$message = 'There was an error adding the message to your favorites';
+		}
+		$this->redirect($redirect, $message);		
+	}
+
 	function delete($id)
 	{
 		//remember to decrease thread count if message is reply to
@@ -91,6 +114,29 @@ class Messages extends App_Controller
 	{
 		$this->public_timeline(true);
 	}	
+
+	/**
+	 * Favorite a message
+	 *
+	 * @access public
+	 * @param id $message_id
+	 * @return 
+	 */
+	public function unfavorite($message_id = null)
+	{
+		$this->mustBeSignedIn();
+		$this->checkId($message_id);
+		$redirect = $this->getRedirect();
+		if ($this->Message->unfavorite($message_id, $this->userData)) 
+		{
+			$message = 'The message removed from your favorites';
+		} 
+		else 
+		{
+			$message = 'There was an error removing the message from your favorites';
+		}
+		$this->redirect($redirect, $message);		
+	}
 	
 	/**
 	 * Show a single status
