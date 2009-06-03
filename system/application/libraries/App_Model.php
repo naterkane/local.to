@@ -12,6 +12,7 @@ class App_Model extends Model {
 	protected static $queryLog = array();
 	protected static $rollbackLog = array();
 	static protected $transactional = false;		
+	protected $fields = array();
 	protected $key;
 	protected $idGenerator;
 	protected $memcacheHost = '67.23.9.219';
@@ -187,6 +188,35 @@ class App_Model extends Model {
     }
 
 	/**
+	 * Set up a new record
+	 * Takes the data passed to it and adds the values of those fields passed to it. 
+	 * Will not add any fields not in the models $fields variable
+	 * @access public
+	 * @param array $post Data passed by form
+	 * @return array
+	 */
+	public function create($post = array())
+	{
+		$data = $this->getFields();
+		if (!is_array($post)) 
+		{
+			return $data;
+		}
+		if (empty($post)) 
+		{
+			return $data;
+		}
+		foreach ($data as $key => $value) {
+			if (isset($post[$key])) 
+			{
+				$data[$key] = trim($post[$key]);
+			}
+		}
+		return $data;
+	}
+	
+
+	/**
      * Delete a record
      *
      * @param array $data Message data
@@ -274,15 +304,27 @@ class App_Model extends Model {
 		}
 		catch(Exception $e)
 		{
-			
 			$this->log_message("error",$e);
 			return null;
 		}
 		if ($this->isSerialized($data)) 
 		{
+			$fields = $this->getFields();
 			$data = unserialize($data);
+			$data = $this->updateData($fields, $data);
 		}
 		return $data;	
+	}
+
+	/**
+	 * Get empty fields for the model
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getFields()
+	{
+		return $this->fields;
 	}
 
 	/**
@@ -623,7 +665,7 @@ class App_Model extends Model {
      */
 	function save($data, $options = array()) 
 	{
-		$this->key = $this->makeSavePrefix($data, $options);		
+		$this->key = $this->makeSavePrefix($data, $options);
 		if (!isset($options['validate'])) 
 		{
 			$options['validate'] = true;
@@ -641,6 +683,7 @@ class App_Model extends Model {
 			$valid = $this->validate();
 		}
 		if ($valid) {
+			$this->setUpTimestampFields();
 			if (is_array($this->modelData)) 
 			{
 				$newData = serialize($this->modelData);
@@ -680,6 +723,32 @@ class App_Model extends Model {
         }
         return true;
 	}
+	
+	/**
+	 * Set's time to modified and created fields
+	 *
+	 * @access public
+	 * @return 
+	 */
+	private function setUpTimestampFields()
+	{
+		$now = time();
+		if (is_array($this->modelData)) 
+		{
+			if (array_key_exists('created', $this->fields)) 
+			{
+				if (empty($this->modelData['created'])) 
+				{
+					$this->modelData['created'] = $now;
+				}
+			}
+			if (array_key_exists('modified', $this->fields))
+			{
+				$this->modelData['modified'] = $now;
+			}
+		}
+	}
+	
 
 	/**
 	 * Transactional

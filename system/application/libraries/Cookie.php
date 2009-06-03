@@ -63,7 +63,7 @@ class Cookie {
 	 */
 	function create()
 	{
-		$cookie = array();
+		$cookie = $this->cookie->create();
 		$cookie['id'] = sha1(time() . $this->randomString . $this->salt);
 		$cookie['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 		$cookie['ip'] = $_SERVER['REMOTE_ADDR'];

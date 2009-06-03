@@ -5,6 +5,11 @@
 class Sms_key extends App_Model
 {
 
+	protected $fields = array(
+			'created' => null, //Timestamp of time created [int]		
+			'key' => null, //Random string [string]
+			'user_id' => null //User's id [string]
+			);
 	protected $name = 'Sms_key';
 	public $key;	
 

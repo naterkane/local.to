@@ -5,6 +5,23 @@
 class Message extends App_Model
 {
 
+	//all fields for model, any other data sent to model is not saved, alphabetized
+	protected $fields = array(
+			'id' => null, //id of message [int]
+			'created' => null, //Timestamp when then record was created [int]
+			'dm' => false, //Is message a dm? [boolean]
+			'dm_group' => false, //Is message a group dm? [boolean]
+			'message' => null, //Plain text of message [string]
+			'message_html' => null,	//Html version of message [string]
+			'modified' => null, //Timestamp when then record was modified [int]
+			'replies' => array(), //Array of message ids replying to this message [array]
+			'reply_to' => null, //Id of message this is in reply to [reply_to]
+			'reply_to_username' => null, //Username of user in reply to [string]
+			'time' => null,	//date message was created [int]
+			'to' => null, //Id of user dm message is sent to [int]
+			'user_id' => null, //Id of message's owner [int]
+			'username' => null	//Username of message's owner [string]
+			);
 	protected $idGenerator = 'messageId';
 	protected $name = 'Message';	
 	private $groupMentions = array();		
@@ -54,8 +71,8 @@ class Message extends App_Model
 					$this->addToPublicTimeline($data);
 				}
 				$this->User->mode = null;
-		    	$this->Group->sendToMembers($data, $this->userData['id']);
-		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);
+		    	$this->Group->sendToMembers($data, $this->userData['id']);		
+		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);				
 				foreach ($this->userMentions as $mention_username => $user_mention) {
 					//query here just in case the user is mentioning herself, which would reset the data
 					$mention = $this->User->getByUsername($mention_username);
@@ -63,7 +80,7 @@ class Message extends App_Model
 					{
 						$this->User->addToMentions($mention, $data['id']);
 					}					
-				}
+				}				
 				foreach ($this->groupMentions as $mention_groupname => $group_mention) {
 					//query here just in case the user is mentioning herself, which would reset the data
 					$group_mention = $this->Group->getByName($mention_groupname);
@@ -71,8 +88,8 @@ class Message extends App_Model
 					{
 						$this->Group->addToMentions($group_mention, $data['id']);
 					}					
-				}				
-				if (isset($data['reply_to']))
+				}								
+				if ($data['reply_to'] != null)
 				{
 					$parentmessage = $this->getOne($data['reply_to']);
 					$this->addToReplies($parentmessage, $data['id']);
@@ -258,11 +275,7 @@ class Message extends App_Model
 	 */
 	public function isGroupMember()
 	{
-		if (isset($this->to['members'])) 
-		{
-			return $this->Group->isMember($this->to['members'], $this->userData['id']);
-		}
-		return false;
+		return $this->Group->isMember($this->to['members'], $this->userData['id']);
 	}
 	
 	
@@ -298,12 +311,9 @@ class Message extends App_Model
 	 */
 	public function parse($message, $user)
 	{
-		$data = array();
+		$data = $this->create($message);
 		//check if the message is a dm even not sent through dm form
-		$parts = split(" ", $message['message'], 3);
-		$data['dm_group'] = false;	
-		$data['to'] = null;
-		$data['dm'] = false;			
+		$parts = split(" ", $data['message'], 3);	
 		if ((strtolower($parts[0]) == 'd') AND isset($parts[1]) AND isset($parts[2]))
 		{
 			$data['dm'] = true;
@@ -316,9 +326,7 @@ class Message extends App_Model
 			if ($data['to'][0] == '!') 
 			{
 				$data['dm_group'] = true;
-			}		
-			$data['reply_to'] = null;
-			$data['reply_to_username'] = null;			
+			}
 			if ($data['dm_group']) 
 			{
 				$this->mode = 'dm_group';
@@ -343,14 +351,9 @@ class Message extends App_Model
 		}
 		else //otherwise check if it is a reply
 		{
-			$data['to'] = null;
-			$data['dm'] = false;	
-			$data['group_dm'] = false;			
 			if ((empty($message['reply_to'])) && (empty($message['reply_username']))) 
 			{
 				$this->mode = 'post';
-				$data['reply_to'] = null;
-				$data['reply_to_username'] = null;		
 			}
 			else 
 			{
@@ -374,8 +377,7 @@ class Message extends App_Model
 		$data['id'] = $this->makeId($this->idGenerator);
 		$data['time'] = time();
 		$data['user_id'] = $user['id'];
-		$data['replies'] = array();	
-		$data['message'] = str_replace("\n", " ", $message['message']);	
+		$data['message'] = str_replace("\n", " ", $data['message']);	
 		$data['message_html'] = preg_replace(MESSAGE_MATCH, "'\\1@<a href=\"/\\2\">\\2</a>'", $message['message']);
 		if ($data['message'] != $data['message_html']) 
 		{

@@ -5,6 +5,33 @@
 class User extends App_Model
 {
 
+	protected $fields = array(
+        'activated' => true, //Is user activated? [boolean]
+		'carrier' => null, //User's cell phone carries [string]
+        'created' => null, //Date record was created as timestamp [int]
+		'device_updates' => false, 	//Does the user receive device updates [boolean]
+		'email' => null, 	//User's email [string]		
+		'followers' => array(), //Array of user ids of users subscribed to [array]
+		'following' => array(), //Array of user ids of users that subscribe to this user [array]
+		'friend_requests' => array(), //Array of user ids indicating pending requests for subscriptions [array]
+		'groups' => array(), //Groups of which user is a member [array]
+		'id' => null, //Unique if for the user [int]
+		'inbox' => array(),	//Array of message ids of DMs sent to user [array]
+        'locked' => false, //Is account private? [boolean]
+		'mentions' => array(), //Array of message ids for messages mentioning the user [array]
+        'modified' => null, //Date last modified as timestamp [int]
+		'password' => null, //User's hashed password [string]
+		'passwordconfirm' => null, //User's password confirmation. Set to null after validation [string]
+		'phone' => null, //Phone number [int]
+		'private' => array(), //Array of message ids for user's home page [array]
+		'public' => array(), //Array of message ids for user's public page [array]
+        'realname' => null, //User's real name
+		'sent' => array(), //Array of message ids for user's sent DMs [array]
+		'sms_activated' => false, //Has the user's sms numbers been activated? [boolean]
+		'threading' => false, //Is the user viewing all messages threaded? [boolean]
+        'time_zone' => null, //What is the user's timeszone [string]
+        'username' => null //User's username [string]
+		);
 	protected $idGenerator = 'userId';
 	protected $name = 'User';	
 	public $defaultTimeZone = 'US/Eastern';	
@@ -551,6 +578,31 @@ class User extends App_Model
 		}
 	}	
 
+	/**
+	 * Save an email alias
+	 *
+	 * @access public
+	 * @param array $user
+	 * @return boolean
+	 */
+	public function saveEmailAlias($user = array())
+	{
+		return $this->save($user, array('prefixValue'=>'email', 'saveOnly'=>'id', 'validate'=>false));
+	}
+	
+	/**
+	 * Save an email alias
+	 *
+	 * @access public
+	 * @param array $user
+	 * @return boolean
+	 */
+	public function saveUsernameAlias($user = array())
+	{
+		return $this->save($user, array('prefixValue'=>'username', 'saveOnly'=>'id', 'validate'=>false));
+	}
+	
+
     /**
      * Send messages to followes
      *
@@ -596,7 +648,7 @@ class User extends App_Model
         }
     }
 
-    /**
+    /**x
      * Create a new user
      *
      * @todo Move create and modified to parent
@@ -610,32 +662,15 @@ class User extends App_Model
         $user = array();
         $now = time();
         $this->mode = 'signup';
-		$data['id'] = $this->makeId($this->idGenerator);
-        $data['locked'] = 0;
-        $data['activated'] = 1;
-		$data['threading'] = 0;
-        $data['created'] = $now;
-        $data['modified'] = $now;
-        $data['time_zone'] = $this->defaultTimeZone;
-		$data['followers'] = array();
-		$data['following'] = array();
-		$data['friend_requests'] = array();
-		$data['public'] = array();
-		$data['private'] = array();	
-		$data['inbox'] = array();
-		$data['sent'] = array();
-		$data['carrier'] = array();
-		$data['device_updates'] = false;
-		$data['phone'] = null;
-		$data['groups'] = array();
-		$data['mentions'] = array();
-		$data['sms_activated'] = false;		
+		$user = $this->create($data);
+		$user['id'] = $this->makeId($this->idGenerator);
+        $user['time_zone'] = $this->defaultTimeZone;
 		$this->startTransaction();
-		if ($this->save($data)) 
-		{
+		if ($this->save($user)) 
+		{	
 			$this->insertId = $data['id'];
-			$this->save($data, array('prefixValue'=>'email', 'saveOnly'=>'id', 'validate'=>false));
-			$this->save($data, array('prefixValue'=>'username', 'saveOnly'=>'id', 'validate'=>false));
+			$this->saveEmailAlias($user);
+			$this->saveUsernameAlias($user);
 		}
 		return $this->endTransaction();
     }
@@ -730,8 +765,8 @@ class User extends App_Model
 		{
 			$this->delete($this->userData['username'], array('prefixValue'=>'username'));
 			$this->delete($this->userData['email'], array('prefixValue'=>'email'));
-			$this->save($this->postData, array('prefixValue'=>'email', 'saveOnly'=>'id', 'validate'=>false));
-			$this->save($this->postData, array('prefixValue'=>'username', 'saveOnly'=>'id', 'validate'=>false));
+			$this->saveEmailAlias($this->postData);
+			$this->saveUsernameAlias($this->postData);
 		}
 		return $this->endTransaction();
 	}
@@ -760,10 +795,9 @@ class User extends App_Model
 			if ($this->postData['phone'])
 			{
 				$this->Sms_key->code = $this->randomNum(8);
-				$key = array();
+				$key = $this->Sms_key->create();
 				$key['user_id'] = $user['id'];
 				$key['key'] = $this->Sms_key->code;
-				$key['created'] = time();
 			}
 			$this->Sms_key->save($key);
 			return $this->endTransaction();
@@ -837,7 +871,6 @@ class User extends App_Model
 			$this->validates_callback('passwordMatches', 'old_password', array('message'=>'Your password does not match the one on record'));
 			$this->modelData['password'] = $this->modelData['new_password'];
 			$this->modelData['passwordconfirm'] = $this->modelData['new_password_confirm'];
-			unset($this->modelData['passwordconfirm']);			
 		}		
 		if (($this->mode == 'signup') || ($this->mode == 'change_password') || ($this->mode == 'reset_password'))
 		{
@@ -847,7 +880,6 @@ class User extends App_Model
 			$this->validates_format_of('password', array('with'=>ALPHANUM, 'message'=>'A password may only be made up of numbers, letters, and underscores'));
 			$this->validates_presence_of('password', array('message'=>'A password is required'));
 			$this->modelData['password'] = $this->hashPassword($this->modelData['password']);	//has to be here in order not to screw up character counts and matching
-			unset($this->modelData['passwordconfirm']);
 		}
 		if ($this->mode == 'profile') 
 		{
@@ -862,7 +894,11 @@ class User extends App_Model
 				$this->validates_presence_of('phone', array('message'=>'A phone is required'));
 				$this->validates_presence_of('carrier', array('message'=>'A carrier is required'));				
 			}
-		}		
+		}
+		if (!empty($this->modelData['passwordconfirm'])) 
+		{
+			$this->modelData['passwordconfirm'] = null;
+		}
 	    return (count($this->validationErrors) == 0);
 	}
 	

@@ -202,11 +202,10 @@ class Users extends App_Controller
 			{
 				$this->load->model(array('Email_key'));
 				$key = $this->randomString(10);			
-				$data = array();
+				$data = $this->Email_key->create();
 				$data['id'] = md5($key);
 				$data['id_unhashed'] = $key;
-				$data['user_id'] = $user['id'];
-				$data['created'] = time();			
+				$data['user_id'] = $user['id'];		
 				$this->Email_key->save($data);
 				$this->load->library('Mail');			
 				$this->mail->send($user['email'], null, null, 'Reset your password', 'http://' . $_SERVER['HTTP_HOST'] . '/reset_password/' . $data['id_unhashed']);

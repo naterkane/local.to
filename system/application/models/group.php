@@ -5,6 +5,20 @@
 class Group extends App_Model
 {
 
+	protected $fields = array(
+			'id' => null, //Group id [int]
+			'inbox' => array(), //Array of DM ids sent to group [array]
+			'invites' => array(), //Array of group_invite ids sent to users [array]
+			'members' => array(), //Array of user ids of members [array]
+			'mentions' => array(),	//Array of message ids mentioning the group [array]
+			'messages' => array(), //Array of message ids sent to group [array]
+			'name' => null, //Groups name [array]			
+			'owner_id' => null, //User id of owner [int]
+			'public' => true, //Is a group public? [boolean]
+			'time_zone' => null, //Time zone of group [string]
+			'created' => null, //Time date was created [int]
+			'modified' => null //Time date was modified [int]
+			);
 	protected $name = 'Group';
 	protected $idGenerator = 'groupId';
 	
@@ -17,22 +31,18 @@ class Group extends App_Model
 	 */
 	function add($data = array(), $owner)
 	{
-		$data['id'] = $this->makeId($this->idGenerator);
-		$data['owner_id'] = $owner['id'];
-		$data['public'] = 1;
-		$data['members'] = array($owner['id']);
-		$data['messages'] = array();
-		$data['inbox'] = array();	
-		$data['invites'] = array();				
-		$data['time_zone'] = $owner['time_zone'];
-		$data['mentions'] = array();		
+		$group = $this->create($data);
+		$group['id'] = $this->makeId($this->idGenerator);
+		$group['owner_id'] = $owner['id'];
+		$group['members'][] = $owner['id'];
+		$group['time_zone'] = $owner['time_zone'];
 		$this->mode = 'add';
 		$this->startTransaction();
-		if ($this->save($data)) 
+		if ($this->save($group)) 
 		{
-			$this->save($data, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
-			$this->addToGroupList($data['name']);			
-			$this->User->addGroup($owner, $data['id']);			
+			$this->save($group, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
+			$this->addToGroupList($group['name']);			
+			$this->User->addGroup($owner, $group['id']);			
 		}
 		return $this->endTransaction();
 	}

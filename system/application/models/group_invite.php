@@ -5,11 +5,20 @@
 class Group_Invite extends App_Model
 {
 	
-	public $failures = array();
+	protected $fields = array(
+			'activated' => false, //Has the key been activated  [boolean]
+			'activated_time' => null, //Time user activated key [boolean]			
+			'created' => null, //Time invite was created [boolean]		
+			'email' => null, //User's email [string]
+			'group_id' => null, //Id of group user is invited to [int]			
+			'key' => null, //Unhashed key [string]
+			'key_hashed' => null //Hashed key [string]
+			);	
+	protected $name = 'group_invite';			
+	public $failures = array();	
 	public $message;
 	public $results = array();
 	public $successes = array();
-	public $name = 'group_invite';
 	
 	/**
 	 * Group constuct
@@ -36,13 +45,11 @@ class Group_Invite extends App_Model
 	 */
 	public function add(&$data = array(), $email, &$group)
 	{
+		$data = $this->create($data);
 		$data['group_id'] = $group['id'];
 		$data['email'] = $email;
 		$data['key'] = $this->randomString(10);
 		$data['key_hashed'] = md5($data['key']);
-		$data['activated'] = false;
-		$data['activated_time'] = null;
-		$data['created'] = time();
 		if (!$this->save($data, array('prefixValue'=>'key_hashed'))) 
 		{
 			return false;
