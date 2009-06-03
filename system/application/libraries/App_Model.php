@@ -80,6 +80,24 @@ class App_Model extends Model {
 	}
 
 	/**
+	* Random Alpha-Numeric String
+	*
+	* @param int length
+	* @param array $chars length	
+	* @return string 
+	* @access private
+	*/
+	private function _random($length, $chars) {
+		$randstr = null;
+		srand();
+		for ($rand = 0; $rand < $length; $rand++) {
+			$random = rand(0, count($chars) -1);
+			$randstr .= $chars[$random];
+		}
+		return $randstr;
+	}
+
+	/**
 	 * Log a query for transactions
 	 *
 	 * @access protected
@@ -554,14 +572,20 @@ class App_Model extends Model {
 	* @access public
 	*/
 	public function randomString($length) {
-		$randstr = null;
-		srand();
 		$chars = array( 'a','b','c','d','e','f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A','B','C','D','E','F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-		for ($rand = 0; $rand < $length; $rand++) {
-			$random = rand(0, count($chars) -1);
-			$randstr .= $chars[$random];
-		}
-		return $randstr;
+		return $this->_random($length, $chars);
+	}
+	
+	/**
+	* Random Alpha-Numeric String
+	*
+	* @param int length
+	* @return int
+	* @access public
+	*/
+	public function randomNum($length) {
+		$chars = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+		return $this->_random($length, $chars);
 	}
 
 	/**
@@ -918,10 +942,9 @@ class App_Model extends Model {
 		}
     }
 
-	/* Pending
     function validates_numericality_of($fieldName,$options=array()) 
 	{
-            $fieldValue = $this->getValue($this->data);
+			$fieldValue = $this->getValue($this->modelData, $fieldName);
             if ( @$options['allow_null'] && ($fieldValue == null) ) 
 			{
                     return true;
@@ -934,9 +957,9 @@ class App_Model extends Model {
 			{
                     if ( $options['only_integer'] ) 
 					{
-                            $options['message'] = Inflector::humanize($fieldName) . ' should be an integer.';
+                            $options['message'] = $fieldName . ' should be an integer.';
                     } else {
-                            $options['message'] = Inflector::humanize($fieldName) . ' should be a number.';
+                            $options['message'] = $fieldName . ' should be a number.';
                     }
             }
             if ( !isset($options['on']) ) 
@@ -950,7 +973,7 @@ class App_Model extends Model {
                             $this->validationErrors[$fieldName] = $options['message'];
                     }
             }
-    }*/
+    }
 
 	/**
 	 * Validate by checking for field value presence

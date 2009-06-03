@@ -1,5 +1,6 @@
 <div class="box">
 	<h2>Settings</h2>
+	<p><?php echo $html->link('Device settings', '/settings/sms') ?></p>
 	<div class="block">
 		<form class="grid_9 alpha" action="/settings" method="post" accept-charset="utf-8">
 			<fieldset>
@@ -39,19 +40,6 @@
 					<?php echo $form->timezones('time_zone') ?>
 					<?php echo $form->error('time_zone') ?>				
 				</p>
-				<p>
-					<label for="carrier">Carriers</label>	
-					<?php echo $form->select('carrier', $carriers) ?>
-					<?php echo $form->error('carrier') ?>		
-				</p>
-				<p>
-					<label for="device_updates">Device Updates</label>	
-					<?php echo $form->checkbox('device_updates'); ?>
-				</p>
-				<p>
-					<label for="phone">Phone</label>	
-					<?php echo $form->input('phone'); ?>
-				</p>								
 				<p>
 					<label for="locked">Lock Account</label>	
 					<?php echo $form->checkbox('locked'); ?>

@@ -170,7 +170,19 @@ class App_Controller extends Controller {
             $this->show404();
         }
     }
- 
+
+	/**
+	 * Does a key exist in post data?
+	 */
+	public function postDataKey($key = null)
+	{
+		if (!$this->postData)
+		{
+			return false;
+		}
+		return array_key_exists($key, $this->postData);
+	}
+
 	/**
 	* Random Alpha-Numeric String
 	*

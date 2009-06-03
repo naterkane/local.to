@@ -9,7 +9,7 @@ class User extends App_Model
 	protected $name = 'User';	
 	public $defaultTimeZone = 'US/Eastern';	
 	public $timeZones = array('US/Hawaii'=>'(GMT-10:00) Hawaii','US/Alaska'=>'(GMT-09:00) Alaska','US/Pacific' => '(GMT-07:00) Pacific Time (US &amp; Canada)','US/Arizona'=>'(GMT-07:00) Arizona','US/Mountain'=>'(GMT-07:00) Mountain Time (US &amp; Canada)','US/Central'=>'(GMT-06:00) Central Time (US &amp; Canada)','US/Eastern'=>'(GMT-05:00) Eastern Time (US &amp; Canada)','US/East-Indiana' => '(GMT-05:00) Indiana (East)','America/Tijuana'=>'(GMT-08:00) Tijuana','America/Chihuahua'=>'(GMT-07:00) Chihuahua','America/Mazatlan'=>'(GMT-07:00) Mazatlan','America/Monterrey'=>'(GMT-06:00) Monterrey','America/Mexico_City'=>'(GMT-06:00) Mexico City',		'Canada/East-Saskatchewan'=>'(GMT-06:00) Saskatchewan','Canada/Saskatchewan'=>'(GMT-06:00) Saskatchewan','America/Bogota'=>'(GMT-05:00) Bogota','America/Lima'=>'(GMT-05:00) Lima','America/Caracas'=>'(GMT-04:00) Caracas','America/Santiago'=>'(GMT-04:00) Santiago','Canada/Newfoundland'=>'(GMT-03:30) Newfoundland','Atlantic/Azores'=>'(GMT-01:00) Azores','Africa/Casablanca'=>'(GMT) Casablanca','Europe/Dublin'=>'(GMT) Dublin','Europe/Lisbon'=>'(GMT) Lisbon','Europe/London'=>'(GMT) London','Africa/Monrovia'=>'(GMT) Monrovia','Europe/Amsterdam'=>'(GMT+01:00) Amsterdam','Europe/Belgrade'=>'(GMT+01:00) Belgrade','Europe/Berlin'=>'(GMT+01:00) Berlin','Europe/Bratislava'=>'(GMT+01:00) Bratislava','Europe/Brussels'=>'(GMT+01:00) Brussels','Europe/Budapest'=>'(GMT+01:00) Budapest','Europe/Copenhagen'=>'(GMT+01:00) Copenhagen','Europe/Ljubljana'=>'(GMT+01:00) Ljubljana','Europe/Madrid'=>'(GMT+01:00) Madrid','Europe/Paris'=>'(GMT+01:00) Paris','Europe/Prague'=>'(GMT+01:00) Prague','Europe/Rome'=>'(GMT+01:00) Rome','Europe/Sarajevo'=>'(GMT+01:00) Sarajevo','Europe/Skopje'=>'(GMT+01:00) Skopje','Europe/Stockholm'=>'(GMT+01:00) Stockholm','Europe/Vienna'=>'(GMT+01:00) Vienna','Europe/Warsaw'=>'(GMT+01:00) Warsaw','Europe/Zagreb'=>'(GMT+01:00) Zagreb','Europe/Athens'=>'(GMT+02:00) Athens','Europe/Bucharest'=>'(GMT+02:00) Bucharest','Africa/Cairo'=>'(GMT+02:00) Cairo','Africa/Harare'=>'(GMT+02:00) Harare','Europe/Helsinki'=>'(GMT+02:00) Helsinki','Asia/Istanbul'=>'(GMT+02:00) Istanbul','Europe/Istanbul'=>'(GMT+02:00) Istanbul','Asia/Jerusalem'=>'(GMT+02:00) Jerusalem','Europe/Minsk'=>'(GMT+02:00) Minsk','Europe/Riga'=>'(GMT+02:00) Riga','Europe/Sofia'=>'(GMT+02:00) Sofia','Europe/Tallinn'=>'(GMT+02:00) Tallinn','Europe/Vilnius'=>'(GMT+02:00) Vilnius','Asia/Baghdad'=>'(GMT+03:00) Baghdad','Asia/Kuwait'=>'(GMT+03:00) Kuwait','Europe/Moscow'=>'(GMT+03:00) Moscow','Africa/Nairobi'=>'(GMT+03:00) Nairobi','Asia/Riyadh'=>'(GMT+03:00) Riyadh','Europe/Volgograd'=>'(GMT+03:00) Volgograd','Asia/Tehran'=>'(GMT+03:30) Tehran','Asia/Baku'=>'(GMT+04:00) Baku','Asia/Muscat'=>'(GMT+04:00) Muscat','Asia/Tbilisi'=>'(GMT+04:00) Tbilisi','Asia/Yerevan'=>'(GMT+04:00) Yerevan','Asia/Kabul'=>'(GMT+04:30) Kabul','Asia/Karachi'=>'(GMT+05:00) Karachi','Asia/Tashkent'=>'(GMT+05:00) Tashkent','Asia/Almaty'=>'(GMT+06:00) Almaty','Asia/Dhaka'=>'(GMT+06:00) Dhaka','Asia/Novosibirsk'=>'(GMT+06:00) Novosibirsk','Asia/Rangoon'=>'(GMT+06:30) Rangoon','Asia/Bangkok'=>'(GMT+07:00) Bangkok','Asia/Jakarta'=>'(GMT+07:00) Jakarta','Asia/Krasnoyarsk'=>'(GMT+07:00) Krasnoyarsk','Asia/Chongqing'=>'(GMT+08:00) Chongqing','Asia/Irkutsk'=>'(GMT+08:00) Irkutsk','Australia/Perth'=>'(GMT+08:00) Perth','Asia/Singapore'=>'(GMT+08:00) Singapore','Singapore'=>'(GMT+08:00) Singapore','Asia/Taipei'=>'(GMT+08:00) Taipei','Asia/Urumqi'=>'(GMT+08:00) Urumqi','Asia/Seoul'=>'(GMT+09:00) Seoul','Asia/Tokyo'=>'(GMT+09:00) Tokyo','Asia/Yakutsk'=>'(GMT+09:00) Yakutsk','Australia/Adelaide'=>'(GMT+09:30) Adelaide','Australia/Darwin'=>'(GMT+09:30) Darwin','Australia/Brisbane'=>'(GMT+10:00) Brisbane','Australia/Canberra'=>'(GMT+10:00) Canberra','Pacific/Guam'=>'(GMT+10:00) Guam','Australia/Hobart'=>'(GMT+10:00) Hobart','Australia/Melbourne'=>'(GMT+10:00) Melbourne','Australia/Sydney'=>'(GMT+10:00) Sydney','Asia/Vladivostok'=>'(GMT+10:00) Vladivostok','Asia/Magadan'=>'(GMT+11:00) Magadan','Pacific/Auckland'=>'(GMT+12:00) Auckland','Pacific/Fiji'=>'(GMT+12:00) Fiji','Asia/Kamchatka'=>'(GMT+12:00) Kamchatka');
-		
+
 	/**
 	 * Private method for following
 	 *
@@ -506,6 +506,26 @@ class User extends App_Model
 		}
 	}
 
+	function removeGroup($user_id,$group_id)
+	{
+		$data = $this->userData;
+		if (!is_array($data['groups']))
+		{
+			$data['groups'] = array();
+		}
+		if ($key = array_search($group_id,$data['groups']) && $key > 0)
+		{
+			unset($data['groups'][$key]);
+			$data['groups'] = array_values($data['groups']);
+		}
+		$data['id'] = $user_id;
+		$data['modified'] = time();
+		$data = $this->updateData($this->userData, $data);
+		$this->startTransaction();
+		$this->save($data);
+		return $this->endTransaction();
+	}
+
 	/**
 	 * Reset Password
 	 *
@@ -576,27 +596,6 @@ class User extends App_Model
         }
     }
 
-	/**
-	 * SMS a user
-	 *
-	 * @access public
-	 * @param int $id
-	 * @return boolean
-	 */
-	public function sms($to = array(), $from = array(), $message = null)
-	{
-		if (!empty($this->mail)) 
-		{
-			unset($this->mail);
-		}
-		$this->load->library('Mail');		
-		if ($to['device_updates'] && $to['phone']  && $to['carrier'])
-		{
-			return $this->mail->sms($to['phone'] . $to['carrier'], $from['email'], $message);
-		}
-		return true;
-	}
-    
     /**
      * Create a new user
      *
@@ -630,6 +629,7 @@ class User extends App_Model
 		$data['phone'] = null;
 		$data['groups'] = array();
 		$data['mentions'] = array();
+		$data['sms_activated'] = false;		
 		$this->startTransaction();
 		if ($this->save($data)) 
 		{
@@ -641,48 +641,83 @@ class User extends App_Model
     }
 
 	/**
-	 * Update threding preference
-	 * 
-	 * @return 
-	 * @param integer $user_id
-	 * @param string $setting
+	 * SMS a user
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return boolean
 	 */
-	function updateThreading($user_id,$setting)
+	public function sms($to = array(), $from = array(), $message = null)
 	{
-		$data['threading'] = $setting;
-		$data['id'] = $user_id;
-		$data['modified'] = time();
-		$data = $this->updateData($this->userData, $data);
-		$this->startTransaction();
-		$this->save($data);
-		return $this->endTransaction();
+		if (!empty($this->mail)) 
+		{
+			unset($this->mail);
+		}
+		$this->load->library('Mail');		
+		if ($to['device_updates'] && $to['phone']  && $to['carrier'])
+		{
+			return $this->mail->sms($to['phone'] . $to['carrier'], $from['email'], $message, $to['sms_activated']);
+		}
+		return true;
 	}
-
-	function removeGroup($user_id,$group_id)
+    
+	/**
+	 * Activate an sms
+	 *
+	 * @access public
+	 * @param int $key
+	 * @param array $user	
+	 * @return boolean
+	 */
+	public function smsKey($key = null, &$user = array())
 	{
-		$data = $this->userData;
-		if (!is_array($data['groups']))
+		if ((!$key) || (!$user)) 
 		{
-			$data['groups'] = array();
+			return false;
 		}
-		if ($key = array_search($group_id,$data['groups']) && $key > 0)
+		$sms_key = $this->Sms_key->find($user['id']);
+		if (empty($sms_key)) 
 		{
-			unset($data['groups'][$key]);
-			$data['groups'] = array_values($data['groups']);
+			return false;
 		}
-		$data['id'] = $user_id;
-		$data['modified'] = time();
-		$data = $this->updateData($this->userData, $data);
-		$this->startTransaction();
-		$this->save($data);
-		return $this->endTransaction();
+		if ($sms_key['key'] != $key) 
+		{
+			return false;
+		}
+		$this->Sms_key->delete($user['id']);
+		$user['sms_activated'] = true;
+		if (isset($user['key'])) 
+		{
+			unset($user['key']);
+		}
+		return $this->save($user);
+	}
+	
+
+	/**
+	 * Is a user's sms pending activation?
+	 *
+	 * @access public
+	 * @param array $user
+	 * @return boolean
+	 */
+	public function smsPending($user)
+	{
+		if(!$user['sms_activated'] && $user['device_updates']) 
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
 	}
 
 	/**
 	 * Update profile
 	 *
 	 * @access public
-	 * @param int $group_id
+	 * @param int $user_id
 	 * @return boolean
 	 */
 	function updateProfile($user_id)
@@ -698,6 +733,62 @@ class User extends App_Model
 			$this->save($this->postData, array('prefixValue'=>'email', 'saveOnly'=>'id', 'validate'=>false));
 			$this->save($this->postData, array('prefixValue'=>'username', 'saveOnly'=>'id', 'validate'=>false));
 		}
+		return $this->endTransaction();
+	}
+
+	/**
+	 * Update sms
+	 *
+	 * @access public
+	 * @param array $user
+	 * @param object $smsKey	
+	 * @return boolean
+	 */
+	function updateSms($user)
+	{
+		$this->mode = 'sms';
+		if (!$this->postData['device_updates']) 
+		{
+			$this->postData['phone'] = null;
+			$this->postData['carrier'] = null;			
+			$this->postData['sms_activated'] = false;
+		}				
+		$user = $this->updateData($user, $this->postData);
+		$this->startTransaction();
+		if ($this->save($user)) 
+		{
+			if ($this->postData['phone'])
+			{
+				$this->Sms_key->code = $this->randomNum(8);
+				$key = array();
+				$key['user_id'] = $user['id'];
+				$key['key'] = $this->Sms_key->code;
+				$key['created'] = time();
+			}
+			$this->Sms_key->save($key);
+			return $this->endTransaction();
+		} 
+		else 
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Update threding preference
+	 * 
+	 * @return 
+	 * @param integer $user_id
+	 * @param string $setting
+	 */
+	function updateThreading($user_id,$setting)
+	{
+		$data['threading'] = $setting;
+		$data['id'] = $user_id;
+		$data['modified'] = time();
+		$data = $this->updateData($this->userData, $data);
+		$this->startTransaction();
+		$this->save($data);
 		return $this->endTransaction();
 	}
 
@@ -763,6 +854,15 @@ class User extends App_Model
 			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));
 			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'A bio must be between 1 and 160 characters long'));
 		}
+		if ($this->mode == 'sms') 
+		{
+			if ($this->modelData['device_updates'] != 0) 
+			{
+				$this->validates_numericality_of('phone', array('message'=>'A phone number can only be made up of numbers'));				
+				$this->validates_presence_of('phone', array('message'=>'A phone is required'));
+				$this->validates_presence_of('carrier', array('message'=>'A carrier is required'));				
+			}
+		}		
 	    return (count($this->validationErrors) == 0);
 	}
 	

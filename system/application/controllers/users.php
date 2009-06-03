@@ -295,8 +295,6 @@ class Users extends App_Controller
 	function settings()
 	{
 		$this->mustBeSignedIn();
-		$this->load->library(array('Mail'));
-		$this->data['carriers'] = $this->mail->carriers;
         $this->data['page_title'] = 'Settings';
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
@@ -348,6 +346,17 @@ class Users extends App_Controller
     }
 
     /**
+     * Sign out a user
+     * 
+     * @return
+     */
+    public function signout()
+    {
+        $this->cookie->remove('user');
+        $this->redirect('/signin', 'You have successfully signed out.');
+    }
+
+    /**
      * Sign up a new user
      * 
      * @return
@@ -395,17 +404,59 @@ class Users extends App_Controller
 		$this->data['invite_key'] = $key;		
         $this->load->view('users/signup', $this->data);
     }
-   
-    /**
-     * Sign out a user
-     * 
-     * @return
-     */
-    function signout()
-    {
-        $this->cookie->remove('user');
-        $this->redirect('/signin', 'You have successfully signed out.');
-    }
+
+	public function sms()
+	{
+		$this->mustBeSignedIn();
+		$this->load->model(array('Sms_key'));		
+		$this->User->Sms_key = $this->Sms_key;
+		$this->data['sms_pending'] = $this->User->smsPending($this->userData);				
+		if (isset($this->params['cancel']) && $this->data['sms_pending']) 
+		{
+			$this->Sms_key->delete($this->userData['id']);
+			$this->userData['phone'] = null;
+			$this->userData['carrier'] = null;
+			$this->userData['sms_activated'] = false;
+			$this->userData['device_updates'] = false;			
+			$this->User->save($this->userData);
+			$this->redirect('/settings/sms', 'Your sms activation has been canceled.');
+		}
+        $this->data['page_title'] = 'Settings / SMS';		
+		$this->load->library(array('Mail'));
+		$this->data['carriers'] = $this->mail->carriers;
+		if ($this->postData)
+		{
+			if ($this->postDataKey('key')) 
+			{
+				if ($this->User->smsKey($this->postData['key'], $this->userData)) 
+				{
+					$this->redirect('/settings/sms', 'Your sms number has been activated');
+				} 
+				else 
+				{
+					$this->cookie->setFlash('The sms code is incorrect.', 'error');
+				}
+			}
+			else 
+			{
+				if ($this->User->updateSms($this->userData))
+				{	
+					$this->mail->sms($this->postData['phone'] . $this->postData['carrier'], null, $this->User->Sms_key->code, true, true);
+					$this->redirect('/settings/sms', 'Your sms settings were updated');
+				}
+				else 
+				{
+					$this->setErrors(array('User'));
+					$this->cookie->setFlash('There was an error updating your sms settings. See below for more details.', 'error');
+				}
+			}
+		}
+		else 
+		{
+			$this->setData($this->userData);
+		}
+		$this->load->view('users/sms', $this->data);
+	}
 
  	/**
  	 * Set the threading preference for a user

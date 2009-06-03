@@ -65,12 +65,19 @@ class Mail
 	 * @param object $from_email
 	 * @param object $message[optional]
 	 */
-	public function sms($to, $from, $message = null)
+	public function sms($to, $from, $message = null, $activated = false, $mustBeAccivated = true)
 	{
-		$this->mail->AddAddress($to);
-		$this->mail->SetFrom($from);
-		$this->mail->Body = $message;
-		$this->mail->Send();
+		if ($mustBeActivated && !$activated) 
+		{
+			return;
+		}
+		else
+		{
+			$this->mail->AddAddress($to);
+			$this->mail->SetFrom($from);
+			$this->mail->Body = $message;
+			$this->mail->Send();
+		}
 	}
 	
 }
