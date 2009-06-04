@@ -428,7 +428,10 @@ class App_Model extends Model {
 		} 
 		else 
 		{
-	    	return ($str == serialize(false) || @unserialize($str) !== false);
+	    	error_reporting(0);
+			$return = ($str == serialize(false) || @unserialize($str) !== false);
+			error_reporting(2);
+			return $return;
 		}
 	}
 
