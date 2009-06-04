@@ -669,7 +669,7 @@ class User extends App_Model
 		$this->startTransaction();
 		if ($this->save($user)) 
 		{	
-			$this->insertId = $data['id'];
+			$this->insertId = (!empty($data['id']))?$data['id']:$user['id'];
 			$this->saveEmailAlias($user);
 			$this->saveUsernameAlias($user);
 		}
