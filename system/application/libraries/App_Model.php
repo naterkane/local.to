@@ -428,11 +428,22 @@ class App_Model extends Model {
 		} 
 		else 
 		{
-	    	error_reporting(0);
+			set_error_handler(array('App_Model','unserialize_handler'));
 			$return = ($str == serialize(false) || @unserialize($str) !== false);
-			error_reporting(2);
+			restore_error_handler();
 			return $return;
 		}
+	}
+	
+	/**
+	 * dummy error handler set up to obsorb any errors thrown by isSerialized
+	 * @return 
+	 * @param object $errno
+	 * @param object $errstr
+	 */
+	function unserialize_handler($errno, $errstr)
+	{
+	   // don't do anything
 	}
 
 	/**
