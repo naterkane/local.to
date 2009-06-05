@@ -19,6 +19,7 @@ class Uploader{
 		public function __construct()
 		{
 			$this->dir = dirname(dirname(dirname(dirname(__FILE__)))) . '/webroot/uploads/';
+			//ini_set('upload_tmp_dir',dirname(dirname(dirname(dirname(__FILE__)))).'/system/tmp/'); 
 		}
 		
 		private function getType($type) 
