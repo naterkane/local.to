@@ -1,5 +1,5 @@
-<div class="box">
-	<h2>Request an invitation</h2>
+<div class="box signup">
+	<h2>Request an Account Invitation</h2>
 	<div class="block">
 	<form action="/admin/create_invite" method="post" accept-charset="utf-8">
 		<fieldset class="login">

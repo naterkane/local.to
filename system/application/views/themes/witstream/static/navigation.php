@@ -12,8 +12,8 @@
 				?>
 				<li><a href="/">Home</a></li>
 				<li><a href="/about">About</a></li>
-				<li><a href="/users/signin">Sign In</a></li>
-				<li><a href="/users/signup">Sign Up</a></li>
+				<li><a href="/signin">Sign In</a></li>
+				<li><a href="/request_invite">Sign Up</a></li>
 				<?php
 			}
 			?>
