@@ -33,12 +33,12 @@
 			// end move to sidebar
 			
 			if (isset($group['im_a_member'])): ?>
-			<form action="/messages/add" method="post" accept-charset="utf-8">
+			<form action="/messages/add<?php echo $html->sendMeHere() ?>" method="post" accept-charset="utf-8">
 			<h3>Post a message to <?php echo $group['name'] ?></h3>
 				<fieldset>
 				<?php 
 				$messagedata = array();
-				$messagedata['message'] = "!".$group['name'];
+				$messagedata['message'] = "!".$group['name'] . " ";
 				echo $this->load->view('messages/postform',$messagedata) ?>
 				</fieldset>
 			</form>

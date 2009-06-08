@@ -1,7 +1,7 @@
 <div class="form-share">
 	<?php if ($group['im_a_member']): ?>
           <span class="character-count" id="character-count"></span>
-          <form action="/messages/add" class="form" method="post" accept-charset="utf-8">
+          <form action="/messages/add<?php echo $html->sendMeHere() ?>" class="form" method="post" accept-charset="utf-8">
           	<fieldset>
               <label for="message">Share something with <?php echo $group['name'] ?></label>
 				</fieldset>
