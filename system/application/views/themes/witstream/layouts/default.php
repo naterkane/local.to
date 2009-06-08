@@ -113,7 +113,7 @@
 				<?php else: ?>
 					<p><?php echo $user['username'] ?> is not currently following anyone.</p>
 				<?php endif; ?>
-			</div>
+			</div></div>
 			<?php else: ?>
 			<?php $this->load->view('users/signin'); ?>
 			<?php endif; ?>
