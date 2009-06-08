@@ -81,7 +81,7 @@
 						<li<?php echo ($this->util->isSection("/mentions"))?' class="current"':""; ?>>
 							<a href="/replies">Mentions</a>
 						</li>
-						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
+						<li<?php echo ($this->util->isSection("/inbox") || $this->util->isSection("/outbox"))?' class="current"':""; ?>>
 							<a href="/inbox">Private Messages</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/public_timeline"))?' class="current"':""; ?>>
@@ -91,8 +91,9 @@
 					
 				</div>
 				<?php endif; ?>
+			
+			<h3>Following</h3>
 			<div class="box following">
-				<h2>Following</h2>
 				<?php if (count($user['following'])>0):
 				shuffle($user['following']);
 				if (count($user['following'])>25)
@@ -116,7 +117,7 @@
 			<?php else: ?>
 			<?php $this->load->view('users/signin'); ?>
 			<?php endif; ?>
-		</div>
+		
 		<div id="content" class="grid_8">
 		{yield}	
 		</div>

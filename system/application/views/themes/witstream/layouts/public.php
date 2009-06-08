@@ -41,14 +41,14 @@
 		<div class="grid_4 sidebar">
 			{yield}	
 		</div>
-		<div id="content" class="grid_8">
+		<div id="content" class="grid_8 content">
 		
 			<?php
 			if (!empty($static_view)) {
 			$this->load->view('static/'.$static_view);	
 			} else { 
 				?>
-			<div class="top short"><h1>WitStream is &hellip;</h1></div>
+			<div class="top short"><h2>WitStream is &hellip;</h2></div>
 			<div class="grid_4 omega"><div class="box omega">
 				<h4>this is a heading</h4>
 				<p>Nunc neque. Integer molestie sollicitudin neque. Maecenas id lectus eu enim vulputate molestie. Sed ullamcorper dapibus neque. Pellentesque luctus blandit dui. Nunc facilisis, leo ut fringilla aliquam, nulla risus imperdiet urna, ut aliquam erat elit et turpis. Duis neque. Fusce dignissim accumsan augue. In vel velit. Mauris facilisis, nulla eget ultricies ultrices, libero lectus molestie ipsum, eu sollicitudin metus lorem et ligula. Phasellus vitae erat. Integer tempus lobortis tortor. Ut eu urna ut ligula malesuada eleifend. Nullam lacinia imperdiet mauris. In tincidunt, ipsum vel euismod tempor, elit sem eleifend nisi, at sollicitudin tortor augue at nisi. Nam velit.</p>

@@ -10,10 +10,10 @@
 				<?php
 			} else {
 				?>
-				<li><a href="/">Home</a></li>
-				<li><a href="/about">About</a></li>
-				<li><a href="/signin">Sign In</a></li>
-				<li><a href="/request_invite">Sign Up</a></li>
+				<li<?php echo (!$this->util->isSection("/about") && !$this->util->isSection("/signin") && !$this->util->isSection("/signup") && !$this->util->isSection("/request_invite"))?' class="current"':""; ?>><a href="/">Home</a></li>
+				<li<?php echo ($this->util->isSection("/about"))?' class="current"':""; ?>><a href="/about">About</a></li>
+				<li<?php echo ($this->util->isSection("/signin"))?' class="current"':""; ?>><a href="/signin">Sign In</a></li>
+				<li<?php echo ($this->util->isSection("/request_invite") || $this->util->isSection("/signup"))?' class="current"':""; ?>><a href="/request_invite">Sign Up</a></li>
 				<?php
 			}
 			?>
