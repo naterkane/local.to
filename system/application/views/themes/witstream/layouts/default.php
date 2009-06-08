@@ -78,11 +78,11 @@
 						<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>>
 							<a href="/home">Home</a>
 						</li>
-						<li<?php echo ($this->util->isSection("/naterkane"))?' class="current"':""; ?>>
-							<a href="/replies">@<?php echo $User['username'] ?></a>
+						<li<?php echo ($this->util->isSection("/mentions"))?' class="current"':""; ?>>
+							<a href="/replies">Mentions</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
-							<a href="/inbox">Private Mesages</a>
+							<a href="/inbox">Private Messages</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/public_timeline"))?' class="current"':""; ?>>
 							<a href="/public_timeline">Everyone</a>
