@@ -50,6 +50,10 @@ h1 a {
 	font-weight:normal;
 }
 
+.sidebar h2 {
+	
+	margin-top: 0;
+}
 
 /* branding
 ----------------------------------------------- */
@@ -74,7 +78,7 @@ h2#page-heading {
 /* sidebar
  * 
  */
-.profile, .members {
+.profile, .members, .signin, .signup {
 	background-color: #2b2b2b;
 	border-radius: 10px;
 	-moz-border-radius:10px;
@@ -84,7 +88,7 @@ h2#page-heading {
 	width: 305px; /*padding is set to 10px so.... */
 	width: 285px;
 }
-.profile a, .members a {
+.profile a, .members a, .signin a, .signup a {
 	color:#f1592a;
 	font-weight: normal;
 }
@@ -94,6 +98,7 @@ h2#page-heading {
 }
 .profile .meta {
 	margin-left: 70px;
+	min-height: 60px;
 }
 .profile p {
 	font-size: 14px;
@@ -454,10 +459,9 @@ form.postform button {
 }
 
 fieldset {
-	border:1px solid #bbb;
+	border:none;
 	padding:10px;
 	position:relative;
-	background:#e9e9e9;
 	margin-bottom:10px;
 }
 legend {
@@ -490,7 +494,12 @@ fieldset.login p label {
 	width:32%;
 }
 fieldset.login p input {
-	width:60%;
+	padding: 5px;
+	border: none;
+	border-radius: 3px;
+		width:60%;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
 }
 fieldset.login input.button {
 	margin-left:35%;
@@ -498,6 +507,13 @@ fieldset.login input.button {
 form p.notice {
 	font-weight:bold;
 }
+fieldset p input[type="text"] {
+
+	border-radius: 5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+
 input.search.text {
 	width:66%;
 }
@@ -505,8 +521,13 @@ input.search.button {
 	width:28%;
 	margin-left:2%;
 }
-input.button {
-	width:28%;
+input.button, input[type="submit"] {
+	width:auto;
+	font-family: Georgia;
+	font-size: 1.4em;
+	color:#fff; 
+	background: url(/img/bg-nav-current.png) bottom repeat-x ; 
+	padding: 5px 10px;
 }
 /* messages
 ----------------------------------------------- */
