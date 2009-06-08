@@ -827,7 +827,7 @@ class User extends App_Model
 		{
 			if ($this->postData['phone'])
 			{
-				$this->Sms_key->code = $this->randomNum(8);
+				$this->Sms_key->code = $this->randomNum(6);
 				$key = $this->Sms_key->create();
 				$key['user_id'] = $user['id'];
 				$key['key'] = $this->Sms_key->code;
