@@ -262,6 +262,38 @@ class User extends App_Model
 			return false;
 		}
 	}
+
+	/**
+	 * Deny Request
+	 *
+	 * @access public
+	 * @param string $username of the user requesting to follow
+	 * @param array $followed the user being denied
+	 * @return boolean
+	 */
+	function deny($username, $followed)
+	{
+		$this->mode = 'deny';
+		$user = $this->getByUsername($username);	//get follower
+		if (!$user) 
+		{
+			return false;
+		}		
+		if (in_array($user['id'], $followed['friend_requests']))	//check if follower in in requests
+		{
+			$this->startTransaction();
+			if (in_array($user['id'], $followed['friend_requests'])) //check if follower is already following
+			{
+				$followed['friend_requests'] = $this->removeFromArray($followed['friend_requests'], $user['id']);
+			}
+			$this->save($followed);
+			return $this->endTransaction();
+		} 
+		else 
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 * Follow a user

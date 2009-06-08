@@ -6,8 +6,8 @@
 	<?php foreach ($requests as $request): ?>
 		<p>
 			<a href="/<?php echo $request['username'] ?>"><?php echo $request['username'] ?></a> 
-			(<a href="/confirm/<?php echo $request['username'] ?>" id="confirm<?php echo $request['username'] ?>">Accept</a>) 
-			(<a href="/deny/<?php echo $request['username'] ?>" id="deny<?php echo $request['username'] ?>">Deny</a>)
+			(<a href="/confirm/<?php echo $request['username'] . $html->sendMeHere() ?>" id="confirm<?php echo $request['username'] ?>">Accept</a>) 
+			(<a href="/deny/<?php echo $request['username'] . $html->sendMeHere() ?>" id="deny<?php echo $request['username'] ?>">Deny</a>)
 		</p>
 	<?php endforeach ?>
 <?php endif ?>

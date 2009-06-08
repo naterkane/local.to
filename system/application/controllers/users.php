@@ -54,13 +54,14 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$this->checkId($username);
+		$redirect = $this->getRedirect();				
 		if ($this->User->confirm($username, $this->userData)) 
 		{
-			$this->redirect('/home', $username . ' is now following your posts.');
+			$this->redirect($redirect, $username . ' is now following your posts.');
 		} 
 		else 
 		{
-			$this->redirect('/home', 'There was problem adding this follower', 'error');
+			$this->redirect($redirect, 'There was problem adding this follower', 'error');
 		}
 	}
 
@@ -85,8 +86,30 @@ class Users extends App_Controller
 		} 
 		else 
 		{
-			$this->redirect('/home', 'There was a problem deleting your account.');
+			$this->redirect('/home', 'There was a problem deleting your account.', 'error');
 		}		
+	}
+
+	/**
+	 * Deny a friend request
+	 *
+	 * @access public
+	 * @param string $username
+	 * @return 
+	 */
+	function deny($username = null)
+	{
+		$this->mustBeSignedIn();
+		$this->checkId($username);
+		$redirect = $this->getRedirect();		
+		if ($this->User->deny($username, $this->userData)) 
+		{
+			$this->redirect($redirect, 'User request denied.');
+		} 
+		else 
+		{
+			$this->redirect($redirect, 'There was problem updating your friend requests', 'error');
+		}
 	}
 
 	/**

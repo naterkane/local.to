@@ -5,6 +5,9 @@
 	$name2 = $selenium->randomString(10);
 	$password2 = $selenium->randomString(10);	
 	$email2 = "nomcat+".$selenium->randomString(10) . '@wearenom.com';
+	$name3 = $selenium->randomString(10);
+	$password3 = $selenium->randomString(10);	
+	$email3 = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$message = $selenium->randomString(10);
 	$message2 = $selenium->randomString(10);	
 	$message3 = $selenium->randomString(10);					
@@ -136,6 +139,32 @@
 	//sign in and check if second account sees message		
 	$selenium->signOut();	
 	$selenium->signIn($name2, $password2);		
-	$selenium->write('verifyTextPresent', $message3);	
+	$selenium->write('verifyTextPresent', $message3);
+	//create a third account and send the first a friend request
+	$selenium->signOut();	
+	$selenium->signIn($name, $password);
+	$selenium->openPage('/settings');
+	$selenium->write('assertNotChecked', 'locked');	
+	$selenium->write('click', 'locked');
+	$selenium->click('Update');
+	$selenium->write('verifyValue', 'testing_count', $count + 12);
+	$selenium->write('verifyTextPresent', 'Your profile was updated.');
+	$selenium->write('assertChecked', 'locked');	
+	$selenium->signOut();	
+	$selenium->signUp($name3, $password3, $email3);
+	$selenium->write('verifyValue', 'testing_count', $count + 15);	
+	$selenium->signIn($name3, $password3);
+	$selenium->openPage('/' . $name);
+	$selenium->write('clickAndWait', 'follow');
+	$selenium->write('verifyValue', 'testing_count', $count + 15);
+	$selenium->write('verifyTextPresent', 'You have a submitted a friend request to '. $name .', it is currently pending.');
+	$selenium->signOut();	
+	$selenium->signIn($name, $password);			
+	$selenium->openPage('/friend_requests');	
+	$selenium->write('clickAndWait', 'deny' . $name3);
+	$selenium->write('verifyTextPresent', 'User request denied.');	
+	$selenium->write('verifyValue', 'testing_count', $count + 15);	
+	$selenium->openPage('/home');
+	$selenium->write('verifyTextPresent', 'Following: 0 Followers: 1');
 	$selenium->openPage('/admin/flush');	
 ?>
