@@ -11,10 +11,12 @@
 |	http://example.com/
 |
 */
+//Theme
+$config['theme'] = 'default';
 $config['service_name'] = "Microblog";
 $config['base_url']	= "http://example.com/";
 $config['admin_base_url']	= "http://admin.example.com/";
-
+$config['avatar_sizes'] = array(24,36,48,60,200);
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -325,9 +327,6 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
-
-//Theme
-$config['theme'] = 'default';
 
 //Tokyo Cabinet host settings
 $config['tt_host'] = 'microblog.dev.wearenom.com';

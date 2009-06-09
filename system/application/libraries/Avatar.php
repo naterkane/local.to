@@ -65,15 +65,14 @@ class Avatar{
 		}	
 	}
 
-	function makeAll($dir, $sourceFileName, $username){
-		$size = 24;
-		for ($i=0; $i < 4; $i++) { 
+	function makeAll($dir, $sourceFileName, $username, $sizes){
+		//var_dump($sizes);// exit;
+		foreach ($sizes as $key=>$size) { 
 			if (!$this->make($dir, $sourceFileName, $dir . '/' .  $username . '_' . $size .'.jpg', $size, $size)) 
 			{
 				$this->addError('Thumbnail could not be created.');
 				return false;
 			}
-			$size = $size + 12;
 		}
 		return true;
 	}

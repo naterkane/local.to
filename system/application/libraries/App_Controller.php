@@ -43,6 +43,7 @@ class App_Controller extends Controller {
 
 	public function _avatar($id, $name, $type = 'user')
 	{
+		$sizes = (is_array($this->config->item('avatar_sizes'))) ? $this->config->item('avatar_sizes') : array(24,36,48,60);
 		if (!empty($_FILES)) 
 		{
 			$this->load->library(array('Uploader', 'Avatar'));
@@ -50,7 +51,7 @@ class App_Controller extends Controller {
 			if (!$this->uploader->isError()) 
 			{
 				$file = $this->uploader->getLastUploadInfo();
-				$this->avatar->makeAll($file['dir'], $this->uploader->getName(), $name);
+				$this->avatar->makeAll($file['dir'], $this->uploader->getName(), $name, $sizes);
 			}
 			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results());
 		}

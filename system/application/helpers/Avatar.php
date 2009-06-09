@@ -44,21 +44,25 @@ class Avatar extends Html
 		else 
 		{
 			$dir .= $data['id'];
-			$path = '/uploads/' . $dir . '/' . $field . '_' . $size . '.jpg';
+			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.jpg';
+			if (!file_exists(WEBROOT . $path))
+			{
+				$path = '/uploads/' . $dir . '/' . $data[$field] . '_default.jpg';
+			}
 		}
 		if (!file_exists(WEBROOT . $path)) 
 		{
 			if (file_exists(WEBROOT .  $this->defaultPath . '_' . $size . '.jpg'))
 			{
 				$path = $this->defaultPath . '_' . $size . '.jpg';	
-				$return = '<img src="' . $path . '" alt="' . $field . '" />';
+				$return = '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}			
 			else {
 				$path = $this->defaultPath . '_48.jpg';	
-				$return = '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $field . '" />';
+				$return = '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}
 		} else {
-			$return = '<img src="' . $path . '" alt="' . $field . '" />';
+			$return = '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 		}
 		return $return;
 	}
