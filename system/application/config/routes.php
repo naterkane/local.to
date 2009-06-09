@@ -70,6 +70,7 @@ $route['confirm/(:any)'] = 			"users/confirm/$1";
 $route['deny/(:any)'] = 			"users/deny/$1";
 $route['friend_requests'] = 		"users/friend_requests";
 $route['mentions'] = 				"users/mentions";
+$route['replies'] =					"users/mentions";
 $route['favorites'] = 				"users/favorites";
 $route['settings'] = 				"users/settings";
 $route['settings/sms'] = 			"users/sms";
