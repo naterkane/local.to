@@ -2,7 +2,7 @@
 	<div class="top short">
 	<h3>Settings</h3>
 	</div>
-	< class="box">
+	<div class="box">
 		<form class="" action="/settings" method="post" accept-charset="utf-8">
 			<fieldset>
 				<legend>Edit Your Account Information</legend>
