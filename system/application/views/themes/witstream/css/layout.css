@@ -682,12 +682,8 @@ input.search.button {
 .message a.image {
 	float:left; 
 	margin:3px 10px 3px 0; 
-	padding:4px;
-	border:1px solid #bbb;
-	background:#fff;
 }
 .message a.image:hover {
-	border:1px solid #666;
 }
 .message a.image img {
 	float:left; 

@@ -10,7 +10,7 @@
 	}
 	$message['email'] = $user['email'];
 	?>
-	<a href="/<?php echo $message['username']?>" class="image"><?php echo $avatar->user($message, "48" ); ?></a>
+	<a href="/<?php echo $message['username']?>" class="image"><?php echo $avatar->user($message, "50" ); ?></a>
 	<p class="author"><?php echo $html->link(!empty($message['realname'])?$message['realname']:$message['username'], '/' . $message['username']); ?></p>
 	<p class="message-text"><?php echo $message['message_html'] ?></p>
 	<p class="meta">
