@@ -168,7 +168,7 @@ h2#page-heading {
 #content {
 	background: url(/img/bg-content.png) 1px 1px no-repeat;
 	margin: -72px -7px 0 0px;
-	min-height: 600px;
+	min-height: 900px;
 	padding: 18px 8px 8px 8px;
 	overflow: visible;
 	width: 625px;/*639px;*/
@@ -422,6 +422,7 @@ ul.section li.current > a.active:hover {
 table {
 	width:100%;
 	border:1px solid #bbb;
+	margin-bottom: 0;
 }
 col.colC {
 	width:8em;
@@ -476,7 +477,9 @@ td.currency {
 .settings .box{
 	margin: 0 20px;
 }
-
+.settings .avatar-original img {
+	max-width: 500px;
+}
 form {
 	overflow:hidden;
 }
