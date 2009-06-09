@@ -168,6 +168,7 @@ h2#page-heading {
 #content {
 	background: url(/img/bg-content.png) 1px 1px no-repeat;
 	margin: -72px -7px 0 0px;
+	min-height: 600px;
 	padding: 18px 8px 8px 8px;
 	overflow: visible;
 	width: 625px;/*639px;*/
@@ -216,9 +217,12 @@ h2#page-heading {
 	border:none;
 }
 .box {
-	
 	margin-bottom:20px;
 	padding:10px 10px 1px 10px;
+}
+#content .box {
+	margin-bottom: 0;
+	padding-bottom: 20px;
 }
 #content .box h2 {
 	font-size:3.4em;
@@ -418,7 +422,6 @@ ul.section li.current > a.active:hover {
 table {
 	width:100%;
 	border:1px solid #bbb;
-	margin-bottom:10px;
 }
 col.colC {
 	width:8em;
@@ -470,6 +473,10 @@ td.currency {
 
 /* forms
 ----------------------------------------------- */
+.settings .box{
+	margin: 0 20px;
+}
+
 form {
 	overflow:hidden;
 }
@@ -513,10 +520,8 @@ fieldset {
 	margin-bottom:10px;
 }
 legend {
-	font-size:1.1em;
-	padding:.4em .8em;
-	background:#fff;
-	border:1px solid #bbb;
+	font-size:22px;
+	border:none;
 }
 fieldset.login p {
 	margin-bottom:1em;
@@ -527,10 +532,8 @@ fieldset p label {
 	display: block;
 	width:98%;
 }
-fieldset p input {
-	width:96%;
-}
 fieldset p select {
+	
 	width:99%;
 }
 fieldset p textarea {
@@ -544,12 +547,16 @@ fieldset p textarea {
 	width:32%;
 }*/
 fieldset p input {
-	border: thin solid #666;
+	border: 1px solid #666 !important;
+	width:96%;
 	padding: 5px;
 	border: none;
 	border-radius: 3px;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
+}
+fieldset p input:focus {
+	border: 1px solid #666;
 }
 input.button, input[type="submit"] {
 	width:auto;
@@ -569,11 +576,14 @@ fieldset input.button, fieldset input[type="submit"] {
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 }
+fieldset input.button:focus, fieldset input[type="submit"]:focus {
+	border: none;
+}
 form p.notice {
 	font-weight:bold;
 }
 fieldset p input[type="text"] {
-	border: thin solid #666;
+	border: 1px solid #666;
 	border-radius: 5px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -586,16 +596,18 @@ input.search.button {
 	width:28%;
 	margin-left:2%;
 }
-
+#content fieldset p input, #content fieldset p select {
+	width: 500px;
+}
+#content fieldset p input.button {
+	width:auto;
+}
 /* messages
 ----------------------------------------------- */
 .messages {
 	padding:0;
 }
 
-.messages h2 {
-	margin:0;
-}
 #messages {
 	padding: 0 30px;
 }
@@ -781,6 +793,9 @@ input.search.button {
 	border-right: 1px solid #ddd;
 	border-top: 1px solid #f5f5f5;
 	border-left: 1px solid #f5f5f5;
+	border-radius: 5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
 	font-size:1.1em;
 	font-weight: normal;
 }

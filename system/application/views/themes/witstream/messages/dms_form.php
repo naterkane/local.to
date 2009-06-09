@@ -1,6 +1,6 @@
 <?php if ($friend_select): ?>
 	<form class="postform" action="/messages/add?redirect=/inbox" method="post" accept-charset="utf-8">
-		<h3>Send <?php echo $form->select('to', $friend_select) ?> a direct message</h3>		
+		<h3>Send <?php echo $form->select('to', $friend_select) ?> a private message</h3>		
 		<fieldset>
 		<?php echo $this->load->view('messages/postform') ?>
 		</fieldset>

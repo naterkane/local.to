@@ -21,9 +21,4 @@
 			</tr>
 		</tbody>
 	</table>
-	<!--
-	Following: <?php echo count($user['following']); ?> 
-	Followers: <?php echo count($user['followers']);?>
-	Posts: <?php echo count($user['public']);?>
-	-->
 </div>
