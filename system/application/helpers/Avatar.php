@@ -43,7 +43,14 @@ class Avatar extends Html
 		}
 		else 
 		{
-			$dir .= $data['id'];
+			if (!empty($data['user_id'])) 
+			{
+				$dir .= $data['user_id'];
+			}
+			else 
+			{
+				$dir .= $data['id'];				
+			}
 			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.jpg';
 			if (!file_exists(WEBROOT . $path))
 			{

@@ -2,7 +2,7 @@
 	<div class="top">
 	<h3><?php
 		$author = $this->User->getByUsername($username);
-		echo $avatar->user($author, "48" ); ?>
+		echo $avatar->user($author, "50" ); ?>
 		<?php echo $username; ?></h3>
 	<?php echo $form->input('user_id', array('value'=>$this->userData['id'], 'type'=>'hidden'));
 	if (!empty($this->userData) && $this->userData['username'] != $username) {
