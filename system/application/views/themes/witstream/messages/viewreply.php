@@ -30,7 +30,7 @@
 	<?php endif ?>
 	</p>-->
 <?php */ ?>
-<a href="/<?php echo $message['username']?>" class="thumb-med" title="<?php echo $message['username']?>"><?php echo $avatar->user($message, ($message['reply_to'] && empty($remove_reply_context))?"48":"36" ); ?></a>
+<a href="/<?php echo $message['username']?>" class="thumb-med" title="<?php echo $message['username']?>"><?php echo $avatar->user($message, ($message['reply_to'] && empty($remove_reply_context))?"50":"36" ); ?></a>
 <p><span class="author"><?php echo $message['username']?></span> <?php echo $message['message_html'] ?></p>
 <span class="stamp">	
 <?php if (empty($message['to'])): ?>

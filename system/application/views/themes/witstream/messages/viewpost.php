@@ -24,7 +24,10 @@
 				&mdash; <span id="reply_count<?php echo $message['id'] ?>">(<a href="<?php echo '/' . $message['username'] . '/status/' . $message['id'] ?>"><?php echo count($message['replies']); ?><?php echo (count($message['replies']) > 1)?"replies":"reply";?></a>)</span>
 			<?php endif ?>
 		<?php endif ?>
-		<span class="reply" id="reply<?php echo $message['id'] ?>"><a href="/home/<?php echo (!empty($message['reply_to']))?$message['reply_to']:$message['id']; ?>">[Reply]</a></span>
+		<?php if (!empty($User)): ?>
+			<span class="reply" id="reply<?php echo $message['id'] ?>"><a href="/home/<?php echo (!empty($message['reply_to']))?$message['reply_to']:$message['id']; ?>">[Reply]</a></span>
+			<span class="favorite" id="favorite<?php echo $message['id'] ?>"><?php echo $html->favorite($message, $User) ?></span>
+		<?php endif; ?>
 	<?php else: ?>
 		<?php echo $time_format->timeAgo($message['time']) . ' ago';?>				
 	<?php endif ?>

@@ -3,8 +3,8 @@ if (!empty($messages))
 {	
 ?>
 	<div class="block" id="messages">
-			<?php
-			$i = 1;
+	<?php
+	$i = 1;
 	foreach ($messages as $message) 
 	{
 		if (!empty($message))

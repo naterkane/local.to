@@ -74,7 +74,9 @@
 				<?php if (!empty($User)  && $user['username'] == $this->userData['username']): ?>
 				<div class="box">
 					<ul class="menu">
-						
+						<li<?php echo ($this->util->isSection("/public_timeline"))?' class="current"':""; ?>>
+							<a href="/public_timeline">Everyone</a>
+						</li>
 						<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>>
 							<a href="/home">Home</a>
 						</li>
@@ -84,9 +86,10 @@
 						<li<?php echo ($this->util->isSection("/inbox") || $this->util->isSection("/outbox"))?' class="current"':""; ?>>
 							<a href="/inbox">Private Messages</a>
 						</li>
-						<li<?php echo ($this->util->isSection("/public_timeline"))?' class="current"':""; ?>>
-							<a href="/public_timeline">Everyone</a>
+						<li<?php echo ($this->util->isSection("/favorites"))?' class="current"':""; ?>>
+							<a href="/favorites">Favorites</a>
 						</li>
+						
 					</ul>
 					
 				</div>
@@ -124,5 +127,6 @@
 		<?php $this->load->view('layouts/footer'); ?>
 	</div>
 <?php echo $form->testInput('count') ?>
+<script type="text/javascript" language="javascript" src="/assets/js/witstream.js"></script>
 </body>
 </html>
