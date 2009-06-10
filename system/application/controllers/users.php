@@ -454,7 +454,9 @@ class Users extends App_Controller
             {
 				$this->Invite->accept($email_decode, $key);
 				$this->sendEmail($this->postData['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to '.$this->config->item('service_name').'!', $redirect = '/signin');
-                $this->redirect('/signin', 'Your account has been created. Please sign in.');
+				$user = $this->User->getByUsername($this->postData['username']);
+				$this->cookie->set('user', $user['id']);
+                $this->redirect('/settings', 'Your account has been created.');
             }
 			else 
 			{

@@ -223,7 +223,7 @@ class Selenium
 		$this->write('type', 'passwordconfirm', $password);	
 		$this->write('type', 'email', $email);
 		$this->click('Sign Up');
-		$this->write('verifyTextPresent', 'Your account has been created. Please sign in.');		
+		$this->write('verifyTextPresent', 'Your account has been created.');		
 		$this->openPage('/admin/delete_invite/${invite_email}/${invite_key}');		
 	}
 	
