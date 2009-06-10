@@ -167,6 +167,34 @@ class Users extends App_Controller
     }
    
 	/**
+	 * Show all users user is following
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function following()
+	{
+        $this->mustBeSignedIn();
+		$this->data['page_title'] = 'Following';
+		$this->data['users'] = Page::make('User', $this->userData['following']);
+		$this->load->view('users/viewlist', $this->data);
+	}
+	
+	/**
+	 * Show all users user is following
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function followers()
+	{
+        $this->mustBeSignedIn();
+		$this->data['page_title'] = 'Followers';
+		$this->data['users'] = Page::make('User', $this->userData['followers']);		
+		$this->load->view('users/viewlist', $this->data);		
+	}
+
+	/**
 	 * Process a request for following
 	 *
 	 * @access public

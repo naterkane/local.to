@@ -364,6 +364,33 @@ class User extends App_Model
     }
 
 	/**
+	 * Get many users by user_ids
+	 *
+	 * @param array $user_ids[optional]
+	 * @return 	array $user_data
+	 */
+    function getMany($user_ids = array(), $start = null, $end = null)
+    {
+		if (!is_array($user_ids)) 
+		{
+			return;
+		}
+		if (($start !== null) && ($end !== null))
+		{
+			$user_ids = array_slice($user_ids, $start, $end);	
+		}		
+		$return = array();
+		foreach ($user_ids as $user_id) {
+			$user = $this->get($user_id);
+			if (!empty($user)) 
+			{
+				$return[] = $user;
+			}
+		}
+		return $return;
+    }
+
+	/**
 	 * Get a User's data by email
 	 *
 	 * @param int $email[optional]

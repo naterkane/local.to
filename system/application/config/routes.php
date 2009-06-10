@@ -53,6 +53,8 @@ $route['change_password'] = 		"users/change_password";
 $route['recover_password'] = 		"users/recover_password";
 $route['reset_password/(:any)'] = 	"users/reset_password/$1";
 $route['reset/(:any)'] = 			"users/reset/$1";
+$route['followers'] = 				"users/followers";
+$route['following'] = 				"users/following";
 
 $route['inbox'] = 					"messages/inbox";
 $route['received'] = 				"messages/inbox";
