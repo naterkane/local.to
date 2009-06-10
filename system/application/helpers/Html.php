@@ -183,11 +183,11 @@ class Html
 	{
 		if (in_array($message['id'], $user['favorites'])) 
 		{
-			return $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere());
+			return $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'on'));
 		}
 		else 
 		{
-			return $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere());			
+			return $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'off'));			
 		}
 	}
 
