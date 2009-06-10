@@ -18,14 +18,10 @@ class Welcome extends App_Controller {
 		else 
 		{
 			$this->data['page_title'] = 'Welcome';
-			
-			/**
-			 * added support for displaying the public timeline on the landing page
-			 */
 			$this->load->model('message');
-        	$pt = $this->message->getTimeline();
-        	$this->data['messages'] = Page::make('Message', $pt);
-			$this->load->view('users/welcome',$this->data);
+	       	$pt = $this->Message->getTimeline();
+	        $this->data['messages'] = Page::make('Message', $pt);
+			$this->load->view('users/welcome', $this->data);
 		}
 	}
 
