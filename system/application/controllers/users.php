@@ -573,5 +573,27 @@ class Users extends App_Controller
         }
     }
 
+	/**
+	 * Welcome page 
+	 *
+	 * @return 
+	 */
+	function welcome() {
+		$this->layout = 'public';
+		if ($this->userData) 
+		{
+			$this->redirect('/home');
+		} 
+		else 
+		{
+			$this->data['page_title'] = 'Welcome';
+			$this->load->model('message');
+	       	$pt = $this->Message->getTimeline();
+			Page::setup($this->uri->segments);
+	        $this->data['messages'] = Page::make('Message', $pt);
+			$this->load->view('users/welcome', $this->data);
+		}
+	}
+
 }
 ?>
