@@ -36,5 +36,40 @@ class App_exceptions extends CI_Exceptions
 		return $buffer;
 	}
 	
+	/**
+	 * Native PHP error handler
+	 *
+	 * @access	private
+	 * @param	string	the error severity
+	 * @param	string	the error string
+	 * @param	string	the error filepath
+	 * @param	string	the error line number
+	 * @return	string
+	 */
+	function show_php_error($severity, $message, $filepath, $line)
+	{	
+		$severity = ( ! isset($this->levels[$severity])) ? $severity : $this->levels[$severity];
+	
+		$filepath = str_replace("\\", "/", $filepath);
+		
+		// For safety reasons we do not show the full file path
+		if (FALSE !== strpos($filepath, '/'))
+		{
+			$x = explode('/', $filepath);
+			$filepath = $x[count($x)-2].'/'.end($x);
+		}
+		
+		if (ob_get_level() > $this->ob_level + 1)
+		{
+			ob_end_flush();	
+		}
+		ob_start();
+		include(APPPATH.'views/themes/' . $config->item('theme') . '/errors/error_php' . EXT);
+		$buffer = ob_get_contents();
+		ob_end_clean();
+		echo $buffer;
+	}
+	
+	
 }
 ?>
