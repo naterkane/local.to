@@ -63,6 +63,8 @@ class App_exceptions extends CI_Exceptions
 		{
 			ob_end_flush();	
 		}
+		include_once(BASEPATH. 'libraries/Config' . EXT);		
+		$config = new CI_Config();		
 		ob_start();
 		include(APPPATH.'views/themes/' . $config->item('theme') . '/errors/error_php' . EXT);
 		$buffer = ob_get_contents();
