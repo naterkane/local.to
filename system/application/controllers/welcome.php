@@ -2,6 +2,22 @@
 
 class Welcome extends App_Controller {
 
+
+	/**
+	 * Determine site home page
+	 */
+	public function index()
+	{
+		if ($this->userData) 
+		{
+			$this->redirect('/home');
+		}
+		else 
+		{
+			$this->redirect('/public_timeline');			
+		}
+	}
+
 	/**
 	 * Displays static views
 	 * 

@@ -13,7 +13,7 @@
 |
 */
 
-$route['default_controller'] = "users/welcome";
+$route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";
 
 // tests
