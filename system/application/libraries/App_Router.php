@@ -18,7 +18,6 @@ class App_router extends CI_Router
 	public function _parse_routes()
 	{
 		require_once(APPPATH . '/libraries/Page.php');
-		new Page();
 		Page::setup($this->uri->segments);
 		parent::_parse_routes();
 	}

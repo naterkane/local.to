@@ -27,7 +27,7 @@ class Page
 	 */
 	public static function setUp(&$segments = array())
 	{
-		$count = count($segments);		
+		$count = count($segments);
 		self::$end = self::$offset;
 		if (isset($segments[$count - 2]) && isset($segments[$count - 1])) 
 		{
@@ -65,7 +65,7 @@ class Page
 	 * @return array $data
 	 */
 	public static function make($model, $data, $options = array())
-	{
+	{		
 		if (!isset($options['method'])) 
 		{
 			$method = 'getMany';
@@ -75,7 +75,7 @@ class Page
 			$method = $options['method'];
 		}
 		$ci = get_instance();
-		$count = count($data) - 1;
+		$count = count($data);
 		if ($count > self::$end) 
 		{
 			self::$showNext = true;
@@ -83,8 +83,8 @@ class Page
 		if ((self::$end - self::$offset) > 0)
 		{
 			self::$showPrevious = true;
-		}		
-		$return = $ci->$model->$method($data, self::$start, self::$end);
+		}
+		$return = $ci->$model->$method($data, self::$start, self::$end);		
 		if (empty($return) AND self::$page > 1)
 		{
 			$ci->show404();

@@ -194,8 +194,7 @@ class Message extends App_Model
 						foreach($this->getMany($this->prefixReplies($message['reply_to'])) as $replyid)
 						{
 							$return[]['replies'][] = $this->getOne($replyid); 
-						}
-						
+						}				
 					}
 				}
 	        }

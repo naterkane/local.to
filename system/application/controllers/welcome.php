@@ -2,8 +2,6 @@
 
 class Welcome extends App_Controller {
 	
-
-	
 	/**
 	 * Public Timeline 
 	 *
@@ -20,6 +18,7 @@ class Welcome extends App_Controller {
 			$this->data['page_title'] = 'Welcome';
 			$this->load->model('message');
 	       	$pt = $this->Message->getTimeline();
+			Page::setup($this->uri->segments);
 	        $this->data['messages'] = Page::make('Message', $pt);
 			$this->load->view('users/welcome', $this->data);
 		}
