@@ -34,7 +34,7 @@ class Groups extends App_Controller
 					$this->Group->addMember($group, $user);
 					$this->User->addGroup($user, $group_id);
 					$this->Group_Invite->delete($invite['key'], false);
-					$this->sendEmail($user['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to ' . $this->config->item('service_name').'!', $redirect = '/signin');
+					$this->mail->sendWelcome($user['email']);
 	                $this->redirect('/signin?redirect=' . urlencode('/group/' . $group['name']), 'Your account has been created. Please sign in.');
 	            }
 				else 
@@ -197,7 +197,7 @@ class Groups extends App_Controller
 		{
 			$this->Group_Invite->addMany($this->postData['invites'], $this->data['group']);
 			foreach ($this->Group_Invite->successes as $invite) {
-				$this->sendEmail($invite['email'], null, null, 'Invitation to join' . $this->data['group']['name'], $this->config->item('base_url') . 'groups/accept/' . $invite['key']);
+				$this->mail->sendGroupInvite($invite['email'], $this->data['group']['name'], $this->config->item('base_url') . 'groups/accept/' . $invite['key']);
 			}
 			$this->redirect($_SERVER['REQUEST_URI'], $this->Group_Invite->message);			
 		}

@@ -142,16 +142,9 @@ class Admin extends App_controller
 				$data['key'] = base64_encode(preg_replace('/@/',$this->Invite->randomString(9),$data['email']));
 				try{
 					$this->Invite->create($data);
-					$this->load->library('Mail');
 					$random_hash = md5(date('r', time()));
-					//define the headers we want passed. Note that they are separated with \r\n
-					$headers = "From: webmaster@example.com\r\nReply-To: webmaster@example.com";
-					//add boundary string and mime type specification
-					$headers .= "\r\nContent-Type: multipart/alternative; boundary=\"PHP-alt-".$random_hash."\""; 
-					ob_start(); // since debugging is set to '2', let's make sure we don't send anything to the browser until we set headers for the actual view.
-					$message = "Welcome to ". $this->config->item("service_name") ."!\n\nPlease kindly accept our invitation to join ". $this->config->item("site_name") ." by following this link\n". $this->config->item("base_url")."signup/".base64_encode($data['email'])."/".$data['key'];
-					$this->mail->send($data['email'], null, null, 'Welcome to '.$this->config->item('service_name'), $message);
-					ob_end_clean();	
+					$url = $this->config->item("base_url")."signup/".base64_encode($data['email'])."/".$data['key'];
+					$this->mail->sendInvite($data['email'], $url);
 					$this->redirect("/signup/".$this->util->base64_url_encode($data['email'])."/".$data['key'],"We've got your info, please click the link in the email we've sent to <strong>".$data['email']."</strong>.");
 				
 				}		

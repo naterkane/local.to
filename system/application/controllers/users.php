@@ -81,6 +81,7 @@ class Users extends App_Controller
 		}
 		if ($this->User->deleteMe($this->userData)) 
 		{
+			$this->mail->sendDeletion($this->userData['email']);			
         	$this->cookie->remove('user');
 			$this->redirect('/signin', 'Your account has been deleted.');
 		} 
@@ -140,19 +141,8 @@ class Users extends App_Controller
 		{
 			if ($user['locked']) 
 			{
-				try
-				{
-					$this->load->library('Mail');
-					ob_start(); // since debugging is set to '2', let's make sure we don't send anything to the browser until we set headers for the actual view.
-					$this->mail->send($user['email'], null, null, 'Welcome', 'http://' . $_SERVER['HTTP_HOST'] . '/friend_requests');
-					ob_end_clean();	
-				}
-				catch(Exception $e)
-				{
-					$this->redirect('/' . $username, 'Caught exception: ',  $e->getMessage(), "\n");
-				}
-				$message = 'A confirmation request has been sent to ' . $user['username'] . '.';	
-							
+				$this->mail->sendFriendRequest($user['email'], $this->userData['email'], 'Welcome', $this->config->item('base_url') . 'friend_requests');
+				$message = 'A confirmation request has been sent to ' . $user['username'] . '.';								
 			} 
 			else 
 			{
@@ -273,7 +263,7 @@ class Users extends App_Controller
 				$data['user_id'] = $user['id'];		
 				$this->Email_key->save($data);
 				$this->load->library('Mail');			
-				$this->mail->send($user['email'], null, null, 'Reset your password', 'http://' . $_SERVER['HTTP_HOST'] . '/reset_password/' . $data['id_unhashed']);
+				$this->mail->sendRecoverPassword($user['email'],  $this->config->item('base_url') . 'reset_password/' . $data['id_unhashed']);
 				$this->redirect('/recover_password', 'An email has been sent to ' . $user['email'] . ' with instructions on how to reset your password.', 'error');
 			}
 			else 
@@ -314,7 +304,7 @@ class Users extends App_Controller
 					{
 						$this->Email_key->delete(md5($key));
 						$this->load->library(array('Mail'));
-						$this->mail->send($user['email'], null, null, 'Your password has been updated', '');						
+						$this->mail->sendResetPassword($user['email']);
 						$this->redirect('/signin', 'Your password has been updated. Please sign in.');
 					} 
 					else 
@@ -453,7 +443,7 @@ class Users extends App_Controller
             if ($this->User->signUp($this->postData))
             {
 				$this->Invite->accept($email_decode, $key);
-				$this->sendEmail($this->postData['email'], null, null, 'Welcome to '.$this->config->item('service_name'), 'Welcome to '.$this->config->item('service_name').'!', $redirect = '/signin');
+				$this->mail->sendWelcome($this->postData['email']);
 				$user = $this->User->getByUsername($this->postData['username']);
 				$this->cookie->set('user', $user['id']);
                 $this->redirect('/settings', 'Your account has been created.');

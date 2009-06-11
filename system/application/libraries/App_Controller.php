@@ -23,7 +23,7 @@ class App_Controller extends Controller {
     public function __construct() 
 	{
         parent::Controller();
-        $this->load->library(array('Load_helpers','Util', 'Sanitize'));
+        $this->load->library(array('Load_helpers','Util', 'Sanitize', 'Mail'));
         $this->load->model(array('User', 'Message', 'Group'));
 		$_COOKIE = Sanitize::clean($_COOKIE);
 		$this->params = $this->uri->params;
@@ -218,35 +218,6 @@ class App_Controller extends Controller {
         header("Location: http://".$_SERVER['HTTP_HOST'].$url, TRUE, 302);
         exit ;
     }
-
-	/**
-	 * Send an email
-	 *
-	 * @access public
-	 * @param object $to
-	 * @param object $from_email[optional]
-	 * @param object $from_name[optional]
-	 * @param object $subject[optional]
-	 * @param object $message[optional]
-	 * @return 
-	 */
-	public function sendEmail($to, $from_email = null, $from_name = null, $subject = null, $message = null, $redirect = '/home')
-	{
-		try
-		{
-			if (empty($this->mail)) 
-			{
-				$this->load->library('Mail');
-			}
-			ob_start(); // since debugging is set to '2', let's make sure we don't send anything to the browser until we set headers for the actual view.
-			$this->mail->send($to, $from_email, $from_name, $subject, $message);
-			ob_end_clean();	
-		}
-		catch(Exception $e)
-		{
-			$this->redirect($redirect, 'Caught exception: ',  $e->getMessage(), "\n");
-		}
-	}
 
 	/**
 	 * Send data to html helper
