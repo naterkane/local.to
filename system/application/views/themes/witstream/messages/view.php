@@ -1,7 +1,6 @@
 <div class="box messages">
 	<div class="top">
 		<div class="message">
-	
 		<?php //var_dump($message); ?>
 		<p class="message-text"><?php echo $message['message_html'] ?></p>
 		<a href="/<?php echo $message['username']?>" class="image"><?php echo $avatar->user($message, "50" ); ?></a>
@@ -16,28 +15,17 @@
 			<?php if (empty($message['reply_to'])): ?>
 				<?php if (count($message['replies']) > 0): ?>
 					&mdash; <span id="reply_count<?php echo $message['id'] ?>">(<a href="<?php echo '/' . $message['username'] . '/status/' . $message['id'] ?>"><?php echo count($message['replies']); ?><?php echo (count($message['replies']) > 1)?"replies":"reply";?></a>)</span>
-				<?php endif ?>
-			<?php endif ?>
+				<?php endif; ?>
+			<?php endif; ?>
 			<?php if (!empty($User)): ?>
 				<span class="reply" id="reply<?php echo $message['id'] ?>"><a href="/home/<?php echo (!empty($message['reply_to']))?$message['reply_to']:$message['id']; ?>">[Reply]</a></span>
 				<span class="favorite" id="favorite<?php echo $message['id'] ?>"><?php echo $html->favorite($message, $User) ?></span>
 			<?php endif; ?>
-	<?php endif ?>
 		<?php else: ?>
 			<?php echo $time_format->timeAgo($message['time']) . ' ago';?>				
 		<?php endif ?>
 		</p>
-		
-	
-	
-	
-	
-	
-	<?php //$this->load->view('messages/viewpost', array('message'=>$message)); ?>
-	
-	
-	
-	
+		<?php //$this->load->view('messages/viewpost', array('message'=>$message)); ?>
 		</div>
 	</div>
 <?php if (!empty($messages)): ?>
