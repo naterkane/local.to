@@ -241,6 +241,24 @@ class Users extends App_Controller
         $this->data['messages'] = Page::make('Message', $this->userData['mentions']);
 		$this->load->view('users/mentions', $this->data);
 	}
+
+	/**
+	 * Mentions
+	 *
+	 * @access public
+	 * @return null
+	 */
+	public function profile($username = null)
+	{
+		$this->checkId($username);		
+		$this->data['profile'] = $this->User->getByUsername($username);		
+		if (empty($this->data['profile'])) 
+		{
+			$this->show404();
+		}		
+		$this->data['page_title'] = $username;
+		$this->load->view('users/profile', $this->data);
+	}
 	
 	/**
 	 * Recover password
