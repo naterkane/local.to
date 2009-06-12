@@ -26,7 +26,7 @@
 	?></title>
 </head>
 <body>
-	<?php echo $this->cookie->flashMessage(); ?>
+	
 	<div class="container_12">
 		<div class="grid_12">
 			<h1 class="logo">
@@ -35,27 +35,21 @@
 			<ul class="nav main">
 			<?php $this->load->view('static/navigation',array('user'=>$this->userData)); ?>
 			</ul>
+			
 		</div>
-		<?php if (empty($this->userData) && isset($username)): ?>
-		<div class="grid_4">
-			<div class="block">
-				<h3><a href="/request_account" class="toggler success">Join today!</a></h3>
-				<p>Already using <?php echo $this->config->item('service_name')?>? <a href="/signin">Sign in here</a>.</p>
-			</div>
-		</div>
-		<div class="grid_12">
-			<div class="block">
-			<h3>Hey there! <strong><?php echo $username ?></strong> is using <?php echo $this->config->item('service_name')?></h3>
-			<p><?php echo $this->config->item('service_name')?> is a free service that lets you keep in touch with people through the exchange of quick, frequent answers to one simple question: What are you doing? Join today to start receiving <?php echo $username ?>'s updates.</p>
-			</div>
-		</div>
-		<?php endif; ?>
 		<div class="clear"></div>
 		
 		<div class="grid_4 sidebar">
+			<?php if (empty($this->userData) && isset($username)): ?>
 			
+			<div class="box signup">
+				<h3><a href="/request_account" class="toggler">Join today!</a></h3>
+				<p>Already using <?php echo $this->config->item('service_name')?>? <a href="/signin">Sign in here</a>.</p>
+			</div>
 				
-			<?php $user = (!empty($username))?$this->User->getByUsername($username):$this->userData;
+			<?php 
+			endif;
+			$user = (!empty($username))?$this->User->getByUsername($username):$this->userData;
 
 			if (!empty($group)): ?>
 			<div class="box profile">
@@ -67,7 +61,6 @@
 				$this->load->view('groups/memberssidebar',array('group'=>$group));
 				
 			elseif (!empty($user)): ?>
-			
 			<div class="box profile">
 				<?php $this->load->view($this->sidebar,array('user'=>$user)); ?>
 			</div>
@@ -119,9 +112,11 @@
 			</div></div>
 			<?php else: ?>
 			<?php $this->load->view('users/signin'); ?>
+			</div></div>
 			<?php endif; ?>
 		
 		<div id="content" class="grid_8">
+		<?php echo $this->cookie->flashMessage(); ?>
 		{yield}	
 		</div>
 		<?php $this->load->view('layouts/footer'); ?>

@@ -1,5 +1,5 @@
 <?php if ($friend_select): ?>
-	<form class="postform" action="/messages/add?redirect=/inbox" method="post" accept-charset="utf-8">
+	<form class="postform" id="postform" action="/messages/add?redirect=/inbox" method="post" accept-charset="utf-8">
 		<h3>Send <?php echo $form->select('to', $friend_select) ?> a private message</h3>		
 		<fieldset>
 		<?php echo $this->load->view('messages/postform') ?>
@@ -36,9 +36,9 @@
 	?>
 	</div>
 	<div class="box content">
-		
+		<div class="neutral">
 			<h3>Sorry, but nobody is following you.</h3>
 			<h4>You can only send private messages to people if they are.</h4>
 			<p>If you go and check out the <a href="/public_timeline">public timeline</a> and reply to others, maybe you can make new a friend or two!</p>
-		
+		</div>
 <?php endif ?>

@@ -32,7 +32,7 @@
 	<div class="box content">
 		<h4>Replies:</h4>
 		<?php foreach ($messages as $message): ?>
-		<div id="status-message-<?php echo $message['id'] ?>" class="message">
+		<div id="status-message-<?php echo $message['id'] ?>" class="message reply">
 			<?php $this->load->view('messages/viewpost', array('message'=>$message,'remove_reply_context'=>true)); ?>
 		</div>
 			<?php //$this->load->view('messages/viewlist', array('messages'=>$messages,'username'=>$username,'remove_reply_context'=>true)); ?>

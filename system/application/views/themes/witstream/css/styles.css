@@ -1,10 +1,15 @@
 #flashMessage {
 	font-size: 1.2em;
 	padding: 0.8em;
-	background: #fff6bf;
+	/*background: #fff6bf;*/
 	color: #514721;
-	border: 2px solid #ffd324;
+	/*border: 2px solid #ffd324;*/
 	text-align: center;
+	z-index:10000;
+	/*position:absolute;
+	top:0;*/
+	width: 100%;
+	/*left:0;*/
 }
 
 .success {
@@ -12,7 +17,14 @@
 	border-color: #c6d880;
 	color: #264409;
 }
-
+#flashMessage.success {
+	background: none;
+	border: none;
+}
+#flashMessage.error {
+	margin:20px;
+	border: 1px solid;
+}
 .error {
 	background: #fbe3e4;	
 	border-color:#fbc2c4;
@@ -20,8 +32,9 @@
 }
 
 .neutral {
-	background-color: #ffffdd;	
+	background-color: #FEFFF0;	
 	border-color: #4F4800;
+	padding: 20px;
 }
 .profile .message .author {
 	display:none;

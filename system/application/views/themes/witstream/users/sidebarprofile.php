@@ -8,16 +8,16 @@
 		<colgroup span="3"></colgroup>
 		<tfoot>
 			<tr>
-				<th>Following</th>
-				<th>Followers</th>
-				<th>Posts</th>
+				<th><a href="/following">Following</a></th>
+				<th><a href="/followers">Followers</a></th>
+				<th><a href="/<?php echo $user['username']; ?>">Updates</a></th>
 			</tr>
 		</tfoot>
 		<tbody>
 			<tr>
-				<td><?php echo count($user['following']); ?></td>
-				<td><?php echo count($user['followers']); ?></td>
-				<td><?php echo count($user['public']); ?></td>
+				<td><a href="/following"><?php echo count($user['following']); ?></a></td>
+				<td><a href="/followers"><?php echo count($user['followers']); ?></a></td>
+				<td><a href="/<?php echo $user['username']; ?>"><?php echo count($user['public']); ?></a></td>
 			</tr>
 		</tbody>
 	</table>

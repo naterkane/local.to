@@ -151,17 +151,20 @@ h2#page-heading {
 	background: #333333;
 	margin-top: 10px;
 }
-.profile .stats * {background:none !important;border:none;text-align:center;}
+.profile .stats * {color: #fff !important;background:none !important;border:none;text-align:center;}
 .profile .stats colgroup {
 	width: 33%;
 }
 .profile .stats tbody td {
 	font-size:17px;
-	font-style:italic;
-	height: 23px;
+	font-family: Arial;
+	height: 17px;
+	padding-bottom:0;
 }
 .profile .stats tfoot * {
 	font-weight:normal;
+	line-height: 14px;
+	padding-top:0;
 }
 /* boxes
 ----------------------------------------------- */
@@ -189,6 +192,11 @@ h2#page-heading {
 }
 .top .message .message-text{
 	font-size: 2.5em;
+	word-wrap: break-word;
+	word-break:break-all;
+	width: 430px;
+	max-width:430px;
+	margin-left: 60px;
 }
 .top h2 {
 	color: #f1592a;
@@ -515,6 +523,7 @@ form.postform textarea {
 	width: 466px;
 	min-width: 466px;
 	max-width: 488px;
+	resize: none;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
@@ -672,13 +681,22 @@ input.search.button {
 .message .meta a:hover {
 	color:#333;
 }
+.disabled {
+	color: #ccc !important;
+}
 .message .message-text {
 	color: #666;
 	font-size: 18px;
+	word-wrap: break-word;
+	display:block;
+	width: 430px;
+	max-width:430px;
+	margin-left: 60px;
 }
 .message .message-text a  {
 	color: #f1592a;
 	font-weight: normal;
+	word-wrap: normal;
 }
 .message.reply .message-text {
 	font-size: 14px;
