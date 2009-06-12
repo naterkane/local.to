@@ -12,4 +12,4 @@
 </div>
 <div class="clear"></div>
 <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="/js/nomcat.js"></script>
+<script type="text/javascript" src="/assets/js/witstream.js"></script>

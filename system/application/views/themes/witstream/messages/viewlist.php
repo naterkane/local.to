@@ -1,3 +1,4 @@
+<div style="text-align:center"><a href="#"><img src="/ads/banner-468x60.gif" style="border:1px solid #ccc;margin:0 auto;padding:0"/></a></div>
 <?php
 if (!empty($messages)) 
 {	

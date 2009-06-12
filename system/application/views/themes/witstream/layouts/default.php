@@ -9,7 +9,7 @@
 	<?php if (!empty($rss_updates)): ?>
 	<link rel="alternate" href="<?php echo $this->config->item('base_url') ?>rss/user/<?php echo $username ?>" title="<?php echo $username ?>'s Updates" type="application/rss+xml" />
 	<?php endif ?>
-	<link rel="stylesheet" type="text/css" media="all" href="/css/reset.css?<?php echo time();?>" />
+	<link rel="stylesheet" type="text/css" media="all" href="/css/reset.css" />
 	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/text.css" />
 		<link rel="stylesheet" type="text/css" href="/assets/css/960.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="/assets/css/layout.css" media="screen" />
@@ -97,24 +97,33 @@
 					$user['following'] = array_slice($user['following'],0,25);
 				}
 				?>
-				<ul>
+				<ul class="following">
 					<?php 
 					foreach($user['following'] as $following)
 					{
 						$following = $this->User->get($following);?>
-						<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->user($following, "24" ); ?></a></li><?php 
+						<li>
+							<a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->user($following, "24" ); ?></a>
+							<p class="username"><?php echo $following['username']; ?></p>
+							<?php if (!empty($following['realname'])){?><p class="realname"><?php echo $following['realname']; ?></p><?php } ?>
+							<p class="links"><a href="/<?php echo $following['username']; ?>"><?php echo $following['username']; ?></a> | <a href="/users/following/<?php echo $following['username']; ?>">Friends</a></p>
+						</li><?php 
 					} 
 					?>
 				</ul>
 				<?php else: ?>
 					<p><?php echo $user['username'] ?> is not currently following anyone.</p>
 				<?php endif; ?>
-			</div></div>
+				
+				</div>
 			<?php else: ?>
 			<?php $this->load->view('users/signin'); ?>
-			</div></div>
+			
+			
 			<?php endif; ?>
-		
+			
+			<span style="display:block;padding:0;width:100px;overflow:visible;"><a href="#"><img src="/ads/sidebar-300x250.gif" style="border:1px solid #ccc;margin:0 auto;padding:0"/></a></span>
+			</div>
 		<div id="content" class="grid_8">
 		<?php echo $this->cookie->flashMessage(); ?>
 		{yield}	
@@ -122,6 +131,5 @@
 		<?php $this->load->view('layouts/footer'); ?>
 	</div>
 <?php echo $form->testInput('count') ?>
-<script type="text/javascript" language="javascript" src="/assets/js/witstream.js"></script>
 </body>
 </html>
