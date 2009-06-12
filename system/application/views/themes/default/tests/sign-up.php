@@ -11,8 +11,10 @@
 	$selenium->caseTitle('Sign Up');
 	$selenium->signOut();		
 	//create an invite and store
-	$selenium->openPage('/admin/create_invite');
-	$selenium->write('storeValue', 'email', 'invite_email');	
+	$selenium->openPage('/admin/request_invite');
+	$selenium->write('type', 'email', $email);
+	$selenium->write('type', 'emailconfirm', $email);
+	$selenium->write('clickAndWait', 'signMeUp');	
 	$selenium->write('storeValue', 'key', 'invite_key');	
 	//test no keys or bad keys
 	$selenium->write('openAndWait', '/signup');	
@@ -22,7 +24,7 @@
 	$selenium->write('openAndWait', '/signup/123/123');	
 	$selenium->write('verifyTextPresent', $selenium->missingText);	
 	//test empty record
-	$selenium->openPage('/signup/${invite_email}/${invite_key}');
+	$selenium->openPage('/signup/${invite_key}');
 	$selenium->write('type', 'email', '');	
 	$selenium->click('Sign Up');
 	$selenium->write('verifyTextPresent', $error);
@@ -89,7 +91,7 @@
 	$selenium->write('verifyTextPresent', 'A password may only be made up of numbers, letters, and underscores');	
 	$selenium->write('verifyValue', 'testing_count', $count + 1);
 	//sign up
-	$selenium->openPage('/admin/delete_invite/${invite_email}/${invite_key}');
+	$selenium->openPage('/admin/delete_invite/${invite_key}');
 	$selenium->signUp($name, $password, $email);
 	$selenium->write('verifyValue', 'testing_count', $count + 4);
 	$selenium->signIn($name, $password);
@@ -98,10 +100,12 @@
 	$selenium->openPage('/signout');	
 	//create a second invite
 	//try and create an account with the same username and email
-	$selenium->openPage('/admin/create_invite');
-	$selenium->write('storeValue', 'email', 'invite_email');	
+	$selenium->openPage('/admin/request_invite');
+	$selenium->write('type', 'email', $email);
+	$selenium->write('type', 'emailconfirm', $email);
+	$selenium->write('clickAndWait', 'signMeUp');	
 	$selenium->write('storeValue', 'key', 'invite_key');		
-	$selenium->openPage('/signup/${invite_email}/${invite_key}');
+	$selenium->openPage('/signup/${invite_key}');
 	$selenium->write('type', 'username', $name);
 	$selenium->write('type', 'password', $password);
 	$selenium->write('type', 'passwordconfirm', $password);	
@@ -112,7 +116,7 @@
 	$selenium->write('verifyTextPresent', 'Email is already in use');
 	$selenium->write('verifyValue', 'testing_count', $count + 4);	
 	$selenium->signIn($name, $password);	
-	$selenium->openPage('/admin/delete_invite/${invite_email}/${invite_key}');	
+	$selenium->openPage('/admin/delete_invite/${invite_key}');	
 	//try to delete account through illegal actions
 	$selenium->openPage('/delete');
 	$selenium->write('verifyTextPresent', $name);

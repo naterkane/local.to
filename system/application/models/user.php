@@ -21,8 +21,10 @@ class User extends App_Model
 		'id' => null, //Unique if for the user [int]
 		'inbox' => array(),	//Array of message ids of DMs sent to user [array]
         'locked' => false, //Is account private? [boolean]
+        'key' => null, //key used for sign up [boolean]
 		'mentions' => array(), //Array of message ids for messages mentioning the user [array]
         'modified' => null, //Date last modified as timestamp [int]
+		'permission' => 'member', //Admin, premium, or member. Defaults to member [string]
 		'password' => null, //User's hashed password [string]
 		'passwordconfirm' => null, //User's password confirmation. Set to null after validation [string]
 		'phone' => null, //Phone number [int]
@@ -719,12 +721,16 @@ class User extends App_Model
      * @param array $data Data to save
      * @param string $timeZone
      */
-    function signUp($data = array())
+    function signUp($data = array(), $permission = null)
     {
         $user = array();
         $now = time();
         $this->mode = 'signup';
 		$user = $this->create($data);
+		if ($permission) 
+		{
+			$user['permission'] = $permission;
+		}
 		$user['id'] = $this->makeId($this->idGenerator);
         $user['time_zone'] = $this->defaultTimeZone;
 		$this->startTransaction();

@@ -142,19 +142,23 @@ class Admin extends App_controller
 			if ($this->postData['email'] == $this->postData['emailconfirm'])
 			{
 				$data['email'] = $this->postData['email'];
-				$data['key'] = base64_encode(preg_replace('/@/',$this->Invite->randomString(9),$data['email']));
-				try{
-					$this->Invite->create($data);
-					$random_hash = md5(date('r', time()));
-					$url = $this->config->item("base_url")."signup/".base64_encode($data['email'])."/".$data['key'];
-					$this->mail->sendInvite($data['email'], $url);
-					$this->redirect("/signup/".$this->util->base64_url_encode($data['email'])."/".$data['key'],"We've got your info, please click the link in the email we've sent to <strong>".$data['email']."</strong>.");
-				
-				}		
-				catch(Exception $e)
-				{
-					$this->redirect('/request_invite', 'Caught exception: ',  $e->getMessage(), "\n");
-				}
+				$data['key'] = $this->Invite->randomString(10);
+				$data['key_hashed'] = md5($data['key']);	
+				$data['created'] = date('Y-m-d H:i:s');
+				$data['modified'] = $data['created'];
+				$data['permission'] = 'member';				
+					if ($this->Invite->create($data)) 
+					{
+						$random_hash = md5(date('r', time()));
+						$path = 'signup/' . $data['key'];
+						$url = $this->config->item("base_url") . $path;
+						$this->mail->sendInvite($data['email'], $url);
+						$this->redirect('/' . $path, "We've got your info, please click the link in the email we've sent to <strong>" . $data['email'] . "</strong>.");
+					} 
+					else 
+					{
+						$this->redirect("/request_invite","There's something wrong with the email you entered, please give it another go.");	
+					}
 			}
 			else
 			{
@@ -183,7 +187,7 @@ class Admin extends App_controller
 		}
 	}
 	
-	function delete_invite($email, $key)
+	function delete_invite($key)
 	{
 		$testing = $this->testing();
 		if ($testing > 0) 
@@ -191,9 +195,8 @@ class Admin extends App_controller
 			$this->layout = 'bare';
 			$this->load->model(array('Invite'));
 			$this->load->database();
-			$data = array();				
-			$email = base64_decode($email);			
-			$this->Invite->delete($email, $key);		
+			$data = array();						
+			$this->Invite->delete($key);		
 			$this->redirect('/home', 'Key has been deleted');
 		}
 	}

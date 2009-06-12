@@ -73,7 +73,7 @@
 	$selenium->click('Update');
 	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);	
-	$selenium->write('verifyTextPresent', 'A bio must be between 1 and 160 characters long');	
+	$selenium->write('verifyTextPresent', 'Bio must be fewer than 160 characters');	
 	//update record
 	$selenium->write('type', 'username', $name_new);
 	$selenium->write('type', 'email', $email_new);	

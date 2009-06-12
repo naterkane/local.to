@@ -460,20 +460,19 @@ class Users extends App_Controller
      * @return
      * @todo Move those load method calls to one place
      */
-    function signup($email = null, $key = null)
+    function signup($key = null)
     {
-		if ((!$email) || (!$key))
+		if (!$key)
 		{
 			$this->show404();
 		}
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign Up';
-		$email_decode = base64_decode($email);
 		$this->load->model(array('Invite','message'));
        	$pt = $this->Message->getTimeline();
         $this->data['messages'] = Page::make('Message', $pt);
 		$this->load->database();
-		$invite = $this->Invite->get($email_decode, $key);
+		$invite = $this->Invite->get($key);
 		if (empty($invite)) 
 		{
 			$this->show404();
@@ -481,12 +480,13 @@ class Users extends App_Controller
 		if ($invite['activated'] == 1) 
 		{
 			$this->redirect('/signin', 'This invite has already been activated.');
-		}
+		}		
         if ($this->postData)
         {
-            if ($this->User->signUp($this->postData))
+			$this->postData['key'] = $key;	
+            if ($this->User->signUp($this->postData, $invite['permission']))
             {
-				$this->Invite->accept($email_decode, $key);
+				$this->Invite->accept($key);
 				$this->mail->sendWelcome($this->postData['email']);
 				$user = $this->User->getByUsername($this->postData['username']);
 				$this->cookie->set('user', $user['id']);
@@ -502,8 +502,7 @@ class Users extends App_Controller
 		{
 			$this->data['email'] = $invite['email'];
 		}
-		$this->data['invite_email'] = $email;
-		$this->data['invite_key'] = $key;		
+		$this->data['invite_key'] = $invite['key'];		
         $this->load->view('users/signup', $this->data);
     }
 

@@ -12,7 +12,7 @@
 			<label for="emailconfirm">Email Confirm</label>
 			<?php echo $form->input('emailconfirm') ?>
 		</p>
-		<p><input type="submit" class="button" value="I really want in!"></p>
+		<p><input type="submit" class="button" value="I really want in!" id="signMeUp"></p>
 		</fieldset>
 	</form>
 	</div>

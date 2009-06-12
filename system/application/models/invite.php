@@ -17,9 +17,9 @@ class Invite extends App_Model
 	 * @param string $email
 	 * @param string $key
 	 */
-	public function accept($email, $key)
+	public function accept($key)
 	{
-		return $this->db->update($this->table, array('activated'=>1), array('email'=>$email, 'key'=>$key));
+		return $this->db->update($this->table, array('activated'=>'1'), array('key_hashed'=>md5($key)));
 	}
 	
 	/**
@@ -42,7 +42,7 @@ class Invite extends App_Model
 	 */
 	public function delete($email, $key)
 	{
-		return $this->db->delete($this->table, array('email' => $email, 'key'=>$key)); 
+		return $this->db->delete($this->table, array('key'=>md5($key))); 
 	}
 	
 	/**
@@ -52,9 +52,9 @@ class Invite extends App_Model
 	 * @param string $email[optional]
 	 * @param string $key[optional]
 	 */
-	public function get($email = null, $key = null)
+	public function get($key = null)
 	{
-		$results = $this->db->get_where($this->table, array('email'=>$email, 'key'=>$key));
+		$results = $this->db->get_where($this->table, array('key_hashed'=>md5($key), 'activated'=>'0'));
 		if (!$results) 
 		{
 			return null;

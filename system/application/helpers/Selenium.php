@@ -214,17 +214,19 @@ class Selenium
 	*/	
 	public function signUp($name, $password, $email)
 	{
-		$this->openPage('/admin/create_invite');
-		$this->write('storeValue', 'email', 'invite_email');	
-		$this->write('storeValue', 'key', 'invite_key');		
-		$this->openPage('/signup/${invite_email}/${invite_key}');
+		$this->openPage('/admin/request_invite');
+		$this->write('type', 'email', $email);
+		$this->write('type', 'emailconfirm', $email);
+		$this->write('clickAndWait', 'signMeUp');	
+		$this->write('storeValue', 'key', 'invite_key');
+		$this->openPage('/signup/${invite_key}');
 		$this->write('type', 'username', $name);
 		$this->write('type', 'password', $password);
 		$this->write('type', 'passwordconfirm', $password);	
 		$this->write('type', 'email', $email);
 		$this->click('Sign Up');
 		$this->write('verifyTextPresent', 'Your account has been created.');		
-		$this->openPage('/admin/delete_invite/${invite_email}/${invite_key}');		
+		$this->openPage('/admin/delete_invite/${invite_key}');		
 	}
 	
 	/**
