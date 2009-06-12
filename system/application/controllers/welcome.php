@@ -2,7 +2,7 @@
 
 class Welcome extends App_Controller {
 
-
+	var $layout = 'public';
 	/**
 	 * Determine site home page
 	 */
@@ -29,12 +29,23 @@ class Welcome extends App_Controller {
 	{
 		if (empty($view))
 			$this->redirect('/');
-		
-		$this->layout = 'public';
+			
 		$this->data['page_title'] = ucfirst($view);
-		$this->data['static_view'] = $view;
-		//$this->load->view('static/'.$view);
-		$this->load->view('users/welcome',$this->data);
+		$this->data['static_view'] = $view;	
+		if ($this->userData)
+		{
+			$this->layout = 'default';
+			$this->data['User'] = $this->userData;
+			$this->load->view('static/'.$view,$this->data);
+		}
+		else
+		{
+			$this->data['page_title'] = ucfirst($view);
+			$this->data['static_view'] = $view;
+			//$this->load->view('static/'.$view);
+			$this->load->view('users/welcome',$this->data);
+		}
+		
 	}
 	
 }

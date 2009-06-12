@@ -120,7 +120,10 @@ class Admin extends App_controller
 	function request_invite()
 	{
 		$this->layout = "public";
-		$this->load->view('admin/request_invite');	
+		$this->load->model("message");
+       	$pt = $this->Message->getTimeline();
+        $this->data['messages'] = Page::make('Message', $pt);
+		$this->load->view('admin/request_invite',$this->data);	
 	}
 
 	/**

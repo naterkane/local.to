@@ -162,11 +162,21 @@ class Users extends App_Controller
 	 * @access public
 	 * @return 
 	 */
-	public function following()
+	public function following($username = null)
 	{
-        $this->mustBeSignedIn();
+        if (empty($username)) $this->mustBeSignedIn();
 		$this->data['page_title'] = 'Following';
-		$this->data['users'] = Page::make('User', $this->userData['following']);
+		if ($username != null)
+		{
+			$user = $this->User->getByUsername($username);
+			$this->data['page_title'] = 'People @'.$user['username']. ' is following';
+		}
+		else 
+		{
+			$user = $this->userData;
+		}
+		
+		$this->data['users'] = Page::make('User', $user['following']);
 		$this->load->view('users/viewlist', $this->data);
 	}
 	
@@ -176,11 +186,21 @@ class Users extends App_Controller
 	 * @access public
 	 * @return 
 	 */
-	public function followers()
+	public function followers($username = null)
 	{
-        $this->mustBeSignedIn();
-		$this->data['page_title'] = 'Followers';
-		$this->data['users'] = Page::make('User', $this->userData['followers']);		
+        if (empty($username)) $this->mustBeSignedIn();
+		
+		if ($username != null)
+		{
+			$user = $this->User->getByUsername($username);
+			$this->data['page_title'] = 'People following @'.$user['username'];
+		}
+		else 
+		{
+			$user = $this->userData;
+		}
+		
+		$this->data['users'] = Page::make('User', $user['followers']);		
 		$this->load->view('users/viewlist', $this->data);		
 	}
 
@@ -251,11 +271,14 @@ class Users extends App_Controller
 	public function profile($username = null)
 	{
 		$this->checkId($username);		
-		$this->data['profile'] = $this->User->getByUsername($username);		
+		$this->sidebar = "users/userprofile";
+		$this->data['profile'] = $this->User->getByUsername($username);	
+		
 		if (empty($this->data['profile'])) 
 		{
 			$this->show404();
 		}		
+		$this->data['username'] = $this->data['profile']['username'];	
 		$this->data['page_title'] = $username;
 		$this->load->view('users/profile', $this->data);
 	}
@@ -401,6 +424,7 @@ class Users extends App_Controller
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign In';
 		$this->data['redirect'] = $this->getRedirect();	
+		$this->load->model("message");
        	$pt = $this->Message->getTimeline();
         $this->data['messages'] = Page::make('Message', $pt);
         if ($this->postData)
@@ -445,7 +469,9 @@ class Users extends App_Controller
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign Up';
 		$email_decode = base64_decode($email);
-		$this->load->model(array('Invite'));
+		$this->load->model(array('Invite','message'));
+       	$pt = $this->Message->getTimeline();
+        $this->data['messages'] = Page::make('Message', $pt);
 		$this->load->database();
 		$invite = $this->Invite->get($email_decode, $key);
 		if (empty($invite)) 
