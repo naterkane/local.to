@@ -12,16 +12,15 @@ class Mail
 	
 	public function __construct()
 	{
-		if (file_exists(APPPATH . 'config/email_config.php')) 
+		$this->ci = get_instance();
+		if (file_exists(APPPATH . 'views/themes/' . $this->ci->config->item('theme') . '/config/email.php')) 
 		{
-			require_once(APPPATH . 'config/email_config.php');
+			require_once(APPPATH . 'views/themes/' . $this->ci->config->item('theme') . '/config/email.php');
 			$this->settings = $settings;
 		}
 		require_once(APPPATH . 'libraries/phpmailer/Phpmailer.php');
 		$this->mail = new Phpmailer();
 		$this->mail->IsSMTP();
-		$this->ci = get_instance();
-		$this->ci->config->item('username');
 		$this->mail->Username = $this->ci->config->item('username');
 		$this->mail->Password = $this->ci->config->item('password');
 		$this->mail->Host = $this->ci->config->item('host');
