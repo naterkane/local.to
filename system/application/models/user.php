@@ -7,6 +7,8 @@ class User extends App_Model
 
 	protected $fields = array(
         'activated' => true, //Is user activated? [boolean]
+		'next_gig' => null, //Description of next gig [string]
+		'next_gig_url' => null, //Url of next gig [string]		
 		'carrier' => null, //User's cell phone carries [string]
         'created' => null, //Date record was created as timestamp [int]
 		'device_updates' => false, 	//Does the user receive device updates [boolean]
@@ -944,7 +946,8 @@ class User extends App_Model
 		if ($this->mode == 'profile') 
 		{
 			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));
-			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'A bio must be between 1 and 160 characters long'));
+			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'Bio must be fewer than 160 characters.'));
+			$this->validates_length_of('next_gig', array('min'=>0, 'max'=>520, 'message'=>'Next gig description must be fewer than 500 characters'));			
 		}
 		if ($this->mode == 'sms') 
 		{

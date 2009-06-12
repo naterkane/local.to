@@ -30,7 +30,16 @@
 					<label for="bio">Bio</label>
 					<?php echo $form->input('bio') ?>
 					<?php echo $form->error('bio') ?>		
-				</p>	
+				</p>
+				<p>
+					<label for="threading">Tell us about your next gig (500 Characters Max)</label>	
+					<?php echo $form->textarea('next_gig'); ?>
+					<?php echo $form->error('next_gig') ?>	
+				</p>
+				<p>
+					<label for="threading">Url for more information about your next gig</label>	
+					<?php echo $form->input('next_gig_url'); ?>
+				</p>				
 				<p>
 					<label for="location">Location</label>
 					<?php echo $form->input('location') ?>
@@ -41,19 +50,6 @@
 					<?php echo $form->timezones('time_zone') ?>
 					<?php echo $form->error('time_zone') ?>				
 				</p>
-				<p>
-					<label for="carrier">Carriers</label>	
-					<?php echo $form->select('carrier', $carriers) ?>
-					<?php echo $form->error('carrier') ?>		
-				</p>
-				<p>
-					<label for="device_updates">Device Updates</label>	
-					<?php echo $form->checkbox('device_updates'); ?>
-				</p>
-				<p>
-					<label for="phone">Phone</label>	
-					<?php echo $form->input('phone'); ?>
-				</p>								
 				<p>
 					<label for="locked">Lock Account</label>	
 					<?php echo $form->checkbox('locked'); ?>
