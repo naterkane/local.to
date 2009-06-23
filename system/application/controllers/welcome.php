@@ -12,9 +12,14 @@ class Welcome extends App_Controller {
 		{
 			$this->redirect('/home');
 		}
-		else 
+		elseif ($this->config->item('start_page') == "timeline") //added this to allow for the start page to be defined as "timeline" in the config
 		{
 			$this->redirect('/public_timeline');			
+		}
+		else
+		{			
+			$this->data['page_title'] = 'Welcome';
+			$this->load->view('users/welcome');
 		}
 	}
 
