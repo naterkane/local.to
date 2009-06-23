@@ -9,13 +9,13 @@
 			// start move to sidebar
 			?>
 			<p><a href="/groups/members/<?php echo $group['name'] ?>">Members (<?php echo $group['member_count'] ?>)</a></p>
-			<?php if (!empty($url)){
+			<?php if (!empty($group['url'])){
 				 echo "<p><a href=\""; 
-				 echo (substr($url,0,7) == "http://")?$url:"http://".$url;
-				 echo"\">$url</a></p>"; 
+				 echo (substr($group['url'],0,7) == "http://")?$group['url']:"http://".$group['url'];
+				 echo'">'.$group['url'].'</a></p>'; 
 			}?>
-			<?php if (!empty($group['desc'])) echo "<p>" . $group['desc'] . "</p>"; ?>
-			<?php if (!empty($location)) echo "<p><strong>Location:</strong> $location</p>"; ?>
+			<?php if (!empty($group['desc'])) echo "<p>".$group['desc']."</p>"; ?>
+			<?php if (!empty($group['location'])) echo "<p><strong>Location:</strong> ".$group['location']."</p>"; ?>
 			<p>
 				<?php if (!$group['is_owner'] && $this->userData): ?>
 					<?php if ($group['im_a_member']): ?>

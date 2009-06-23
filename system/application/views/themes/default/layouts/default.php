@@ -58,31 +58,36 @@
 		<div class="grid_4">
 			
 			<?php $user = (!empty($username))?$this->User->getByUsername($username):$this->userData;
-			//var_dump($user); 
-			//echo $this->sidebar; 
-				
-			if (!empty($user)): ?>
-			<div class="box">
-			<?php $this->load->view($this->sidebar,array('user'=>$user)); ?>
+
+			if (!empty($group)): ?>
+			<div class="box profile">
+				<?php
+				$this->load->view('groups/profilesidebar',array('group'=>$group));
+				 ?>
 			</div>
-				<?php if (!empty($User) && $user['username'] == $this->userData['username']): ?>
+				<?php
+				$this->load->view('groups/memberssidebar',array('group'=>$group));
+				
+			elseif (!empty($user)): ?>
+			
+			<div class="box profile">
+				<?php $this->load->view($this->sidebar,array('user'=>$user)); ?>
+			</div>
+				<?php if (!empty($User)  && $user['username'] == $this->userData['username']): ?>
 				<div class="box">
 					<ul class="menu">
 						
 						<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>>
 							<a href="/home">Home</a>
 						</li>
-						<li<?php echo ($this->util->isSection("/".$User['username']))?' class="current"':""; ?>>
-							<a href="/<?php echo $User['username'] ?>">@<?php echo $User['username'] ?>  (<?php echo (!empty($this->userData['public']))?count($this->userData['public']):"0"; ?>)</a>
-						</li>
-						<li<?php echo ($this->util->isSection("/replies"))?' class="current"':""; ?>>
-							<a href="/mentions">Mentions <?php if($User['mentions']){ echo "(" . count($User['mentions']) . ")";} ?></a>
+						<li<?php echo ($this->util->isSection("/naterkane"))?' class="current"':""; ?>>
+							<a href="/replies">@<?php echo $User['username'] ?></a>
 						</li>
 						<li<?php echo ($this->util->isSection("/favorites"))?' class="current"':""; ?>>
 							<a href="/Favorites">Favorites <?php if($User['favorites']){ echo "(" . count($User['favorites']) . ")";} ?></a>
 						</li>						
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
-							<a href="/inbox">Private Mesages (<?php echo (!empty($this->userData['inbox']))?count($this->userData['inbox']):"0"; ?>)</a>
+							<a href="/inbox">Private Mesages</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/public_timeline"))?' class="current"':""; ?>>
 							<a href="/public_timeline">Everyone</a>
@@ -93,7 +98,13 @@
 				<?php endif; ?>
 			<div class="box following">
 				<h2>Following</h2>
-				<?php if (count($user['following'])):?>
+				<?php if (count($user['following'])>0):
+				shuffle($user['following']);
+				if (count($user['following'])>25)
+				{
+					$user['following'] = array_slice($user['following'],0,25);
+				}
+				?>
 				<ul>
 					<?php 
 					foreach($user['following'] as $following)
@@ -105,40 +116,6 @@
 				</ul>
 				<?php else: ?>
 					<p><?php echo $user['username'] ?> is not currently following anyone.</p>
-				<?php endif; ?>
-			</div>
-			<?php 
-			elseif (!empty($User)): ?>
-			<div class="box">
-				<ul class="menu">
-					<li>
-						<a href="/home">Home</a>
-					</li>
-					<li>
-						<a href="/<?php echo $User['username'] ?>">@<?php echo $User['username'] ?></a>
-					</li>
-					<li>
-						<a href="/inbox">Private Mesages</a>
-					</li>
-					<li>
-						<a href="/public_timeline">Everyone</a>
-					</li>
-				</ul>
-				
-			</div>
-			
-			<div class="box following">
-				<h2>Following</h2>
-				<?php if (count($User['following'])):?>
-				<ul>
-					<?php foreach($User['following'] as $following){
-						$following = $this->User->get($following);
-						?>
-					<li><a href="/<?php echo $following['username']; ?>" alt="<?php echo $following['username']; ?>"><?php echo $avatar->user($following['username'], "24" ); ?></a></li>
-					<?php } ?>
-				</ul>
-				<?php else: ?>
-					<p>You are not currently following anyone, take a look at the <a href="/public_timeline">public timeline</a> to see if anyone catches your eye.</p>
 				<?php endif; ?>
 			</div>
 			<?php else: ?>
