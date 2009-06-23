@@ -334,7 +334,7 @@ class Users extends App_Controller
 	{
 		if (!$key) 
 		{
-			$this->show404();
+			$this->redirect('/', "Sorry, we can't reset your password at this time.");
 		}
 		else 
 		{
@@ -472,7 +472,7 @@ class Users extends App_Controller
     {
 		if (!$key)
 		{
-			$this->show404();
+			$this->redirect('/request_invite', "Sorry, you must request an invitation before you can sign up.");
 		}
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign Up';
