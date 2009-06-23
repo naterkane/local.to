@@ -119,11 +119,19 @@ class Users extends App_Controller
 	 * @access public
 	 * @return null
 	 */
-	public function favorites()
+	public function favorites($username = null)
 	{
-		$this->mustBeSignedIn();
+		if (empty($username)) $this->mustBeSignedIn();
 		$this->data['page_title'] = 'Favorites';	
-        $this->data['messages'] = Page::make('Message', $this->userData['favorites']);
+		if ($username != null)
+		{
+			$user = $this->User->getByUsername($username);
+		}
+		else 
+		{
+			$user = $this->userData;
+		}
+        $this->data['messages'] = Page::make('Message', $user['favorites']);
 		$this->load->view('users/favorites', $this->data);
 	}
 	
