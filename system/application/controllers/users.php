@@ -17,6 +17,13 @@ class Users extends App_Controller
 		$this->_avatar($this->userData['id'], $this->userData['username']);
 	}
 	
+	function delete_account()
+	{
+		$this->mustBeSignedIn();
+		$this->data['page_title'] = 'Delete your Account';
+		$this->load->view('users/delete_account', $this->data);
+	}
+	
 	/**
 	 * Update a password
 	 *

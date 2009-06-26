@@ -1,5 +1,12 @@
 <div class="box">
 	<h2>Settings</h2>
+	<ul class="nav">
+		<li><?php echo $html->link('Profile Settings', '/settings') ?></li>
+		<li><?php echo $html->link('Device settings', '/settings/sms') ?></li>
+		<li><?php echo $html->link('Add/Edit Avatar', '/settings/avatar') ?></li>
+		<li><?php echo $html->link('Change Password', '/change_password') ?></li>
+		<li><?php echo $html->link('Delete Account', '/delete_account') ?></li>
+	</ul>
 	<div class="block">
 		<form action="/change_password" method="post" accept-charset="utf-8">
 			<fieldset class="login">
@@ -23,5 +30,6 @@
 				<p><input class="confirm button" type="submit" value="Update"></p>
 			</fieldset>
 		</form>
+		<div class="clear"></div>
 	</div>
 </div>
