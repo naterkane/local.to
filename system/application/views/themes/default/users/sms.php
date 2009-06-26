@@ -1,5 +1,5 @@
 <div class="box">
-	<h2>SMS</h2>
+	<h2>Settings</h2>
 	<ul class="nav">
 		<li><?php echo $html->link('Profile Settings', '/settings') ?></li>
 		<li><?php echo $html->link('Device settings', '/settings/sms') ?></li>

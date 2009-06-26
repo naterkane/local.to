@@ -48,11 +48,11 @@
 					<?php echo $form->error('time_zone') ?>				
 				</p>
 				<p>
-					<label for="locked">Lock Account</label>	
+					<label for="locked">Make my profile and posts private</label>	
 					<?php echo $form->checkbox('locked'); ?>
 				</p>
 				<p>
-					<label for="threading">Enable Threading</label>	
+					<label for="threading">Display replies as threaded messages</label>	
 					<?php echo $form->checkbox('threading'); ?>
 				</p>
 				<p>
