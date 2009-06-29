@@ -257,6 +257,7 @@ class Message extends App_Model
 			$messages = array_slice($messages, $start, $end);	
 		}
         $return = array();
+		$threading = false;
 		if ($this->userData && $this->userData['threading'] == 1)
 		{
 			$threading = true;
