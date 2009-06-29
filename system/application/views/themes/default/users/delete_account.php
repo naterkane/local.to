@@ -8,7 +8,7 @@
 		<li><?php echo $html->link('Delete Account', '/delete_account') ?></li>
 	</ul>
 	<div class="block">
-		<form class="grid_9 alpha" action="/delete" method="post" accept-charset="utf-8">
+		<form class="grid_9 alpha" action="/users/delete" method="post" accept-charset="utf-8">
 			<fieldset>
 				<legend>Delete this account</legend>
 			<?php echo $form->input('update_key', array('type'=>'hidden')) ?>
