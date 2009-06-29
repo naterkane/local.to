@@ -138,8 +138,15 @@ class Group extends App_Model
 	 */
 	function addMember(&$group, &$member)
 	{
-		array_unshift($group['members'], $member['id']);
-		return $this->save($group);
+		if (!in_array($member['id'], $group['members'])) 
+		{
+			array_unshift($group['members'], $member['id']);
+			return $this->save($group);			
+		}
+		else 
+		{
+			return false;
+		}
 	}
 	
 	/**
