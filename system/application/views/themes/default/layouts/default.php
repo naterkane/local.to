@@ -87,7 +87,7 @@
 							<a href="/favorites">Favorites <?php if($User['favorites']){ echo "(" . count($User['favorites']) . ")";} ?></a>
 						</li>						
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
-							<a href="/inbox">Private Mesages</a>
+							<a href="/inbox">Private Messages</a>
 						</li>
 						<li<?php echo ($this->util->isSection("/public_timeline"))?' class="current"':""; ?>>
 							<a href="/public_timeline">Everyone</a>
