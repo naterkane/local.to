@@ -498,7 +498,6 @@ class Group extends App_Model
 							{
 								$member = $this->User->get($member_id);
 								array_unshift($member['private'], $messageData['id']);
-								array_unshift($member['public'], $messageData['id']);
 								$this->User->save($member);
 								$sent[] = $member_id;
 							}
