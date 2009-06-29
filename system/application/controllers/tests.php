@@ -1,7 +1,26 @@
 <?php
 /**
-* Selenium class
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Selenium tests
+ * 
+ * @package 	Nomcat
+ * @subpackage	nomcat-controllers
+ * @category	controller
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Tests extends App_Controller
 {
 

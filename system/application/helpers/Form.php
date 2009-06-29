@@ -1,13 +1,43 @@
 <?php
+if (!defined('BASEPATH')) exit ('No direct script access allowed');
 /**
-* Form helper
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Form Helper
+ * 
+ * Methods for displaying form elements
+ * 
+ * @package 	Nomcat
+ * @subpackage	Helpers
+ * @category	Helpers
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Form extends Html
 {
-
+	/**
+	 * @var array
+	 */
 	public $data = array();
+	/**
+	 * @var array
+	 */
 	public $validationErrors = array();	
 
+	/**
+	 * Calls parent constructor
+	 */
 	function __construct()
 	{
 		parent::__construct();
@@ -44,7 +74,7 @@ class Form extends Html
 	 *
 	 * @access private
 	 * @param string
-	 * @return 
+	 * @return array|string
 	 */
 	private function setOptions($field, $default, $options)
 	{
@@ -76,12 +106,12 @@ class Form extends Html
 	}
 
 	/**
-	* Print out an error to the user
-	*
-	* @access public	
-	* @param string $name Name of field
-	* @return string|null Error message
-	*/
+	 * Print out an error to the user
+	 *
+	 * @access public	
+	 * @param string $name Name of field
+	 * @return string|null Error message
+	 */
 	public function error($name)
 	{
 		$return = null;
@@ -93,12 +123,12 @@ class Form extends Html
 	}
 	
 	/**
-	* Get a value from a post field
-	*
-	* @access public	
-	* @param string $name Name of field
-	* @return string|null Value
-	*/
+	 * Get a value from a post field
+	 *
+	 * @access public	
+	 * @param string $name Name of field
+	 * @return string|null Value
+	 */
 	public function getValue($name)
 	{
 		if (isset($this->postValue[$name])) 
@@ -108,13 +138,13 @@ class Form extends Html
 	}
 
 	/**
-	* Print out an input field
-	*
-	* @access public	
-	* @param string $name Name of field
-	* @param array $options[optional] HTML options
-	* @return string
-	*/
+	 * Print out an input field
+	 *
+	 * @access public	
+	 * @param string $name Name of field
+	 * @param array $options[optional] HTML options
+	 * @return string
+	 */
 	public function input($name, $options = array())
 	{
 		$options = $this->setOptions('type', 'input', $options);
@@ -132,6 +162,14 @@ class Form extends Html
 		return sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
 	}
 	
+	/**
+	 * Return the HTML for a select field
+	 * 
+	 * @param string $name
+	 * @param array $values
+	 * @param array $options[optional]
+	 * @return string And HTML select element
+	 */
 	function select($name, $values, $options=array())
 	{
 		$fieldValue = $this->getElementValue($name);
@@ -172,7 +210,7 @@ class Form extends Html
 	 *
 	 * @param string $fieldName 
 	 * @param array $options Array of HTML attributes.
-	 * @return string An HTML text input element
+	 * @return string An HTML textarea element
 	 */
 	public function textarea($name, $options = array()) 
 	{
@@ -188,15 +226,15 @@ class Form extends Html
 	 * Timezone select
 	 *
 	 * @access public
-	 * @param string
-	 * @return 
+	 * @param string $name
+	 * @param array $options[optional]
+	 * @return string An HTML select element
 	 */
 	function timezones($name, $options = array())
 	{
 		$options['no_blank'] = true;
 		return $this->select($name, $this->timeZones, $options);
 	}
-	
 
 }
 ?>

@@ -1,19 +1,56 @@
 <?php 
 /**
- * Create avatars
+ * Nomcat
  *
- **/ 
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * Avatar
+ * 
+ * Create avatars
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	MiscClasses
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Avatar{
 	
-
+	/**
+	 * @var array
+	 */
 	public $allowed_mime_types = array('image/jpeg','image/pjpeg','image/gif','image/png');
+	/**
+	 * @var array
+	 */
 	public $dir = array();
+	/**
+	 * @var
+	 */
 	public $controller;
+	/**
+	 * @var array
+	 */
 	public $errors = array();
 	public $file;
 	public $fileNew;
+	/**
+	 * @var string
+	 */
 	public $image_location = 'images';
 	public $model;
+	/**
+	 * @var integer
+	 */
 	public $zoom_crop = 1;//do not zoom crop
 	
 	/**

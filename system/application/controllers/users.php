@@ -1,6 +1,25 @@
 <?php
 /**
- * Class for users controller
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Users
+ * 
+ * @package 	Nomcat
+ * @subpackage	nomcat-controllers
+ * @category	controller
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class Users extends App_Controller
 {

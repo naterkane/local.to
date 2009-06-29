@@ -1,6 +1,25 @@
 <?php
 /**
- * Class for users controller
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Messages
+ * 
+ * @package 	Nomcat
+ * @subpackage	nomcat-controllers
+ * @category	controller
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class Messages extends App_Controller
 {
@@ -143,7 +162,7 @@ class Messages extends App_Controller
 	 *
 	 * @access public
 	 * @param string $username
-	 * @param int $timestamp	
+	 * @param integer $timestamp	
 	 * @return 
 	 */
 	function view($username = null, $message_id = null)

@@ -1,26 +1,105 @@
 <?php
+ /**
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
 /**
- * Message Class
+ * Message Model
+ * 
+ * @package 	Nomcat
+ * @subpackage	Models
+ * @category	Model
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class Message extends App_Model
 {
 
-	//all fields for model, any other data sent to model is not saved, alphabetized
+	/**
+	 * All fields for model, any other data sent to model is not saved, alphabetized
+	 * @access protected
+	 * @var array
+	 */
 	protected $fields = array(
-			'id' => null, //id of message [int]
-			'created' => null, //Timestamp when then record was created [int]
-			'dm' => false, //Is message a dm? [boolean]
-			'dm_group' => false, //Is message a group dm? [boolean]
-			'message' => null, //Plain text of message [string]
-			'message_html' => null,	//Html version of message [string]
-			'modified' => null, //Timestamp when then record was modified [int]
-			'replies' => array(), //Array of message ids replying to this message [array]
-			'reply_to' => null, //Id of message this is in reply to [reply_to]
-			'reply_to_username' => null, //Username of user in reply to [string]
-			'time' => null,	//date message was created [int]
-			'to' => null, //Id of user dm message is sent to [int]
-			'user_id' => null, //Id of message's owner [int]
-			'username' => null	//Username of message's owner [string]
+			/**
+			 * id of message
+			 * @var integer
+			 */
+			'id' => null,
+			/**
+			 * Timestamp when the record was created
+			 * @var integer
+			 */
+			'created' => null,
+			/**
+			 * Is this a direct message?
+			 * @var boolean
+			 */
+			'dm' => false,
+			/**
+			 * Is this a direct message to a group?
+			 * @var boolean
+			 */
+			'dm_group' => false,
+			/**
+			 * Plain text of message
+			 * @var string
+			 */
+			'message' => null,
+			/**
+			 * HTML version of message
+			 * @var string
+			 */
+			'message_html' => null,
+			/**
+			 * Timestamp when the record was last modified
+			 * @var integer
+			 */
+			'modified' => null,
+			/**
+			 * Array of message ids replying to this message
+			 * @var array
+			 */
+			'replies' => array(),
+			/**
+			 * Id of message this is in reply to
+			 * @var integer
+			 */
+			'reply_to' => null,
+			/**
+			 * Username of user this message is in reply to
+			 * @var string
+			 */
+			'reply_to_username' => null,
+			/**
+			 * Datetime message was created
+			 * @var integer
+			 */
+			'time' => null,
+			/**
+			 * Id of user direct message is sent to
+			 * @var integer
+			 */
+			'to' => null,
+			/**
+			 * Id of message's owner/author
+			 * @var integer
+			 */
+			'user_id' => null,
+			/**
+			 * username of message's owner/author
+			 * @var string
+			 */
+			'username' => null
 			);
 	protected $idGenerator = 'messageId';
 	protected $name = 'Message';	
@@ -74,7 +153,7 @@ class Message extends App_Model
 		    	$this->Group->sendToMembers($data, $this->userData['id']);		
 		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);				
 				foreach ($this->userMentions as $mention_username => $user_mention) {
-					//query here just in case the user is mentioning herself, which would reset the data
+					// query here just in case the user is mentioning herself, which would reset the data
 					$mention = $this->User->getByUsername($mention_username);
 					if ($mention) 
 					{
@@ -82,7 +161,7 @@ class Message extends App_Model
 					}					
 				}				
 				foreach ($this->groupMentions as $mention_groupname => $group_mention) {
-					//query here just in case the user is mentioning herself, which would reset the data
+					// query here just in case the user is mentioning herself, which would reset the data
 					$group_mention = $this->Group->getByName($mention_groupname);
 					if ($group_mention) 
 					{
@@ -103,7 +182,7 @@ class Message extends App_Model
 	 * Add to public timeline
 	 *
 	 * @access public
-	 * @param int $message_id
+	 * @param integer $message_id
 	 * @return 
 	 */
     public function addToPublicTimeline($message)
@@ -145,7 +224,7 @@ class Message extends App_Model
 	 * Favorite a message
 	 *
 	 * @access public
-	 * @param int $message_id
+	 * @param integer $message_id
 	 * @param array $user	
 	 * @return boolean
 	 */
@@ -206,7 +285,7 @@ class Message extends App_Model
 	 * Get one message
 	 *
 	 * @access public
-     * @param int $message_id
+     * @param integer $message_id
      * @return array Message
      */
     public function getOne($message_id)
@@ -225,7 +304,7 @@ class Message extends App_Model
      * Get replies to a message
      *
      * @access public
-     * @param int $messages
+     * @param integer $messages
      * @return array Messages
      */
     public function getReplies($message_ids, $start = null)
@@ -320,15 +399,12 @@ class Message extends App_Model
     }
 
 	/**
-	 * Set up a message
+	 * Parse up a message
 	 * Set up data for regular messages and dms. Also sets up validation values
 	 *
-	 * @access private
-	 * @param array $data
+	 * @access public
 	 * @param array $message
 	 * @param array $user
-	 * @param boolean $direct_message [optional] Defaults to false			
-	 * @param array $to [optional] Recipient of dm	
 	 * @return array Message data
 	 */
 	public function parse($message, $user)
@@ -426,7 +502,11 @@ class Message extends App_Model
 	 */
 	private function parseMentions($data, $separator, $property)
 	{
+		//var_dump($separator);
+		//var_dump($property);
+		//var_dump($data);
 		$parts = explode(' ', $data['message']);
+		//var_dump($parts);
 		foreach ($parts as $part) {
 			if ($part[0] == $separator) 
 			{
@@ -440,7 +520,7 @@ class Message extends App_Model
 	 * Unfavorite a message
 	 *
 	 * @access public
-	 * @param int $message_id
+	 * @param integer $message_id
 	 * @param array $user	
 	 * @return boolean
 	 */

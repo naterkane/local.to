@@ -3,14 +3,32 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 /**
- * Util 
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * Util
  * 
  * Provides some basic reusable utility methods
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Exception
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class Util
 {
 
- 		
 	/**
 	 * 
 	 * @return 

@@ -1,16 +1,38 @@
 <?php
 /**
- * Provides simple time tools
+ * Nomcat
  *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * Time_format Helper
+ * 
+ * Provides simple time tools
+ * 
+ * @package 	Nomcat
+ * @subpackage	Helpers
+ * @category	Helpers
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class Time_format {
 
 	/**
+	 * Generates a human readable sentence describing relative time lapsed between
+	 * the two timestamps. Only one timestamp is required to calculate against "now".
 	 * 
-	 * @return 
 	 * @param object $from_time
 	 * @param object $to_time[optional]
 	 * @param object $include_seconds[optional]
+	 * @return string 
 	 */
     function timeAgo($from_time, $to_time = null, $include_seconds = false) {
 		if (!$to_time) {

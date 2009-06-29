@@ -1,16 +1,63 @@
 <?php
 /**
- * Extended controller
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * App_Controller Controller
+ * 
+ * Extended Controller
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Controllers
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class App_Controller extends Controller {
-   
+
+	/**
+	 * @var array
+	 */
     public $data = array();
-	public $layout = 'default';				//leave empty for default	
+	/**
+	 * The layout to use for any given view. Refers to filename in <code>theme/layouts</code> directory
+	 * @var string
+	 */
+	public $layout = 'default';
+	/**
+	 * The sidebar to use for any given view. Must be set as relative path of <code>theme/</code> directory
+	 * @var string
+	 */
 	public $sidebar = 'users/sidebarprofile';
+	/**
+	 * @var array
+	 */
 	public $params = array();
+	/**
+	 * @var array
+	 */
     public $postData = array();
+	/**
+	 * @var array
+	 */
     public $userData = array();
+	/**
+	 * @var string
+	 */
 	public $testingData;
+	/**
+	 * @var array
+	 */
 	public $validationErrors = array();
    
 	/**
@@ -41,6 +88,13 @@ class App_Controller extends Controller {
 		$this->getUserData();
     }
 
+	/**
+	 * 
+	 * @return 
+	 * @param object $id
+	 * @param object $name
+	 * @param object $type[optional]
+	 */
 	public function _avatar($id, $name, $type = 'user')
 	{
 		$sizes = (is_array($this->config->item('avatar_sizes'))) ? $this->config->item('avatar_sizes') : array(24,36,48,60);
@@ -163,6 +217,7 @@ class App_Controller extends Controller {
    
     /**
      * Checks to see if a user is not signed in
+     * Redirects to 404 if the user isn't authenticated
      */
     public function mustNotBeSignedIn() 
 	{
@@ -174,6 +229,9 @@ class App_Controller extends Controller {
 
 	/**
 	 * Does a key exist in post data?
+	 *  
+	 * @param object $key[optional]
+	 * @return boolean
 	 */
 	public function postDataKey($key = null)
 	{
@@ -187,11 +245,11 @@ class App_Controller extends Controller {
 	/**
 	* Random Alpha-Numeric String
 	*
-	* @param int length
-	* @return string 
 	* @access public
+	* @param integer $length
+	* @return string 
 	*/
-	public public function randomString($length) 
+	public function randomString($length) 
 	{
 		$randstr = null;
 		srand();
@@ -207,10 +265,10 @@ class App_Controller extends Controller {
     /**
      * Redirects to given $url
      * Script execution is halted after the redirect.
-     *
+     * 
+     * @access public
      * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
      * @param todo Use CakePHP's redirect here
-     * @access public
      */
     public function redirect($url, $message=null, $type = null) 
 	{
@@ -237,9 +295,9 @@ class App_Controller extends Controller {
 	/**
 	 * Send errors to html helper
 	 *
+	 * @access public
 	 * @todo Would be nice if this were done automatically
 	 * @param array $models[optional]
-	 * @access public
 	 */
 	public function setErrors($models = array())
 	{

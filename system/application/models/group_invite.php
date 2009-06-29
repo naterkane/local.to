@@ -1,30 +1,97 @@
 <?php
 /**
-* Group Invites
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Group Invites
+ * 
+ * Used to save cookies to db
+ * 
+ * @package 	Nomcat
+ * @subpackage	Models
+ * @category	Model
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Group_Invite extends App_Model
 {
-	
+	/**
+	 * @access protected
+	 * @var array
+	 */
 	protected $fields = array(
-			'activated' => false, //Has the key been activated  [boolean]
-			'activated_time' => null, //Time user activated key [boolean]			
-			'created' => null, //Time invite was created [boolean]		
-			'email' => null, //User's email [string]
-			'group_id' => null, //Id of group user is invited to [int]			
-			'key' => null, //Unhashed key [string]
-			'key_hashed' => null //Hashed key [string]
+			/**
+			 * Has the key been activated?
+			 * @var boolean
+			 */
+			'activated' => false,
+			/**
+			 * Time the key was activated by User
+			 * @var string|boolean|datetime
+			 */
+			'activated_time' => null,
+			/**
+			 * Time invite was created
+			 * @var string|datetime
+			 */	
+			'created' => null,
+			/**
+			 * User's email
+			 * @var string
+			 */
+			'email' => null, 
+			/**
+			 * ID of group user is invited to
+			 * @var integer
+			 */
+			'group_id' => null, 
+			/**
+			 * Unhashed / raw key
+			 * @var string
+			 */		
+			'key' => null, 
+			/**
+			 * Hashed key
+			 * @var string
+			 */
+			'key_hashed' => null 
 			);	
-	protected $name = 'group_invite';			
+	/**
+	 * @access protected
+	 * @var string
+	 */
+	protected $name = 'group_invite';	
+	/**
+	 * @var array
+	 */		
 	public $failures = array();	
+	/**
+	 * @var string
+	 */
 	public $message;
+	/**
+	 * @var array
+	 */
 	public $results = array();
+	/**
+	 * @var array
+	 */
 	public $successes = array();
 	
 	/**
-	 * Group constuct
+	 * Calls parent constructor, then sets Group to parent Group
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function __construct()
 	{
@@ -41,7 +108,7 @@ class Group_Invite extends App_Model
 	 * @param array $data Passed by reference
 	 * @param string $email
 	 * @param array $group Passed by reference 
-	 * @return boolean
+	 * @return boolean|Group
 	 */
 	public function add(&$data = array(), $email, &$group)
 	{
@@ -94,7 +161,7 @@ class Group_Invite extends App_Model
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return 
+	 * @return boolean|Group->save()
 	 */
 	public function delete($key = null, $checkOwnership = true)
 	{
@@ -122,7 +189,7 @@ class Group_Invite extends App_Model
 	 * Get one invite
 	 *
 	 * @access public
-	 * @param int $invite_id
+	 * @param integer $invite_id
 	 * @return array Full invite
 	 */
 	public function get($key)

@@ -19,7 +19,7 @@
  * @package   Incendiary
  * @copyright 2007-2008 Zacharias Knudsen
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @version   $Id: Wick.php 32 2008-08-22 15:13:43Z zdknudsen $
+ * @version   $Id$
  */
 
 if (!defined('BASEPATH')) {

@@ -1,7 +1,28 @@
 <?php
 /**
-* Router extension
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * App_Router
+ * 
+ * Router Extension
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Router
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class App_router extends CI_Router
 {
 	
@@ -9,12 +30,36 @@ class App_router extends CI_Router
 	public $config;	
 	public $default_controller;	
 	public $directory;
+	/**
+	 * @var array
+	 */
 	public $error_routes = array();	
+	/**
+	 * @var string
+	 */
 	public $method = 'index';
+	/**
+	 * @var array
+	 */
 	public $routes = array();	
-	public $scaffolding_request = FALSE; // Must be set to FALSE
+	/**
+	 * This must be set to FALSE
+	 * @var boolean
+	 */
+	public $scaffolding_request = FALSE;
+	/**
+	 * @var string
+	 */
 	public $uri_protocol = 'auto';	
 
+	/**
+	 * 
+	 * @see Page
+	 * @see Page::setup()
+	 * @see CI_Router
+	 * @see CI_Router::_parse_routes()
+	 * @access public
+	 */
 	public function _parse_routes()
 	{
 		require_once(APPPATH . '/libraries/Page.php');
@@ -26,8 +71,8 @@ class App_router extends CI_Router
 	 * Validates the supplied segments.  Attempts to determine the path to
 	 * the controller.
 	 *
-	 * @access	private
-	 * @param	array
+	 * @access	public
+	 * @param	array	$segments
 	 * @return	array
 	 */	
 	public function _validate_request($segments)

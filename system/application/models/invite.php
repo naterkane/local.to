@@ -1,12 +1,33 @@
 <?php
 /**
- * Used to get invites
+ * Nomcat
  *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Invite Model
+ * 
+ * Used to get invites
+ * 
+ * @package 	Nomcat
+ * @subpackage	Models
+ * @category	Model
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class Invite extends App_Model
 {
 	/**
-	 * @var $table
+	 * @access protected
+	 * @var string
 	 */
 	protected $table = 'invites';
 	
@@ -48,9 +69,8 @@ class Invite extends App_Model
 	/**
 	 * Retrieves an invitation record
 	 * 
-	 * @return 
-	 * @param string $email[optional]
 	 * @param string $key[optional]
+	 * @return null|array
 	 */
 	public function get($key = null)
 	{

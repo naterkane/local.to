@@ -128,5 +128,6 @@
 		<?php $this->load->view('layouts/footer'); ?>
 	</div>
 <?php echo $form->testInput('count') ?>
+<script type="text/javascript" language="javascript" src="/assets/js/nomcat.js"></script>
 </body>
 </html>

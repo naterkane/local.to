@@ -1,10 +1,36 @@
 <?php
 /**
-* Asset loading functions to support themes
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Asset loading functions to support themes
+ * 
+ * Because themes are stored in the filesystem outside of the webroot, we need 
+ * to make unprocessed files available via http
+ * 
+ * @package 	Nomcat
+ * @subpackage	nomcat-controllers
+ * @category	controller
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Assets extends App_controller
 {
-	
+	/**
+	 * Returns the contents of the css file passed as a parameter
+	 * @return 
+	 * @param object $file
+	 */
 	function css($file)
 	{
 		$this->setHeader($file);
@@ -15,6 +41,12 @@ class Assets extends App_controller
 			exit;	
 		}
 	}
+	
+	/**
+	 * Returns the contents of the javascript file passed as a parameter
+	 * @return 
+	 * @param object $file
+	 */
 	function js($file)
 	{
 		$this->setHeader($file);
@@ -26,6 +58,11 @@ class Assets extends App_controller
 		}
 	}
 	
+	/**
+	 * Return the contents of the image file passed as a parameter
+	 * @return 
+	 * @param object $file
+	 */
 	function img($file)
 	{
 		$file = APPPATH . 'views/themes/'. $this->config->item('theme') .'/img/' . $file;
@@ -38,6 +75,11 @@ class Assets extends App_controller
 		}
 	}
 	
+	/**
+	 * Set the appropriate header for whichever file type is requested
+	 * @return 
+	 * @param object $file
+	 */
 	private function setHeader($file)
 	{
 		$file = split('[.]',$file);

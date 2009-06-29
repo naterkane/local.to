@@ -1,12 +1,44 @@
 <?php
+/**
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * Yielder Hook
+ * 
+ * Provides simple way to add multiple layouts and theme support
+ * 
+ * @package 	Nomcat
+ * @subpackage	Hooks
+ * @category	Hooks
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Yielder {
 	
+	/**
+	 * Specify any helpers that may be required
+	 * @var array
+	 */
 	var $setHelpers = array();
+	/**
+	 * Specify the layout to be used for the current view
+	 * @var string
+	 */
 	var $layout;
 	/**
 	 * Determines layout to load for view
 	 *
-	 * @return
+	 * @return string
 	 */
 	function Yield() 
 	{

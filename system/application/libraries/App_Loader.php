@@ -1,11 +1,37 @@
 <?php
 /**
-* Extends Loader
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * App Loader
+ * 
+ * Extended CI_Loader
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Loader
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class App_loader extends CI_Loader
 {
-
+	/**
+	 * @var array
+	 */
 	var $helpers = array('Html', 'Time_format', 'Selenium', 'Form', 'Gravatar', 'Avatar');
+	/**
+	 * @var array
+	 */
 	var $passData = array();
 
 	/**
@@ -35,11 +61,9 @@ class App_loader extends CI_Loader
 	 *
 	 * This extends the view method. It loads helpers and passes off error messages.
 	 *
-	 * @access	public
-	 * @param	string
-	 * @param	array
-	 * @param	bool
-	 * @return	void
+	 * @param	string	$view
+	 * @param	array	$vars[optional]
+	 * @param	boolean	$return[optional]
 	 */
 	function view($view, $vars = array(), $return = FALSE)
 	{

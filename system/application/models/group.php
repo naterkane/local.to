@@ -1,25 +1,106 @@
 <?php
 /**
-* Group model
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Group Model
+ * 
+ * @package 	Nomcat
+ * @subpackage	Models
+ * @category	Model
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Group extends App_Model
 {
-
+	
+	/**
+	 * @access protected
+	 * @var array
+	 */
 	protected $fields = array(
-			'id' => null, //Group id [int]
-			'inbox' => array(), //Array of DM ids sent to group [array]
-			'invites' => array(), //Array of group_invite ids sent to users [array]
-			'members' => array(), //Array of user ids of members [array]
-			'mentions' => array(),	//Array of message ids mentioning the group [array]
-			'messages' => array(), //Array of message ids sent to group [array]
-			'name' => null, //Groups name [array]			
-			'owner_id' => null, //User id of owner [int]
-			'public' => true, //Is a group public? [boolean]
-			'time_zone' => null, //Time zone of group [string]
-			'created' => null, //Time date was created [int]
-			'modified' => null //Time date was modified [int]
+			/**
+			 * Group id
+			 * @var integer
+			 */
+			'id' => null,
+			/**
+			 * Array of direct message ids sent to group
+			 * @var array
+			 */
+			'inbox' => array(),
+			/**
+			 * Array of group_invite ids sent to users
+			 * @var array
+			 */
+			'invites' => array(),
+			/**
+			 * Array of user ids of members
+			 * @var array
+			 */
+			'members' => array(),
+			/**
+			 * Array of message ids mentioning the group
+			 * @var array
+			 */
+			'mentions' => array(),
+			/**
+			 * Array of message ids sent to group
+			 * @var array
+			 */
+			'messages' => array(),
+			/**
+			 * Group's name
+			 * @var string
+			 */
+			'name' => null,
+			/**
+			 * User id of group owner
+			 * @var integer
+			 */
+			'owner_id' => null,
+			/**
+			 * Is the group public?
+			 * @var boolean
+			 */
+			'public' => true,
+			/**
+			 * Timezone of group
+			 * @var string
+			 */
+			'time_zone' => null,
+			/**
+			 * Timestamp of group's creation date
+			 * @var integer
+			 */
+			'created' => null,
+			/**
+			 * Timestamp of the date when the group's record was last modified
+			 * @var integer
+			 */
+			'modified' => null
 			);
+	
+	/**
+	 * @access protected
+	 * @var string
+	 */
 	protected $name = 'Group';
+	
+	/**
+	 * @access private
+	 * @var string
+	 */
 	protected $idGenerator = 'groupId';
 	
 	/**
@@ -27,6 +108,7 @@ class Group extends App_Model
 	 *
 	 * @access public
 	 * @param array $data
+	 * @param integer $owner
 	 * @return boolean
 	 */
 	function add($data = array(), $owner)
@@ -48,11 +130,10 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * Add member to a group
-	 *
-	 * @access public
-	 * @param string $name Name of group
-	 * @param string $member Member to add
+	 * Add User to a Group
+	 * 
+	 * @param array $name group object
+	 * @param array $member user object
 	 * @return boolean
 	 */
 	function addMember(&$group, &$member)
@@ -111,7 +192,7 @@ class Group extends App_Model
 	 *
 	 * @access public
 	 * @param array $members Member ids
-	 * @param int $member_id	
+	 * @param integer $member_id	
 	 * @return 
 	 */
 	public function dm($members = array(), $sender, $message)
@@ -178,11 +259,15 @@ class Group extends App_Model
 	}
 	
     /**
+     * function getMany
+     * 
      * Get more than one group
      *
 	 * @access public
-     * @param array $groups_ids
-     * @return array of groups
+     * @param array $groupnames
+     * @param integer $start[optional]
+     * @param integer $end[optional]
+     * @return array an array of groups
      */
     public function getMany($groupnames = array(), $start = null, $end = null)
     {
@@ -204,10 +289,12 @@ class Group extends App_Model
     }
 	
 	/**
+	 * function getMembers
+	 * 
 	 * Get Members
 	 *
 	 * @access public
-	 * @param int $group_id Name of group
+	 * @param integer $group_id Name of group
 	 * @return array Members
 	 */
 	function getMembers($member_ids)
@@ -226,10 +313,11 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * Get Owner
+	 * function getOwner
+	 * 
+	 * Get's the owner of a group by the group's Id
 	 *
-	 * @access public
-	 * @param string $name Name of group
+	 * @param integer $group_id Name of group
 	 * @return string Owner
 	 */
 	function getOwner($group_id)
@@ -239,12 +327,13 @@ class Group extends App_Model
 	}
 	
 	/**
+	 * function isMember
+	 * 
 	 * Is a user a member of a group
 	 *
 	 * @access public
-	 * @param string $name group name
-	 * @param string $user_name user to search for
-	 * @param array $members[optional] will use this array instead if supplied
+	 * @param array $members array of a group's members
+	 * @param integer $user_id the Id of the user to search for
 	 * @return boolean
 	 */
 	function isMember($members, $user_id)
@@ -265,12 +354,14 @@ class Group extends App_Model
 	}
 	
 	/**
+	 * function isOwner
+	 * 
 	 * Is a user an owner of a group?
 	 *
 	 * @access public
-	 * @param int $user_id
-	 * @param int $owner_id[optional]
-	 * @param int $group_id[optional]
+	 * @param integer $user_id
+	 * @param integer $owner_id[optional]
+	 * @param integer $group_id[optional]
 	 * @return boolean
 	 */
 	function isOwner($user_id, $owner_id = null, $group_id = null)
@@ -283,6 +374,8 @@ class Group extends App_Model
 	}
 
 	/**
+	 * function matchGroups
+	 * 
 	 * Get a group names from a message
 	 *
 	 * @access public
@@ -303,7 +396,9 @@ class Group extends App_Model
 	}
 
 	/**
-	 * Is a group name unique?
+	 * function nameUnique
+	 * 
+	 * Is a group's name unique?
 	 *
 	 * @access public
 	 * @return boolean
@@ -329,7 +424,9 @@ class Group extends App_Model
 	}
 
 	/**
-	 * Remove member from a group
+	 * function removeMember 
+	 * 
+	 * Remove a user from a group
 	 *
 	 * @access public
 	 * @param string $name Name of group
@@ -356,12 +453,14 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * Send message to a group
+	 * function sendToMembers
+	 * 
+	 * Send a message to the members of a group
 	 *
 	 * @todo Break this out into smaller methods
 	 * @access public	
-	 * @param array $data
-	 * @param int $user_id	
+	 * @param array @messageData
+	 * @param integer $user_id	
 	 * @return 
 	 */
 	function sendToMembers($messageData, $user_id)
@@ -412,12 +511,14 @@ class Group extends App_Model
 	}
 
 	/**
+	 * function update
+	 * 
 	 * Update group
 	 *
 	 * @access public
 	 * @param array $oldGroup
 	 * @param array $newGroup
-	 * @param array $user_id	
+	 * @param integer $user_id	
 	 * @return boolean
 	 */
 	function update($oldGroup, $newGroup, $user_id)
@@ -436,6 +537,8 @@ class Group extends App_Model
 	}	
 	
 	/**
+	 * function validate
+	 * 
 	 * Validates a group
 	 *
 	 * @access public

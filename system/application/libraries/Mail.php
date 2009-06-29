@@ -1,15 +1,52 @@
 <?php
 /**
-* Mailer class
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * Mail
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Classes
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Mail
 {
-	
+	/**
+	 * @access private
+	 * @var array
+	 */
 	private $settings = array();
+	/**
+	 * @var array
+	 */
 	public $carriers = array('@sms.3rivers.net'=>'3 River Wireless', '@cingularme.com'=>'7-11 Speakout', '@airtelkk.com'=>'Airtel (Karnataka, India)', '@msg.acsalaska.com'=>'Alaska Communications Systems', '@message.alltel.com'=>'Alltel Wireless', '@txt.att.net'=>'AT&T Wireless', '@txt.bell.ca'=>'Bell Mobility (Canada)', '@myboostmobile.com'=>'Boost Mobile', '@mobile.celloneusa.com'=>'Cellular One (Dobson)', '@cingularme.com'=>'Cingular (Postpaid)', '@cwemail.com'=>'Centennial Wireless', '@cingularme.com'=>'Cingular (GoPhone prepaid)', '@ideasclaro-ca.com'=>'Claro (Nicaragua)', '@comcel.com.co'=>'Comcel', '@sms.mycricket.com'=>'Cricket', '@sms.ctimovil.com.ar'=>'CTI', '@emtelworld.net'=>'Emtel (Mauritius)', '@fido.ca'=>'Fido (Canada)', '@msg.gci.net'=>'General Communications Inc.', '@msg.globalstarusa.com'=>'Globalstar', '@myhelio.com'=>'Helio', '@ivctext.com'=>'Illinois Valley Cellular', '.iws@iwspcs.net'=>'i wireless', '@sms.mymeteor.ie'=>'Meteor (Ireland)', '@sms.spicenepal.com'=>'Mero Mobile (Nepal)', '@mymetropcs.com'=>'MetroPCS', '@movimensaje.com.ar'=>'Movicom', '@sms.mobitel.lk'=>'Mobitel (Sri Lanka)', '@movistar.com.co'=>'Movistar (Colombia)', '@sms.co.za'=>'MTN (South Africa)', '@text.mtsmobility.com'=>'MTS (Canada)', '@nextel.net.ar'=>'Nextel (Argentina)', '@orange.pl'=>'Orange (Poland)', '@personal-net.com.ar'=>'Personal (Argentina)', '@text.plusgsm.pl'=>'Plus GSM (Poland)', '@txt.bell.ca'=>'President\'s Choice (Canada)', '@qwestmp.com'=>'Qwest', '@pcs.rogers.com'=>'Rogers (Canada)', '@sms.sasktel.com'=>'Sasktel (Canada)', '@mas.aw'=>'Setar Mobile email (Aruba)', '@txt.bell.ca'=>'Solo Mobile', '@messaging.sprintpcs.com'=>'Sprint (PCS)', '@page.nextel.com'=>'Sprint (Nextel)', '@tms.suncom.com'=>'Suncom', '@tmomail.net'=>'T-Mobile', '@sms.t-mobile.at'=>'T-Mobile (Austria)', '@msg.telus.com'=>'Telus Mobility (Canada)', '@sms.thumbcellular.com'=>'Thumb Cellular', '@sms.tigo.com.co'=>'Tigo (Formerly Ola)', '@utext.com'=>'Unicel', '@email.uscc.net'=>'US Cellular', '@vtext.com'=>'Verizon', '@vmobile.ca'=>'Virgin Mobile (Canada)', '@vmobl.com'=>'Virgin Mobile (USA)', '@sms.ycc.ru'=>'YCC', '@orange.net'=>'Orange (UK)', '@gocbw.com'=>'Cincinnati Bell Wireless', '@t-mobile-sms.de'=>'T-Mobile Germany', '@vodafone-sms.de'=>'Vodafone Germany', '@smsmail.eplus.de'=>'E-Plus');
+	/**
+	 * @var string
+	 */
 	public $from_email;
+	/**
+	 * @var string
+	 */
 	public $from_name;	
 	
+	/**
+	 * Loads the current theme's email configuration, then loads and 
+	 * instantiates the {@link phpmailer/Phpmailer.php} class
+	 * 
+	 * @see Phpmailer
+	 */
 	public function __construct()
 	{
 		$this->ci = get_instance();
@@ -33,6 +70,12 @@ class Mail
 		$this->mail->do_debug = 0;
 	}
 	
+	/**
+	 * Get the value of a setting
+	 * 
+	 * @param string $setting
+	 * @return void|mixed
+	 */
 	public function getSetting($setting = null)
 	{
 		if (!$setting) 
@@ -50,12 +93,12 @@ class Mail
 	/**
 	 * Sends an email
 	 * 
-	 * @return 
-	 * @param object $to
-	 * @param object $subject[optional]
-	 * @param object $message[optional]	
-	 * @param object $from_email[optional]
-	 * @param object $from_name[optional]
+	 * @access private
+	 * @param string $to
+	 * @param string $subject[optional]
+	 * @param string $message[optional]	
+	 * @param string $from_email[optional]
+	 * @param string $from_name[optional]
 	 */
 	private function send($to, $subject = null, $message = null, $from_email = null, $from_name = null)
 	{
@@ -83,6 +126,13 @@ class Mail
 		}		
 	}
 
+	/**
+	 * Sends an email notifying a user that their account has been deleted
+	 * 
+	 * @access public
+	 * @param string $to
+	 * @see send()
+	 */
 	public function sendDeletion($to)
 	{
 		$message = $this->getSetting('message_deletion');
@@ -91,6 +141,15 @@ class Mail
 		$this->send($to, $subject, $message);
 	}
 	
+	/**
+	 * Sends an email notifying a user that a user has requested to follow their public stream
+	 * 
+	 * @access public
+	 * @param string $to
+	 * @param string $username
+	 * @param string $link
+	 * @see send()
+	 */
 	public function sendFriendRequest($to, $username, $link)
 	{
 		$message = $this->getSetting('message_friend_request');
@@ -101,6 +160,15 @@ class Mail
 		$this->send($to, $subject, $message);
 	}
 	
+	/**
+	 * Sends an email notifying a user that they have been invited to be a member of a group
+	 * 
+	 * @access public
+	 * @param string $to
+	 * @param string $groupname
+	 * @param string $link
+	 * @see send()
+	 */
 	public function sendGroupInvite($to, $groupname, $link)
 	{
 		$message = $this->getSetting('message_group_invite');
@@ -111,6 +179,14 @@ class Mail
 		$this->send($to, $subject, $message);
 	}
 	
+	/**
+	 * Sends an email notifying a non-user that they have been invited to the system and may have signup for a user account
+	 * 
+	 * @access public
+	 * @param string $to
+	 * @param string $link
+	 * @see send()
+	 */
 	public function sendInvite($to, $link)
 	{
 		$message = $this->getSetting('message_invite');
@@ -120,6 +196,14 @@ class Mail
 		$this->send($to, $subject, $message);
 	}
 	
+	/**
+	 * Sends an email to a user who has forgotten their password
+	 * 
+	 * @access public 
+	 * @param string $to
+	 * @param string $link
+	 * @see send()
+	 */
 	public function sendRecoverPassword($to, $link)
 	{
 		$message = $this->getSetting('message_recover_password');
@@ -129,6 +213,13 @@ class Mail
 		$this->send($to, $subject, $message);
 	}
 	
+	/**
+	 * Sends an email to a user that contains a link with a new/reset password for their account
+	 * 
+	 * @access public 
+	 * @param string $to
+	 * @see send()
+	 */
 	public function sendResetPassword($to)
 	{
 		$message = $this->getSetting('message_reset_password');
@@ -137,6 +228,14 @@ class Mail
 		$this->send($to, $subject, $message);
 	}
 	
+	/**
+	 * Sends an email to a user notifying them that an account has been created with their email address
+	 * and welcoming them to the system
+	 * 
+	 * @access public 
+	 * @param object $to
+	 * @see send()
+	 */
 	public function sendWelcome($to)
 	{
 		$message = $this->getSetting('message_welcome');
@@ -146,18 +245,21 @@ class Mail
 	}
 	
 	/**
-	 * Sends an email
+	 * Sends an sms message to a user via email
 	 * 
-	 * @return 
-	 * @param object $to
-	 * @param object $from_email
-	 * @param object $message[optional]
+	 * @access public
+	 * @param string $to
+	 * @param string $from
+	 * @param string $message[optional]
+	 * @param boolean $activated[optional]
+	 * @param boolean $mustBeActivated[optional]
+	 * @return boolean TRUE on success, FALSE if the user is not activated.
 	 */
 	public function sms($to, $from, $message = null, $activated = false, $mustBeAccivated = true)
 	{
 		if ($mustBeActivated && !$activated) 
 		{
-			return;
+			return false;
 		}
 		else
 		{
@@ -165,9 +267,9 @@ class Mail
 			$this->mail->SetFrom($from);
 			$this->mail->Body = $message;
 			$this->mail->Send();
+			return true;
 		}
 	}
 	
 }
-
 ?>

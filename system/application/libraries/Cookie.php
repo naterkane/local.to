@@ -1,7 +1,28 @@
 <?php
 /**
-* Extended Cookie Class
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * Cookie
+ * 
+ * Extended Cookie class
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Classes
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Cookie {
 	
 	var $cookie;
@@ -15,7 +36,8 @@ class Cookie {
 	 * Constructor
 	 *
 	 * Loads controller into Library, then loads cookie model.
-	 *
+	 * 
+	 * @see check()
 	 * @todo Check performance on this. See if there is a better way.
 	 */
 	function __construct() 
@@ -31,9 +53,11 @@ class Cookie {
 
 	/**
 	 * Check if cookie is set, if not, set one
-	 *
-	 * @access public
-	 * @return 
+	 * 
+	 * @see exists()
+	 * @see create()
+	 * @see getAllData()
+	 * @see delete()
 	 */
 	function check()
 	{
@@ -57,9 +81,11 @@ class Cookie {
 
 	/**
 	 * Create a new cookie
-	 *
-	 * @access public	
-	 * @return 
+	 * 
+	 * @see cookie_model
+	 * @see cookie_model::create()
+	 * @see cookie_model::save()
+	 * @see setcookie()
 	 */
 	function create()
 	{
@@ -74,9 +100,10 @@ class Cookie {
 
 	/**
 	 * Delete a cookie
-	 *
-	 * @access public
-	 * @return
+	 * 
+	 * @see exists()
+	 * @see cookie_model
+	 * @see cookie_model::delete()
 	 */
 	function delete() 
 	{
@@ -105,7 +132,7 @@ class Cookie {
 	
 	/**
 	 * Show flash message
-	 *
+	 * 
 	 * @access public
 	 * @return string
 	 */
@@ -247,6 +274,5 @@ class Cookie {
 		$this->set('user', $data);
 	}
 	
-
 }
 ?>

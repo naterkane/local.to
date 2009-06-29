@@ -1,7 +1,29 @@
 <?php
+if (!defined('BASEPATH')) exit ('No direct script access allowed');
 /**
-* HTML
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * HTML Helper
+ * 
+ * Methods for displaying html elements
+ * 
+ * @package 	Nomcat
+ * @subpackage	Helpers
+ * @category	Helpers
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Html
 {
 
@@ -144,9 +166,9 @@ class Html
 	 * If the value is not one of these 3, the parameter is not output.
 	 *
 	 * @param  array  $options Array of options.
-	 * @param  array  $exclude Array of options to be excluded.
-	 * @param  string $insertBefore String to be inserted before options.
-	 * @param  string $insertAfter  String to be inserted ater options.
+	 * @param  array  $exclude[optional] Array of options to be excluded.
+	 * @param  string $insertBefore[optional] String to be inserted before options.
+	 * @param  string $insertAfter[optional]  String to be inserted ater options.
 	 * @return string
 	 */
 	function _parseAttributes($options, $exclude = null, $insertBefore = ' ', $insertAfter = null) {
@@ -195,7 +217,7 @@ class Html
 	 * Convenience method for htmlspecialchars.
 	 *
 	 * @param string $text Text to wrap through htmlspecialchars
-	 * @param string $charset Character set to use when escaping.  Defaults to config value in 'App.encoding' or 'UTF-8'
+	 * @param string $charset[optional] Character set to use when escaping.  Defaults to config value in 'App.encoding' or 'UTF-8'
 	 * @return string Wrapped text
 	 * @link http://book.cakephp.org/view/703/h
 	 */
@@ -214,7 +236,7 @@ class Html
 	 * Message
 	 *
 	 * @access public
-	 * @param $message $message
+	 * @param $message[optional] $message
 	 * @return $message with tags processed	
 	 */
 	function message($message = null)
@@ -234,9 +256,9 @@ class Html
 	 *
 	 * @param  string  $title The content to be wrapped by <a> tags.
 	 * @param  mixed   $url Cake-relative URL or array of URL parameters, or external URL (starts with http://)
-	 * @param  array   $htmlAttributes Array of HTML attributes.
-	 * @param  string  $confirmMessage JavaScript confirmation message.
-	 * @param  boolean $escapeTitle	Whether or not $title should be HTML escaped.
+	 * @param  array   $htmlAttributes[optional] Array of HTML attributes.
+	 * @param  string  $confirmMessage[optional] JavaScript confirmation message.
+	 * @param  boolean $escapeTitle[optional]	Whether or not $title should be HTML escaped.
 	 * @return string	An <a /> element.
 	 */	
 	function link($title, $url, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true)
@@ -276,7 +298,7 @@ class Html
 	 * Create a redirect query string to send a user back to requesting page
 	 *
 	 * @access public
-	 * @param string $uri To override default
+	 * @param string $url[optional] To override default
 	 * @return 
 	 */
 	public function sendMeHere($url = null)

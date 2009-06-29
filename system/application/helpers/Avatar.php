@@ -1,31 +1,86 @@
 <?php
+if (!defined('BASEPATH')) exit ('No direct script access allowed');
 /**
-* Show an avatar
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Avatar Helper
+ * 
+ * Display an avatar
+ * 
+ * @package 	Nomcat
+ * @subpackage	Helpers
+ * @category	Helpers
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Avatar extends Html
 {
 	/**
-	 * @var string $defaultPath
+	 * The default path of where avatars are stored in the filesystem
+	 * @var string
 	 */
 	public $defaultPath = '/img/avatar';
 	
 	/**
-	 * 
-	 * @return 
-	 * @param object $user[optional]
+	 * The default size of which an avatar should be displayed
+	 * @var string
+	 * @todo allow to be overriden by theme config
 	 */
-	public function group($user = array(), $size = '48')
+	var $defaultSize = "48";
+	
+	/**
+	 * Get and return html to display the avatar of a group
+	 * 
+	 * @access public
+	 * @param object $user[optional]
+	 * @param string $size[optional]
+	 * @return string
+	 */
+	public function group($user = array(), $size = null)
 	{
 		return $this->make($user, $size, true);
 	}
+
+	/**
+	 * Get and return html to display the avatar of a user
+	 * 
+	 * @access public
+	 * @param object $user[optional]
+	 * @param string $size[optional]
+	 * @return string
+	 */
+	public function user($user = array(), $size = null)
+	{
+		return $this->make($user, $size);
+	}
 	
 	/**
+	 * Get and return html to display an avatar
 	 * 
-	 * @return 
+	 * @access private
 	 * @param object $data[optional]
+	 * @param string $size[optional]
+	 * @param boolean $group[optional]
+	 * @return string
 	 */
-	private function make($data = array(), $size = '48', $group = false)
+	private function make($data = array(), $size = null, $group = false)
 	{
+		if ($size == null)
+		{
+			$size = $this->defaultSize;
+		}
+		
 		$dir = null;
 		if ($group) 
 		{
@@ -74,15 +129,7 @@ class Avatar extends Html
 		return $return;
 	}
 	
-	/**
-	 * 
-	 * @return 
-	 * @param object $user[optional]
-	 */
-	public function user($user = array(), $size = '48')
-	{
-		return $this->make($user, $size);
-	}
+
 
 }
 

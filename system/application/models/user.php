@@ -1,45 +1,204 @@
 <?php
 /**
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
  * User Model
+ * 
+ * @package 	Nomcat
+ * @subpackage	Models
+ * @category	Model
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
  */
 class User extends App_Model
 {
-
+	/**
+	 * @access protected
+	 * @var array
+	 */
 	protected $fields = array(
-        'activated' => true, //Is user activated? [boolean]
-		'next_gig' => null, //Description of next gig [string]
-		'next_gig_url' => null, //Url of next gig [string]		
-		'carrier' => null, //User's cell phone carries [string]
-        'created' => null, //Date record was created as timestamp [int]
-		'device_updates' => false, 	//Does the user receive device updates [boolean]
-		'email' => null, 	//User's email [string]		
-		'favorites' => array(), //Array of message ids of user's favorite posts [array]
-		'followers' => array(), //Array of user ids of users subscribed to [array]
-		'following' => array(), //Array of user ids of users that subscribe to this user [array]
-		'friend_requests' => array(), //Array of user ids indicating pending requests for subscriptions [array]
-		'groups' => array(), //Groups of which user is a member [array]
-		'id' => null, //Unique if for the user [int]
-		'inbox' => array(),	//Array of message ids of DMs sent to user [array]
-        'locked' => false, //Is account private? [boolean]
-        'key' => null, //key used for sign up [boolean]
-		'mentions' => array(), //Array of message ids for messages mentioning the user [array]
-        'modified' => null, //Date last modified as timestamp [int]
-		'permission' => 'member', //Admin, premium, or member. Defaults to member [string]
-		'password' => null, //User's hashed password [string]
-		'passwordconfirm' => null, //User's password confirmation. Set to null after validation [string]
-		'phone' => null, //Phone number [int]
-		'private' => array(), //Array of message ids for user's home page [array]
-		'public' => array(), //Array of message ids for user's public page [array]
-        'realname' => null, //User's real name
-		'sent' => array(), //Array of message ids for user's sent DMs [array]
-		'sms_activated' => false, //Has the user's sms numbers been activated? [boolean]
-		'threading' => false, //Is the user viewing all messages threaded? [boolean]
-        'time_zone' => null, //What is the user's timeszone [string]
-        'username' => null //User's username [string]
+		/**
+		 * Is the user activeated?
+		 * @var boolean
+		 */
+        'activated' => true,
+        /**
+         * Description of next gig
+         * @var string
+         */
+		'next_gig' => null,
+		/**
+		 * Url of next gig
+		 * @var string
+		 */
+		'next_gig_url' => null,
+		/**
+		 * User's cell phone carrier
+		 * @var string
+		 */	
+		'carrier' => null,
+		/**
+		 * Timestamp user's record was created
+		 * @var integer
+		 */
+        'created' => null,
+        /**
+         * Does this user receive device updates
+         * @var boolean
+         */
+		'device_updates' => false,
+		/**
+		 * User's email
+		 * @var string
+		 */
+		'email' => null,
+		/**
+		 * Array of message ids of user's favorite posts
+		 * @var array
+		 */
+		'favorites' => array(),
+		/**
+		 * Array of user ids of users that user follows
+		 * @var array
+		 */
+		'followers' => array(),
+		/**
+		 * Array of user ids of users that follow user
+		 * @var array
+		 */
+		'following' => array(),
+		/**
+		 * Array of user ids indicating pending follow requests
+		 * @var array
+		 */
+		'friend_requests' => array(),
+		/**
+		 * Groups of which user is a member
+		 * @var array
+		 */
+		'groups' => array(),
+		/**
+		 * Unique ID of the user
+		 * @var integer
+		 */
+		'id' => null,
+		/**
+		 * Array of message ids of direct messages sent to user
+		 * @var array
+		 */
+		'inbox' => array(),
+		/**
+		 * Is account private?
+		 * @var boolean
+		 */
+        'locked' => false,
+        /**
+         * Key used for sign up
+         * @var boolean
+         */
+        'key' => null,
+        /**
+         * Array of message ids for messages that content the user's username {@link $fields[username]}
+         * @var array
+         */
+		'mentions' => array(),
+		/**
+		 * Timestamp of last time user's record was modified
+		 * @var integer
+		 */
+        'modified' => null,
+        /**
+         * Status or userlevel of user. May be admin, premium, or member. Defaults to member
+         * @var string
+         */
+		
+		'permission' => 'member',
+		/**
+		 * Hashed user's password
+		 * @var string
+		 */
+		'password' => null,
+		/**
+		 * User's password confirmation, non-hashed, and in full text. 
+		 * Should be set to null after validation, if not, may be used for manual password recovery
+		 * without having to do a password reset
+		 * @var string
+		 */
+		'passwordconfirm' => null,
+		/**
+		 * User's phone number
+		 * @var integer
+		 */
+		'phone' => null,
+		/**
+		 * Array of message ids for user's home page
+		 * @var array
+		 */
+		'private' => array(),
+		/**
+		 * Array of messag eids for user's public page
+		 * @var array
+		 */
+		'public' => array(),
+		/**
+		 * User's real or full name
+		 * @var string
+		 */
+        'realname' => null,
+        /**
+         * Array of message ids of direct messages sent by user
+         * @var array
+         */
+		'sent' => array(),
+		/**
+		 * Has the user's sms/phone number been activated?
+		 * @var boolean
+		 */
+		'sms_activated' => false,
+		/**
+		 * Is the user viewing reply messages in a threaded format?
+		 * @var boolean
+		 */
+		'threading' => false,
+		/**
+		 * Time zone of the user
+		 * @var string
+		 */
+        'time_zone' => null,
+        /**
+         * User's username, handle, screenname
+         * @var string
+         */
+        'username' => null
 		);
+	/**
+	 * @access protected
+	 * @var string
+	 */
 	protected $idGenerator = 'userId';
-	protected $name = 'User';	
+	/**
+	 * @access protected
+	 * @var string
+	 */
+	protected $name = 'User';
+	/**
+	 * @var string
+	 */	
 	public $defaultTimeZone = 'US/Eastern';	
+	/**
+	 * @var array
+	 */
 	public $timeZones = array('US/Hawaii'=>'(GMT-10:00) Hawaii','US/Alaska'=>'(GMT-09:00) Alaska','US/Pacific' => '(GMT-07:00) Pacific Time (US &amp; Canada)','US/Arizona'=>'(GMT-07:00) Arizona','US/Mountain'=>'(GMT-07:00) Mountain Time (US &amp; Canada)','US/Central'=>'(GMT-06:00) Central Time (US &amp; Canada)','US/Eastern'=>'(GMT-05:00) Eastern Time (US &amp; Canada)','US/East-Indiana' => '(GMT-05:00) Indiana (East)','America/Tijuana'=>'(GMT-08:00) Tijuana','America/Chihuahua'=>'(GMT-07:00) Chihuahua','America/Mazatlan'=>'(GMT-07:00) Mazatlan','America/Monterrey'=>'(GMT-06:00) Monterrey','America/Mexico_City'=>'(GMT-06:00) Mexico City',		'Canada/East-Saskatchewan'=>'(GMT-06:00) Saskatchewan','Canada/Saskatchewan'=>'(GMT-06:00) Saskatchewan','America/Bogota'=>'(GMT-05:00) Bogota','America/Lima'=>'(GMT-05:00) Lima','America/Caracas'=>'(GMT-04:00) Caracas','America/Santiago'=>'(GMT-04:00) Santiago','Canada/Newfoundland'=>'(GMT-03:30) Newfoundland','Atlantic/Azores'=>'(GMT-01:00) Azores','Africa/Casablanca'=>'(GMT) Casablanca','Europe/Dublin'=>'(GMT) Dublin','Europe/Lisbon'=>'(GMT) Lisbon','Europe/London'=>'(GMT) London','Africa/Monrovia'=>'(GMT) Monrovia','Europe/Amsterdam'=>'(GMT+01:00) Amsterdam','Europe/Belgrade'=>'(GMT+01:00) Belgrade','Europe/Berlin'=>'(GMT+01:00) Berlin','Europe/Bratislava'=>'(GMT+01:00) Bratislava','Europe/Brussels'=>'(GMT+01:00) Brussels','Europe/Budapest'=>'(GMT+01:00) Budapest','Europe/Copenhagen'=>'(GMT+01:00) Copenhagen','Europe/Ljubljana'=>'(GMT+01:00) Ljubljana','Europe/Madrid'=>'(GMT+01:00) Madrid','Europe/Paris'=>'(GMT+01:00) Paris','Europe/Prague'=>'(GMT+01:00) Prague','Europe/Rome'=>'(GMT+01:00) Rome','Europe/Sarajevo'=>'(GMT+01:00) Sarajevo','Europe/Skopje'=>'(GMT+01:00) Skopje','Europe/Stockholm'=>'(GMT+01:00) Stockholm','Europe/Vienna'=>'(GMT+01:00) Vienna','Europe/Warsaw'=>'(GMT+01:00) Warsaw','Europe/Zagreb'=>'(GMT+01:00) Zagreb','Europe/Athens'=>'(GMT+02:00) Athens','Europe/Bucharest'=>'(GMT+02:00) Bucharest','Africa/Cairo'=>'(GMT+02:00) Cairo','Africa/Harare'=>'(GMT+02:00) Harare','Europe/Helsinki'=>'(GMT+02:00) Helsinki','Asia/Istanbul'=>'(GMT+02:00) Istanbul','Europe/Istanbul'=>'(GMT+02:00) Istanbul','Asia/Jerusalem'=>'(GMT+02:00) Jerusalem','Europe/Minsk'=>'(GMT+02:00) Minsk','Europe/Riga'=>'(GMT+02:00) Riga','Europe/Sofia'=>'(GMT+02:00) Sofia','Europe/Tallinn'=>'(GMT+02:00) Tallinn','Europe/Vilnius'=>'(GMT+02:00) Vilnius','Asia/Baghdad'=>'(GMT+03:00) Baghdad','Asia/Kuwait'=>'(GMT+03:00) Kuwait','Europe/Moscow'=>'(GMT+03:00) Moscow','Africa/Nairobi'=>'(GMT+03:00) Nairobi','Asia/Riyadh'=>'(GMT+03:00) Riyadh','Europe/Volgograd'=>'(GMT+03:00) Volgograd','Asia/Tehran'=>'(GMT+03:30) Tehran','Asia/Baku'=>'(GMT+04:00) Baku','Asia/Muscat'=>'(GMT+04:00) Muscat','Asia/Tbilisi'=>'(GMT+04:00) Tbilisi','Asia/Yerevan'=>'(GMT+04:00) Yerevan','Asia/Kabul'=>'(GMT+04:30) Kabul','Asia/Karachi'=>'(GMT+05:00) Karachi','Asia/Tashkent'=>'(GMT+05:00) Tashkent','Asia/Almaty'=>'(GMT+06:00) Almaty','Asia/Dhaka'=>'(GMT+06:00) Dhaka','Asia/Novosibirsk'=>'(GMT+06:00) Novosibirsk','Asia/Rangoon'=>'(GMT+06:30) Rangoon','Asia/Bangkok'=>'(GMT+07:00) Bangkok','Asia/Jakarta'=>'(GMT+07:00) Jakarta','Asia/Krasnoyarsk'=>'(GMT+07:00) Krasnoyarsk','Asia/Chongqing'=>'(GMT+08:00) Chongqing','Asia/Irkutsk'=>'(GMT+08:00) Irkutsk','Australia/Perth'=>'(GMT+08:00) Perth','Asia/Singapore'=>'(GMT+08:00) Singapore','Singapore'=>'(GMT+08:00) Singapore','Asia/Taipei'=>'(GMT+08:00) Taipei','Asia/Urumqi'=>'(GMT+08:00) Urumqi','Asia/Seoul'=>'(GMT+09:00) Seoul','Asia/Tokyo'=>'(GMT+09:00) Tokyo','Asia/Yakutsk'=>'(GMT+09:00) Yakutsk','Australia/Adelaide'=>'(GMT+09:30) Adelaide','Australia/Darwin'=>'(GMT+09:30) Darwin','Australia/Brisbane'=>'(GMT+10:00) Brisbane','Australia/Canberra'=>'(GMT+10:00) Canberra','Pacific/Guam'=>'(GMT+10:00) Guam','Australia/Hobart'=>'(GMT+10:00) Hobart','Australia/Melbourne'=>'(GMT+10:00) Melbourne','Australia/Sydney'=>'(GMT+10:00) Sydney','Asia/Vladivostok'=>'(GMT+10:00) Vladivostok','Asia/Magadan'=>'(GMT+11:00) Magadan','Pacific/Auckland'=>'(GMT+12:00) Auckland','Pacific/Fiji'=>'(GMT+12:00) Fiji','Asia/Kamchatka'=>'(GMT+12:00) Kamchatka');
 
 	/**
@@ -107,8 +266,7 @@ class User extends App_Model
 	 *
 	 * @access public
 	 * @param array $user 
-	 * @param array $message_id 
-	 * @return
+	 * @param array $message_id
 	 */
 	public function addToSent(&$user, $message_id)
 	{
@@ -119,9 +277,8 @@ class User extends App_Model
 	 * Add to mentions
 	 *
 	 * @access public
-	 * @param array $user 
-	 * @param array $message_id 
-	 * @return
+	 * @param array $user_mention 
+	 * @param array $message_id
 	 */
 	public function addToMentions(&$user_mention, $message_id)
 	{
@@ -133,8 +290,7 @@ class User extends App_Model
 	 *
 	 * @access public
 	 * @param array $user 
-	 * @param array $message_id 
-	 * @return
+	 * @param array $message_id
 	 */
 	public function addToPrivate(&$user, $message_id)
 	{
@@ -142,12 +298,11 @@ class User extends App_Model
 	}
 		
 	/**
-	 * Add to public
+	 * Add message to public stream
 	 *
 	 * @access public
 	 * @param array $user 
-	 * @param array $message_id 
-	 * @return
+	 * @param array $message_id
 	 */
 	public function addToPublic(&$user, $message_id)
 	{
@@ -155,12 +310,11 @@ class User extends App_Model
 	}
 	
 	/**
-	 * Add to public and private
+	 * Add message to to public and private streams
 	 *
 	 * @access public
 	 * @param array $user 
-	 * @param array $message_id 
-	 * @return
+	 * @param array $message_id
 	 */
 	public function addToPublicAndPrivate(&$user, $message_id)
 	{
@@ -168,6 +322,13 @@ class User extends App_Model
 		$this->addToPrivate($user, $message_id);
 	}
 
+	/**
+	 * Add user to group
+	 * 
+	 * @access public
+	 * @param object $user
+	 * @param object $group_id
+	 */
 	public function addGroup(&$user, $group_id)
 	{
 		if (!is_array($user['groups']))
@@ -182,12 +343,11 @@ class User extends App_Model
 	}	
 
 	/**
-	 * Change password
+	 * Change the password of a user
 	 *
 	 * @access public
-	 * @param int $user_id
-	 * @param string $password	
-	 * @return 
+	 * @param integer $user_id
+	 * @param string $password
 	 */
 	function changePassword($user_id, $password)
 	{
@@ -352,7 +512,7 @@ class User extends App_Model
 	/**
 	 * Get a User's data by id
 	 *
-	 * @param int $user_id[optional]
+	 * @param integer $user_id[optional]
 	 * @return 	array $user_data
 	 */
     function get($user_id = null)
@@ -397,7 +557,7 @@ class User extends App_Model
 	/**
 	 * Get a User's data by email
 	 *
-	 * @param int $email[optional]
+	 * @param integer $email[optional]
 	 * @return 	array $user_data
 	 */
 	function getByEmail($email = null)
@@ -417,7 +577,7 @@ class User extends App_Model
 	/**
 	 * Get a User's data by username
 	 *
-	 * @param int $username[optional]
+	 * @param integer $username[optional]
 	 * @return 	array $user_data
 	 */
 	function getByUsername($username = null)
@@ -437,7 +597,7 @@ class User extends App_Model
 	/**
 	 * Get all of a users friend requests
 	 *
-	 * @param int $user_id
+	 * @param integer $user_id
 	 * @return 	
 	 */
     function getFriendRequests($requests)
@@ -486,8 +646,8 @@ class User extends App_Model
     /**
      * Check if a user is following another user
      *
-     * @param int $user_id The user in question
-     * @param int $my_id The user doing the asking
+     * @param integer $user_id The user in question
+     * @param integer $my_id The user doing the asking
      * @return boolean
      */
     function isFollowing($user_id, $following)
@@ -509,8 +669,8 @@ class User extends App_Model
     /**
      * Check if a user has already requested friend
      *
-     * @param int $user_id The user in question
-     * @param int $my_id The user doing the asking
+     * @param integer $user_id The user in question
+     * @param integer $my_id The user doing the asking
      * @return boolean
      */
     function isPendingFriendRequest($friendRequests, $my_id)
@@ -670,7 +830,7 @@ class User extends App_Model
     /**
      * Send messages to followes
      *
-     * @param int $message_id     
+     * @param integer $message_id     
 	 * @param array $followers An array of follower ids
      * @return boolean
      */
@@ -747,7 +907,7 @@ class User extends App_Model
 	 * SMS a user
 	 *
 	 * @access public
-	 * @param int $id
+	 * @param integer $id
 	 * @return boolean
 	 */
 	public function sms($to = array(), $from = array(), $message = null)
@@ -768,7 +928,7 @@ class User extends App_Model
 	 * Activate an sms
 	 *
 	 * @access public
-	 * @param int $key
+	 * @param integer $key
 	 * @param array $user	
 	 * @return boolean
 	 */
@@ -817,10 +977,9 @@ class User extends App_Model
 	}
 
 	/**
-	 * Update profile
+	 * Update a user's profile
 	 *
-	 * @access public
-	 * @param int $user_id
+	 * @param integer $user_id
 	 * @return boolean
 	 */
 	function updateProfile($user_id)
@@ -840,9 +999,8 @@ class User extends App_Model
 	}
 
 	/**
-	 * Update sms
+	 * Update the sms data for a user
 	 *
-	 * @access public
 	 * @param array $user
 	 * @param object $smsKey	
 	 * @return boolean
@@ -877,11 +1035,11 @@ class User extends App_Model
 	}
 	
 	/**
-	 * Update threding preference
+	 * Update threading preference
 	 * 
-	 * @return 
 	 * @param integer $user_id
 	 * @param string $setting
+	 * @return boolean
 	 */
 	function updateThreading($user_id,$setting)
 	{
@@ -897,8 +1055,7 @@ class User extends App_Model
 	/**
 	 * Unfollow a user
 	 *
-	 * @access public
-	 * @param string $username of user to follow
+	 * @param string $username[optional] of user to follow
 	 * @param array $user data of user following
 	 * @return boolean
 	 */
@@ -916,7 +1073,6 @@ class User extends App_Model
 	/**
 	 * Validates a user
 	 *
-	 * @access public
 	 * @return boolean
 	 */	
 	function validate()
@@ -971,7 +1127,5 @@ class User extends App_Model
 	    return (count($this->validationErrors) == 0);
 	}
 	
-
 }
-
 ?>

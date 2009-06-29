@@ -1,12 +1,15 @@
 <div class="box messages">
 	<div class="box">
-	<div class="block">
-		<h3>What are you doing?</h3>
-		<form action="/messages/add" method="post" accept-charset="utf-8">
-			<fieldset>
-			<?php echo $this->load->view('messages/postform') ?>
-			</fieldset>
-		</form>
+	<div class="block form-share">
+      <span class="character-count" id="character-count"></span>
+      <form action="/messages/add" class="form" method="post" accept-charset="utf-8">
+      	<fieldset>
+          <label for="message" id="message-context">What are you up to?</label>
+        </fieldset>
+		<fieldset>
+		<?php echo $this->load->view('messages/postform') ?>
+		</fieldset>
+	</form>
 	</div>
 	</div>
 	<?php echo $this->load->view('messages/viewlist', $this->userData) ?>

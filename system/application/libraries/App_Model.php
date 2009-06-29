@@ -1,27 +1,103 @@
 <?php
 /**
-* Extension of CI Model
-*
-* Allows for app-wide validation in the model and basic CRUD functionality
-*  
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * App_Model
+ * 
+ * Extension of CI Model
+ *
+ * Allows for app-wide validation in the model and basic CRUD functionality
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Model
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class App_Model extends Model {
 
+	/**
+	 * @access protected
+	 * @static
+	 * @var integer
+	 */
 	protected static $queryCount = 0;
+	/**
+	 * @access protected
+	 * @static
+	 * @var integer
+	 */
 	protected static $queryErrors = 0;
+	/**
+	 * @access protected
+	 * @static
+	 * @var array
+	 */
 	protected static $queryLog = array();
+	/**
+	 * @access protected
+	 * @static
+	 * @var array
+	 */
 	protected static $rollbackLog = array();
-	static protected $transactional = false;		
+	/**
+	 * @access protected
+	 * @static
+	 * @var boolean
+	 */
+	protected static $transactional = false;
+	/**
+	 * @access protected
+	 * @var array
+	 */	
 	protected $fields = array();
+	/**
+	 * @access protected
+	 * @var mixed
+	 */	
 	protected $key;
+	/**
+	 * @access protected
+	 * @var mixed
+	 */	
 	protected $idGenerator;
+	/**
+	 * @access protected
+	 * @var string
+	 * @todo move the setting of $memcacheHost to config
+	 */	
 	protected $memcacheHost = '67.23.9.219';
+	/**
+	 * @access protected
+	 * @var integer
+	 * @todo move the setting of $memcachePort to config
+	 */	
 	protected $memcachePort = '21201';
+	/**
+	 * @access protected
+	 * @var string
+	 */	
 	protected $name;
+	/**
+	 * @access protected
+	 * @var string
+	 */	
 	protected $prefixSeparator = ':';
 	/**
 	 * reservedNames should be compared to the defined routes to make sure that it includes any names that may be used by the system in a URI.
-	 * @var
+	 * @access protected
+	 * @var array
 	 * @see /system/application/config/routes.php
 	 */
 	protected $reservedNames = array(
@@ -51,16 +127,48 @@ class App_Model extends Model {
 									'about',
 									'user',
 									'group');
+	/**
+	 * @access protected
+	 * @var mixed
+	 */
 	protected $table;	
+	/**
+	 * @var string
+	 */
 	public $action;
+	/**
+	 * @var integer|string
+	 */
 	public $id;	
+	/**
+	 * @var boolean
+	 */
 	public $locked = false;	
+	/**
+	 * @var array
+	 */
 	public $modelData = array();
+	/**
+	 * @var string
+	 */
 	public $mode;
+	/**
+	 * @var boolean
+	 */
 	public $validate = true;
+	/**
+	 * @var array
+	 */
 	public $validationErrors = array();
+	/**
+	 * @var integer|string
+	 */
 	public $insertId;		
 
+	/**
+	 * 
+	 * @return 
+	 */
 	function __construct()
 	{
 		$ci = CI_Base::get_instance();
@@ -170,18 +278,24 @@ class App_Model extends Model {
 	}
 	
 	/**
+	 * Base64 encode a string that is url safe
 	 * 
-	 * @return 
+	 * Any string encoded with this method must be decoded with base64_url_decode()
+	 * 
+	 * @see base64_url_decode()
 	 * @param object $input
+	 * @return string base64 encoded string
 	 */
 	public function base64_url_encode($input) {
     	return strtr(base64_encode($input), '+/=', '-_,');
     }
 
 	/**
+	 * Base64 decode a string that has been encoded with base64_url_encode
 	 * 
-	 * @return 
+	 * @see base64_url_encode()
 	 * @param object $input
+	 * @return string
 	 */
 	public function base64_url_decode($input) {
 	    return base64_decode(strtr($input, '-_,', '+/='));
@@ -191,6 +305,8 @@ class App_Model extends Model {
 	 * Set up a new record
 	 * Takes the data passed to it and adds the values of those fields passed to it. 
 	 * Will not add any fields not in the models $fields variable
+	 * 
+	 * @see getFields()
 	 * @access public
 	 * @param array $post Data passed by form
 	 * @return array
@@ -218,12 +334,17 @@ class App_Model extends Model {
 
 	/**
      * Delete a record
-     *
-     * @param array $data Message data
+     * 
+     * @see makeFindPrefix()
+     * @see logQuery()
+     * @see Memcache
+     * @see Memcache::get()
+     * @see Memcache::delete()
+     * @param array $value[optional] Message data
      * @param array $options 
-	 * [override] string Override the entire key, e.g. 'publictimeline'	
-	 * [prefixName] string Override the first part of the prefix, the class name
-	 * [prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id			
+	 * 					[override] string Override the entire key, e.g. 'publictimeline'	
+	 * 					[prefixName] string Override the first part of the prefix, the class name
+	 * 					[prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id			
 	 * @return boolean
      */
 	public function delete($value = null, $options = array())
@@ -245,7 +366,10 @@ class App_Model extends Model {
 	
 	/**
 	 * Do transaction
-	 *
+	 * 
+	 * @see save()
+	 * @see delete()
+	 * @return boolean
 	 */
 	public function endTransaction()
 	{
@@ -285,13 +409,20 @@ class App_Model extends Model {
 
 	/**
      * Find a record
-     *
-     * @param array $data Message data
+     * 
+     * @see makeFindPrefix()
+     * @see Memcache
+     * @see Memcache::get()
+     * @see log_message()
+     * @see isSerialized()
+     * @see getFields()
+     * @see updateData()
+     * @param array $value Message data
      * @param array $options 
-	 * [override] string Override the entire key, e.g. 'publictimeline'	
-	 * [prefixName] string Override the first part of the prefix, the class name
-	 * [prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id			
-	 * @return boolean
+	 * 				[override] string Override the entire key, e.g. 'publictimeline'	
+	 * 				[prefixName] string Override the first part of the prefix, the class name
+	 * 				[prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id			
+	 * @return mixed
      */
 	public function find($value = null, $options = array())
 	{

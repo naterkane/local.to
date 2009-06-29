@@ -1,9 +1,31 @@
 <?php
 /**
-* Load helpers
-*/
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+ /**
+ * Load_helpers
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Classes
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Load_helpers {
 	
+	/**
+	 * @var array
+	 */
 	var $setHelpers = array();
 	
 	/**

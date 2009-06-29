@@ -1,5 +1,29 @@
 <?php
-
+if (!defined('BASEPATH')) exit ('No direct script access allowed');
+/**
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
+ * @filesource
+ */
+/**
+ * Welcome
+ * 
+ * This is the default controller that is loaded for a top level page request.
+ * 
+ * @package 	Nomcat
+ * @subpackage	Helpers
+ * @category	Helpers
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
 class Welcome extends App_Controller {
 
 	var $layout = 'public';
