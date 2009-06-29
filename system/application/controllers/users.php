@@ -36,13 +36,6 @@ class Users extends App_Controller
 		$this->_avatar($this->userData['id'], $this->userData['username']);
 	}
 	
-	function delete_account()
-	{
-		$this->mustBeSignedIn();
-		$this->data['page_title'] = 'Delete your Account';
-		$this->load->view('users/delete_account', $this->data);
-	}
-	
 	/**
 	 * Update a password
 	 *
@@ -89,6 +82,16 @@ class Users extends App_Controller
 		{
 			$this->redirect($redirect, 'There was problem adding this follower', 'error');
 		}
+	}
+
+	function delete_account()
+	{
+		$this->mustBeSignedIn();
+		$this->data['page_title'] = 'Delete your Account';
+		$key = md5($this->randomString(5));
+		$this->userData['update_key'] = $key;
+		$this->cookie->set('update_key', $key);
+		$this->load->view('users/delete_account', $this->data);
 	}
 
 	/**
