@@ -170,7 +170,7 @@ class User extends App_Model
 		 * Is the user viewing reply messages in a threaded format?
 		 * @var boolean
 		 */
-		'threading' => false,
+		'threading' => true,
 		/**
 		 * Time zone of the user
 		 * @var string

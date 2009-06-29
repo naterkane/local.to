@@ -47,8 +47,8 @@
 	$selenium->write('verifyTextPresent', $message3);
 	//check message is not on timeline
 	$selenium->openPage('/public_timeline');
-	$selenium->write('verifyTextNotPresent', $message3);
+	$selenium->write('verifyTextPresent', $message3);
 	$selenium->write('clickAndWait', 'xpath=//html/body/div/div[6]/div/div[2]/p/a');		
-	$selenium->write('verifyTextPresent', $message3);		
+	$selenium->write('verifyTextNotPresent', $message3);		
 	$selenium->openPage('/admin/flush');	
 ?>
