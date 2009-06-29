@@ -270,7 +270,7 @@ class Message extends App_Model
 					$return[] = $this->getOne($message);
 					if ($threading && !empty($message['reply_to']))
 					{
-						foreach($this->getMany($this->prefixReplies($message['reply_to'])) as $replyid)
+						foreach($this->getMany($message['reply_to']) as $replyid)
 						{
 							$return[]['replies'][] = $this->getOne($replyid); 
 						}				
