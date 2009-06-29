@@ -109,7 +109,7 @@ class App_Controller extends Controller {
 			}
 			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results());
 		}
-		$this->load->view('users/avatar');
+		$this->load->view('users/avatar', $this->data);
 	}
 
 	/**
