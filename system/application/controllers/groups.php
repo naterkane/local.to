@@ -403,8 +403,17 @@ class Groups extends App_Controller
 			$this->data['group']['groupname'] = $group['name'];
 			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 			$this->data['group']['member_count'] = count($group['members']);			
-			$this->data['messages'] = $this->Message->getMany($group['messages']);
 			$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+			if ($this->data['group']['im_a_member']) 
+			{
+				$messages = array_merge($this->data['group']['messages'], $this->data['group']['inbox']);
+				rsort($messages);
+			} 
+			else 
+			{
+				$messages = $this->data['group']['messages'];				
+			}
+			$this->data['messages'] = $this->Message->getMany($messages);
 			$this->data['User'] = $user;
 			if ($this->data['group']['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);

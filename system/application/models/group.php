@@ -55,10 +55,10 @@ class Group extends App_Model
 			 */
 			'mentions' => array(),
 			/**
-			 * Array of message ids sent to group
+			 * Array of message ids sent to group without DMs
 			 * @var array
 			 */
-			'messages' => array(),
+			'messages' => array(),	
 			/**
 			 * Group's name
 			 * @var string
@@ -192,6 +192,19 @@ class Group extends App_Model
 	public function addToMentions(&$group_mention, $message_id)
 	{
 		$this->addTo('mentions', $group_mention, $message_id);
+	}
+	
+	/**
+	 * Add to mentions
+	 *
+	 * @access public
+	 * @param array $user 
+	 * @param array $message_id 
+	 * @return
+	 */
+	public function addToMessages(&$group, $message_id)
+	{
+		$this->addTo('messages', $group, $message_id);
 	}
 	
 	/**
