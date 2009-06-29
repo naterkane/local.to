@@ -33,6 +33,9 @@
 			// end move to sidebar
 			
 			if (isset($group['im_a_member'])): ?>
+			<?php if ($group['is_owner']): ?>
+				<p><a href="/groups/invites/<?php echo $group['name'] ?>">Invite New Members</a></p>
+			<?php endif ?>			
 			<form action="/messages/add<?php echo $html->sendMeHere() ?>" method="post" accept-charset="utf-8">
 			<h3>Post a message to <?php echo $group['name'] ?></h3>
 				<fieldset>

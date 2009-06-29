@@ -13,6 +13,9 @@
 			<a href="/groups/settings/<?php echo $name ?>" class="toggler">Edit <?php echo (substr($name,-1) == "s")?$name."'":$name."'s"; ?> Profile</a>
 			<?php endif ?>
 		</p>
+		<?php if ($is_owner): ?>
+			<p><a href="/groups/invites/<?php echo $name ?>">Invite New Members</a></p>
+		<?php endif ?>
 	<?php if (!empty($members) && $members[0] != false): ?>
 		<table summary="This table includes the members of the <?php echo $name ?> group">
 			<colgroup>
