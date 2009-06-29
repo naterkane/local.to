@@ -84,7 +84,7 @@
 							<a href="/replies">@<?php echo $User['username'] ?></a>
 						</li>
 						<li<?php echo ($this->util->isSection("/favorites"))?' class="current"':""; ?>>
-							<a href="/Favorites">Favorites <?php if($User['favorites']){ echo "(" . count($User['favorites']) . ")";} ?></a>
+							<a href="/favorites">Favorites <?php if($User['favorites']){ echo "(" . count($User['favorites']) . ")";} ?></a>
 						</li>						
 						<li<?php echo ($this->util->isSection("/inbox"))?' class="current"':""; ?>>
 							<a href="/inbox">Private Mesages</a>
