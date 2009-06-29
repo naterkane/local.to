@@ -25,6 +25,21 @@ class Admin extends App_controller
 {
 
 	/**
+	 * Check to see if in testing mode, if not, show 404
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		if (!$this->testing()) 
+		{
+			$this->show404();
+		}
+	}
+
+	/**
 	 * Delete cookie, used for cookie tests
 	 *
 	 * @access public
@@ -142,7 +157,7 @@ class Admin extends App_controller
 		$this->load->model("message");
        	$pt = $this->Message->getTimeline();
         $this->data['messages'] = Page::make('Message', $pt);
-		$this->load->view('admin/request_invite',$this->data);	
+		$this->load->view('admin/request_invite', $this->data);	
 	}
 
 	/**
@@ -186,38 +201,25 @@ class Admin extends App_controller
 		} 
 		else 
 		{
-			/**
-			 * for running via a test, generates a generic invites
-			 * @todo require some sort of authentication so we can keep this
-			 */
-			$testing = $this->testing();
-			if ($testing > 0) 
-			{
-				
-				$this->layout = 'bare';
-				$this->load->model(array('Invite'));
-				$this->load->database();				
-				$this->data['email'] = "nomcat+" . $this->Invite->randomString(10) . '@wearenom.com';
-				$this->data['key'] = $this->util->base64_url_encode(preg_replace('/@/',$this->Invite->randomString(9),$this->data['email']));
-				$this->Invite->create($this->data);		
-				$this->data['email'] = $this->util->base64_url_encode($this->data['email']);
-				$this->load->view('admin/create_invite', $this->data);
-			}
+			$this->layout = 'bare';
+			$this->load->model(array('Invite'));
+			$this->load->database();				
+			$this->data['email'] = "nomcat+" . $this->Invite->randomString(10) . '@wearenom.com';
+			$this->data['key'] = $this->util->base64_url_encode(preg_replace('/@/',$this->Invite->randomString(9),$this->data['email']));
+			$this->Invite->create($this->data);		
+			$this->data['email'] = $this->util->base64_url_encode($this->data['email']);
+			$this->load->view('admin/create_invite', $this->data);
 		}
 	}
 	
 	function delete_invite($key)
 	{
-		$testing = $this->testing();
-		if ($testing > 0) 
-		{
-			$this->layout = 'bare';
-			$this->load->model(array('Invite'));
-			$this->load->database();
-			$data = array();						
-			$this->Invite->delete($key);		
-			$this->redirect('/home', 'Key has been deleted');
-		}
+		$this->layout = 'bare';
+		$this->load->model(array('Invite'));
+		$this->load->database();
+		$data = array();						
+		$this->Invite->delete($key);		
+		$this->redirect('/home', 'Key has been deleted');
 	}
 
 	function test() 

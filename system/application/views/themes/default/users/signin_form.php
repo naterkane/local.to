@@ -22,5 +22,7 @@
 		</fieldset>
 	</form>	
 	<p><a href="/recover_password">Forget your password?</a></p>
-	<p>Don't have a login yet? <?php /*<a href="/signup">Sign up</a>*/ ?><a href="/request_invite">Request an Account</a>!</p>
+	<?php if ($this->testingData['testing']): ?>
+		<p>Don't have a login yet? <a href="/request_invite">Request an Account</a>!</p>
+	<?php endif ?>
 </div>
