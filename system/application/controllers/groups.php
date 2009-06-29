@@ -346,7 +346,6 @@ class Groups extends App_Controller
 			$this->User->addGroup($this->userData, $group_id);
 			$message = 'I just became a member of !'. $group['name'];
 			$message_id = $this->Message->add($message, $this->userData);
-			var_dump($message_id);
 			$this->User->sendToFollowers($message_id, $this->userData['followers']);
 			$this->redirect('/group/' . $group['name']);
 		} 
