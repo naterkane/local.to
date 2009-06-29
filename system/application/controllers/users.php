@@ -150,16 +150,17 @@ class Users extends App_Controller
 	 */
 	public function favorites($username = null)
 	{
-		if (empty($username)) $this->mustBeSignedIn();
-		$this->data['page_title'] = 'Favorites';	
-		if ($username != null)
+		if (!$username) 
 		{
-			$user = $this->User->getByUsername($username);
+			$this->mustBeSignedIn();
+			$user = $this->userData;
+			$this->data['User']['threading'] = false;
 		}
 		else 
 		{
-			$user = $this->userData;
+			$user = $this->User->getByUsername($username);			
 		}
+		$this->data['page_title'] = 'Favorites';
         $this->data['messages'] = Page::make('Message', $user['favorites']);
 		$this->load->view('users/favorites', $this->data);
 	}
@@ -295,6 +296,7 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$this->data['page_title'] = 'Mentions';	
+		$this->data['User']['threading'] = false;				
         $this->data['messages'] = Page::make('Message', $this->userData['mentions']);
 		$this->load->view('users/mentions', $this->data);
 	}

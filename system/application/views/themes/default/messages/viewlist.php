@@ -14,7 +14,7 @@ if (!empty($messages))
 			{
 				$show = true;
 			}
-			elseif(!empty($User) && $User['threading'] == 1 && !empty($message) && $message['reply_to'] != null)
+			elseif(!empty($User) && $User['threading'] == true && !empty($message) && $message['reply_to'] != null)
 			{
 				$show = false;
 			}
