@@ -101,17 +101,41 @@ class Message extends App_Model
 			 */
 			'username' => null
 			);
+	/**
+	 * @access protected
+	 * @var string
+	 */
 	protected $idGenerator = 'messageId';
-	protected $name = 'Message';	
-	private $groupMentions = array();		
+	/**
+	 * @access protected
+	 * @var string
+	 */
+	protected $name = 'Message';
+	/**
+	 * @access private
+	 * @var array
+	 */
+	private $groupMentions = array();	
+	/**
+	 * @access private
+	 * @var array
+	 */	
 	private $to = array();
-	private $userMentions = array();	
+	/**
+	 * @access private
+	 * @var array
+	 */
+	private $userMentions = array();
+	/**
+	 * @access private
+	 * @var mixed
+	 */
 	private $parent;
 
     /**
      * Add a new message
      *
-     * @param array $message
+     * @param string $message
      * @param array $user
 	 * @return boolean
      */
@@ -120,6 +144,7 @@ class Message extends App_Model
 		$this->startTransaction();
 		$this->loadModels(array('Group'));		
 		$data = $this->parse($message, $user);
+		
 		if ($data['dm']) 
 		{
 			if ($this->save($data))
@@ -150,7 +175,7 @@ class Message extends App_Model
 					$this->addToPublicTimeline($data);
 				}
 				$this->User->mode = null;
-		    	$this->Group->sendToMembers($data, $this->userData['id']);		
+		    	$this->Group->sendToMembers($data, $this->userData['id']);
 		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);				
 				foreach ($this->userMentions as $mention_username => $user_mention) {
 					// query here just in case the user is mentioning herself, which would reset the data
@@ -175,7 +200,7 @@ class Message extends App_Model
 				}
 			}
 		}
-		return $this->endTransaction();	
+		return $this->endTransaction();
 	}
 
 	/**
@@ -410,8 +435,9 @@ class Message extends App_Model
 	public function parse($message, $user)
 	{
 		$data = $this->create($message);
+		
 		//check if the message is a dm even not sent through dm form
-		$parts = split(" ", $data['message'], 3);	
+		$parts = split(" ", $data['message'], 3);
 		if ((strtolower($parts[0]) == 'd') AND isset($parts[1]) AND isset($parts[2]))
 		{
 			$data['dm'] = true;
@@ -502,11 +528,7 @@ class Message extends App_Model
 	 */
 	private function parseMentions($data, $separator, $property)
 	{
-		//var_dump($separator);
-		//var_dump($property);
-		//var_dump($data);
 		$parts = explode(' ', $data['message']);
-		//var_dump($parts);
 		foreach ($parts as $part) {
 			if ($part[0] == $separator) 
 			{

@@ -42,6 +42,9 @@ class Group extends App_Model
 	 */
 	protected $idGenerator = 'groupId';
 	
+	/**
+	 * Calls the parent constructor then loads any fields defined in the current theme's configuration into the Group::$fields array
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -57,7 +60,6 @@ class Group extends App_Model
 	/**
 	 * Add a group
 	 *
-	 * @access public
 	 * @param array $data
 	 * @param integer $owner
 	 * @return boolean
@@ -136,9 +138,8 @@ class Group extends App_Model
 	 * Add to mentions
 	 *
 	 * @access public
-	 * @param array $user 
-	 * @param array $message_id 
-	 * @return
+	 * @param array $group_mention 
+	 * @param integer $message_id 
 	 */
 	public function addToMentions(&$group_mention, $message_id)
 	{
@@ -149,9 +150,8 @@ class Group extends App_Model
 	 * Add to mentions
 	 *
 	 * @access public
-	 * @param array $user 
-	 * @param array $message_id 
-	 * @return
+	 * @param array $group 
+	 * @param integer $message_id 
 	 */
 	public function addToMessages(&$group, $message_id)
 	{
@@ -162,9 +162,9 @@ class Group extends App_Model
 	 * Add group dms to member inboxes
 	 *
 	 * @access public
-	 * @param array $members Member ids
-	 * @param integer $member_id	
-	 * @return 
+	 * @param array $members An array of user ids
+	 * @param mixed $sender
+	 * @param array $message	
 	 */
 	public function dm($members = array(), $sender, $message)
 	{		
@@ -196,7 +196,6 @@ class Group extends App_Model
 	/**
 	 * Find all groups
 	 *
-	 * @access public
 	 * @return array $group_ids
 	 */
 	function getAll()
@@ -212,7 +211,6 @@ class Group extends App_Model
 	/**
 	 * Find a group by name
 	 *
-	 * @access public
 	 * @param string $name
 	 * @return array User data
 	 */
@@ -230,8 +228,6 @@ class Group extends App_Model
 	}
 	
     /**
-     * function getMany
-     * 
      * Get more than one group
      *
 	 * @access public
@@ -260,11 +256,8 @@ class Group extends App_Model
     }
 	
 	/**
-	 * function getMembers
-	 * 
 	 * Get Members
 	 *
-	 * @access public
 	 * @param integer $group_id Name of group
 	 * @return array Members
 	 */
@@ -284,8 +277,6 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * function getOwner
-	 * 
 	 * Get's the owner of a group by the group's Id
 	 *
 	 * @param integer $group_id Name of group
@@ -298,11 +289,8 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * function isMember
-	 * 
 	 * Is a user a member of a group
 	 *
-	 * @access public
 	 * @param array $members array of a group's members
 	 * @param integer $user_id the Id of the user to search for
 	 * @return boolean
@@ -325,11 +313,8 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * function isOwner
-	 * 
 	 * Is a user an owner of a group?
 	 *
-	 * @access public
 	 * @param integer $user_id
 	 * @param integer $owner_id[optional]
 	 * @param integer $group_id[optional]
@@ -349,7 +334,6 @@ class Group extends App_Model
 	 * 
 	 * Get a group names from a message
 	 *
-	 * @access public
 	 * @param string $message
 	 * @return array
 	 */
@@ -367,11 +351,8 @@ class Group extends App_Model
 	}
 
 	/**
-	 * function nameUnique
-	 * 
 	 * Is a group's name unique?
 	 *
-	 * @access public
 	 * @return boolean
 	 */
 	function nameUnique()
@@ -395,18 +376,15 @@ class Group extends App_Model
 	}
 
 	/**
-	 * function removeMember 
-	 * 
 	 * Remove a user from a group
 	 *
-	 * @access public
-	 * @param string $name Name of group
-	 * @param string $member Member to add
+	 * @param array $group Object of group's data
+	 * @param integer|string $user_id Member to remove
 	 * @return boolean
 	 */
 	function removeMember($group, $user_id)
 	{
-		if (!$this->isOwner($group_id, $user_id)) 
+		if (!$this->isOwner($group['id'], $user_id)) 
 		{
 			$new_lineup = array();
 			foreach ($group['members'] as $previous_member) 
@@ -424,15 +402,13 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * function sendToMembers
-	 * 
 	 * Send a message to the members of a group
 	 *
 	 * @todo Break this out into smaller methods
 	 * @access public	
 	 * @param array @messageData
 	 * @param integer $user_id	
-	 * @return 
+	 * @return boolean
 	 */
 	function sendToMembers($messageData, $user_id)
 	{

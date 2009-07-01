@@ -757,6 +757,13 @@ class User extends App_Model
 		}
 	}
 
+	/**
+	 * Remove a group, by id, from a user's groups 
+	 *  
+	 * @param integer $user_id
+	 * @param integer $group_id
+	 * @return boolean
+	 */
 	function removeGroup($user_id,$group_id)
 	{
 		$data = $this->userData;
@@ -764,10 +771,14 @@ class User extends App_Model
 		{
 			$data['groups'] = array();
 		}
-		if ($key = array_search($group_id,$data['groups']) && $key > 0)
+		if (in_array($group_id,$data['groups']))
 		{
-			unset($data['groups'][$key]);
-			$data['groups'] = array_values($data['groups']);
+			$key = array_search($group_id,$data['groups']) ;
+			if (is_int($key))
+			{
+				unset($data['groups'][$key]);
+				$data['groups'] = array_values($data['groups']);
+			}
 		}
 		$data['id'] = $user_id;
 		$data['modified'] = time();

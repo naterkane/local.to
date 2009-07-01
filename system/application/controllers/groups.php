@@ -205,13 +205,20 @@ class Groups extends App_Controller
 	public function invites($groupname = null)
 	{
 		$this->mustBeSignedIn();
+		if (!$groupname)
+		{
+			$this->redirect('/groups/');
+		}
+		
 		$this->load->model(array('Group_Invite'));		
-		$this->data['page_title'] = 'Group Invites';
 		$this->data['group'] = $this->Group->getByName($groupname);
+		$this->data['page_title'] = 'Invite people to '.$this->data['group']['name'];
 		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
 		{
 			$this->show404();
 		}
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $this->data['group']['id']);
+		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $this->data['group']['members']);	
 		if ($this->postData) 
 		{
 			$this->Group_Invite->addMany($this->postData['invites'], $this->data['group']);
@@ -239,9 +246,10 @@ class Groups extends App_Controller
 		if ($group) 
 		{
 			$this->data = $group;
+			$this->data['group'] = $group;
 			$this->data['User'] = $this->userData;
-			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
-			$this->data['im_a_member'] = in_array($this->userData['id'], $group['members']);			
+			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
+			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);			
 			$this->data['page_title'] = $group['name'] . ' Members';
 			$this->data['groupname'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
@@ -272,13 +280,16 @@ class Groups extends App_Controller
 		$group = $this->Group->getByName($groupname);
 		if ($group) 
 		{
+			$this->data['group'] = $group;
+			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
+			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
 			$this->data['page_title'] = 'Mentions';	
 	        $this->data['messages'] = Page::make('Message', $group['mentions']);
 			$this->load->view('groups/mentions', $this->data);
 		} 
 		else 
 		{
-			$this->show404;
+			$this->redirect('/groups/',"We're sorry, but we didn't have what you were looking for.");
 		}
 	}
 
@@ -293,39 +304,40 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$user = $this->data['User'];
 		$group = $this->Group->getByName($groupname);
+		if (!$group){
+			$this->redirect('/groups/');
+		}
+		
 		$this->data['page_title'] = 'Group Settings';
+		
 		if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
 		{
 			$this->data = $group;
+			$this->data['group'] = $group;
+			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
+			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
 			$this->data['User'] = $user;
-			if ($group) 
+			if ($this->postData) 
 			{
-				if ($this->postData) 
+				if ($this->Group->update($group, $this->postData, $this->userData['id'])) 
 				{
-					if ($this->Group->update($group, $this->postData, $this->userData['id'])) 
-					{
-						$this->redirect('/groups/settings/' . $this->postData['name'], 'The group was updated.');
-					} 
-					else 
-					{
-						$this->setErrors(array('Group'));
-						$this->cookie->setFlash('There was an error updating your group. See below for more details.', 'error');
-					}
-				}
+					$this->redirect('/groups/settings/' . $this->postData['name'], 'The group was updated.');
+				} 
 				else 
 				{
-					$this->setData($this->data);
+					$this->setErrors(array('Group'));
+					$this->cookie->setFlash('There was an error updating your group. See below for more details.', 'error');
 				}
-				$this->load->view('groups/settings', $this->data); 
-			} 
+			}
 			else 
 			{
-				$this->show404();
+				$this->setData($this->data);
 			}
+			$this->load->view('groups/settings', $this->data); 
 		} 
 		else 
 		{
-			$this->show404();
+			$this->redirect('/groups/'.$group['name']);
 		}
 	}
 
@@ -345,7 +357,7 @@ class Groups extends App_Controller
 			$this->Group->addMember($group, $this->userData);
 			$this->User->addGroup($this->userData, $group_id);
 			$message = 'I just became a member of !'. $group['name'];
-			$message_id = $this->Message->add($message, $this->userData);
+			$message_id = $this->Message->add(array('message'=>$message), $this->userData);
 			$this->User->sendToFollowers($message_id, $this->userData['followers']);
 			$this->redirect('/group/' . $group['name']);
 		} 
