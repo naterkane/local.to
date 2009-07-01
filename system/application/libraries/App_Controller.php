@@ -98,6 +98,10 @@ class App_Controller extends Controller {
 	public function _avatar($id, $name, $type = 'user')
 	{
 		$sizes = (is_array($this->config->item('avatar_sizes'))) ? $this->config->item('avatar_sizes') : array(24,36,48,60);
+		$this->data['avatartype'] = $type;
+		$this->data['avatarid'] = $id;
+		$this->data['name'] = $name;
+		//var_dump($this->data);
 		if (!empty($_FILES)) 
 		{
 			$this->load->library(array('Uploader', 'Avatar'));

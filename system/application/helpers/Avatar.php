@@ -43,13 +43,13 @@ class Avatar extends Html
 	 * Get and return html to display the avatar of a group
 	 * 
 	 * @access public
-	 * @param object $user[optional]
+	 * @param array $group[optional]
 	 * @param string $size[optional]
 	 * @return string
 	 */
-	public function group($user = array(), $size = null)
+	public function group($group = array(), $size = null)
 	{
-		return $this->make($user, $size, true);
+		return $this->make($group, $size, true);
 	}
 
 	/**

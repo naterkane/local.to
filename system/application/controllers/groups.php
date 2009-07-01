@@ -108,18 +108,21 @@ class Groups extends App_Controller
 	 * Avatar management
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function avatar($groupname = null)
 	{
 		$this->mustBeSignedIn();
         $this->data['page_title'] = 'Upload Avatar';		
 		$this->data['group'] = $this->Group->getByName($groupname);
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $this->data['group']['id']);
+		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $this->data['group']['members']);	
 		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
 		{
-			$this->show404();
+			$this->redirect('/groups');
 		}
 		$this->_avatar($this->data['group']['id'], $this->data['group']['name'], 'group');
+		
+		//$this->load->view('users/avatar', $this->data);
 	}
 
 	/**
@@ -139,7 +142,7 @@ class Groups extends App_Controller
 			$this->redirect($redirect, 'Invitation successfully deleted.');	
 		}
 		else {
-			$this->redirect($redirect, 'The invitation could not be delete.', 'error');	
+			$this->redirect($redirect, 'The invitation could not be deleted.', 'error');	
 		}
 	}
 	
