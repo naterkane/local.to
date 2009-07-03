@@ -205,17 +205,17 @@ class Users extends App_Controller
 	public function following($username = null)
 	{
         if (empty($username)) $this->mustBeSignedIn();
-		$this->data['page_title'] = 'Following';
+		
 		if ($username != null)
 		{
 			$user = $this->User->getByUsername($username);
-			$this->data['page_title'] = 'People @'.$user['username']. ' is following';
 		}
 		else 
 		{
 			$user = $this->userData;
 		}
-		
+		$this->data['user'] = $user;
+		$this->data['page_title'] = 'people '.$user['username'].' is following';
 		$this->data['users'] = Page::make('User', $user['following']);
 		$this->load->view('users/viewlist', $this->data);
 	}
@@ -233,13 +233,14 @@ class Users extends App_Controller
 		if ($username != null)
 		{
 			$user = $this->User->getByUsername($username);
-			$this->data['page_title'] = 'People following @'.$user['username'];
+			
 		}
 		else 
 		{
 			$user = $this->userData;
 		}
-		
+		$this->data['user'] = $user;
+		$this->data['page_title'] = 'people following '.$user['username'];
 		$this->data['users'] = Page::make('User', $user['followers']);		
 		$this->load->view('users/viewlist', $this->data);		
 	}
