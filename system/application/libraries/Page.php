@@ -28,11 +28,11 @@ class Page
 	
 	public static $end = 1;
 	public static $next;
-	public static $nextText = 'next';	
+	public static $nextText = 'view newer';	
 	public static $offset = 20;
 	public static $page = 1;
 	public static $previous;			
-	public static $previousText = 'previous';
+	public static $previousText = 'view older';
 	public static $showNext = false;
 	public static $showPrevious = false;	
 	public static $start = 0;
@@ -131,11 +131,11 @@ class Page
 		$return = null;
 		if (self::$showNext) 
 		{
-			$return .= "<span id=\"page-next\">" . $html->link(self::$nextText, self::$next) . "</span> \n";
+			$return .= "<span id=\"page-next\">&laquo; " . $html->link(self::$nextText, self::$next) . "</span> \n";
 		}
 		if (self::$showPrevious) 
 		{
-			$return .= "<span id=\"page-previous\">" . $html->link(self::$previousText, self::$previous) . "</span>\n";
+			$return .= "<span id=\"page-previous\">" . $html->link(self::$previousText, self::$previous) . " &raquo;</span>\n";
 		}		
 		return $return;
 	}

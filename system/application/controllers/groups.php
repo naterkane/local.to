@@ -162,27 +162,27 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		if ($groupname) {
 			$group = $this->Group->getByName($groupname);
+			if (!$group){
+				$this->redirect("/groups/","Sorry but we couldn't find what you were looking for","error");
+			}
 			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
 			{
-				$this->show404();
+				$this->redirect('/group/'.$group['name']);
 			}	
 			$user = $this->data['User'];
 			$this->data = $group; //necessary, but should be removed, this was accidently coded to overwriter user data
+			$this->data['group'] = $group;
 			$this->data['page_title'] = $group['name'] . ' Inbox';
 			$this->data['groupname'] = $group['name'];
 			$this->data['message'] = 'd !' . $group['name'] . ' ';			
-			$this->data['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
-			$this->data['member_count'] = count($group['members']);			
+			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+			$this->data['group']['member_count'] = count($group['members']);			
 			$this->data['messages'] = $this->Message->getMany($group['inbox']);
-			$this->data['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+			$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
 			$this->data['User'] = $user;
-			if ($this->data['member_count'] > 0) {
-				$this->load->view('groups/inbox', $this->data);
-			} else {
-				$this->show404();
-			}
+			$this->load->view('groups/inbox', $this->data);
 		} else {
-			$this->show404();
+			$this->redirect("/groups/","Sorry but we couldn't find what you were looking for","error");
 		}
 	}
 
