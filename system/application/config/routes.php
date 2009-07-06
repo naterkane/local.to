@@ -45,6 +45,7 @@ $route['friend_requests'] = 		"users/friend_requests";
 $route['mentions'] = 				"users/mentions";
 $route['replies'] =					"users/mentions";
 $route['favorites'] = 				"users/favorites";
+$route['favorites/(:any)'] =		"users/favorites/$1";
 $route['settings'] = 				"users/settings";
 $route['settings/sms'] = 			"users/sms";
 $route['settings/avatar'] = 		"users/avatar";

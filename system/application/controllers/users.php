@@ -32,10 +32,11 @@ class Users extends App_Controller
 	public function avatar()
 	{
 		$this->mustBeSignedIn();
+		$this->data['user'] = $this->userData;
         $this->data['page_title'] = 'Upload Avatar';
 		$this->data['avatarid'] = $this->userData['id'];
-		$this->data['avatartype'] = 'user';
-		$this->load->view('users/avatar', $this->data);
+		$this->data['avatartype'] = 'User';
+		$this->_avatar($this->userData['id'], $this->userData['username']);
 	}
 	
 	/**

@@ -72,10 +72,10 @@ class Cookie {
 			{
 				$this->delete();
 			}
-			if (!empty($data['ip']) && $_SERVER['REMOTE_ADDR'] != $data['ip']) 
+			/*if (!empty($data['ip']) && $_SERVER['REMOTE_ADDR'] != $data['ip']) 
 			{
 				$this->delete();
-			}
+			}*/
 		}
 	}
 
@@ -92,7 +92,7 @@ class Cookie {
 		$cookie = $this->cookie->create();
 		$cookie['id'] = sha1(time() . $this->randomString . $this->salt);
 		$cookie['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-		$cookie['ip'] = $_SERVER['REMOTE_ADDR'];
+		//$cookie['ip'] = $_SERVER['REMOTE_ADDR'];
 		$cookie['last_accessed'] = time();		
 		setcookie($this->name, $cookie['id'], $this->expires, $this->domain);
 		$this->cookie->save($cookie);

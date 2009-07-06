@@ -113,7 +113,7 @@ class App_Controller extends Controller {
 			}
 			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results());
 		}
-		$this->load->view('users/avatar', $this->data);
+		$this->load->view($type.'s/avatar', $this->data);
 	}
 
 	/**
@@ -213,19 +213,20 @@ class App_Controller extends Controller {
      */
     public function mustBeSignedIn() 
 	{
-        if ( empty($this->userData)) 
-		{			
+        if (empty($this->userData)) 
+		{
             $this->redirect('/signin?redirect=' . urlencode($_SERVER['REQUEST_URI']), 'You must sign in to view this page.', 'error');
         }
     }
-   
+
     /**
      * Checks to see if a user is not signed in
-     * Redirects to 404 if the user isn't authenticated
+     * Redirects to 404 if the user is authenticated
+     * Used by signin / signup views.
      */
     public function mustNotBeSignedIn() 
 	{
-        if (! empty($this->userData)) 
+        if (!empty($this->userData)) 
 		{
             $this->show404();
         }

@@ -116,13 +116,13 @@ class Groups extends App_Controller
 		$this->data['group'] = $this->Group->getByName($groupname);
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $this->data['group']['id']);
 		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $this->data['group']['members']);	
+		$this->data['avatartype'] = 'Group';
+		$this->data['avatarid'] = $this->data['group'];
 		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
 		{
 			$this->redirect('/groups');
 		}
 		$this->_avatar($this->data['group']['id'], $this->data['group']['name'], 'group');
-		
-		//$this->load->view('users/avatar', $this->data);
 	}
 
 	/**

@@ -54,7 +54,7 @@ class Util
 	 */
 	public function isSection($string)
 	{
-		return stristr($_SERVER['REQUEST_URI'],$string);
+		return stristr($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],$string);
 	}
 	
 }

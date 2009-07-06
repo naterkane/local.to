@@ -28,11 +28,11 @@ class Page
 	
 	public static $end = 1;
 	public static $next;
-	public static $nextText = 'view newer';	
+	public static $nextText = 'view older';	
 	public static $offset = 20;
 	public static $page = 1;
 	public static $previous;			
-	public static $previousText = 'view older';
+	public static $previousText = 'view newer';
 	public static $showNext = false;
 	public static $showPrevious = false;	
 	public static $start = 0;
