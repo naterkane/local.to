@@ -27,161 +27,7 @@ class User extends App_Model
 	 * @access protected
 	 * @var array
 	 */
-	protected $fields = array(
-		/**
-		 * Is the user activeated?
-		 * @var boolean
-		 */
-        'activated' => true,
-        /**
-         * Description of next gig
-         * @var string
-         */
-		'next_gig' => null,
-		/**
-		 * Url of next gig
-		 * @var string
-		 */
-		'next_gig_url' => null,
-		/**
-		 * User's cell phone carrier
-		 * @var string
-		 */	
-		'carrier' => null,
-		/**
-		 * Timestamp user's record was created
-		 * @var integer
-		 */
-        'created' => null,
-        /**
-         * Does this user receive device updates
-         * @var boolean
-         */
-		'device_updates' => false,
-		/**
-		 * User's email
-		 * @var string
-		 */
-		'email' => null,
-		/**
-		 * Array of message ids of user's favorite posts
-		 * @var array
-		 */
-		'favorites' => array(),
-		/**
-		 * Array of user ids of users that user follows
-		 * @var array
-		 */
-		'followers' => array(),
-		/**
-		 * Array of user ids of users that follow user
-		 * @var array
-		 */
-		'following' => array(),
-		/**
-		 * Array of user ids indicating pending follow requests
-		 * @var array
-		 */
-		'friend_requests' => array(),
-		/**
-		 * Groups of which user is a member
-		 * @var array
-		 */
-		'groups' => array(),
-		/**
-		 * Unique ID of the user
-		 * @var integer
-		 */
-		'id' => null,
-		/**
-		 * Array of message ids of direct messages sent to user
-		 * @var array
-		 */
-		'inbox' => array(),
-		/**
-		 * Is account private?
-		 * @var boolean
-		 */
-        'locked' => false,
-        /**
-         * Key used for sign up
-         * @var boolean
-         */
-        'key' => null,
-        /**
-         * Array of message ids for messages that content the user's username {@link $fields[username]}
-         * @var array
-         */
-		'mentions' => array(),
-		/**
-		 * Timestamp of last time user's record was modified
-		 * @var integer
-		 */
-        'modified' => null,
-        /**
-         * Status or userlevel of user. May be admin, premium, or member. Defaults to member
-         * @var string
-         */
-		
-		'permission' => 'member',
-		/**
-		 * Hashed user's password
-		 * @var string
-		 */
-		'password' => null,
-		/**
-		 * User's password confirmation, non-hashed, and in full text. 
-		 * Should be set to null after validation, if not, may be used for manual password recovery
-		 * without having to do a password reset
-		 * @var string
-		 */
-		'passwordconfirm' => null,
-		/**
-		 * User's phone number
-		 * @var integer
-		 */
-		'phone' => null,
-		/**
-		 * Array of message ids for user's home page
-		 * @var array
-		 */
-		'private' => array(),
-		/**
-		 * Array of messag eids for user's public page
-		 * @var array
-		 */
-		'public' => array(),
-		/**
-		 * User's real or full name
-		 * @var string
-		 */
-        'realname' => null,
-        /**
-         * Array of message ids of direct messages sent by user
-         * @var array
-         */
-		'sent' => array(),
-		/**
-		 * Has the user's sms/phone number been activated?
-		 * @var boolean
-		 */
-		'sms_activated' => false,
-		/**
-		 * Is the user viewing reply messages in a threaded format?
-		 * @var boolean
-		 */
-		'threading' => true,
-		/**
-		 * Time zone of the user
-		 * @var string
-		 */
-        'time_zone' => null,
-        /**
-         * User's username, handle, screenname
-         * @var string
-         */
-        'username' => null
-		);
+	protected $fields = array();
 	/**
 	 * @access protected
 	 * @var string
@@ -200,6 +46,22 @@ class User extends App_Model
 	 * @var array
 	 */
 	public $timeZones = array('US/Hawaii'=>'(GMT-10:00) Hawaii','US/Alaska'=>'(GMT-09:00) Alaska','US/Pacific' => '(GMT-07:00) Pacific Time (US &amp; Canada)','US/Arizona'=>'(GMT-07:00) Arizona','US/Mountain'=>'(GMT-07:00) Mountain Time (US &amp; Canada)','US/Central'=>'(GMT-06:00) Central Time (US &amp; Canada)','US/Eastern'=>'(GMT-05:00) Eastern Time (US &amp; Canada)','US/East-Indiana' => '(GMT-05:00) Indiana (East)','America/Tijuana'=>'(GMT-08:00) Tijuana','America/Chihuahua'=>'(GMT-07:00) Chihuahua','America/Mazatlan'=>'(GMT-07:00) Mazatlan','America/Monterrey'=>'(GMT-06:00) Monterrey','America/Mexico_City'=>'(GMT-06:00) Mexico City',		'Canada/East-Saskatchewan'=>'(GMT-06:00) Saskatchewan','Canada/Saskatchewan'=>'(GMT-06:00) Saskatchewan','America/Bogota'=>'(GMT-05:00) Bogota','America/Lima'=>'(GMT-05:00) Lima','America/Caracas'=>'(GMT-04:00) Caracas','America/Santiago'=>'(GMT-04:00) Santiago','Canada/Newfoundland'=>'(GMT-03:30) Newfoundland','Atlantic/Azores'=>'(GMT-01:00) Azores','Africa/Casablanca'=>'(GMT) Casablanca','Europe/Dublin'=>'(GMT) Dublin','Europe/Lisbon'=>'(GMT) Lisbon','Europe/London'=>'(GMT) London','Africa/Monrovia'=>'(GMT) Monrovia','Europe/Amsterdam'=>'(GMT+01:00) Amsterdam','Europe/Belgrade'=>'(GMT+01:00) Belgrade','Europe/Berlin'=>'(GMT+01:00) Berlin','Europe/Bratislava'=>'(GMT+01:00) Bratislava','Europe/Brussels'=>'(GMT+01:00) Brussels','Europe/Budapest'=>'(GMT+01:00) Budapest','Europe/Copenhagen'=>'(GMT+01:00) Copenhagen','Europe/Ljubljana'=>'(GMT+01:00) Ljubljana','Europe/Madrid'=>'(GMT+01:00) Madrid','Europe/Paris'=>'(GMT+01:00) Paris','Europe/Prague'=>'(GMT+01:00) Prague','Europe/Rome'=>'(GMT+01:00) Rome','Europe/Sarajevo'=>'(GMT+01:00) Sarajevo','Europe/Skopje'=>'(GMT+01:00) Skopje','Europe/Stockholm'=>'(GMT+01:00) Stockholm','Europe/Vienna'=>'(GMT+01:00) Vienna','Europe/Warsaw'=>'(GMT+01:00) Warsaw','Europe/Zagreb'=>'(GMT+01:00) Zagreb','Europe/Athens'=>'(GMT+02:00) Athens','Europe/Bucharest'=>'(GMT+02:00) Bucharest','Africa/Cairo'=>'(GMT+02:00) Cairo','Africa/Harare'=>'(GMT+02:00) Harare','Europe/Helsinki'=>'(GMT+02:00) Helsinki','Asia/Istanbul'=>'(GMT+02:00) Istanbul','Europe/Istanbul'=>'(GMT+02:00) Istanbul','Asia/Jerusalem'=>'(GMT+02:00) Jerusalem','Europe/Minsk'=>'(GMT+02:00) Minsk','Europe/Riga'=>'(GMT+02:00) Riga','Europe/Sofia'=>'(GMT+02:00) Sofia','Europe/Tallinn'=>'(GMT+02:00) Tallinn','Europe/Vilnius'=>'(GMT+02:00) Vilnius','Asia/Baghdad'=>'(GMT+03:00) Baghdad','Asia/Kuwait'=>'(GMT+03:00) Kuwait','Europe/Moscow'=>'(GMT+03:00) Moscow','Africa/Nairobi'=>'(GMT+03:00) Nairobi','Asia/Riyadh'=>'(GMT+03:00) Riyadh','Europe/Volgograd'=>'(GMT+03:00) Volgograd','Asia/Tehran'=>'(GMT+03:30) Tehran','Asia/Baku'=>'(GMT+04:00) Baku','Asia/Muscat'=>'(GMT+04:00) Muscat','Asia/Tbilisi'=>'(GMT+04:00) Tbilisi','Asia/Yerevan'=>'(GMT+04:00) Yerevan','Asia/Kabul'=>'(GMT+04:30) Kabul','Asia/Karachi'=>'(GMT+05:00) Karachi','Asia/Tashkent'=>'(GMT+05:00) Tashkent','Asia/Almaty'=>'(GMT+06:00) Almaty','Asia/Dhaka'=>'(GMT+06:00) Dhaka','Asia/Novosibirsk'=>'(GMT+06:00) Novosibirsk','Asia/Rangoon'=>'(GMT+06:30) Rangoon','Asia/Bangkok'=>'(GMT+07:00) Bangkok','Asia/Jakarta'=>'(GMT+07:00) Jakarta','Asia/Krasnoyarsk'=>'(GMT+07:00) Krasnoyarsk','Asia/Chongqing'=>'(GMT+08:00) Chongqing','Asia/Irkutsk'=>'(GMT+08:00) Irkutsk','Australia/Perth'=>'(GMT+08:00) Perth','Asia/Singapore'=>'(GMT+08:00) Singapore','Singapore'=>'(GMT+08:00) Singapore','Asia/Taipei'=>'(GMT+08:00) Taipei','Asia/Urumqi'=>'(GMT+08:00) Urumqi','Asia/Seoul'=>'(GMT+09:00) Seoul','Asia/Tokyo'=>'(GMT+09:00) Tokyo','Asia/Yakutsk'=>'(GMT+09:00) Yakutsk','Australia/Adelaide'=>'(GMT+09:30) Adelaide','Australia/Darwin'=>'(GMT+09:30) Darwin','Australia/Brisbane'=>'(GMT+10:00) Brisbane','Australia/Canberra'=>'(GMT+10:00) Canberra','Pacific/Guam'=>'(GMT+10:00) Guam','Australia/Hobart'=>'(GMT+10:00) Hobart','Australia/Melbourne'=>'(GMT+10:00) Melbourne','Australia/Sydney'=>'(GMT+10:00) Sydney','Asia/Vladivostok'=>'(GMT+10:00) Vladivostok','Asia/Magadan'=>'(GMT+11:00) Magadan','Pacific/Auckland'=>'(GMT+12:00) Auckland','Pacific/Fiji'=>'(GMT+12:00) Fiji','Asia/Kamchatka'=>'(GMT+12:00) Kamchatka');
+
+	/**
+	 * Calls the parent constructor then loads any fields defined in the current theme's configuration into the Group::$fields array
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->ci = get_instance();
+		if (file_exists(APPPATH . 'views/themes/' . $this->ci->config->item('theme') . '/config/user_fields.php')) 
+		{
+			require_once(APPPATH . 'views/themes/' . $this->ci->config->item('theme') . '/config/user_fields.php');
+			$this->fields = $fields;
+		}
+		unset($this->ci);		
+	}
+
 
 	/**
 	 * Private method for following
@@ -1120,7 +982,33 @@ class User extends App_Model
 		{
 			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));
 			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'Bio must be fewer than 160 characters.'));
-			$this->validates_length_of('next_gig', array('min'=>0, 'max'=>520, 'message'=>'Next gig description must be fewer than 500 characters'));			
+			$this->validates_length_of('hometown', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));	
+			$this->validates_length_of('birthdate', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('height', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('weight', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('handed_footed', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('athletic', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('academics', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('about_me', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('favorite_sports', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('favorite_teams', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('favorite_players', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));	
+			$this->validates_length_of('phone', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('im', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('address', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('address_line2', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('state', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('city', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('postal_code', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('country', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));		
+			$this->validates_length_of('college', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('degree', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('high_school', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('employer', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('position', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('employment_description', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));	
+			$this->validates_length_of('employment_location', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('employment_time_period', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
 		}
 		if ($this->mode == 'sms') 
 		{
