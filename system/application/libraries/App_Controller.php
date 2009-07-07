@@ -70,6 +70,22 @@ class App_Controller extends Controller {
     public function __construct() 
 	{
         parent::Controller();
+		$this->load->config('fireignition');
+		if ($this->config->item('fireignition_enabled'))
+		{
+			if (floor(phpversion()) < 5)
+			{
+				log_message('error', 'PHP 5 is required to run fireignition');
+			} else {
+				$this->load->library('firephp');
+				$this->firephp->setOptions(array('includeLineNumbers' => true));
+			}
+		}
+		else 
+		{
+			$this->load->library('firephp_fake');
+			$this->firephp =& $this->firephp_fake;
+		}
         $this->load->library(array('Load_helpers','Util', 'Sanitize', 'Mail'));
         $this->load->model(array('User', 'Message', 'Group'));
 		$_COOKIE = Sanitize::clean($_COOKIE);
@@ -215,7 +231,11 @@ class App_Controller extends Controller {
 	{
         if (empty($this->userData)) 
 		{
-            $this->redirect('/signin?redirect=' . urlencode($_SERVER['REQUEST_URI']), 'You must sign in to view this page.', 'error');
+            $this->getUserData();
+			if (empty($this->userData)) 
+			{
+				$this->redirect('/signin?redirect=' . urlencode($_SERVER['REQUEST_URI']), 'You must sign in to view this page.', 'error');
+			}
         }
     }
 
