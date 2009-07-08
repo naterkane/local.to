@@ -71,7 +71,7 @@ class App_Controller extends Controller {
 	{
         parent::Controller();
 		$this->load->config('fireignition');
-		if ($this->config->item('fireignition_enabled'))
+		if ($this->config->item('fireignition_enabled') == true)
 		{
 			if (floor(phpversion()) < 5)
 			{

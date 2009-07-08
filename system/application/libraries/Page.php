@@ -105,7 +105,7 @@ class Page
 		{
 			self::$showPrevious = true;
 		}
-		$return = $ci->$model->$method($data, self::$start, self::$end);
+		$return = $ci->$model->$method($data, self::$start, self::$end,$options);
 		if (empty($return) AND self::$page > 1)
 		{
 			$ci->show404();

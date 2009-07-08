@@ -136,11 +136,14 @@ class Group_Invite extends App_Model
 	{
 		if (!is_array($emails)) 
 		{
+			str_replace(' ','',$emails);
 			$emails = explode(',', $emails);
+			//array_map('trim',$emails);
 		}
 		$return['successes'] = 0;
 		$return['failures'] = 0;		
 		foreach ($emails as $key => $email) {
+			//echo $key . " " .$email;
 			$this->validationErrors = array();
 			$email = trim($email);
 			$data = array();

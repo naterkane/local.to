@@ -28,7 +28,10 @@ class FirePHP_Fake {
 
   public function log() {
   }
-
+  
+  public function trace() {
+  }
+  
   public function dump() {
   } 
   

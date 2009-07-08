@@ -275,34 +275,88 @@ class Message extends App_Model
      * @param array $messages
      * @return array of messages
      */
-    public function getMany($messages = array(), $start = null, $end = null)
+    public function getMany($messages = array(), $start = null, $end = null,$options = array())
     {
-		if (($start !== null) && ($end !== null) && (is_array($messages)))
+		$return = array();
+		//var_dump($options);
+		$isreplies = (isset($options['isreplies']))?$options['isreplies']:false;
+		$threading = (isset($options['threading']))?$options['threading']:($this->userData && ($this->userData['threading'] == 0))?false:true;
+		//$isreplies = (isset($options['isreplies']))?$options['isreplies']:false;
+		$end = ($end != null)? $end : count($messages);
+		//$origmessages = $messages;
+		//if ($isreplies == null) $this->firephp->log(count($messages),"total messages");
+		if ($isreplies == false && ($start !== null) && ($end !== null) && (is_array($messages)))
 		{
-			$messages = array_slice($messages, $start, $end);	
-		}
-        $return = array();
-		$threading = false;
-		if ($this->userData && $this->userData['threading'] == 1)
-		{
-			$threading = true;
-		}
+			
+			//$messages = array_slice($messages, $start, $end,true);	
+		} 
+        
+		$this->firephp->log($threading,"threading");
 		if (($messages) AND (is_array($messages))) {
+			
 			foreach ($messages as $message)
 	        {
-				if ($message) 
+				if ($message && count($return)<$end) 
 				{
-					$return[] = $this->getOne($message);
-					if ($threading && !empty($message['reply_to']))
+					$messageid = $message;
+					$message = $this->getOne($message);
+					$message['id'] = $messageid;
+					if ($isreplies != true && $threading == true && empty($message['reply_to']))
 					{
-						foreach($this->getMany($message['reply_to']) as $replyid)
-						{
-							$return[]['replies'][] = $this->getOne($replyid); 
-						}				
+						//echo "poop";
+						//$this->firephp->trace("showing threading");
+						//if (is_int($message['replies'][0])):
+							$this->firephp->log($message['replies']);
+							
+							//$replies = $this->getMany($message['replies'], null, null,"replies");
+							//$this->firephp->log($replies);
+							$replies = $message['replies'];
+							//$message['replies'] = array();
+							foreach($replies as $key => $reply)
+							{
+								//echo $key;
+								$message['replies'][$key] = $this->getOne($reply);
+							}		
+						//endif;
+						$return[] = $message;
+					//} elseif (!$replies && !empty($message['reply_to'])) {
+					//	$this->firephp->trace("elseif ".!$replies && !empty($message['reply_to']));
+					} elseif ($isreplies != true && $threading==true && !empty($message['reply_to'])) {
+						//echo "double poop";
+					}else{
+						//$this->firephp->trace("else");
+						//echo "yay";
+						$return[] = $message;
 					}
+					//$this->firephp->log($message['id']);
 				}
 	        }
+			//$this->firephp->log(count($return),"final return count");
+			/*if (($start !== null) && ($end !== null) && count($return)<$end){
+				$this->firephp->log($start,"start");
+				$this->firephp->log($end,"end");
+				$this->firephp->log(count($return),"return count");
+				$diff = $end - count($return);
+				$this->firephp->log($diff,"diff");
+				if ($diff > 0 && count(array_slice($origmessages,$start+$end,$diff)) > 0)
+				{
+					$this->firephp->trace("moremessages start");
+					$moremessages = self::getMany($origmessages,$start+$end,$diff);
+					$this->firephp->trace("moremessages stop");
+					foreach($moremessages as $moremessage)
+					{
+						if (count($return<20))
+						{
+							$return[] = $moremessage;
+						}
+					}
+				}
+			}*/
+			
 		}
+		$return['threading'] = $threading;
+		$return['isreplies'] = $isreplies;
+		//echo "is replies "; var_dump($isreplies);
         return $return;
     }
 
@@ -334,7 +388,7 @@ class Message extends App_Model
      */
     public function getReplies($message_ids, $start = null)
     {
-        return $this->getMany($message_ids);
+        return $this->getMany($message_ids,$start,null,array("isreplies"=>true));
     }
 
     /**
@@ -347,7 +401,8 @@ class Message extends App_Model
     public function getTimeline($start = null)
     {
         $pt = $this->find(null, array('override'=>'timeline'));
-		return $pt['unthreaded'];
+		$return = (!empty($pt['unthreaded']))?$pt['unthreaded']:null;
+		return $return;
     }
 
     /**
@@ -360,7 +415,8 @@ class Message extends App_Model
     public function getTimelineThreaded()
     {
         $pt = $this->find(null, array('override'=>'timeline'));
-		return $pt['threaded'];
+		$return = (!empty($pt['threaded']))?$rt['threaded']:null;
+		return $return;
     }
 
     /**

@@ -301,8 +301,8 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$this->data['page_title'] = 'Mentions';	
-		$this->data['User']['threading'] = false;				
-        $this->data['messages'] = Page::make('Message', $this->userData['mentions']);
+		//$this->data['User']['threading'] = false;				
+        $this->data['messages'] = Page::make('Message', $this->userData['mentions'],array('threading'=>false));
 		$this->load->view('users/mentions', $this->data);
 	}
 

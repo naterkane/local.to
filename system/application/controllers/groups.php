@@ -404,6 +404,7 @@ class Groups extends App_Controller
 	{		
 		if ($groupname) {
 			$group = $this->Group->getByName($groupname);
+			if ($group == null) $this->redirect('/groups');
 			if (isset($this->data['User'])) 
 			{
 				$user = $this->data['User'];
