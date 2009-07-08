@@ -427,13 +427,14 @@ class Groups extends App_Controller
 			} 
 			else 
 			{
-				$messages = $this->data['group']['messages'];				
+				$messages = $this->data['group']['mentions'];				
 			}
         	$this->data['messages'] = Page::make('Message', $messages);	
 			$this->data['User'] = $user;
 			if ($this->data['group']['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);
-			} else {
+			} 
+			else {
 				$this->show404();
 			}
 		} else {

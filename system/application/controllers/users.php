@@ -598,8 +598,10 @@ class Users extends App_Controller
 		}
 		else 
 		{
+			
 			$this->setData($this->userData);
 		}
+		$this->data['key'] = null;
 		$this->load->view('users/sms', $this->data);
 	}
 
