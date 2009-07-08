@@ -503,6 +503,25 @@ class Group extends App_Model
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required', 'allow_null'=>true));
 			if ($this->mode == 'update') 
 			{
+				$this->validates_format_of('other_email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required', 'allow_null'=>true));				
+				$this->validates_length_of('sport', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('level', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('gender', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('location', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('home_field', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('league', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('division', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('session_start', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('session_end', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('recent_news', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('other_email', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('url', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));				
+				$this->validates_length_of('address', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('address_line2', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('state', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('city', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('postal_code', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+				$this->validates_length_of('country', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
 				$this->validates_length_of('desc', array('min'=>0, 'max'=>160, 'message'=>'A description must be between 1 and 160 characters long'));
 			}
 		}

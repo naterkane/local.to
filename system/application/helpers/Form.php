@@ -53,8 +53,6 @@ class Form extends Html
 	*/
 	public function checkbox($name, $options = array())
 	{
-		$options = $this->setOptions('type', 'checkbox', $options);
-		$options = $this->setOptions('name', $name, $options);
 		$options = $this->setOptions('id', $name, $options);
 		if (empty($options['value'])) {
 			$options = $this->setOptions('value', $this->getElementValue($name), $options);
@@ -64,8 +62,8 @@ class Form extends Html
 		} else {
 			$options['value'] = 1;
 		}
-		$output = $this->input($name, array('type' => 'hidden', 'id' => $options['id'] . '_', 'name' => $options['name'], 'value' => '0'));
-		return $output . sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
+		$output = $this->input($name, array('type' => 'hidden', 'id' => $options['id'] . '_', 'name' => $name, 'value' => '0'));
+		return $output . sprintf($this->tags['checkbox'], $name, $this->_parseAttributes($options)); 
 	}
 	
 	
@@ -148,7 +146,6 @@ class Form extends Html
 	public function input($name, $options = array())
 	{
 		$options = $this->setOptions('type', 'input', $options);
-		$options = $this->setOptions('name', $name, $options);
 		$options = $this->setOptions('id', $name, $options);
 		if ((!isset($options['unsetPassword'])) && ($options['type'] == 'password')) 
 		{
