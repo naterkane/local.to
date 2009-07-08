@@ -53,7 +53,8 @@ class Users extends App_Controller
 		{
 			if ($this->User->changePassword($this->userData['id'], $this->userData['password']))
 			{
-				$this->cookie->set('user', $this->User->modelData);
+				$this->load->library(array('Mail'));
+				$this->mail->sendResetPassword($this->userData['email']);				
 				$this->redirect('/home', 'Your password was updated.');
 			} 
 			else 
