@@ -157,15 +157,17 @@ class Users extends App_Controller
 		if (!$username) 
 		{
 			$this->mustBeSignedIn();
-			$user = $this->userData;
-			$this->data['User']['threading'] = false;
+			$this->data['user'] = $this->userData;
+			//$this->data['User']['threading'] = false;
 		}
 		else 
 		{
-			$user = $this->User->getByUsername($username);			
+			$this->data['user'] = $this->User->getByUsername($username);			
 		}
+		//var_dump($this->data['user']);
+		//exit;
 		$this->data['page_title'] = 'Favorites';
-        $this->data['messages'] = Page::make('Message', $user['favorites']);
+        $this->data['messages'] = Page::make('Message', $this->data['user']['favorites'],array('threading'=>false));
 		$this->load->view('users/favorites', $this->data);
 	}
 	
@@ -300,8 +302,7 @@ class Users extends App_Controller
 	public function mentions()
 	{
 		$this->mustBeSignedIn();
-		$this->data['page_title'] = 'Mentions';	
-		//$this->data['User']['threading'] = false;				
+		$this->data['page_title'] = 'Mentions';				
         $this->data['messages'] = Page::make('Message', $this->userData['mentions'],array('threading'=>false));
 		$this->load->view('users/mentions', $this->data);
 	}

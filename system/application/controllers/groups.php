@@ -38,7 +38,7 @@ class Groups extends App_Controller
 		$group = $this->Group->get($invite['group_id']);		
 		if (empty($invite) || empty($group)) 
 		{
-			$this->show404();
+			$this->redirect('/home','Sorry but that invite has already been accepted.','error');
 		}
 		if (empty($this->userData)) 
 		{	
@@ -51,8 +51,12 @@ class Groups extends App_Controller
 	            {
 					$user = $this->User->get($this->User->insertId);
 					$this->Group->addMember($group, $user);
-					$this->User->addGroup($user, $group_id);
+					$this->User->addGroup($user, $group['id']);
 					$this->Group_Invite->delete($invite['key'], false);
+					$this->userData = $user;
+					$this->userData['followers'] = array();
+					$message = 'I just became a member of !'. $group['name'];
+					$message_id = $this->Message->add(array('message'=>$message), $user);
 					$this->mail->sendWelcome($user['email']);
 	                $this->redirect('/signin?redirect=' . urlencode('/group/' . $group['name']), 'Your account has been created. Please sign in.');
 	            }
@@ -62,6 +66,7 @@ class Groups extends App_Controller
 	                $this->cookie->setFlash('There was an error signing up. Please see below for details.', 'error');
 				}
 			}
+			$this->data['email'] = $invite['email'];
 			$this->load->view('groups/accept', $this->data);
 		}
 		else 
@@ -74,6 +79,8 @@ class Groups extends App_Controller
 			if ($this->Group->addMember($group, $this->userData)) 
 			{
 				$this->Group_Invite->delete($invite['key'], false);
+				$message = 'I just became a member of !'. $group['name'];
+				$message_id = $this->Message->add(array('message'=>$message), $user);
 				$this->redirect('/group/' . $group['name'], 'Welcome to ' . $group['name'] . '!');
 			}
 			else 

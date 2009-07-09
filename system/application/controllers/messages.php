@@ -64,7 +64,7 @@ class Messages extends App_Controller
 		$this->mustBeSignedIn();
 		$this->checkId($message_id);
 		$redirect = $this->getRedirect();
-		if ($this->Message->favorite($message_id, $this->userData)) 
+		if ($this->Message->favorite( (integer) $message_id, $this->userData)) 
 		{
 			$message = 'The message added to your favorites';
 		} 
@@ -111,16 +111,18 @@ class Messages extends App_Controller
 	function public_timeline()
 	{
         $this->data['page_title'] = 'Public Timeline';		
-		if (!empty($User) && ($User['threaded'] == 1) )
+		/*if (!empty($User) && ($User['threaded'] == 1) )
 		{
-        	$pt = $this->Message->getTimelineThreaded();
+        	$pt = $this->Message->getTimeline();
         	$this->data['messages'] = Page::make('Message', $pt);
 		} 
 		else 
 		{
-        	$pt = $this->Message->getTimeline();
+        	$pt = $this->Message->getTimelineThreaded();
         	$this->data['messages'] = Page::make('Message', $pt);
-		}
+		}*/
+		$pt = $this->Message->getPublicTimeline();
+        $this->data['messages'] = Page::make('Message', $pt);
 		$this->load->view('messages/public_timeline', $this->data);
 	}
 	

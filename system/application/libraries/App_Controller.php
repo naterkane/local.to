@@ -105,11 +105,20 @@ class App_Controller extends Controller {
     }
 
 	/**
+	 * Handles the loading of the Uploader and Avatar classes and handles the files
 	 * 
-	 * @return 
+	 * This method is used for both {@link users::avatar()} and {@link groups::avatar()}
+	 * 
 	 * @param object $id
 	 * @param object $name
 	 * @param object $type[optional]
+	 * @see Uploader
+	 * @see Uploader::upload
+	 * @see Uploader::getLastUploadInfo
+	 * @see Uploader::getName
+	 * @see Uploader::results
+	 * @see Avatar
+	 * @see Avatar::makeAll
 	 */
 	public function _avatar($id, $name, $type = 'user')
 	{

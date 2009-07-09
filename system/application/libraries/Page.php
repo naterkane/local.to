@@ -95,7 +95,7 @@ class Page
 		{
 			$method = $options['method'];
 		}
-		$ci = get_instance();
+		$ci =& get_instance();
 		$count = count($data);
 		if ($count > self::$end) 
 		{
