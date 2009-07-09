@@ -29,6 +29,7 @@ $route['legal'] = 	"welcome/page/legal";
 $route['terms'] = 	"welcome/page/terms";
 $route['contact'] = "welcome/page/contact";
 $route['faq'] = 	"welcome/page/faq";
+$route['privacy'] = "welcome/page/privacy";
 
 
 $route['request_invite'] = 			"admin/request_invite";
