@@ -33,6 +33,7 @@ class Groups extends App_Controller
 	 */
 	public function accept($key = null)
 	{
+		if ($key == null) $this->redirect("/groups");
 		$this->load->model(array('Group_Invite'));
 		$invite = $this->Group_Invite->get($key);
 		$group = $this->Group->get($invite['group_id']);		
@@ -78,9 +79,10 @@ class Groups extends App_Controller
 			}
 			if ($this->Group->addMember($group, $this->userData)) 
 			{
+				$this->User->addGroup($this->userData, $group['id']);
 				$this->Group_Invite->delete($invite['key'], false);
 				$message = 'I just became a member of !'. $group['name'];
-				$message_id = $this->Message->add(array('message'=>$message), $user);
+				$message_id = $this->Message->add(array('message'=>$message), $this->userData);
 				$this->redirect('/group/' . $group['name'], 'Welcome to ' . $group['name'] . '!');
 			}
 			else 
