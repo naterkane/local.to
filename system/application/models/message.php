@@ -268,6 +268,7 @@ class Message extends App_Model
     public function getMany($messages = array(), $start = null, $end = null,$options = array())
     {
 		$return = array();
+		if (empty($messages)) return $return;
 		extract($options);
 		$isreplies = (array_key_exists('isreplies',$options))?$options['isreplies']:false;
 		if(!isset($threading)){
