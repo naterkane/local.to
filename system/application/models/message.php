@@ -196,7 +196,7 @@ class Message extends App_Model
 				if ($data['reply_to'] != null)
 				{
 					$parentmessage = $this->getOne($data['reply_to']);
-					if ($parentmessage['reply_to'] != null)
+					if (!empty($parentmessage['reply_to']))
 					{
 						$parentmessage = $this->getOne($parentmessage['reply_to']);
 					}
@@ -217,22 +217,6 @@ class Message extends App_Model
     public function addToPublicTimeline($message)
 	{
 		$pt = $this->find(null, array('override'=>'timeline'));
-		/*if (!isset($pt['threaded'])) 
-		{
-			$pt['threaded'] = array();
-		}
-		if (!isset($pt['unthreaded'])) 
-		{
-			$pt['unthreaded'] = array();
-		}		
-		if (!empty($message['reply_to'])) 
-		{
-			array_unshift($pt['threaded'], $message['id']);
-		}
-		else 
-		{
-			array_unshift($pt['unthreaded'], $message['id']);
-		}*/
 		array_unshift($pt,$message['id']);
 		return $this->save($pt, array('override'=>'timeline', 'validate'=>false));
 	}

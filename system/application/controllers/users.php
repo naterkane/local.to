@@ -274,21 +274,30 @@ class Users extends App_Controller
 		if ($replyTo) 
 		{
 			$message = $this->Message->getOne($replyTo);
+			
+			
+			
 			if (!empty($message['user_id'])) 
 			{
 				$user = $this->User->get($message['user_id']);
 				if ($user) 
 				{
-					$this->data['reply_to'] = $message['id'];
+					$this->data['reply_to'] = (integer) $message['id'];
 					$this->data['reply_to_username'] = $user['username'];
 					$this->data['message'] = '@' . $user['username'] . ' ';
 				}
+				if (!empty($message['reply_to'])){
+					$parentmessage = $this->Message->getOne($message['reply_to']);
+					$this->data['reply_to'] = (integer) $parentmessage['id'];
+				}
 			}
+			
 		}
         $this->data['page_title'] = 'Home';
 		$this->data['next'] = null;
         $this->data['messages'] = Page::make('Message', $this->userData['private']);
 		$this->data['following'] = $this->userData['following'];
+		//var_dump($this->data['reply_to']);
         $this->load->view('users/home', $this->data);
 		
     }

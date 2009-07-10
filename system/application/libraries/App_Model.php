@@ -670,6 +670,13 @@ class App_Model extends Model {
 		return $prefix;
 	}
 	
+	/**
+	 * Sets the string to be used as the key for a record
+	 *
+	 * @param array $data [optional]
+	 * @param array $options [optional]
+	 * @return string $prefix
+	 */
 	protected function makeSavePrefix($data = array(), $options = array())
 	{
 		if (!isset($options['validate'])) 
@@ -873,9 +880,8 @@ class App_Model extends Model {
 	 * Set's time to modified and created fields
 	 *
 	 * @access public
-	 * @return 
 	 */
-	private function setUpTimestampFields()
+	public function setUpTimestampFields()
 	{
 		$now = time();
 		if (is_array($this->modelData)) 
