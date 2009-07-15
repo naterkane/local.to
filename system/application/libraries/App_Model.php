@@ -436,7 +436,7 @@ class App_Model extends Model {
 		catch(Exception $e)
 		{
 			$this->log_message("error",$e);
-			return null;
+			return array();
 		}
 		if ($this->isSerialized($data)) 
 		{
