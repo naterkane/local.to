@@ -43,6 +43,10 @@ class Messages extends App_Controller
 			}
 			else 
 			{
+				if (strlen($this->postData['message']) > 1000) 
+				{
+					$this->postData['message'] = substr_replace($this->postData['message'], '', 1000, strlen($this->postData['message']));
+				}
 				$this->cookie->set('message', $this->postData['message']);
 				$this->redirect($redirect, 'There was an error adding your message.', 'error');
 			}
