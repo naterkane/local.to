@@ -43,6 +43,7 @@ class Messages extends App_Controller
 			}
 			else 
 			{
+				$this->cookie->set('message', $this->postData['message']);
 				$this->redirect($redirect, 'There was an error adding your message.', 'error');
 			}
         }
