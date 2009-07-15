@@ -118,10 +118,11 @@ class Mail
 		{
 			ob_start();
 			$this->mail->Send();
+			$this->mail->ClearAllRecipients();
 			ob_end_clean();	
 		}
 		catch(Exception $e)
-		{
+		{			
 			$this->ci->redirect('/', 'Caught exception: ',  $e->getMessage(), "\n");
 		}		
 	}
