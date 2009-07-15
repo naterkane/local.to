@@ -36,7 +36,7 @@ class Users extends App_Controller
         $this->data['page_title'] = 'Upload Avatar';
 		$this->data['avatarid'] = $this->userData['id'];
 		$this->data['avatartype'] = 'User';
-		$this->_avatar($this->userData['id'], $this->userData['username']);
+		$this->_avatar($this->userData['id'], $this->userData['id']);
 	}
 	
 	/**

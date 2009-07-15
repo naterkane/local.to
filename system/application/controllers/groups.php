@@ -131,7 +131,7 @@ class Groups extends App_Controller
 		{
 			$this->redirect('/groups');
 		}
-		$this->_avatar($this->data['group']['id'], $this->data['group']['name'], 'group');
+		$this->_avatar($this->data['group']['id'], $this->data['group']['id'], 'group');
 	}
 
 	/**

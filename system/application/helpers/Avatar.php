@@ -84,12 +84,12 @@ class Avatar extends Html
 		$dir = null;
 		if ($group) 
 		{
-			$field = 'name';
+			$field = 'id';
 			$dir .= 'group_';
 		}
 		else 
 		{
-			$field = 'username';
+			$field = 'id';
 			$dir .= 'user_';			
 		}
 		if (empty($data[$field]) || empty($data['id'])) 
@@ -107,6 +107,7 @@ class Avatar extends Html
 				$dir .= $data['id'];				
 			}
 			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.jpg';
+			
 			if (!file_exists(WEBROOT . $path))
 			{
 				$path = '/uploads/' . $dir . '/' . $data[$field] . '_default.jpg';
