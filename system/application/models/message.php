@@ -140,7 +140,7 @@ class Message extends App_Model
 	 * @return boolean
      */
     public function add($message, $user)
-    {
+    { 
 		$this->startTransaction();
 		$this->loadModels(array('Group'));		
 		$data = $this->parse($message, $user);
