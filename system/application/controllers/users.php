@@ -94,6 +94,7 @@ class Users extends App_Controller
 		$this->data['page_title'] = 'Delete your Account';
 		$key = md5($this->randomString(5));
 		$this->userData['update_key'] = $key;
+		$this->setData($this->userData);		
 		$this->cookie->set('update_key', $key);
 		$this->load->view('users/delete_account', $this->data);
 	}
