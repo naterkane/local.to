@@ -667,7 +667,7 @@ class App_Model extends Model {
 		{
 			$prefix = $options['override'];
 		}		
-		return $prefix;
+		return strtolower($prefix);
 	}
 	
 	/**
@@ -704,7 +704,7 @@ class App_Model extends Model {
 		{
 			$prefix = $options['override'];
 		}
-		return $prefix;
+		return strtolower($prefix);
 	}
 
 	/**

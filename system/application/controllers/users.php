@@ -165,8 +165,6 @@ class Users extends App_Controller
 		{
 			$this->data['user'] = $this->User->getByUsername($username);			
 		}
-		//var_dump($this->data['user']);
-		//exit;
 		$this->data['page_title'] = 'Favorites';
         $this->data['messages'] = Page::make('Message', $this->data['user']['favorites'],array('threading'=>false));
 		$this->load->view('users/favorites', $this->data);
@@ -275,9 +273,6 @@ class Users extends App_Controller
 		if ($replyTo) 
 		{
 			$message = $this->Message->getOne($replyTo);
-			
-			
-			
 			if (!empty($message['user_id'])) 
 			{
 				$user = $this->User->get($message['user_id']);
@@ -298,7 +293,6 @@ class Users extends App_Controller
 		$this->data['next'] = null;
         $this->data['messages'] = Page::make('Message', $this->userData['private']);
 		$this->data['following'] = $this->userData['following'];
-		//var_dump($this->data['reply_to']);
         $this->load->view('users/home', $this->data);
 		
     }
@@ -334,7 +328,7 @@ class Users extends App_Controller
 			$this->show404();
 		}		
 		$this->data['username'] = $this->data['profile']['username'];	
-		$this->data['page_title'] = $username;
+		$this->data['page_title'] = $this->data['profile']['username'];
 		$this->load->view('users/profile', $this->data);
 	}
 	
@@ -425,7 +419,7 @@ class Users extends App_Controller
         {
 			$this->layout = 'rss';	
 			$this->data['user'] = $user;
-			$this->data['page_title'] = $username;	
+			$this->data['page_title'] = $user['username'];	
         	$this->data['messages'] = Page::make('Message', $user['public']);
 			
             $this->load->view('users/view.rss.php', $this->data);
@@ -681,8 +675,8 @@ class Users extends App_Controller
         if ($user)
         {
 			$this->data['rss_updates'] = true;
-            $this->data['page_title'] = $username;
-            $this->data['username'] = $username;
+            $this->data['page_title'] = $user['username'];
+            $this->data['username'] = $user['username'];
         	$this->data['messages'] = Page::make('Message', $user['public']);
 			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
             $this->load->view('users/view', $this->data);
