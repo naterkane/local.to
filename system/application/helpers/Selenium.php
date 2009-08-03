@@ -239,6 +239,7 @@ class Selenium
 		$this->write('storeValue', 'key', 'invite_key');
 		$this->openPage('/signup/${invite_key}');
 		$this->write('type', 'username', $name);
+		$this->write('type', 'realname', $name);		
 		$this->write('type', 'password', $password);
 		$this->write('type', 'passwordconfirm', $password);	
 		$this->write('type', 'email', $email);

@@ -763,6 +763,10 @@ class User extends App_Model
 		if ($permission) 
 		{
 			$user['permission'] = $permission;
+		}		
+		if (!empty($this->postData['realname'])) 
+		{
+			$this->postData['realname'] = strip_tags($this->postData['realname']);
 		}
 		$user['id'] = $this->makeId($this->idGenerator);
         $user['time_zone'] = $this->defaultTimeZone;
@@ -952,7 +956,7 @@ class User extends App_Model
 	{
 		if (($this->mode == 'signup') OR  ($this->mode == 'profile'))
 		{
-			$this->setAction();
+			$this->setAction();			
 			$this->validates_length_of('realname', array('min'=>0, 'max'=>25, 'message'=>'A name must be fewer than 25 characters'));
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required'));
 			$this->validates_uniqueness_of('email', array('message'=>'Email is already in use'));
@@ -962,6 +966,8 @@ class User extends App_Model
 			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken'));
 			$this->validates_format_of('username', array('with'=>ALPHANUM, 'message'=>'A username may only be made up of numbers, letters, and underscores'));
 			$this->validates_presence_of('username', array('message'=>'A username is required'));
+			$this->validates_length_of('realname', array('min'=>1, 'max'=>50, 'message'=>'Full name must be between 1 and 50 characters long'));
+			$this->validates_presence_of('realname', array('message'=>'Full name is required'));
 		}
 		if ($this->mode == 'change_password') 
 		{
