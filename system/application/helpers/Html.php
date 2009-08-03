@@ -230,7 +230,29 @@ class Html
 		}
 		return htmlspecialchars($text, ENT_QUOTES, $charset);
 	}
-	
+
+	/**
+	 * Output group name 
+	 *
+	 * @access public
+	 * @param array $group Group data
+	 * @return string
+	 */
+	public function groupName($group=array())
+	{
+		if (!is_array($group)) 
+		{
+			return $group;
+		}
+		if (isset($group['fullname'])) 
+		{
+			return $group['fullname'];
+		}
+		if (isset($group['name'])) 
+		{
+			return $group['name'];
+		}
+	}	
 	
 	/**
 	 * Message
@@ -317,7 +339,6 @@ class Html
 		}
 	}
 	
-
 	/**
 	 * Create a redirect query string to send a user back to requesting page
 	 *
