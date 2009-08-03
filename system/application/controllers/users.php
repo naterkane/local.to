@@ -675,7 +675,8 @@ class Users extends App_Controller
         if ($user)
         {
 			$this->data['rss_updates'] = true;
-            $this->data['page_title'] = $user['username'];
+			$this->load->loadHelper('Html');
+			$this->data['page_title'] = $this->load->passData['html']->name($user);
             $this->data['username'] = $user['username'];
         	$this->data['messages'] = Page::make('Message', $user['public']);
 			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);

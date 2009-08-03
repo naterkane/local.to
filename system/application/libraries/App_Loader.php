@@ -37,22 +37,31 @@ class App_loader extends CI_Loader
 	/**
 	 * Load helpers and instantiate them
 	 *
-	 * @todo Make instance dynamic, $myHelper rather than $this->myHelper
 	 * @param array $helpers array of helpers to load
 	 */
-	function loadHelpers()
+	public function loadHelpers()
 	{
 		foreach ($this->helpers as $helper_class) 
 		{		
-			$ext_helper = APPPATH . 'helpers/' . $helper_class . EXT;
-			if (file_exists($ext_helper)) 
-			{ 
-				include_once($ext_helper);
-				if (empty($this->passData[$helper_class])) {
-					$helper_class_lc = strtolower($helper_class);
-					$this->passData[$helper_class_lc] = new $helper_class();
-				}		
-			}
+			$this->loadHelper($helper_class);
+		}
+	}
+	
+	/*
+	 * Load single helper and instantiate them
+	 *
+	 * @param string $helper
+	 */
+	public function loadHelper($helper_class = null)
+	{
+		$ext_helper = APPPATH . 'helpers/' . $helper_class . EXT;
+		if (file_exists($ext_helper)) 
+		{ 
+			include_once($ext_helper);
+			if (empty($this->passData[$helper_class])) {
+				$helper_class_lc = strtolower($helper_class);
+				$this->passData[$helper_class_lc] = new $helper_class();
+			}		
 		}
 	}
 	
@@ -65,7 +74,7 @@ class App_loader extends CI_Loader
 	 * @param	array	$vars[optional]
 	 * @param	boolean	$return[optional]
 	 */
-	function view($view, $vars = array(), $return = FALSE)
+	public function view($view, $vars = array(), $return = FALSE)
 	{
 		$this->passData = $vars;
 		$this->loadHelpers();
