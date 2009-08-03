@@ -188,8 +188,8 @@ class User extends App_Model
 	 * Add user to group
 	 * 
 	 * @access public
-	 * @param object $user
-	 * @param object $group_id
+	 * @param array $user
+	 * @param int $group_id
 	 */
 	public function addGroup(&$user, $group_id)
 	{
@@ -201,7 +201,7 @@ class User extends App_Model
 		{
 			array_push($user['groups'], $group_id);
 		}
-		return $this->save($user);
+		return $this->save($user, array('validate'=>false));
 	}	
 
 	/**
