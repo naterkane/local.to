@@ -295,6 +295,30 @@ class Html
 	}
 
 	/**
+	 * Output user name 
+	 *
+	 * @access public
+	 * @param array $user User data
+	 * @return string
+	 */
+	public function name($user=array())
+	{
+		if (!is_array($user)) 
+		{
+			return $user;
+		}
+		if (isset($user['realname'])) 
+		{
+			return $user['realname'];
+		}
+		if (isset($user['username'])) 
+		{
+			return $user['username'];
+		}
+	}
+	
+
+	/**
 	 * Create a redirect query string to send a user back to requesting page
 	 *
 	 * @access public
