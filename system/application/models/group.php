@@ -75,6 +75,7 @@ class Group extends App_Model
 		$this->startTransaction();
 		if ($this->save($group)) 
 		{
+			$this->save($group, array('prefixValue'=>'fullname', 'saveOnly'=>'id', 'validate'=>false));
 			$this->save($group, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
 			$this->addToGroupList($group['name']);			
 			$this->User->addGroup($owner, $group['id']);			
@@ -177,6 +178,31 @@ class Group extends App_Model
 			}
 		}
 	}
+
+	/**
+	 * Is a group's full name unique?
+	 *
+	 * @return boolean
+	 */
+	function fullNameUnique()
+	{
+		if (isset($this->modelData['fullname'])) 
+		{
+			$group = $this->getByFullName($this->modelData['fullname']);
+			if ((!$group['id']) OR ($this->modelData['id'] == $group['id']))
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		} 
+		else 
+		{
+			return true;
+		}
+	}
 	
 	/**
 	 * Find a group by id
@@ -206,6 +232,25 @@ class Group extends App_Model
 			$groups['all'] = array();
 		}
 		return $groups;
+	}
+
+	/**
+	 * Find a group by full name
+	 *
+	 * @param string $fullname
+	 * @return array Group data
+	 */
+	function getByFullName($fullname = null)
+	{
+		$return = null;
+		if ($fullname) 
+		{
+			$group_id = $this->find($fullname, array('prefixValue'=>'fullname'));
+			if ($group_id) 
+			{
+				return $this->get($group_id);
+			}
+		}
 	}
 	
 	/**
@@ -499,7 +544,10 @@ class Group extends App_Model
 			$this->validates_format_of('name', array('with'=>ALPHANUM, 'message'=>'A group name may only be made up of numbers, letters, and underscores'));
 			$this->validates_length_of('name', array('min'=>1, 'max'=>15, 'message'=>'A group name must be between 1 and 15 characters'));
 			$this->validates_callback('nameUnique', 'name', array('message'=>'Group name has already been taken'));
-			$this->validates_presence_of('name', array('message'=>'A group name is required'));			
+			$this->validates_presence_of('name', array('message'=>'A group name is required'));				
+			$this->validates_length_of('fullname', array('min'=>1, 'max'=>50, 'message'=>'A full group name must be between 1 and 50 characters'));
+			$this->validates_callback('fullNameUnique', 'fullname', array('message'=>'Group full name has already been taken'));
+			$this->validates_presence_of('fullname', array('message'=>'A full group name is required'));
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required', 'allow_null'=>true));
 			if ($this->mode == 'update') 
 			{
