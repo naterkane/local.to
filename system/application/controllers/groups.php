@@ -46,6 +46,7 @@ class Groups extends App_Controller
 	        $this->layout = 'public';
 			$this->data['page_title'] = 'Sign Up';			
 			$this->data['key'] = $key;
+			$this->data['sendMeHere'] = true;
 			if ($this->postData) 
 			{
 	            if ($this->User->signUp($this->postData))
