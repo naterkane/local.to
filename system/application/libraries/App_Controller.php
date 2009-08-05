@@ -248,6 +248,27 @@ class App_Controller extends Controller {
         }
     }
 
+	/**
+	 * Must be the owner of a group
+	 *
+	 * @access public
+	 * @param array $group
+	 * @return boolean	
+	 */
+	public function mustBeOwner($group = array())
+	{
+		if (empty($group))
+		{
+			$this->show404();
+		}
+		if (!$this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
+		{
+			$this->show404();
+		}
+		return true;
+	}
+	
+
     /**
      * Checks to see if a user is not signed in
      * Redirects to 404 if the user is authenticated

@@ -97,15 +97,18 @@ class Selenium
 	 *
 	 * @access public	 
 	 */
-	public function checkErrors()
+	public function checkErrors($missing = true)
 	{
 		$this->write('verifyTextNotPresent', $this->noticeText);
 		$this->write('verifyTextNotPresent', $this->warningText);
-		$this->write('verifyTextNotPresent', $this->missingText);
 		$this->write('verifyTextNotPresent', $this->phpError);
 		$this->write('verifyTextNotPresent', $this->errorText);
 		$this->write('verifyTextNotPresent', $this->badCharacters);	
-		$this->write('verifyTextNotPresent', $this->badRequest);				
+		$this->write('verifyTextNotPresent', $this->badRequest);
+		if ($missing) 
+		{
+			$this->write('verifyTextNotPresent', $this->missingText);
+		}
 	}
 	
 	/**
@@ -155,6 +158,20 @@ class Selenium
 	{
 		$this->write('openAndWait', $path);
 		$this->write('verifyTextPresent', 'Sign In');
+	}
+
+	/**
+	 * Open page that should not exist
+	 *
+	 * Make sure a 404 appears
+	 * 
+	 * @access public	
+	 * @param string $path Relative path to open
+	 */
+	public function open404($page)
+	{
+		$this->write('openAndWait', $page);
+		$this->checkErrors(false);
 	}
 
 	/**

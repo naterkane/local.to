@@ -622,32 +622,19 @@ class User extends App_Model
 	/**
 	 * Remove a group, by id, from a user's groups 
 	 *  
-	 * @param integer $user_id
+	 * @param int $user
 	 * @param integer $group_id
 	 * @return boolean
 	 */
-	function removeGroup($user_id,$group_id)
+	function removeGroup($user_id = null, $group_id = null)
 	{
-		$data = $this->userData;
-		if (!is_array($data['groups']))
+		$user = $this->User->get($user_id);
+		if ((empty($user)) || (!$group_id)) 
 		{
-			$data['groups'] = array();
+			return false;
 		}
-		if (in_array($group_id,$data['groups']))
-		{
-			$key = array_search($group_id,$data['groups']) ;
-			if (is_int($key))
-			{
-				unset($data['groups'][$key]);
-				$data['groups'] = array_values($data['groups']);
-			}
-		}
-		$data['id'] = $user_id;
-		$data['modified'] = time();
-		$data = $this->updateData($this->userData, $data);
-		$this->startTransaction();
-		$this->save($data);
-		return $this->endTransaction();
+		$user['groups'] = $this->removeFromArray($user['groups'], $group_id);
+		return $this->save($user);
 	}
 
 	/**

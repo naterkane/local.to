@@ -135,6 +135,25 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * View blacklist
+	 *
+	 * @todo create a way of getting a users "public" info only and not returning anything that's sensitive.	
+	 * @access public
+	 * @param string $name
+	 * @return 
+	 */
+	function blacklist($groupname = null, $sidebar = null)
+	{
+		$this->mustBeSignedIn();
+		$group = $this->Group->getByName($groupname);
+		$this->mustBeOwner($group);
+		$this->data['group'] = $group;
+		$this->data['page_title'] = $group['name'] . ' Blacklist';
+       	$this->data['blacklist'] = Page::make('Group', $group['blacklist'], array('method'=>'getMembers'));
+		$this->load->view('groups/blacklist', $this->data);	
+	}
+
+	/**
 	 * Delete an invite
 	 *
 	 * @access public
@@ -306,6 +325,46 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * Remove member
+	 *
+	 * @access public
+	 * @param int $group_id
+	 * @param int $user_id	
+	 * @return 
+	 */
+	public function remove($group_id = null, $user_id = null, $blacklist = null)
+	{
+		$this->mustBeSignedIn();
+		$group = $this->Group->get($group_id);	//get group
+		$this->mustBeOwner($group);
+		if (empty($group)) 	//if either returns no data show 404
+		{
+			$this->show404();
+		} 
+		else 
+		{
+			if ($this->Group->removeMember($group, $user_id))	//remove member 
+			{
+				$this->User->removeGroup($user_id, $group_id);
+				if ($blacklist) 
+				{
+					$this->Group->addToBlacklist($group, $user_id);
+					$message = 'The member was removed and blacklisted. <a href="/groups/blacklist/' . $group['name'] . '">View blacklist.</a>';
+				} 
+				else 
+				{
+					$message = 'The member was removed.';
+				}
+				$this->redirect('/groups/members/' . $group['name'], $message);
+			} 
+			else 
+			{
+				$this->redirect('/groups/members/' . $group['name'], 'Could not remove member from group.', 'error');
+			}
+		}
+	}
+
+	/**
 	 * Update a user profile
 	 *
 	 * @access public
@@ -392,12 +451,35 @@ class Groups extends App_Controller
 		$group = $this->Group->get($group_id);
 		if ($group) {
 			$this->Group->removeMember($group, $this->userData['id']);
-			$this->User->removeGroup($this->userData['id'],$group_id);
+			$this->User->removeGroup($this->userData['id'], $group_id);
 			$this->redirect('/group/' . $group['name']);
 		} else {
 			$this->show404();
 		}		
 	}	
+	
+	/**
+	 * Remove user from blacklist
+	 *
+	 * @access public
+	 * @param int $group_id
+	 * @param int $user_id	
+	 * @return 
+	 */
+	function unblacklist($group_id = null, $user_id = null)
+	{
+		$this->mustBeSignedIn();
+		$group = $this->Group->get($group_id);	//get group
+		$this->mustBeOwner($group);
+		if ($this->Group->removeFromBlacklist($group, $user_id))	//remove member 
+		{
+			$this->redirect('/groups/members/' . $group['name'], 'The user was removed from the blacklist.');
+		} 
+		else 
+		{
+			$this->redirect('/groups/members/' . $group['name'], 'Could not remove user from blacklist.', 'error');
+		}
+	}
 	
 	/**
 	 * View a group

@@ -92,7 +92,8 @@ class Group extends App_Model
 	 */
 	function addMember(&$group, &$member)
 	{
-		if (!in_array($member['id'], $group['members'])) 
+		//if user is not already a member and is not blacklisted
+		if ((!in_array($member['id'], $group['members'])) && (!in_array($member['id'], $group['blacklist'])))
 		{
 			array_unshift($group['members'], $member['id']);
 			return $this->save($group);			
@@ -101,6 +102,19 @@ class Group extends App_Model
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Add to blacklist
+	 *
+	 * @access public
+	 * @param array $group 
+	 * @param array $user_id 
+	 * @return
+	 */
+	public function addToBlacklist(&$group, $user_id)
+	{
+		$this->addTo('blacklist', $group, $user_id);
 	}
 	
 	/**
@@ -423,27 +437,32 @@ class Group extends App_Model
 	/**
 	 * Remove a user from a group
 	 *
-	 * @param array $group Object of group's data
-	 * @param integer|string $user_id Member to remove
+	 * @param array $group
+	 * @param integer $user_id Member to remove
 	 * @return boolean
 	 */
-	function removeMember($group, $user_id)
+	function removeMember(&$group, $user_id)
 	{
-		if (!$this->isOwner($group['id'], $user_id)) 
+		if (!$this->isOwner($user_id, $group['owner_id'])) 
 		{
-			$new_lineup = array();
-			foreach ($group['members'] as $previous_member) 
-			{
-				if ($previous_member != $user_id) 
-				{
-					$new_lineup[] = $previous_member;
-				}
-			}
-			$group['members'] = $new_lineup;
+			$group['members'] = $this->Group->removeFromArray($group['members'], $user_id);
 			return $this->save($group);
 		} else {
 			return false;
 		}		
+	}
+	
+	/**
+	 * Remove a user from a blacklist
+	 *
+	 * @param array $group 
+	 * @param integer $user_id Member to remove
+	 * @return boolean
+	 */
+	function removeFromBlacklist(&$group, $user_id)
+	{
+		$group['blacklist'] = $this->Group->removeFromArray($group['blacklist'], $user_id);
+		return $this->save($group);		
 	}
 	
 	/**
