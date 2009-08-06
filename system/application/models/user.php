@@ -152,11 +152,18 @@ class User extends App_Model
 	 *
 	 * @access public
 	 * @param array $user 
-	 * @param array $message_id
+	 * @param array $message
 	 */
-	public function addToPrivate(&$user, $message_id)
+	public function addToPrivate(&$user, $message)
 	{
-		$this->addTo('private', $user, $message_id);
+		if (!empty($message['id'])) 
+		{
+			$this->addTo('private', $user, $message['id']);
+			if (empty($message['reply_to'])) 
+			{
+				$this->addTo('private_threaded', $user, $message['id']);
+			}
+		}		
 	}
 		
 	/**
@@ -164,11 +171,14 @@ class User extends App_Model
 	 *
 	 * @access public
 	 * @param array $user 
-	 * @param array $message_id
+	 * @param array $message
 	 */
-	public function addToPublic(&$user, $message_id)
+	public function addToPublic(&$user, $message)
 	{
-		$this->addTo('public', $user, $message_id);
+		if (!empty($message['id'])) 
+		{
+			$this->addTo('public', $user, $message['id']);
+		}
 	}
 	
 	/**
@@ -176,12 +186,12 @@ class User extends App_Model
 	 *
 	 * @access public
 	 * @param array $user 
-	 * @param array $message_id
+	 * @param array $message
 	 */
-	public function addToPublicAndPrivate(&$user, $message_id)
+	public function addToPublicAndPrivate(&$user, $message)
 	{
-		$this->addToPublic($user, $message_id);
-		$this->addToPrivate($user, $message_id);
+		$this->addToPublic($user, $message);
+		$this->addToPrivate($user, $message);
 	}
 
 	/**
@@ -686,24 +696,23 @@ class User extends App_Model
 		return $this->save($user, array('prefixValue'=>'username', 'saveOnly'=>'id', 'validate'=>false));
 	}
 	
-
     /**
      * Send messages to followes
      *
-     * @param integer $message_id     
+     * @param array $message
 	 * @param array $followers An array of follower ids
      * @return boolean
      */
-    function sendToFollowers($message_id, $followers)
+    function sendToFollowers($message, $followers)
     {
-		$this->startTransaction();	
-		foreach ($followers as $follower_id)
-        {
-			$follower = $this->get($follower_id);			
-			array_unshift($follower['private'], $message_id);
-            $this->save($follower);
-        }
-        return $this->endTransaction();
+		if (!empty($message['id'])) 
+		{
+			foreach ($followers as $follower_id)
+	        {
+				$follower = $this->get($follower_id);			
+				$this->addToPrivate($follower, $message);
+	        }
+		}
     }
 
     /**

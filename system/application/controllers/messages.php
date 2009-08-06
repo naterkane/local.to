@@ -115,30 +115,10 @@ class Messages extends App_Controller
 	 */
 	function public_timeline()
 	{
-        $this->data['page_title'] = 'Public Timeline';		
-		/*if (!empty($User) && ($User['threaded'] == 1) )
-		{
-        	$pt = $this->Message->getTimeline();
-        	$this->data['messages'] = Page::make('Message', $pt);
-		} 
-		else 
-		{
-        	$pt = $this->Message->getTimelineThreaded();
-        	$this->data['messages'] = Page::make('Message', $pt);
-		}*/
+        $this->data['page_title'] = 'Public Timeline';
 		$pt = $this->Message->getPublicTimeline();
         $this->data['messages'] = Page::make('Message', $pt);
 		$this->load->view('messages/public_timeline', $this->data);
-	}
-	
-	/**
-	 * Threaded public timeline
-	 *
-	 * @access public
-	 */
-	function public_timeline_threaded()
-	{
-		$this->public_timeline(true);
 	}	
 
 	/**

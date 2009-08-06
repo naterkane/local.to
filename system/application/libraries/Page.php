@@ -58,12 +58,12 @@ class Page
 				{
 					self::$page = $segments[$count - 1];
 					self::$start = (self::$page - 1) * self::$offset;
-					self::$end = (self::$offset * self::$page) - 1;
-				}
+					self::$end = self::$offset * self::$page;
+				}		
 				unset($segments[$count - 2]);
 				unset($segments[$count - 1]);
 			}		
-		}
+		}		
 		self::$next = '/' . implode('/', $segments) . '/page/';
 		self::$next .= self::$page + 1;
 		if (self::$page > 1) 
@@ -105,7 +105,7 @@ class Page
 		{
 			self::$showPrevious = true;
 		}
-		$return = $ci->$model->$method($data, self::$start, self::$end,$options);
+		$return = $ci->$model->$method($data, self::$start, self::$end, $options);
 		if (empty($return) AND self::$page > 1)
 		{
 			$ci->show404();

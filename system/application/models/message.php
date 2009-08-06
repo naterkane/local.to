@@ -131,6 +131,7 @@ class Message extends App_Model
 	 * @var mixed
 	 */
 	private $parent;
+	public $threaded = true;	
 
     /**
      * Add a new message
@@ -169,14 +170,14 @@ class Message extends App_Model
 			if ($this->save($data))
 			{
 				$this->mode = null;
-				$this->User->addToPublicAndPrivate($user, $data['id']);	
+				$this->User->addToPublicAndPrivate($user, $data);	
 				if (!$user['locked']) 
 				{
 					$this->addToPublicTimeline($data);
 				}
 				$this->User->mode = null;
 		    	$this->Group->sendToMembers($data, $this->userData['id']);
-		    	$this->User->sendToFollowers($data['id'], $this->userData['followers']);				
+		    	$this->User->sendToFollowers($data, $this->userData['followers']);				
 				foreach ($this->userMentions as $mention_username => $user_mention) {
 					// query here just in case the user is mentioning herself, which would reset the data
 					$umention = $this->User->getByUsername($mention_username);
@@ -216,9 +217,21 @@ class Message extends App_Model
 	 */
     public function addToPublicTimeline($message)
 	{
-		$pt = $this->find(null, array('override'=>'timeline'));
-		array_unshift($pt,$message['id']);
-		return $this->save($pt, array('override'=>'timeline', 'validate'=>false));
+		$pt = $this->getPublicTimeline(true);
+		if (empty($pt['all'])) 
+		{
+			$pt['all'] = array();
+		}
+		if (empty($pt['threaded'])) 
+		{
+			$pt['threaded'] = array();
+		}
+		if (!$message['reply_to']) 
+		{
+			array_unshift($pt['threaded'], $message['id']);
+		}
+		array_unshift($pt['all'], $message['id']);
+		return $this->save($pt, array('override'=>'timeline', 'validate'=>false, 'ignoreTime'=>true));
 	}
 	
 	/**
@@ -265,52 +278,35 @@ class Message extends App_Model
      * @param integer index of where to start
      * @return array of messages
      */
-    public function getMany($messages = array(), $start = null, $end = null,$options = array())
+    public function getMany ($messages = array(), $start = null, $end = null)
     {
 		$return = array();
-		if (empty($messages)) return $return;
-		extract($options);
-		$isreplies = (array_key_exists('isreplies',$options))?$options['isreplies']:false;
-		if(!isset($threading)){
-			$threading = ($this->userData && ($this->userData['threading'] == 0))?false:true;
-		}
-		if($start !== null)
+		if (!is_array($messages)) 
 		{
-			array_slice($messages,$start);
+			return $return;
 		}
-		$end = ($end != null)? $end : count($messages);
-		if (($messages) AND (is_array($messages))) {
-			$i = 0;
-			foreach ($messages as $message)
-	        {
-				if ($message && count($return)<=$end) 
+		$messages = array_slice($messages, $start, $end);
+		foreach ($messages as $id) {
+			if (is_int($id)) 
+			{
+				$message = $this->getOne($id);
+				if (!empty($message)) 
 				{
-					$messageid = $message;
-					$message = $this->getOne($messageid);
-					$message['id'] = $messageid;
-					
-					if ($isreplies != true && $threading == true &&  empty($message['reply_to']))
-					{
-						if (!empty($message['replies'])):
-							$replies = $message['replies'];
-							foreach($replies as $key => $reply)
-							{
-								$message['replies'][$key] = $this->getOne($reply);
-							}		
-						endif;
-						$return[] = $message;
-					} elseif ($isreplies != true && $threading==true && !empty($message['reply_to'])) {
-						// do nothing
-					}else{
-
-						$return[] = $message;
-					}
-					
+					$return[] = $message;
 				}
-	        }
+				if ((!empty($message['replies'])) && ($this->threaded)) 
+				{
+					foreach ($message['replies'] as $reply_id) {
+						$reply = $this->getOne($reply_id);
+						if (!empty($reply)) 
+						{
+							$reply['isReply'] = true;
+							$return[] = $reply;
+						}						
+					}
+				}
+			}
 		}
-		$return['threading'] = $threading;
-		$return['isreplies'] = $isreplies;
         return $return;
     }
 
@@ -328,9 +324,13 @@ class Message extends App_Model
 		if (!empty($message)) 
 		{
 			$user = $this->User->get($message['user_id']);
-			$message['username'] = $user['username'];			
+			$message['User'] = $user;
 		}
-		return $message;
+		if ($this->wellFormed($message)) 
+		{
+			return $message;
+		}
+		return array();
 	}
    
     /**
@@ -349,42 +349,22 @@ class Message extends App_Model
 	 * Get Public Timeline
 	 * 
 	 * @access public
+	 * @param boolean $returnWholeRecord Set to true if you want threaded and all
 	 * @return array messages that are in the public timeline
 	 */
-	public function getPublicTimeline()
+	public function getPublicTimeline($returnWholeRecord = false)
 	{
-		return $this->find(null, array('override'=>'timeline'));;
+		$pt = $this->find(null, array('override'=>'timeline', 'ignoreModelFields'=>true));
+		if ($returnWholeRecord) 
+		{
+			return $pt;
+		}		
+		if ($this->threaded) 
+		{
+			return $pt['threaded'];
+		}
+		return $pt['all'];		
 	}
-
-    /**
-     * Get Public Timeline
-     *
-     * @todo Clip the timeline at a limited number of messages
-     * @access public
-     * @return array Messages
-     * @depreciated
-     */
-    public function getTimeline($start = null)
-    {
-        $pt = $this->find(null, array('override'=>'timeline'));
-		$return = (!empty($pt['unthreaded']))?$pt['unthreaded']:null;
-		return $return;
-    }
-
-    /**
-     * Get Public Timeline Threaded
-     *
-     * @todo Clip the timeline at a limited number of messages
-     * @access public
-     * @return array Messages
-     */
-    public function getTimelineThreaded()
-    {
-        $pt = $this->find(null, array('override'=>'timeline'));
-		var_dump($pt);
-		$return = (!empty($pt['unthreaded']))?$pt['unthreaded']:null;
-		return $return;
-    }
 
     /**
      * Is a message is a real message
@@ -635,6 +615,35 @@ class Message extends App_Model
 		}
 	    return (count($this->validationErrors) == 0);
 	}
+
+	/**
+	 * Is a returned message well formed
+	 *
+	 * @access public
+	 * @param array $message
+	 * @return 
+	 */
+	public function wellFormed($message = array())
+	{
+		if (!is_array($message)) 
+		{
+			return false;
+		}
+		if (!isset($message['id'])) 
+		{
+			return false;
+		}
+		if (empty($message['User'])) 
+		{
+			return false;
+		}
+		if (!isset($message['message_html'])) 
+		{
+			return false;
+		}
+		return true;
+	}
+	
 
 }
 ?>

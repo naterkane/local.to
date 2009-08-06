@@ -155,8 +155,6 @@ class Admin extends App_controller
 	{
 		$this->layout = "public";
 		$this->load->model("message");
-       	$pt = $this->Message->getTimeline();
-        $this->data['messages'] = Page::make('Message', $pt);
 		$this->load->view('admin/request_invite', $this->data);	
 	}
 

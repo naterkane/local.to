@@ -291,7 +291,15 @@ class Users extends App_Controller
 		}
         $this->data['page_title'] = 'Home';
 		$this->data['next'] = null;
-        $this->data['messages'] = Page::make('Message', $this->userData['private']);
+		if ($this->userData['threading']) 
+		{
+			$messages = $this->userData['private_threaded'];
+		} 
+		else 
+		{
+			$messages = $this->userData['private'];
+		}
+        $this->data['messages'] = Page::make('Message', $messages);
 		$this->data['following'] = $this->userData['following'];
         $this->load->view('users/home', $this->data);
 		
@@ -473,9 +481,6 @@ class Users extends App_Controller
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign In';
 		$this->data['redirect'] = $this->getRedirect();	
-		$this->load->model("message");
-       	$pt = $this->Message->getTimeline();
-        $this->data['messages'] = Page::make('Message', $pt);
         if ($this->postData)
         {
             $user = $this->User->signIn($this->postData);
@@ -518,8 +523,6 @@ class Users extends App_Controller
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign Up';
 		$this->load->model(array('Invite','message'));
-       	$pt = $this->Message->getTimeline();
-        $this->data['messages'] = Page::make('Message', $pt);
 		$this->load->database();
 		$invite = $this->Invite->get($key);
 		if (empty($invite)) 
@@ -617,30 +620,34 @@ class Users extends App_Controller
  	 * @param object $setting
  	 * @param object $uri
  	 */
- 	function threading($setting,$uri)
+ 	function threading($setting)
 	{
 		$this->mustBeSignedIn();
-		if ($setting != ("enable" || "disable"))
+		if ($setting != ('enable' || 'disable'))
 		{
-			$this->redirect('/home');			
+			$this->show404();
 		}
-		$this->setData($this->userData);	
-		$key = md5($this->randomString(5));
-		$this->userData['update_key'] = $key;
-		$this->cookie->set('update_key', $key);
-		$data = $this->userData;
-		//echo $this->util->base64_url_decode($uri);
-		$data['threading'] = ($setting == "enable")?1:0;
-		if ($this->User->updateThreading($this->userData['id'],$data['threading']))
+		else 
 		{
-			//$this->cookie->setUser($data);
-			$this->redirect($this->util->base64_url_decode($uri),"You have {$setting}d threading");
+			$redirect = $this->getRedirect();
+			if ($setting == 'enable') 
+			{
+				$this->userData['threading'] = true;
+			}
+			else 
+			{
+				$this->userData['threading'] = false;				
+			}
+			if ($this->User->save($this->userData))
+			{
+				$message = "You have {$setting}d threading";
+			}
+			else
+			{
+				$message = "Something went wrong! You have not {$setting}d threading";
+			}
+			$this->redirect($redirect, $message);			
 		}
-		else
-		{
-			$this->redirect($this->util->base64_url_decode($uri),"Something went wrong! You have not {$setting}d threading");
-		}
-		
 	}
 
     /**
@@ -678,6 +685,7 @@ class Users extends App_Controller
 			$this->load->loadHelper('Html');
 			$this->data['page_title'] = $this->load->passData['html']->name($user);
             $this->data['username'] = $user['username'];
+			$this->Message->threaded = false; //force threading
         	$this->data['messages'] = Page::make('Message', $user['public']);
 			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
             $this->load->view('users/view', $this->data);

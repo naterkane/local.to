@@ -102,6 +102,10 @@ class App_Controller extends Controller {
 			$this->testingData['count'] = $this->countAllRecords();
 		}		
 		$this->getUserData();
+		if (!empty($this->userData)) //set threading 
+		{
+			$this->Message->threaded = $this->userData['threading'];
+		}
     }
 
 	/**

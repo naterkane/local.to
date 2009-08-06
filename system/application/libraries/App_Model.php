@@ -421,7 +421,8 @@ class App_Model extends Model {
      * @param array $options 
 	 * 				[override] string Override the entire key, e.g. 'publictimeline'	
 	 * 				[prefixName] string Override the first part of the prefix, the class name
-	 * 				[prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id			
+	 * 				[prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id
+	 * 				[ignoreModelFields] boolean Don't populate with model fields. Overrides security. Used with public timeline. Use with caution.
 	 * @return mixed
      */
 	public function find($value = null, $options = array())
@@ -440,9 +441,15 @@ class App_Model extends Model {
 		}
 		if ($this->isSerialized($data)) 
 		{
-			$fields = $this->getFields();
+			if (!isset($options['ignoreModelFields'])) 
+			{
+				$fields = $this->getFields();
+			}
 			$data = unserialize($data);
-			$data = $this->updateData($fields, $data);
+			if (!isset($options['ignoreModelFields'])) 
+			{
+				$data = $this->updateData($fields, $data);
+			}			
 		}
 		return $data;	
 	}
@@ -813,6 +820,7 @@ class App_Model extends Model {
 	 * [prefixName] string Override the first part of the prefix, the class name
 	 * [prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id
 	 * [saveOnly] string Key from Data you wish to save if you don't want to save the whole array
+	 * [ignoreTime] boolean Set to true to ignore timestamps
 	 * @return boolean
      */
 	function save($data, $options = array()) 
@@ -835,7 +843,10 @@ class App_Model extends Model {
 			$valid = $this->validate();
 		}
 		if ($valid) {
-			$this->setUpTimestampFields();
+			if (!isset($options['ignoreTime'])) 
+			{
+				$this->setUpTimestampFields();
+			}
 			if (is_array($this->modelData)) 
 			{
 				$newData = serialize($this->modelData);
