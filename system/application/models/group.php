@@ -162,15 +162,20 @@ class Group extends App_Model
 	}
 	
 	/**
-	 * Add to mentions
+	 * Add to messages
 	 *
 	 * @access public
 	 * @param array $group 
 	 * @param integer $message_id 
 	 */
-	public function addToMessages(&$group, $message_id)
+	public function addToMessages(&$group, $message)
 	{
-		$this->addTo('messages', $group, $message_id);
+		if (!$message['reply_to']) 
+		{
+			array_unshift($group['messages_threaded'], $message['id']);
+		}
+		array_unshift($group['messages'], $message['id']);
+		$this->save($group);
 	}
 	
 	/**
@@ -489,9 +494,7 @@ class Group extends App_Model
 								
 				if ($group && !empty($group['members'])) 
 				{
-					array_unshift($group['messages'], $messageData['id']);				
-					$this->save($group);
-					
+					$this->addToMessages($group, $messageData);					
 					/**
 					 * check to make sure that the user sending the message is a member of the group before posting to group member's feeds.
 					 */
@@ -501,8 +504,7 @@ class Group extends App_Model
 							if (!in_array($member_id, $sent)) 
 							{
 								$member = $this->User->get($member_id);
-								array_unshift($member['private'], $messageData['id']);
-								$this->User->save($member);
+								$this->User->addToPrivate($member, $messageData);
 								$sent[] = $member_id;
 							}
 						}	

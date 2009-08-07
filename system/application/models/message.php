@@ -278,7 +278,7 @@ class Message extends App_Model
      * @param integer index of where to start
      * @return array of messages
      */
-    public function getMany ($messages = array(), $start = null, $end = null)
+    public function getMany ($messages = array(), $start = 0, $end = 20000)
     {
 		$return = array();
 		if (!is_array($messages)) 

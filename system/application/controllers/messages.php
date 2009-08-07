@@ -155,9 +155,10 @@ class Messages extends App_Controller
 	function view($username = null, $message_id = null)
 	{
 		$this->data['message'] = $this->Message->getOne($message_id);
-		$this->data['messages'] = $this->Message->getReplies($this->data['message']['replies']);		
+		$this->data['messages'] = $this->Message->getMany($this->data['message']['replies']);
 		$user = $this->User->getByUserName($username);
 		if (($this->data['message']) AND ($user['username'] == $username) AND (!isset($this->data['message']['to']))) {
+			$this->data['remove_reply_context'] = true;
 			$this->load->view('messages/view', $this->data);
 		} else{
 			$this->show404();

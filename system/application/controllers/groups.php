@@ -515,7 +515,18 @@ class Groups extends App_Controller
 			$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
 			if ($this->data['group']['im_a_member']) 
 			{
-				$messages = array_merge($this->data['group']['messages'], $this->data['group']['inbox']);
+				if ($this->userData['threading']) 
+				{
+					$messages = $this->data['group']['messages_threaded'];
+				}
+				else 
+				{
+					$messages = $this->data['group']['messages'];
+				}
+				if (!empty($this->data['group']['inbox'])) 
+				{
+					$messages = array_merge($messages, $this->data['group']['inbox']);
+				}
 				rsort($messages);
 			} 
 			else 

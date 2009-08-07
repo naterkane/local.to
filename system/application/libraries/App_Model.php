@@ -428,6 +428,10 @@ class App_Model extends Model {
 	public function find($value = null, $options = array())
 	{
 		$key = $this->makeFindPrefix($value, $options);
+		if (!$key) //if false has been returned as the key, return nothing.
+		{
+			return null;
+		}
 		try
 		{
 			// ob_start();
@@ -668,6 +672,10 @@ class App_Model extends Model {
 		}
 		if (!isset($options['override'])) 
 		{
+			if (!$value) 
+			{
+				return false;
+			}
 			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
 		}		
 		else 
@@ -682,7 +690,7 @@ class App_Model extends Model {
 	 *
 	 * @param array $data [optional]
 	 * @param array $options [optional]
-	 * @return string $prefix
+	 * @return string|boolean $prefix | false on empty id value
 	 */
 	protected function makeSavePrefix($data = array(), $options = array())
 	{
@@ -704,6 +712,10 @@ class App_Model extends Model {
 			if (isset($data[$options['prefixValue']])) 
 			{
 				$value = $data[$options['prefixValue']];
+			}
+			if (!$value) //if value is empty, fail 
+			{
+				return false;
 			}
 			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
 		}		
@@ -826,6 +838,10 @@ class App_Model extends Model {
 	function save($data, $options = array()) 
 	{
 		$this->key = $this->makeSavePrefix($data, $options);
+		if (!$this->key) //if key was returned as false value, fail
+		{
+			return false;
+		}
 		if (!isset($options['validate'])) 
 		{
 			$options['validate'] = true;

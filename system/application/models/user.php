@@ -91,8 +91,17 @@ class User extends App_Model
 	public function addFollowedMessages($followed, $following)
 	{
 		$public = array_slice($followed['public'], 0, 20);
-		$following['private'] = array_merge($following['private'], $public);		
+		$this->loadModels(array('Message'));
+		foreach ($public as $id) {
+			$message = $this->Message->getOne($id);
+			if (empty($message['reply_to'])) 
+			{
+				array_unshift($following['private_threaded'], $message['id']);
+			}
+			array_unshift($following['private'], $message['id']);							
+		}
 		rsort($following['private']);
+		rsort($following['private_threaded']);
 		return $this->save($following);
 	}
 
