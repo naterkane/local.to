@@ -163,7 +163,9 @@ class Users extends App_Controller
 		}
 		else 
 		{
-			$this->data['user'] = $this->User->getByUsername($username);			
+			$this->data['profile'] = $this->User->getByUsername($username);			
+			$this->data['user'] = $this->data['profile'];
+			$this->isProfile = true;									
 		}
 		$this->data['page_title'] = 'Favorites';
         $this->data['messages'] = Page::make('Message', $this->data['user']['favorites'],array('threading'=>false));
@@ -207,19 +209,20 @@ class Users extends App_Controller
 	 */
 	public function following($username = null)
 	{
-        if (empty($username)) $this->mustBeSignedIn();
-		
-		if ($username != null)
+		if (!$username) 
 		{
-			$user = $this->User->getByUsername($username);
+			$this->mustBeSignedIn();
+			$this->data['user'] = $this->userData;
+			//$this->data['User']['threading'] = false;
 		}
 		else 
 		{
-			$user = $this->userData;
+			$this->data['profile'] = $this->User->getByUsername($username);			
+			$this->data['user'] = $this->data['profile'];
+			$this->isProfile = true;									
 		}
-		$this->data['user'] = $user;
-		$this->data['page_title'] = 'people '.$user['username'].' is following';
-		$this->data['users'] = Page::make('User', $user['following']);
+		$this->data['page_title'] = 'people ' . $this->data['user']['username'] . ' is following';
+		$this->data['users'] = Page::make('User', $this->data['user']['following']);		
 		$this->load->view('users/viewlist', $this->data);
 	}
 	
@@ -231,20 +234,20 @@ class Users extends App_Controller
 	 */
 	public function followers($username = null)
 	{
-        if (empty($username)) $this->mustBeSignedIn();
-		
-		if ($username != null)
+		if (!$username) 
 		{
-			$user = $this->User->getByUsername($username);
-			
+			$this->mustBeSignedIn();
+			$this->data['user'] = $this->userData;
+			//$this->data['User']['threading'] = false;
 		}
 		else 
 		{
-			$user = $this->userData;
+			$this->data['profile'] = $this->User->getByUsername($username);			
+			$this->data['user'] = $this->data['profile'];
+			$this->isProfile = true;									
 		}
-		$this->data['user'] = $user;
-		$this->data['page_title'] = 'people following '.$user['username'];
-		$this->data['users'] = Page::make('User', $user['followers']);		
+		$this->data['page_title'] = 'people following '.$this->data['user']['username'];
+		$this->data['users'] = Page::make('User', $this->data['user']['followers']);		
 		$this->load->view('users/viewlist', $this->data);		
 	}
 
@@ -329,8 +332,8 @@ class Users extends App_Controller
 	{
 		$this->checkId($username);		
 		$this->sidebar = "users/userprofile";
-		$this->data['profile'] = $this->User->getByUsername($username);	
-		
+		$this->data['user_profile'] = $this->User->getByUsername($username);	
+		$this->isProfile = true;
 		if (empty($this->data['profile'])) 
 		{
 			$this->show404();
@@ -681,14 +684,26 @@ class Users extends App_Controller
 		$this->sidebar = "users/userprofile";
         if ($user)
         {
-			$this->data['rss_updates'] = true;
 			$this->load->loadHelper('Html');
 			$this->data['page_title'] = $this->load->passData['html']->name($user);
-            $this->data['username'] = $user['username'];
-			$this->Message->threaded = false; //force threading
-        	$this->data['messages'] = Page::make('Message', $user['public']);
-			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
-            $this->load->view('users/view', $this->data);
+			$this->data['view_user'] = $user;
+			$this->data['username'] = $user['username'];
+			$this->data['profile'] = $user;	
+			$this->isProfile = true;
+			$this->data['isLocked'] = $this->User->isLocked($user);
+			if ($this->data['isLocked']) 
+			{
+	            $this->load->view('users/locked', $this->data);				
+			}
+			else 
+			{
+				$this->data['rss_updates'] = true;
+	            $this->data['username'] = $user['username'];
+				$this->Message->threaded = false; //force threading
+	        	$this->data['messages'] = Page::make('Message', $user['public']);
+				$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
+	            $this->load->view('users/view', $this->data);
+			}
         }
         else
         {

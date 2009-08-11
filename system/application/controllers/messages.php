@@ -93,6 +93,8 @@ class Messages extends App_Controller
 		$this->data['dm'] = true;
         $this->data['messages'] = Page::make('Message', $this->userData['inbox']);
 		$this->data['friend_select'] = $this->User->friendSelect($this->userData['followers']);	
+		$this->data['profile'] = $this->userData;
+		$this->data['homeMenu'] = true;		
 		$this->load->view('messages/inbox', $this->data);
 	}
 	
@@ -104,7 +106,9 @@ class Messages extends App_Controller
 		$this->data['sent'] = true;			
 		$this->data['message'] = null;
         $this->data['messages'] = Page::make('Message', $this->userData['sent']);
-		$this->data['friend_select'] = $this->User->friendSelect($this->userData['followers']);			
+		$this->data['friend_select'] = $this->User->friendSelect($this->userData['followers']);	
+		$this->data['profile'] = $this->userData;
+		$this->data['homeMenu'] = true;				
 		$this->load->view('messages/sent', $this->data);		
 	}
 
@@ -118,6 +122,8 @@ class Messages extends App_Controller
         $this->data['page_title'] = 'Public Timeline';
 		$pt = $this->Message->getPublicTimeline();
         $this->data['messages'] = Page::make('Message', $pt);
+		$this->data['profile'] = $this->userData;
+		$this->data['homeMenu'] = true;
 		$this->load->view('messages/public_timeline', $this->data);
 	}	
 

@@ -545,7 +545,28 @@ class User extends App_Model
 		} else {
 			return false;
 		}
-    }	
+    }
+
+	/**
+	 * Is a user locked
+	 *
+	 * @access public
+	 * @param array $user
+	 * @return boolean
+	 */
+	public function isLocked($user = array())
+	{
+		if (!is_array($user)) 
+		{
+			return false;
+		}
+		if (!empty($user['locked'])) 
+		{
+			return true;
+		}
+		return false;
+	}
+	
 
     /**
      * Check if a user has already requested friend

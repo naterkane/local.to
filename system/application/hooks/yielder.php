@@ -46,11 +46,7 @@ class Yielder {
 		if (!$ci->layout) {			
 			$ci->layout = 'default';
 		}
-		if (!$ci->sidebar) {			
-			$ci->sidebar = 'users/sidebarprofile';
-		}
 		$layout = BASEPATH ."application/views/themes/".config_item('theme')."/layouts/" . $ci->layout . ".php";
-		$sidebar = $ci->sidebar;
 		$current_output = $ci->output->get_output();
 		$controller = $ci->uri->segment(1);
 		if (file_exists($layout)){

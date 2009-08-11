@@ -30,15 +30,23 @@ class App_Controller extends Controller {
 	 */
     public $data = array();
 	/**
+	 * @var boolean
+	 */
+    public $isSignedIn = false;
+	/**
+	 * @var boolean
+	 */
+    public $isProfile = false;
+	/**
 	 * The layout to use for any given view. Refers to filename in <code>theme/layouts</code> directory
 	 * @var string
 	 */
 	public $layout = 'default';
 	/**
-	 * The sidebar to use for any given view. Must be set as relative path of <code>theme/</code> directory
+	 * Whether or not to load the group sidebar
 	 * @var string
-	 */
-	public $sidebar = 'users/sidebarprofile';
+	 */	
+	public $loadGroupSidebar = false;
 	/**
 	 * @var array
 	 */
@@ -213,6 +221,7 @@ class App_Controller extends Controller {
 		$this->userData = $this->User->get($user_id);
         if (! empty($this->userData)) 
 		{
+			$this->isSignedIn = true;
             $this->data['User'] = $this->userData;
 			$this->data['User']['following_count'] = count($this->userData['following']);
 			$this->data['User']['follower_count'] = count($this->userData['followers']);
@@ -221,7 +230,9 @@ class App_Controller extends Controller {
 			{
 				date_default_timezone_set($this->userData['time_zone']);
 			}
+			$this->data['homeMenu'] = true;			
         }
+		$this->data['profile'] = $this->userData;
     }
 
 	/**

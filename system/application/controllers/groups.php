@@ -24,6 +24,8 @@
 class Groups extends App_Controller
 {
 
+	var $loadGroupSidebar = true;	
+
 	/**
 	 * Accept an invite
 	 *
@@ -111,6 +113,7 @@ class Groups extends App_Controller
 				$this->cookie->setFlash('There was an error adding your group. Please see below for details.', 'error');
 			}
 		} 
+		$this->loadGroupSidebar = false;		
 		$this->load->view('groups/add', $this->data);
 	}
 
@@ -221,9 +224,10 @@ class Groups extends App_Controller
 	 * @access public
 	 */
 	public function index()
-	{		
+	{
 		$groups = $this->Group->getAll();
        	$this->data['groups'] = Page::make('Group', $groups['all'], array('method'=>'getMany'));
+		$this->loadGroupSidebar = false;
 		$this->load->view('groups/index', $this->data);
 	}
 
@@ -404,7 +408,7 @@ class Groups extends App_Controller
 			else 
 			{
 				$this->setData($this->data);
-			}
+			}			
 			$this->load->view('groups/settings', $this->data); 
 		} 
 		else 
@@ -506,7 +510,6 @@ class Groups extends App_Controller
 			{
 				$user = array();
 			}
-			//$this->data = $group;
 			$this->data['group'] = $group;
 			$this->data['page_title'] = $group['name'];
 			$this->data['group']['groupname'] = $group['name'];
@@ -533,8 +536,7 @@ class Groups extends App_Controller
 			{
 				$messages = $this->data['group']['mentions'];				
 			}
-        	$this->data['messages'] = Page::make('Message', $messages);	
-			$this->data['User'] = $user;
+        	$this->data['messages'] = Page::make('Message', $messages);			
 			if ($this->data['group']['member_count'] > 0) {
 				$this->load->view('groups/view', $this->data);
 			} 

@@ -255,6 +255,16 @@ class Html
 	}	
 	
 	/**
+	 * compares a string against the request URI
+	 * @return 
+	 * @param object $string
+	 */
+	public function isSection($string)
+	{
+		return stristr($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], $string);
+	}
+	
+	/**
 	 * Message
 	 *
 	 * @access public
@@ -315,6 +325,38 @@ class Html
 		}
 		return sprintf($this->tags['link'], $url, $this->_parseAttributes($htmlAttributes), $title); 
 	}
+
+	/**
+	 * Output a menu item
+	 *
+	 * @param  string  $title The content to be wrapped by <a> tags.
+	 * @param  mixed   $url Cake-relative URL or array of URL parameters, or external URL (starts with http://)
+	 * @param  array   $htmlAttributes[optional] Array of HTML attributes.
+	 * @param  string  $confirmMessage[optional] JavaScript confirmation message.
+	 * @param  boolean $escapeTitle[optional]	Whether or not $title should be HTML escaped.
+	 * @return string	An <a /> element wrapped in a formatted <li>
+	 */
+	public function menuItem($title, $url, $count = null, $linkAttributes = array(), $confirmMessage = false, $escapeTitle = true)
+	{
+		$return = "<li ";
+		if ($this->isSection($url)) 
+		{
+			$return .= "class=\"current\"";
+		}
+		$return .= ">";
+		if (is_array($count)) 
+		{
+			$count = count($count);
+			if ($count > 0) 
+			{
+				$title .= " (" . $count . ")";
+			}
+		}		
+		$return .= $this->link($title, $url, $linkAttributes, $confirmMessage, $escapeTitle);
+		$return .= "</li>\n";
+		return $return;
+	}
+	
 
 	/**
 	 * Output user name 

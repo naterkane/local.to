@@ -148,6 +148,56 @@ class Selenium
 	}
 
 	/**
+	 * Check group profile
+	 *
+	 * @access public
+	 * @param string $page
+	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @return 
+	 */
+	public function groupSbMember($page, $showSignIn = false, $showSignUp = false)
+	{
+		$this->openPage($page);
+		if ($showSignIn) 
+		{
+			$this->write('verifyElementPresent', 'sb_signin');			
+		}
+		if ($showSignUp) 
+		{
+			$this->write('verifyElementPresent', 'sb_signup');			
+		}
+		$this->write('verifyElementPresent', 'sb_group');		
+		$this->write('verifyElementPresent', 'sb_group_profile');
+		$this->write('verifyElementPresent', 'sb_members');		
+		$this->write('verifyElementPresent', 'sb_menu_long');
+	}
+	
+	/**
+	 * Check group profile
+	 *
+	 * @access public
+	 * @param string $page
+	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @return 
+	 */
+	public function groupSbNonMember($page, $showSignIn = false, $showSignUp = false)
+	{
+		$this->openPage($page);
+		if ($showSignIn) 
+		{
+			$this->write('verifyElementPresent', 'sb_signin');			
+		}
+		if ($showSignUp) 
+		{
+			$this->write('verifyElementPresent', 'sb_signup');			
+		}
+		$this->write('verifyElementPresent', 'sb_group');		
+		$this->write('verifyElementPresent', 'sb_group_profile');
+		$this->write('verifyElementPresent', 'sb_members');		
+		$this->write('verifyElementNotPresent', 'sb_menu_long');
+	}	
+
+	/**
 	* Used for testing non-public pages
 	*
 	* @access public	
@@ -276,6 +326,82 @@ class Selenium
 	{
 		echo '<tr><td><b>'.$title.'</b></td></tr>';
 	}
+	
+	/**
+	 * Make sure the full user profile is present
+	 *
+	 * @access public
+	 * @param string $page
+	 * @return 
+	 */
+	public function userSbFull($page)
+	{
+		$this->openPage($page);
+		$this->write('verifyElementNotPresent', 'sb_signup');
+		$this->write('verifyElementNotPresent', 'sb_signin');
+		$this->write('verifyElementNotPresent', 'sb_stats');
+		$this->write('verifyElementNotPresent', 'sb_menu_short');				
+		$this->write('verifyElementPresent', 'sb');
+		$this->write('verifyElementPresent', 'sb_profile');	
+		$this->write('verifyElementPresent', 'sb_following');
+		$this->write('verifyElementNotPresent', 'sb_menu_short');				
+	}
+	
+	/**
+	 * Make sure the partial user profile is present
+	 *
+	 * @access public
+	 * @param string $page
+	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @return 
+	 */
+	public function userSbProfile($page, $showSignIn = false, $showSignUp = false)
+	{
+		$this->openPage($page);
+		if ($showSignIn) 
+		{
+			$this->write('verifyElementPresent', 'sb_signin');			
+		}
+		if ($showSignUp) 
+		{
+			$this->write('verifyElementPresent', 'sb_signup');			
+		}
+		$this->write('verifyElementPresent', 'sb');		
+		$this->write('verifyElementPresent', 'sb_stats');
+		$this->write('verifyElementPresent', 'sb_following');
+		$this->write('verifyElementPresent', 'sb_menu_short');
+		$this->write('verifyElementNotPresent', 'sb_menu_long');
+		$this->write('verifyElementNotPresent', 'sb_profile');
+	}
+	
+	/**
+	 * Make sure the partial user profile is present
+	 *
+	 * @access public
+	 * @param string $page
+	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @return 
+	 */
+	public function userSbNone($page, $showSignIn = false, $showSignUp = false)
+	{
+		$this->openPage($page);
+		if ($showSignIn) 
+		{
+			$this->write('verifyElementPresent', 'sb_signin');			
+		}
+		if ($showSignUp) 
+		{
+			$this->write('verifyElementPresent', 'sb_signup');			
+		}
+		$this->write('verifyElementNotPresent', 'sb');		
+		$this->write('verifyElementNotPresent', 'sb_stats');
+		$this->write('verifyElementNotPresent', 'sb_following');
+		$this->write('verifyElementNotPresent', 'sb_menu_short');
+		$this->write('verifyElementNotPresent', 'sb_menu_long');
+		$this->write('verifyElementNotPresent', 'sb_profile');
+	}
+	
+	
 	
 	/**
 	 * Write a test command
