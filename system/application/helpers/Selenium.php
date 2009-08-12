@@ -334,17 +334,18 @@ class Selenium
 	 * @param string $page
 	 * @return 
 	 */
-	public function userSbFull($page)
+	public function userSbFull($page, $username)
 	{
 		$this->openPage($page);
 		$this->write('verifyElementNotPresent', 'sb_signup');
 		$this->write('verifyElementNotPresent', 'sb_signin');
 		$this->write('verifyElementNotPresent', 'sb_stats');
-		$this->write('verifyElementNotPresent', 'sb_menu_short');				
+		$this->write('verifyElementNotPresent', 'sb_menu_short');
+		$this->write('verifyTextPresent', $username . ' is not currently following anyone.');						
 		$this->write('verifyElementPresent', 'sb');
 		$this->write('verifyElementPresent', 'sb_profile');	
 		$this->write('verifyElementPresent', 'sb_following');
-		$this->write('verifyElementNotPresent', 'sb_menu_short');				
+		$this->write('verifyElementNotPresent', 'sb_menu_short');			
 	}
 	
 	/**

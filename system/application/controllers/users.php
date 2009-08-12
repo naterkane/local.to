@@ -428,12 +428,19 @@ class Users extends App_Controller
        	$user = $this->User->getByUsername($username);
         if ($user)
         {
-			$this->layout = 'rss';	
-			$this->data['user'] = $user;
-			$this->data['page_title'] = $user['username'];	
-        	$this->data['messages'] = Page::make('Message', $user['public']);
-			
-            $this->load->view('users/view.rss.php', $this->data);
+			//if user is locked no one can view rss, regardless of relationship
+			if ($user['locked']) 
+			{
+				$this->show404();
+			} 
+			else 
+			{
+				$this->layout = 'rss';	
+				$this->data['user'] = $user;
+				$this->data['page_title'] = $user['username'];	
+	        	$this->data['messages'] = Page::make('Message', $user['public']);
+	            $this->load->view('users/view.rss.php', $this->data);
+			}
         }
         else
         {
@@ -690,20 +697,16 @@ class Users extends App_Controller
 			$this->data['username'] = $user['username'];
 			$this->data['profile'] = $user;	
 			$this->isProfile = true;
-			$this->data['isLocked'] = $this->User->isLocked($user);
-			if ($this->data['isLocked']) 
+			$this->data['isLocked'] = $this->User->isLocked($user, $this->userData);
+			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);			
+			if (!$this->data['isLocked']) 
 			{
-	            $this->load->view('users/locked', $this->data);				
-			}
-			else 
-			{
-				$this->data['rss_updates'] = true;
-	            $this->data['username'] = $user['username'];
 				$this->Message->threaded = false; //force threading
 	        	$this->data['messages'] = Page::make('Message', $user['public']);
-				$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);
-	            $this->load->view('users/view', $this->data);
 			}
+			//if a user is locked, don't show rss. Doesn't matter what the relationship is
+			$this->data['rss_updates'] = !$user['locked'];
+			$this->load->view('users/view', $this->data);			
         }
         else
         {

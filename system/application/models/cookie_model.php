@@ -36,6 +36,16 @@ class Cookie_model extends App_Model
 			 */
 			'id' => null, 
 			/**
+			 * Flash message
+			 * @var string
+			 */
+			'flash_message' => null,
+			/**
+			 * Type of flash
+			 * @var string
+			 */
+			'flash_type' => null,			
+			/**
 			 * User's IP address
 			 * @var string
 			 */
@@ -45,6 +55,16 @@ class Cookie_model extends App_Model
 			 * @var integer
 			 */		
 			'last_accessed' => null,
+			/**
+			 * Update key for account deletion, etc
+			 * @var int
+			 */ 
+			'update_key' => null,
+			/**
+			 * User's id
+			 * @var int
+			 */ 
+			'user' => null,
 			/**
 			 * User's browser and operating system information
 			 * @var string

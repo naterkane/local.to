@@ -231,7 +231,7 @@ class Message extends App_Model
 			array_unshift($pt['threaded'], $message['id']);
 		}
 		array_unshift($pt['all'], $message['id']);
-		return $this->save($pt, array('override'=>'timeline', 'validate'=>false, 'ignoreTime'=>true));
+		return $this->save($pt, array('override'=>'timeline', 'validate'=>false, 'ignoreTime'=>true, 'ignoreModelFields'=>true));
 	}
 	
 	/**
@@ -361,9 +361,9 @@ class Message extends App_Model
 		}		
 		if ($this->threaded) 
 		{
-			return $pt['threaded'];
+			return @$pt['threaded'];
 		}
-		return $pt['all'];		
+		return @$pt['all'];		
 	}
 
     /**

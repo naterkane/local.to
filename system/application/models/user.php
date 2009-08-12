@@ -551,17 +551,22 @@ class User extends App_Model
 	 * Is a user locked
 	 *
 	 * @access public
-	 * @param array $user
+	 * @param array $user in question
+	 * @param array $otherUser
 	 * @return boolean
 	 */
-	public function isLocked($user = array())
+	public function isLocked($user = array(), $otherUser = array())
 	{
-		if (!is_array($user)) 
+		if ($user['locked']) 
 		{
-			return false;
-		}
-		if (!empty($user['locked'])) 
-		{
+			if (!empty($otherUser['id'])) 
+			{
+				if ($user['id'] == $otherUser['id']) 
+				{
+					return false;
+				}
+				return !in_array($otherUser['id'], $user['followers']);
+			}
 			return true;
 		}
 		return false;
@@ -1013,7 +1018,7 @@ class User extends App_Model
 		if ($this->mode == 'profile') 
 		{
 			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));
-			$this->validates_length_of('bio', array('min'=>0, 'max'=>160, 'message'=>'Bio must be fewer than 160 characters.'));
+			$this->validates_length_of('about_me', array('min'=>0, 'max'=>160, 'message'=>'Bio must be fewer than 160 characters.'));
 			$this->validates_length_of('hometown', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));	
 			$this->validates_length_of('birthdate', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
 			$this->validates_length_of('height', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));

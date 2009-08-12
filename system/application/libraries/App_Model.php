@@ -302,6 +302,26 @@ class App_Model extends Model {
     }
 
 	/**
+	 * Check to see if submitted form fields are valid
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function checkFields()
+	{
+		if (is_array($this->modelData)) 
+		{
+			foreach ($this->modelData as $key => $value) {
+				if (!array_key_exists($key, $this->fields)) 
+				{
+					unset($this->modelData[$key]);
+				}
+			}
+		}
+	}
+	
+
+	/**
 	 * Set up a new record
 	 * Takes the data passed to it and adds the values of those fields passed to it. 
 	 * Will not add any fields not in the models $fields variable
@@ -833,6 +853,7 @@ class App_Model extends Model {
 	 * [prefixValue] string Override the the value of the key, e.g. 'email' instead of the default, id
 	 * [saveOnly] string Key from Data you wish to save if you don't want to save the whole array
 	 * [ignoreTime] boolean Set to true to ignore timestamps
+	 * [ignoreModelFields] boolean Set to true to ignore the check against the AppModel::fields whitelist, useful for the public timeline
 	 * @return boolean
      */
 	function save($data, $options = array()) 
@@ -850,10 +871,18 @@ class App_Model extends Model {
 		{
 			$data = $data[$options['saveOnly']];
 		}
+		if (!isset($options['ignoreModelFields'])) 
+		{
+			$options['ignoreModelFields'] = false;
+		}
 		$valid = true;
 		$newData = null;	
 		$this->modelData = $data;
 		$this->logQuery($this->key, 'save');
+		if (!$options['ignoreModelFields']) 
+		{
+			$this->checkFields();
+		}
 		if ($options['validate']) 
 		{
 			$valid = $this->validate();

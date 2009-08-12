@@ -154,6 +154,9 @@ class Groups extends App_Controller
 		$this->data['group'] = $group;
 		$this->data['page_title'] = $group['name'] . ' Blacklist';
        	$this->data['blacklist'] = Page::make('Group', $group['blacklist'], array('method'=>'getMembers'));
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+		$this->data['group']['member_count'] = count($group['members']);			
+		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
 		$this->load->view('groups/blacklist', $this->data);	
 	}
 
