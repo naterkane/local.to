@@ -320,6 +320,24 @@ class App_Model extends Model {
 		}
 	}
 	
+	/**
+	 * Clip and array by the start and end positions
+	 *
+	 * @access public
+	 * @param array $array to clip
+	 * @param int $start postion
+	 * @param int $end postion		
+	 * @return array
+	 */
+	public function clip($array = array(), $start = null, $end = null)
+	{
+		if (($start !== null) && ($end !== null) && (is_array($array)))
+		{
+			$array = array_slice($array, $start, $end);	
+		}
+		return $array;
+	}
+	
 
 	/**
 	 * Set up a new record

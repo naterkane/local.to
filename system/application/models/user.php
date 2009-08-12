@@ -375,17 +375,47 @@ class User extends App_Model
 	 *
 	 * @access public
 	 * @param array $followers
+	 * @param object $Group	
 	 * @return array key=>value pairings for select
 	 */
-	public function friendSelect($friends = array())
+	public function friendSelect($user, $Group)
 	{
 		$return = array();
-		foreach ($friends as $friend) {
-			$data = $this->get($friend);
-			if ($data) 
-			{
-				$return[$data['username']] = $data['username'];
+		//add followers
+		if ($user['followers']) 
+		{
+			$return[0]['Friends'] = array();
+			foreach ($user['followers'] as $friend_id) {
+				$data = $this->get($friend_id);
+				if ($data) 
+				{
+					$return[0]['Friends'][$data['username']] = $data['username'];
+				}
 			}
+		}
+		//Add groups
+		$groups = $Group->getManyByIds($user['groups']);	//get many groups
+		if (!$groups) //if no groups are returned, just return users
+		{
+			return $return;
+		}
+		//add dm to groups
+		$return[1]['Teams'] = array();
+		foreach ($groups as $g) {
+			$return[1]['Teams']['!' . $g['name']] = $g['name'];
+		}
+		//add group members
+		$i = 2;
+		foreach ($groups as $g) {
+			$return[$i][$g['name']] = array();
+			$members = $Group->getMembers($g['members']);
+			foreach ($members as $member) {
+				if ($user['id'] != $member['id']) 
+				{
+					$return[$i][$g['name']][$member['username']] = $member['username'];
+				}
+			}
+			$i++;
 		}
 		return $return;
 	}

@@ -302,10 +302,7 @@ class Group extends App_Model
      */
     public function getMany($groupnames = array(), $start = null, $end = null)
     {
-		if (($start !== null) && ($end !== null) && (is_array($groupnames)))
-		{
-			$groupnames = array_slice($groupnames, $start, $end);	
-		}
+		$groupnames = $this->clip($groupnames, $start, $end);
         $return = array();
 		if (($groupnames) AND (is_array($groupnames))) {
 			foreach ($groupnames as $name)
@@ -313,6 +310,32 @@ class Group extends App_Model
 				if ($name) 
 				{
 					$return[] = $this->getByName($name);
+				}
+	        }
+		}
+        return $return;
+    }
+
+    /**
+     * Get more than one group
+     *
+	 * @access public
+     * @param array $groupnames
+     * @param integer $start[optional]
+     * @param integer $end[optional]
+     * @return array an array of groups
+     */
+    public function getManyByIds($group_ids = array(), $start = null, $end = null)
+    {
+		$group_ids = $this->clip($group_ids, $start, $end);
+        $return = array();
+		if (($group_ids) AND (is_array($group_ids))) {
+			foreach ($group_ids as $group_id)
+	        {
+				$group = $this->get($group_id);
+				if ($group) 
+				{
+					$return[] = $group;
 				}
 	        }
 		}
@@ -375,6 +398,34 @@ class Group extends App_Model
 		}
 		return false;
 	}
+	
+	/**
+	 * Is the user a member of any of the groups?
+	 *
+	 * @access public
+	 * @param array $groups Array of group ids
+	 * @param int $user_id User id in question	
+	 * @return boolean
+	 */
+	public function isMemberOfAnyGroup($groups, $user_id)
+	{
+		if (!is_array($groups)) 
+		{
+			return false;
+		}
+		foreach ($groups as $group_id) {
+			$group = $this->get($group_id);
+			if (!empty($group['members'])) 
+			{
+				if ($this->isMember($group['members'], $user_id)) 
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	
 	/**
 	 * Is a user an owner of a group?

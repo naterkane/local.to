@@ -285,7 +285,7 @@ class Message extends App_Model
 		{
 			return $return;
 		}
-		$messages = array_slice($messages, $start, $end);
+		$messages = $this->clip($messages, $start, $end);
 		foreach ($messages as $id) {
 			if (is_int($id)) 
 			{
@@ -405,6 +405,31 @@ class Message extends App_Model
 	public function isGroupMember()
 	{
 		return $this->Group->isMember($this->to['members'], $this->userData['id']);
+	}
+	
+	/**
+	 * Is the user a member of your groups
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function isFollowerOrTeammate()
+	{
+		if ($this->isFollower() || $this->isMemberOfAnyGroup()) 
+		{
+			return true;
+		}
+	}
+	
+	/**
+	 * Is the user the member of any group?
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function isMemberOfAnyGroup()
+	{
+		return $this->Group->isMemberOfAnyGroup($this->userData['groups'], $this->to['id']);
 	}
 	
 	
@@ -605,8 +630,8 @@ class Message extends App_Model
 		}
 		if ($this->mode == 'dm') 
 		{
-			$this->validates_presence_of('to', array('message'=>'A recipient is required'));			
-			$this->validates_callback('isFollower', 'to', array('message'=>'This user is not following you'));
+			$this->validates_presence_of('to', array('message'=>'A recipient is required'));
+			$this->validates_callback('isFollowerOrTeammate', 'to', array('message'=>'This user is not following you and/or is not on any of your teams.'));
 		}
 		if ($this->mode == 'dm_group') 
 		{

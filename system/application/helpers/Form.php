@@ -156,7 +156,42 @@ class Form extends Html
 			$options = $this->setOptions('value', $this->getElementValue($name), $options);			
 			$options['value'] = html_entity_decode($options['value']);
 		}
-		return sprintf($this->tags[$options['type']], $name, $this->_parseAttributes($options)); 
+		$type = $options['type'];
+		unset($options['type']);
+		return sprintf($this->tags[$type], $name, $this->_parseAttributes($options)); 
+	}
+
+	/**
+	 * Return the HTML for optgroup
+	 * 
+	 * @param string $name
+	 * @param array $values
+	 * @param array $options[optional]
+	 * @return string And HTML select element
+	 */
+	function optgroup($name, $values, $options=array())
+	{
+		$fieldValue = $this->getElementValue($name);
+		$return = "<select id=\"$name\" name=\"$name\">\n";
+		if (empty($options['first_label'])) 
+		{
+			$return .= "<option value=\"\">&nbsp;</option>\n";
+		}
+		else 
+		{
+			$return .= "<option value=\"\">" . $options['first_label'] . "</option>\n";			
+		}
+		foreach ($values as $optgroup) {
+			foreach ($optgroup as $title => $values) {
+				$return .= "<optgroup label=\"$title\">\n";
+				foreach ($values as $key => $value) {
+					$return .= $this->makeOptionTag($fieldValue, $key, $value);					
+				}
+			}
+			$return .= "</optgroup>\n";			
+		}
+		$return .= "</select>\n";		
+		return $return;
 	}
 	
 	/**
@@ -173,17 +208,23 @@ class Form extends Html
 		$return = "<select id=\"$name\" name=\"$name\">\n";
 		if (empty($options['no_blank'])) 
 		{
-			$return .= "<option value=\"\">&nbsp</option>\n";
+			$return .= "<option value=\"\">&nbsp;</option>\n";
 		}
 		foreach ($values as $key => $value) {
-			$return .= 	"<option value=\"$key\"";
-			if ($fieldValue == $key) 
-			{
-				$return .= 	" selected=\"selected\" ";
-			}
-			$return .= ">$value</option>\n";
+			$return .= $this->makeOptionTag($fieldValue, $key, $value);
 		}
 		$return .= "</select>\n";		
+		return $return;
+	}
+	
+	public function makeOptionTag($fieldValue, $key, $value)
+	{
+		$return = "<option value=\"$key\"";
+		if (($fieldValue == $key) && ($fieldValue)) 
+		{
+			$return .= 	" selected=\"selected\" ";
+		}
+		$return .= ">$value</option>\n";
 		return $return;
 	}
 
