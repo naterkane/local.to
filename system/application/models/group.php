@@ -309,7 +309,11 @@ class Group extends App_Model
 	        {
 				if ($name) 
 				{
-					$return[] = $this->getByName($name);
+					$group = $this->getByName($name);
+					if ($group) 
+					{
+						$return[] = $group;
+					}
 				}
 	        }
 		}
