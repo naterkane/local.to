@@ -198,6 +198,23 @@ class Selenium
 	}	
 
 	/**
+	 * Make a group and sign up members
+	 *
+	 * @access public
+	 * @param string
+	 * @return 
+	 */
+	public function makeGroup($group)
+	{
+		$this->openPage('/groups/add');
+		$this->write('type', 'name', $group);
+		$this->write('type', 'fullname', $group);	
+		$this->click('Add');
+		$this->write('verifyTextPresent', $group);
+		$this->openPage('/groups/members/' . $group);
+	}
+
+	/**
 	* Used for testing non-public pages
 	*
 	* @access public	
@@ -313,6 +330,27 @@ class Selenium
 		$this->click('Sign Up');
 		$this->write('verifyTextPresent', 'Your account has been created.');		
 		$this->openPage('/admin/delete_invite/${invite_key}');		
+	}
+	
+	/**
+	 * Make a group and sign up members
+	 *
+	 * @access public
+	 * @param string $group
+	 * @return 
+	 */
+	public function subscribeToGroup($group, $owner_name, $owner_password, $name, $password, $email)
+	{
+		$key = $this->randomString(10);
+		$this->signOut();
+		$this->signIn($owner_name, $owner_password);
+		$this->openPage('/groups/invites/' . $group);	
+		$this->write('type', 'invites', $email);	
+		$this->click('Create Invitations');
+		$this->write('storeValue', 'count-0', $key);		
+		$this->signOut();
+		$this->signIn($name, $password);
+		$this->openPage('/groups/accept/${' . $key . '}');
 	}
 	
 	/**
