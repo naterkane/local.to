@@ -133,7 +133,7 @@ class Group extends App_Model
 		$groups = $this->getAll();
 		$groups['all'][] = $name;
 		sort($groups['all']);
-		return $this->save($groups, array('override'=>'groups', 'validate'=>false));
+		return $this->save($groups, array('override'=>'groups', 'validate'=>false, 'ignoreTime'=>true, 'ignoreModelFields'=>true));
 	}
 	
 	/**
@@ -245,7 +245,7 @@ class Group extends App_Model
 	 */
 	function getAll()
 	{
-		$groups = $this->find(null, array('override'=>'groups'));
+		$groups = $this->find(null, array('override'=>'groups', 'ignoreModelFields'=>true));
 		if (empty($groups['all'])) 
 		{
 			$groups['all'] = array();
