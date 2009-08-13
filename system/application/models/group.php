@@ -133,7 +133,7 @@ class Group extends App_Model
 		$groups = $this->getAll();
 		$groups['all'][] = $name;
 		sort($groups['all']);
-		return $this->save($groups, array('override'=>'groups', 'validate'=>false, 'ignoreTime'=>true, 'ignoreModelFields'=>true));
+		return $this->saveGroupList($groups);
 	}
 	
 	/**
@@ -526,6 +526,41 @@ class Group extends App_Model
 	}
 	
 	/**
+	 * Remove a name from the group list
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return 
+	 */
+	public function removeFromGroupList($name = null)
+	{
+		if (!$name) 
+		{
+			return;
+		}
+		$groups = $this->getAll();			
+		$groups['all'] = array_flip($groups['all']);
+		unset($groups['all'][$name]);
+		$groups['all'] = array_unique($groups['all']);
+		$groups['all'] = array_flip($groups['all']);
+		return $this->saveGroupList($groups);
+	}
+	
+	
+	/**
+	 * Save the group list
+	 *
+	 * @access public
+	 * @param array $group
+	 * @return 
+	 */
+	public function saveGroupList($groups = array())
+	{
+		return $this->save($groups, array('override'=>'groups', 'validate'=>false, 'ignoreTime'=>true, 'ignoreModelFields'=>true));
+	}
+	
+	
+	/**
 	 * Send a message to the members of a group
 	 *
 	 * @todo Break this out into smaller methods
@@ -595,6 +630,8 @@ class Group extends App_Model
 		$this->startTransaction();
 		if ($this->save($group)) 
 		{
+			$this->removeFromGroupList($oldGroup['name']);
+			$this->addToGroupList($group['name']);			
 			$this->delete($oldGroup['name'], array('prefixValue'=>'name'));
 			$this->save($group, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
 		}
