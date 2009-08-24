@@ -118,6 +118,11 @@ class Message extends App_Model
 	private $groupMentions = array();	
 	/**
 	 * @access private
+	 * @var boolean
+	 */	
+	private $sentByGroupForm = false;	
+	/**
+	 * @access private
 	 * @var array
 	 */	
 	private $to = array();
@@ -131,7 +136,8 @@ class Message extends App_Model
 	 * @var mixed
 	 */
 	private $parent;
-	public $threaded = true;	
+	//keep the message off the public timeline?
+	public $threaded = true;
 
     /**
      * Add a new message
@@ -145,7 +151,10 @@ class Message extends App_Model
 		$this->startTransaction();
 		$this->loadModels(array('Group'));		
 		$data = $this->parse($message, $user);
-		
+		if (!empty($message['group_name'])) 
+		{
+			$this->sentByGroupForm = true;
+		}
 		if ($data['dm']) 
 		{
 			if ($this->save($data))
@@ -171,12 +180,12 @@ class Message extends App_Model
 			{
 				$this->mode = null;
 				$this->User->addToPublicAndPrivate($user, $data);	
-				if (!$user['locked']) 
+				$this->User->mode = null;
+				$this->Group->sendTo($data, $this->userData['id']);
+				if (!$user['locked'] && !$this->Group->keepOffPublicTimeline) 
 				{
 					$this->addToPublicTimeline($data);
 				}
-				$this->User->mode = null;
-		    	$this->Group->sendToMembers($data, $this->userData['id']);
 		    	$this->User->sendToFollowers($data, $this->userData['followers']);				
 				foreach ($this->userMentions as $mention_username => $user_mention) {
 					// query here just in case the user is mentioning herself, which would reset the data
@@ -185,11 +194,11 @@ class Message extends App_Model
 					{
 						$this->User->addToMentions($umention, $data['id']);
 					}					
-				}				
+				}
 				foreach ($this->groupMentions as $mention_groupname => $group_mention) {
 					// query here just in case the user is mentioning herself, which would reset the data
 					$gmention = $this->Group->getByName($mention_groupname);
-					if ($gmention && !in_array($user['id'],$gmention['members'])) 
+					if ($gmention) 
 					{
 						$this->Group->addToMentions($gmention, $data['id']);
 					}					
@@ -462,8 +471,7 @@ class Message extends App_Model
 	 */
 	public function parse($message, $user)
 	{
-		$data = $this->create($message);
-		
+		$data = $this->create($message);		
 		//check if the message is a dm even not sent through dm form
 		$parts = split(" ", $data['message'], 3);
 		if ((strtolower($parts[0]) == 'd') AND isset($parts[1]) AND isset($parts[2]))
@@ -541,7 +549,12 @@ class Message extends App_Model
 		{
 			$this->parseMentions($data, '!', 'groupMentions');
 		}
-		$data['message_html'] = preg_replace(URL_MATCH, '<a href="$1">$1</a>', $data['message_html']);		
+		$data['message_html'] = preg_replace(URL_MATCH, '<a href="$1">$1</a>', $data['message_html']);
+		//if sent from group form, add group name
+		if (!empty($message['group_name'])) 
+		{
+			$data['to_group'] = $message['group_name'];
+		}
 		return $data;
 	}
 	

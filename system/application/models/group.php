@@ -43,6 +43,13 @@ class Group extends App_Model
 	protected $idGenerator = 'groupId';
 	
 	/**
+	 * Set to true if a message is save to a group
+	 * @access public
+	 * @var boolean
+	 */
+	public $keepOffPublicTimeline = false;
+	
+	/**
 	 * Calls the parent constructor then loads any fields defined in the current theme's configuration into the Group::$fields array
 	 */
 	public function __construct()
@@ -449,6 +456,20 @@ class Group extends App_Model
 	}
 
 	/**
+	 * Is group public
+	 *
+	 * @access public
+	 * @param array $group
+	 * @return false 
+	 * @todo Make an actual function when we start using public groups 	
+	 */
+	public function isPublic($group = array())
+	{
+		return false;
+	}
+	
+
+	/**
 	 * function matchGroups
 	 * 
 	 * Get a group names from a message
@@ -561,7 +582,7 @@ class Group extends App_Model
 	
 	
 	/**
-	 * Send a message to the members of a group
+	 * Send a message to the members of a group if member, add to mentions if not. Checks to see if group exists as well. Does nothing if there is no mention of a group
 	 *
 	 * @todo Break this out into smaller methods
 	 * @access public	
@@ -569,48 +590,53 @@ class Group extends App_Model
 	 * @param integer $user_id	
 	 * @return boolean
 	 */
-	function sendToMembers($messageData, $user_id)
+	function sendTo($messageData, $user_id)
 	{
 		$this->mode = null;
 		$sent = array();
-		$sent[] = $user_id;
-		$groups = $this->matchGroups($messageData['message']);
-		if (!empty($groups)) 
+		if (!empty($messageData['to_group'])) 
 		{
 			$this->startTransaction();
-			foreach ($groups as $groupname) 
-			{
-				$group = $this->getByName($groupname);
-								
-				if ($group && !empty($group['members'])) 
+			$group = $this->getByName($messageData['to_group']);
+			if ($this->isMember($group['members'], $user_id))
+			{	
+				$this->keepOffPublicTimeline = true;
+				if ($this->sendToMembers($messageData, $group['members'], $user_id)) 
 				{
-					$this->addToMessages($group, $messageData);					
-					/**
-					 * check to make sure that the user sending the message is a member of the group before posting to group member's feeds.
-					 */
-					if (in_array($user_id,$group['members']))
-					{
-						foreach ($group['members'] as $member_id) {
-							if (!in_array($member_id, $sent)) 
-							{
-								$member = $this->User->get($member_id);
-								$this->User->addToPrivate($member, $messageData);
-								$sent[] = $member_id;
-							}
-						}	
-					}
-					else{
-					/**
-					 * @todo if the posting user isn't a member of a group, add this message to group's "mentions"
-					 */
-					}
+					$this->addToMessages($group, $messageData);
 				}
-				
 			}
 			return $this->endTransaction();
 		}
 		return false;
 	}
+	
+	/**
+	 * Send to a list of members
+	 *
+	 * @access public
+	 * @param array $message
+	 * @param array $member_ids	
+	 * @return boolean True if any members receive, false if none receive
+	 */
+	private function sendToMembers($message = array(), $member_ids = array(), $user_id = null)
+	{
+		if (empty($message) || empty($member_ids) || !$member_ids) 
+		{
+			return false;
+		}
+		$sent = array();
+		foreach ($member_ids as $member_id) {
+			if (!in_array($member_id, $sent)) 
+			{
+				$member = $this->User->get($member_id);
+				$this->User->addToPrivate($member, $message);
+				$sent[] = $member_id;
+			}
+		}
+	    return (count($sent) > 0);
+	}
+	
 
 	/**
 	 * function update

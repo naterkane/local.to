@@ -266,13 +266,16 @@ class App_Model extends Model {
 	 */
 	public function addTo($arrayName, &$data, $id, $push = false)
 	{
-		if ($push) 
+		if (!in_array($id, $data[$arrayName])) 
 		{
-			$data[$arrayName][] = $id;
-		}
-		else
-		{
-			array_unshift($data[$arrayName], $id);
+			if ($push) 
+			{
+				$data[$arrayName][] = $id;
+			}
+			else
+			{
+				array_unshift($data[$arrayName], $id);
+			}
 		}
 		return $this->save($data);
 	}
