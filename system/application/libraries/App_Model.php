@@ -371,7 +371,29 @@ class App_Model extends Model {
 		}
 		return $data;
 	}
-	
+
+	/**
+	 * Decrease a counter
+	 *
+	 * @access public
+	 * @param $counter_name
+	 * @param $data Array containing the counter (passed by reference)
+	 * @param $amount (default is 1)		
+	 * @return boolean
+	 */
+	public function decrease($counter_name = null, &$data = array(), $amount = 1)
+	{
+		if (!$counter_name || !array_key_exists($counter_name, $data)) 
+		{
+			return false;
+		}
+		$data[$counter_name] = $data[$counter_name] - $amount;
+		if ($data[$counter_name] < 0) 
+		{
+			$data[$counter_name] = 0;
+		}
+		return $this->save($data);
+	}	
 
 	/**
      * Delete a record
@@ -542,6 +564,26 @@ class App_Model extends Model {
 	{
 		return sha1($value . $this->config->item('salt'));
 	}
+
+	/**
+	 * Increase a counter
+	 *
+	 * @access public
+	 * @param $counter_name
+	 * @param $data Array containing the counter (passed by reference)
+	 * @param $amount (default is 1)		
+	 * @return boolean
+	 */
+	public function increase($counter_name = null, &$data = array(), $amount = 1)
+	{
+		if (!$counter_name || !array_key_exists($counter_name, $data)) 
+		{
+			return false;
+		}
+		$data[$counter_name] = $data[$counter_name] + $amount;
+		return $this->save($data);
+	}
+	
 
 	/**
 	 * Is a username not reserved

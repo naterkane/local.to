@@ -95,6 +95,7 @@ class Messages extends App_Controller
 		$this->data['friend_select'] = $this->User->friendSelect($this->userData, $this->Group);	
 		$this->data['profile'] = $this->userData;
 		$this->data['homeMenu'] = true;		
+		$this->User->updateRead('inbox', $this->userData);
 		$this->load->view('messages/inbox', $this->data);
 	}
 	

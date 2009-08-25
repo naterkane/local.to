@@ -915,6 +915,58 @@ class User extends App_Model
 	}
 
 	/**
+	 * Update read messages count
+	 *
+	 * @access public
+	 * @param string $counter Name of counter (e.g. 'private', 'inbox')	
+	 * @param array $user User data, passed by reference
+	 * @return boolean
+	 */
+	public function updateRead($counter = null, &$user = array())
+	{
+		$read_counter = $counter . '_read';
+		if (!array_key_exists($counter, $user) || !array_key_exists($read_counter, $user)) 
+		{
+			return false;
+		}
+		if ($user[$read_counter] != count($user[$counter])) 
+		{
+			$user[$read_counter] = count($user[$counter]);
+			return $this->save($user);
+		}
+		return true;
+	}
+	
+	/**
+	 * Update read messages count
+	 *
+	 * @access public
+	 * @param array $user User data, passed by reference
+	 * @param array $group Group data
+	 * @return boolean
+	 */
+	public function updateReadGroup(&$user = array(), $group = array())
+	{
+		$counter_array = 'group_messages_read';
+		$group_name = $group['name'];
+		$message_count = count($group['messages']);		
+		if (!array_key_exists($counter_array, $user)) 
+		{
+			return false;
+		}
+		if (array_key_exists($group_name, $user[$counter_array]))
+		{
+			if ($user[$counter_array][$group_name] == $message_count) 
+			{
+				return true;
+			}
+		}
+		$user[$counter_array][$group_name] = $message_count;
+		return $this->save($user);
+	}
+	
+
+	/**
 	 * Update a user's profile
 	 *
 	 * @param integer $user_id

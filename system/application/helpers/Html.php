@@ -351,6 +351,9 @@ class Html
 			{
 				$title .= " (" . $count . ")";
 			}
+		}
+		elseif(is_int($count) && $count > 0) {
+				$title .= " (" . $count . ")";			
 		}		
 		$return .= $this->link($title, $url, $linkAttributes, $confirmMessage, $escapeTitle);
 		$return .= "</li>\n";
@@ -396,6 +399,52 @@ class Html
 		}
 		return '?redirect=' . $url;
 	}
+	
+	/**
+	 * Calculate unread messages
+	 *
+	 * @access public
+	 * @param array $user
+	 * @param string $counter	
+	 * @return int | null
+	 */
+	public function unread($user = array(), $counter = null)
+	{
+		$read_counter = $counter . '_read';
+		if (array_key_exists($counter, $user) && array_key_exists($read_counter, $user)) 
+		{
+			$difference = count($user[$counter]) - $user[$read_counter];
+			if ($difference > 0) 
+			{
+				return $difference;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Calculate unread group messages
+	 *
+	 * @access public
+	 * @param array $user
+	 * @param array $group	
+	 * @return int | null
+	 */
+	public function unreadGroup($user = array(), $group = null)
+	{
+		$counter = 'group_messages_read';
+		$group_name = $group['name'];
+		if (array_key_exists($group_name, $user[$counter]) && !empty($group['messages'])) 
+		{
+			$difference = count($group['messages']) - $user[$counter][$group_name];
+			if ($difference > 0) 
+			{
+				return $difference;
+			}
+		}
+		return null;
+	}
+	
 	
 }
 ?>
