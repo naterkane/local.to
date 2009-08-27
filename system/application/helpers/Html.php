@@ -204,7 +204,7 @@ class Html
 	{
 		if ($isOwner && !$message['deleted_by_user']) 
 		{
-			return "[" . $this->link('Delete', '/messages/delete/' . $message['id'] . $this->sendMeHere(), array('id'=>'delete-' . $message['id']), 'Are your sure you want to delete this message? This can not be undone.') . "]";
+			return "[" . $this->link('Delete', '/messages/delete/' . $message['id'] . $this->sendMeHere(), array('id'=>'delete_' . $message['id']), 'Are your sure you want to delete this message? This can not be undone.') . "]";
 		}
 	}
 
@@ -220,11 +220,11 @@ class Html
 	{
 		if (in_array($message['id'], $user['favorites'])) 
 		{
-			return $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'on'));
+			return $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'on', 'id'=>'favorite_link_' . $message['id']));
 		}
 		else 
 		{
-			return $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'off'));			
+			return $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'off', 'id'=>'favorite_link_' . $message['id']));			
 		}
 	}
 

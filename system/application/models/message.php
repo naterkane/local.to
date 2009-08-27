@@ -316,7 +316,7 @@ class Message extends App_Model
 	public function favorite($message_id = null, $user = array())
 	{
 		$message = $this->find($message_id);
-		if (empty($message) || !isset($user['favorites'])) 
+		if (empty($message) || !isset($user['favorites']) || $this->isDeleted($message)) 
 		{
 			return false;
 		}
@@ -442,6 +442,19 @@ class Message extends App_Model
 			return true;
 		}
     }
+
+	/**
+	 * Is a message deleted?
+	 *
+	 * @access public
+	 * @param array $message
+	 * @return 
+	 */
+	public function isDeleted($message = array())
+	{
+		return ($message['deleted_by_user'] || $message['deleted_by_admin']);
+	}
+	
 
 	/**
 	 * Is a user a follower
