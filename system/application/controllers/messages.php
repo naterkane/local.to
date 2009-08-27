@@ -80,9 +80,20 @@ class Messages extends App_Controller
 		$this->redirect($redirect, $message);		
 	}
 
-	function delete($id)
+	function delete($id = null)
 	{
-		//remember to decrease thread count if message is reply to
+		$this->mustBeSignedIn();
+		$this->checkId($id);
+		$redirect = $this->getRedirect();
+		if ($this->Message->delete($id)) 
+		{
+			$message = 'The message was deleted';
+		} 
+		else 
+		{
+			$message = 'There was an error deleting the message';
+		}
+		$this->redirect($redirect, $message);
 	}
 	
 	public function inbox()

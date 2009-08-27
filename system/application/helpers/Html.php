@@ -194,6 +194,21 @@ class Html
 	}
 
 	/**
+	 * Make a delete message link
+	 *
+	 * @access public
+	 * @param array $message
+	 * @return 
+	 */
+	public function deleteMessageLink($message = array(), $isOwner = false)
+	{
+		if ($isOwner && !$message['deleted_by_user']) 
+		{
+			return "[" . $this->link('Delete', '/messages/delete/' . $message['id'] . $this->sendMeHere(), array('id'=>'delete-' . $message['id']), 'Are your sure you want to delete this message? This can not be undone.') . "]";
+		}
+	}
+
+	/**
 	 * Make a favorite link
 	 *
 	 * @access public

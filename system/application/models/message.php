@@ -41,6 +41,16 @@ class Message extends App_Model
 			 */
 			'created' => null,
 			/**
+			 * Was the comment deleted by user?
+			 * @var boolean
+			 */
+			'deleted_by_user' => false,
+			/**
+			 * Was the comment deleted by admin?
+			 * @var boolean
+			 */
+			'deleted_by_admin' => false,			
+			/**
 			 * Is this a direct message?
 			 * @var boolean
 			 */
@@ -257,6 +267,45 @@ class Message extends App_Model
 	}
 
 	/**
+	 * Delete a message
+	 * Flags a message for deletion.
+	 * @access public
+	 * @param $message_id
+	 * @return boolean
+	 */
+	public function delete($message_id = null)
+	{
+		$message = $this->getOne($message_id);
+		if ($message && $this->isOwner($message)) 
+		{
+			$message['deleted_by_user'] = true;
+			return $this->save($message);
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if a message has been flagged for deletion. If so, replace message with deletion message.
+	 *
+	 * @access public
+	 * @param Array $message Passed by reference
+	 * @return 
+	 */
+	public function checkIsDeleted(&$message = array())
+	{
+		if ($message['deleted_by_user'] === true) 
+		{
+			$message['message_html'] = 'User has deleted this post.';
+			$message['message'] = 'User has deleted this post.';			
+		}
+		if ($message['deleted_by_admin'] === true) 
+		{
+			$message['message_html'] = 'Admin has deleted this post.';
+			$message['message'] = 'Admin has deleted this post.';			
+		}
+	}
+
+	/**
 	 * Favorite a message
 	 *
 	 * @access public
@@ -337,6 +386,7 @@ class Message extends App_Model
 		}
 		if ($this->wellFormed($message)) 
 		{
+			$this->checkIsDeleted($message);
 			return $message;
 		}
 		return array();
@@ -459,6 +509,23 @@ class Message extends App_Model
 			return false;
 		}
     }
+
+	/**
+	 * Does the user own the message?
+	 *
+	 * @access public
+	 * @param array $message
+	 * @return boolean
+	 */
+	public function isOwner($message = array())
+	{
+		if (empty($message['user_id']) || empty($this->userData['id'])) 
+		{
+			return false;
+		}
+		return ($message['user_id'] == $this->userData['id']);
+	}
+	
 
 	/**
 	 * Parse up a message
