@@ -216,16 +216,23 @@ class Html
 	 * @param array $user	
 	 * @return 
 	 */
-	public function favorite($message, $user)
+	public function favoriteLink($message = array(), $user = array())
 	{
+		if (!$user) 
+		{
+			return;
+		}
+		$return = "[";
 		if (in_array($message['id'], $user['favorites'])) 
 		{
-			return $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'on', 'id'=>'favorite_link_' . $message['id']));
+			$return .= $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'on', 'id'=>'favorite_link_' . $message['id']));
 		}
 		else 
 		{
-			return $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(),array('class'=>'off', 'id'=>'favorite_link_' . $message['id']));			
+			$return .= $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'off', 'id'=>'favorite_link_' . $message['id']));
 		}
+		$return .= "]";
+		return $return;
 	}
 
 	/**
@@ -400,19 +407,56 @@ class Html
 	}
 	
 	/**
+	 * Make a reply link
+	 *
+	 * @access public
+	 * @param array $message
+	 * @return 
+	 */
+	public function replyLink($message = array())
+	{
+		if ($message['reply_to']) 
+		{
+			$reply = $message['reply_to'];
+		} 
+		else 
+		{
+			$reply = $message['id'];
+		}
+		$url = null;		
+		if ($_SERVER['PATH_INFO']) 
+		{
+			$parts = explode('/', $_SERVER['PATH_INFO']);
+			if ((!empty($parts[1])) && (strtolower($parts[1]) == 'home'))
+			{
+				$url = '/home';
+			}
+		}
+		return "[" . $this->link('Reply', '/home/' . $reply . $this->sendMeHere($url, true), array('id'=>'reply_link_' . $message['id'])) . "]";
+	}
+	
+	
+	/**
 	 * Create a redirect query string to send a user back to requesting page
 	 *
 	 * @access public
 	 * @param string $url[optional] To override default
 	 * @return 
 	 */
-	public function sendMeHere($url = null)
+	public function sendMeHere($url = null, $pathOnly = false)
 	{
 		if (!$url) 
 		{
-			$url = urlencode($_SERVER['REQUEST_URI']);
+			if ($pathOnly) 
+			{
+				$url = $_SERVER['PATH_INFO'];
+			} 
+			else 
+			{
+				$url = $_SERVER['REQUEST_URI'];
+			}
 		}
-		return '?redirect=' . $url;
+		return '?redirect=' . urlencode($url);
 	}
 	
 	/**

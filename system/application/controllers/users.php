@@ -304,6 +304,7 @@ class Users extends App_Controller
 		}
         $this->data['messages'] = Page::make('Message', $messages);
 		$this->data['following'] = $this->userData['following'];
+		$this->data['redirect'] = $this->getRedirect();
         $this->load->view('users/home', $this->data);
 		
     }
