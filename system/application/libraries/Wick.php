@@ -42,7 +42,7 @@ class Wick
      * @var    array
      * @access private
      */
-    var $_queue = array();
+    private $_queue = array();
 
     /**
      * Registry of loaded controllers
@@ -50,7 +50,7 @@ class Wick
      * @var    array
      * @access private
      */
-    var $_registry = array();
+    private $_registry = array();
 
     /**
      * Registrates current instance
@@ -58,7 +58,7 @@ class Wick
      * @return void
      * @access public
      */
-    function Wick()
+    public function Wick()
     {
         $ci                      = get_instance();
         $class                   = strtolower(get_class($ci));
@@ -76,7 +76,7 @@ class Wick
      * @return void
      * @access public
      */
-    function light($segments = array())
+    public function light($segments = array())
     {
         // Arrayify whatever needs arrayifying
         if (!is_array($segments)) {
@@ -140,7 +140,7 @@ class Wick
      * @return void
      * @access private
      */
-    function &_transfer(&$to)
+    private function &_transfer(&$to)
     {
         $ci = &get_instance();
         foreach (array_keys(get_object_vars($ci)) as $variable) {

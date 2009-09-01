@@ -230,7 +230,7 @@ class User extends App_Model
 	 * @param integer $user_id
 	 * @param string $password
 	 */
-	function changePassword($user_id, $password)
+	public function changePassword($user_id, $password)
 	{
 		$this->mode = 'change_password';
 		$this->postData = $this->updateData($this->userData, $this->postData);
@@ -260,7 +260,7 @@ class User extends App_Model
 	 * @param array $followed the user being followed
 	 * @return boolean
 	 */
-	function confirm($username, $followed)
+	public function confirm($username, $followed)
 	{
 		$this->mode = 'confirm';
 		$user = $this->getByUsername($username);	//get follower
@@ -293,7 +293,7 @@ class User extends App_Model
 	 * @param array $data User Data
 	 * @return boolean
 	 */
-	function deleteMe($data = array())
+	public function deleteMe($data = array())
 	{
 		if ($data) 
 		{
@@ -316,7 +316,7 @@ class User extends App_Model
 	 * @param array $followed the user being denied
 	 * @return boolean
 	 */
-	function deny($username, $followed)
+	public function deny($username, $followed)
 	{
 		$this->mode = 'deny';
 		$user = $this->getByUsername($username);	//get follower
@@ -348,7 +348,7 @@ class User extends App_Model
 	 * @param array $following Data of user following
 	 * @return boolean
 	 */
-	function follow($followed, $following)
+	public function follow($followed, $following)
 	{
 		if ($followed) 
 		{
@@ -423,10 +423,11 @@ class User extends App_Model
 	/**
 	 * Get a User's data by id
 	 *
+	 * @access public	
 	 * @param integer $user_id[optional]
 	 * @return 	array $user_data
 	 */
-    function get($user_id = null)
+	public function get($user_id = null)
     {
         if ($user_id)
         {
@@ -441,10 +442,11 @@ class User extends App_Model
 	/**
 	 * Get many users by user_ids
 	 *
+	 * @access public	
 	 * @param array $user_ids[optional]
 	 * @return 	array $user_data
 	 */
-    function getMany($user_ids = array(), $start = null, $end = null)
+	public function getMany($user_ids = array(), $start = null, $end = null)
     {
 		if (!is_array($user_ids)) 
 		{
@@ -468,10 +470,11 @@ class User extends App_Model
 	/**
 	 * Get a User's data by email
 	 *
+	 * @access public	
 	 * @param integer $email[optional]
 	 * @return 	array $user_data
 	 */
-	function getByEmail($email = null)
+	public function getByEmail($email = null)
 	{
 		$return = null;
 		if ($email) 
@@ -488,10 +491,11 @@ class User extends App_Model
 	/**
 	 * Get a User's data by username
 	 *
+	 * @access public	
 	 * @param integer $username[optional]
 	 * @return 	array $user_data
 	 */
-	function getByUsername($username = null)
+	public function getByUsername($username = null)
 	{
 		$return = null;
 		if ($username) 
@@ -508,10 +512,11 @@ class User extends App_Model
 	/**
 	 * Get all of a users friend requests
 	 *
+	 * @access public	
 	 * @param integer $user_id
 	 * @return 	
 	 */
-    function getFriendRequests($requests)
+	public function getFriendRequests($requests)
     {
 		$return = array();
 		foreach ($requests as $request) {
@@ -523,11 +528,12 @@ class User extends App_Model
 	/**
 	 * Get all of a users friend requests
 	 *
+	 * @access public	
 	 * @param array $you The other user
 	 * @param array $me The logged in user	
 	 * @return string 'following,' 'pending,' 'follow'
 	 */
-    function getFriendStatus($you, $me)
+	public function getFriendStatus($you, $me)
     {
 		if ($this->isFollowing($you['id'], $me['following']))
 		{
@@ -546,10 +552,11 @@ class User extends App_Model
     /**
      * Hash a password
      *
+	 * @access public
      * @param array $password
      * @return string
      */
-    function hashPassword($password)
+	public function hashPassword($password)
     {
         return $this->hash($password);
     }
@@ -557,11 +564,12 @@ class User extends App_Model
     /**
      * Check if a user is following another user
      *
+	 * @access public
      * @param integer $user_id The user in question
      * @param integer $my_id The user doing the asking
      * @return boolean
      */
-    function isFollowing($user_id, $following)
+	public function isFollowing($user_id, $following)
     {
 		if (!empty($following)) {
 			if (in_array($user_id, $following))
@@ -606,11 +614,12 @@ class User extends App_Model
     /**
      * Check if a user has already requested friend
      *
+	 * @access public
      * @param integer $user_id The user in question
      * @param integer $my_id The user doing the asking
      * @return boolean
      */
-    function isPendingFriendRequest($friendRequests, $my_id)
+	public function isPendingFriendRequest($friendRequests, $my_id)
     {
 		if (!empty($friendRequests)) {
 			if (in_array($my_id, $friendRequests))
@@ -632,7 +641,7 @@ class User extends App_Model
 	 * @access public
 	 * @return 
 	 */
-	function passwordMatches()
+	public function passwordMatches()
 	{
 		if (($this->hash($this->modelData['password'])) == ($this->modelData['old_password'])) 
 		{
@@ -650,7 +659,7 @@ class User extends App_Model
 	 * @access public
 	 * @return boolean
 	 */
-	function passwordsMatch()
+	public function passwordsMatch()
 	{
 		if ((isset($this->modelData['password'])) && (isset($this->modelData['passwordconfirm'])))
 		{
@@ -675,7 +684,7 @@ class User extends App_Model
 	 * @access public
 	 * @return boolean (Note: return true if they do NOT match)
 	 */
-	function passwordUsernameDoNotMatch()
+	public function passwordUsernameDoNotMatch()
 	{
 		if ((isset($this->modelData['username'])) && (isset($this->modelData['password'])))  
 		{
@@ -697,11 +706,12 @@ class User extends App_Model
 	/**
 	 * Remove a group, by id, from a user's groups 
 	 *  
+	 * @access public	
 	 * @param int $user
 	 * @param integer $group_id
 	 * @return boolean
 	 */
-	function removeGroup($user_id = null, $group_id = null)
+	public function removeGroup($user_id = null, $group_id = null)
 	{
 		$user = $this->User->get($user_id);
 		if ((empty($user)) || (!$group_id)) 
@@ -720,7 +730,7 @@ class User extends App_Model
 	 * @param array $data New password data	
 	 * @return 
 	 */
-	function resetPassword(&$user, $data)
+	public function resetPassword(&$user, $data)
 	{
 		$this->mode = 'reset_password';
 		$this->modelData = $data;
@@ -764,11 +774,12 @@ class User extends App_Model
     /**
      * Send messages to followes
      *
+	 * @access public
      * @param array $message
 	 * @param array $followers An array of follower ids
      * @return boolean
      */
-    function sendToFollowers($message, $followers)
+	public function sendToFollowers($message, $followers)
     {
 		if (!empty($message['id'])) 
 		{
@@ -783,10 +794,11 @@ class User extends App_Model
     /**
      * Sign in a user
      *
+	 * @access public
      * @param array $data Userdata
      * @return mixed Array on success | boolean false on failure
      */
-    function signIn($data)
+	public function signIn($data)
     {
         if (! empty($data['username']))
         {
@@ -806,7 +818,7 @@ class User extends App_Model
         }
     }
 
-    /**x
+    /**
      * Create a new user
      *
      * @todo Move create and modified to parent
@@ -815,7 +827,7 @@ class User extends App_Model
      * @param array $data Data to save
      * @param string $timeZone
      */
-    function signUp($data = array(), $permission = null)
+	public function signUp($data = array(), $permission = null)
     {
         $user = array();
         $now = time();
@@ -969,10 +981,11 @@ class User extends App_Model
 	/**
 	 * Update a user's profile
 	 *
+	 * @access public	
 	 * @param integer $user_id
 	 * @return boolean
 	 */
-	function updateProfile($user_id)
+	public function updateProfile($user_id)
 	{
 		$this->mode = 'profile';		
 		$this->postData = $this->updateData($this->userData, $this->postData);
@@ -990,12 +1003,13 @@ class User extends App_Model
 
 	/**
 	 * Update the sms data for a user
-	 *
+	 * 
+	 * @access public	
 	 * @param array $user
 	 * @param object $smsKey	
 	 * @return boolean
 	 */
-	function updateSms($user)
+	public function updateSms($user)
 	{
 		$this->mode = 'sms';
 		if (!$this->postData['device_updates']) 
@@ -1027,11 +1041,12 @@ class User extends App_Model
 	/**
 	 * Update threading preference
 	 * 
+	 * @access public	
 	 * @param integer $user_id
 	 * @param string $setting
 	 * @return boolean
 	 */
-	function updateThreading($user_id,$setting)
+	public function updateThreading($user_id,$setting)
 	{
 		$data['threading'] = $setting;
 		$data['id'] = $user_id;
@@ -1045,11 +1060,12 @@ class User extends App_Model
 	/**
 	 * Unfollow a user
 	 *
+	 * @access public	
 	 * @param string $username[optional] of user to follow
 	 * @param array $user data of user following
 	 * @return boolean
 	 */
-	function unfollow($username = null, $following)
+	public function unfollow($username = null, $following)
 	{
 		$this->startTransaction();
 		$user = $this->getByUsername($username);
@@ -1063,9 +1079,10 @@ class User extends App_Model
 	/**
 	 * Validates a user
 	 *
+	 * @access public	
 	 * @return boolean
 	 */	
-	function validate()
+	public function validate()
 	{
 		if (($this->mode == 'signup') OR  ($this->mode == 'profile'))
 		{

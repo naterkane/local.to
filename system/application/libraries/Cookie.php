@@ -25,22 +25,52 @@
  */
 class Cookie {
 	
-	var $cookie;
-	var $domain = '/';
-	var $expires;
-	var $name = 'Microblog';
-	var $randomString;
-	var $salt;	
+	/**
+	 * Cookie Model is stored to this
+	 * @var object
+	 * @access private	
+	 */	
+	private $cookie;
+	/**
+	 * Cookie domain
+	 * @var string
+	 * @access private	
+	 */	
+	private $domain = '/';
+	/**
+	 * Date cookie expires
+	 * @var string
+	 * @access private	
+	 */	
+	private $expires;
+	/**
+	 * Cookie name
+	 * @var string
+	 * @access private	
+	 */	
+	private $name = 'Microblog';
+	/**
+	 * Random String for cookie key
+	 * @var boolean
+	 * @access private	
+	 */	
+	private $randomString;
+	/**
+	 * Salt for encoding
+	 * @var string
+	 * @access private
+	 */	
+	private $salt;	
 	
 	/**
 	 * Constructor
 	 *
 	 * Loads controller into Library, then loads cookie model.
 	 * 
-	 * @see check()
-	 * @todo Check performance on this. See if there is a better way.
+	 * @access public
+	 * @return	
 	 */
-	function __construct() 
+	public function __construct() 
 	{
 		$ci = get_instance();
 		$ci->load->model(array('Cookie_model'));
@@ -54,12 +84,10 @@ class Cookie {
 	/**
 	 * Check if cookie is set, if not, set one
 	 * 
-	 * @see exists()
-	 * @see create()
-	 * @see getAllData()
-	 * @see delete()
+	 * @access public
+	 * @return 
 	 */
-	function check()
+	public function check()
 	{
 		if (!$this->exists()) 
 		{
@@ -82,12 +110,10 @@ class Cookie {
 	/**
 	 * Create a new cookie
 	 * 
-	 * @see cookie_model
-	 * @see cookie_model::create()
-	 * @see cookie_model::save()
-	 * @see setcookie()
+	 * @access public
+	 * @return
 	 */
-	function create()
+	public function create()
 	{
 		$cookie = $this->cookie->create();
 		$cookie['id'] = sha1(time() . $this->randomString . $this->salt);
@@ -101,11 +127,10 @@ class Cookie {
 	/**
 	 * Delete a cookie
 	 * 
-	 * @see exists()
-	 * @see cookie_model
-	 * @see cookie_model::delete()
+	 * @access public
+	 * @return
 	 */
-	function delete() 
+	public function delete() 
 	{
 		setcookie($this->name, '', time()-60000, $this->domain);		
 		if ($this->exists()) 
@@ -117,10 +142,10 @@ class Cookie {
 	/**
 	 * Does a cookie exist?
 	 *
-	 * @access public	
+	 * @access public
 	 * @return boolean
 	 */
-	function exists()
+	public function exists()
 	{
 		if (!isset($_COOKIE[$this->name])) 
 		{
@@ -136,7 +161,7 @@ class Cookie {
 	 * @access public
 	 * @return string
 	 */
-	function flashMessage()
+	public function flashMessage()
 	{
 		$return = null;
 		if ($this->exists()) 
@@ -164,7 +189,7 @@ class Cookie {
 	 * @param string $key 
 	 * @return array|string|null
 	 */	
-	function get($key)
+	public function get($key)
 	{		
 		$data = $this->getAllData();
 		if (isset($data[$key])) 
@@ -183,7 +208,7 @@ class Cookie {
 	 * @access public
 	 * @return array|null
 	 */
-	function getAllData()
+	public function getAllData()
 	{
 		if ($this->exists()) 
 		{
@@ -198,10 +223,9 @@ class Cookie {
 	 *
 	 * @access public
 	 * @param string $key 
-	 * @param mixed $data 	
 	 * @return boolean
 	 */
-	function remove($key)
+	public function remove($key)
 	{
 		if ($this->exists()) 
 		{
@@ -222,7 +246,7 @@ class Cookie {
 	 * @param mixed $data 	
 	 * @return boolean
 	 */
-	function set($key, $data)
+	public function set($key, $data)
 	{
 		if ($this->exists()) 
 		{	
@@ -251,27 +275,6 @@ class Cookie {
 		}
 		$this->set('flash_message', $message);
 		$this->set('flash_type', $type);
-	}
-
-	/**
-	 * Set a user data to a session
-	 *
-	 * @access public
-	 * @param array $user User data
-	 * @return 
-	 * @depreciated
-	 */
-	public function setUser($user = array())
-	{
-		$data = array();
-		$data['username'] = $user['username'];
-		$data['id'] = $user['id'];
-		$data['locked'] = $user['locked'];
-		$data['activated'] = $user['locked'];	
-		$data['threading'] = $user['threading'];	
-		$data['email'] = $user['email'];		
-		$data['time_zone'] = $user['time_zone'];
-		$this->set('user', $data);
 	}
 	
 }

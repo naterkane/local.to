@@ -23,16 +23,67 @@ if (!defined('BASEPATH')) exit ('No direct script access allowed');
 class Selenium
 {
 
+	/**
+	 * Url for admin
+	 *
+	 * @var string
+	 */
 	public $admin_url;
+	/**
+	 * Text to be verified for a bad request error
+	 *
+	 * @var string
+	 */	
 	public $badRequest = 'Bad Request';
+	/**
+	 * Text to be verified for a bad character error
+	 *
+	 * @var string
+	 */	
 	public $badCharacters = 'The URI you submitted has disallowed characters.';
+	/**
+	 * Text to be verified for a general error
+	 *
+	 * @var string
+	 */
 	public $errorText = 'An Error Was Encountered';	
+	/**
+	 * Text to be verified for a 404
+	 *
+	 * @var string
+	 */	
 	public $missingText = '404 Page Not Found';	
+	/**
+	 * Text to be verified for a PHP notice
+	 *
+	 * @var string
+	 */	
 	public $noticeText = 'Notice';	
+	/**
+	 * Text to be verified for a PHP error
+	 *
+	 * @var string
+	 */	
 	public $phpError = 'A PHP Error was encountered';	
+	/**
+	 * Url to be checked
+	 *
+	 * @var string
+	 */	
 	public $url;	
+	/**
+	 * Text to be verified for a php warning
+	 *
+	 * @var string
+	 */	
 	public $warningText = 'Warning';
 
+	/**
+	 * Class constructor
+	 * Passes off url and admin urls from a controller instance
+	 * @access public
+	 * @return 	
+	 */
 	public function __construct()
 	{
 		$ci = get_instance();
@@ -47,6 +98,7 @@ class Selenium
 	 * @access private	
 	 * @param string $value
 	 * @return string $value
+	 * @return 	
 	 */	
 	private function ieXpathFix($value)
     {
@@ -72,6 +124,7 @@ class Selenium
 	 * @param string $command Command name. Find them here: http://seleniumhq.org/documentation/core/reference.html
 	 * @param string $target Name of object to target
 	 * @param string $value Value to be passed
+	 * @return 	
 	 */
 	private function row($command, $target, $value)
 	{
@@ -86,6 +139,7 @@ class Selenium
 	 * @access public		
 	 * @param string $title Name of suite
 	 * @param string $view View to load
+	 * @return 	
 	 */
 	public function addTestCase($title, $view)
 	{
@@ -94,8 +148,10 @@ class Selenium
 	
 	/**
 	 * Check all errors
-	 *
+	 * Checks for php notices, warnings, errors. Also code igniter bad characters error and bad request errors.
+	 * @param boolean $missing check for 404 error
 	 * @access public	 
+	 * @return 	
 	 */
 	public function checkErrors($missing = true)
 	{
@@ -113,7 +169,7 @@ class Selenium
 	
 	/**
 	 * Test that a bad characters error was thrown
-	 *
+	 * Used to test for bad characters in URL. Is true when a bad character is present.
 	 * @access public
 	 * @param string $url
 	 * @return 
@@ -129,6 +185,7 @@ class Selenium
 	 *
 	 * @param string $title Title of test case
 	 * @access public	
+	 * @return 	
 	 */
 	public function caseTitle($title)
 	{
@@ -140,6 +197,7 @@ class Selenium
 	 *
 	 * @access public			
 	 * @param string $buttonValue e.g. 'save'
+	 * @return 	
 	 */
 	public function click($buttonValue=null) 
 	{
@@ -151,8 +209,9 @@ class Selenium
 	 * Check group profile
 	 *
 	 * @access public
-	 * @param string $page
+	 * @param string $page Path to page to open
 	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @param boolean $showSignUp Set to false if testing for sign up form
 	 * @return 
 	 */
 	public function groupSbMember($page, $showSignIn = false, $showSignUp = false)
@@ -178,6 +237,7 @@ class Selenium
 	 * @access public
 	 * @param string $page
 	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @param boolean $showSignUp Set to false if testing for sign up form	
 	 * @return 
 	 */
 	public function groupSbNonMember($page, $showSignIn = false, $showSignUp = false)
@@ -198,10 +258,10 @@ class Selenium
 	}	
 
 	/**
-	 * Make a group and sign up members
+	 * Make a group and open member page
 	 *
 	 * @access public
-	 * @param string
+	 * @param string $group Name of group to make
 	 * @return 
 	 */
 	public function makeGroup($group)
@@ -215,7 +275,8 @@ class Selenium
 	}
 
 	/**
-	* Used for testing non-public pages
+	* Can user view page not signed in?
+	* Used for testing non-public pages to make sure user can not access when not signed in
 	*
 	* @access public	
 	* @param string $path
@@ -229,7 +290,6 @@ class Selenium
 
 	/**
 	 * Open page that should not exist
-	 *
 	 * Make sure a 404 appears
 	 * 
 	 * @access public	
@@ -243,11 +303,10 @@ class Selenium
 
 	/**
 	 * Open page
-	 *
-	 * Includes calls to several methods useful to check if a page is loading properly
+	 * Opens page, waits to load, and then checks for all errors.
 	 * 
 	 * @access public	
-	 * @param string $path Relative path to open
+	 * @param string $path Relative path to open e.g. '/home'
 	 */
 	public function openPage($page)
 	{
@@ -257,7 +316,7 @@ class Selenium
 
 	/**
 	* Random Alpha-Numeric String
-	*
+	* Used for generating random user names, group names, messages, etc.
 	* @param int length
 	* @return string 
 	* @access public
@@ -274,7 +333,7 @@ class Selenium
 	}
 
 	/**
-	* Random Alpha-Numeric String
+	* Sign in a user
 	* 
 	* @param string $name
 	* @param string $password	
@@ -295,9 +354,10 @@ class Selenium
 	}
 
 	/**
-	* Wrapper for signing out
+	* sign out a user
 	*
-	* @access public	
+	* @access public
+	* @return 	
 	*/
 	public function signOut()
 	{
@@ -306,11 +366,11 @@ class Selenium
 	}
 
 	/**
-	* Sign In
+	* Sign Up a new user
 	*
-	* @todo This will expanded into its own test with validation
 	* @param string $name
 	* @param string $password	
+	* @param string $email
 	* @return
 	* @access public
 	*/	
@@ -333,10 +393,15 @@ class Selenium
 	}
 	
 	/**
-	 * Make a group and sign up members
+	 * Make a group and sign up an existing user as member
 	 *
 	 * @access public
-	 * @param string $group
+	 * @param string $group Name of group
+	 * @param string $owner_name username of owner
+	 * @param string $owner_password password of owner
+	 * @param string $name Name of member
+	 * @param string $password Password of member
+	 * @param string $email Email of member
 	 * @return 
 	 */
 	public function subscribeToGroup($group, $owner_name, $owner_password, $name, $password, $email)
@@ -370,6 +435,7 @@ class Selenium
 	 *
 	 * @access public
 	 * @param string $page
+	 * @param string $username	
 	 * @return 
 	 */
 	public function userSbFull($page, $username)
@@ -392,6 +458,7 @@ class Selenium
 	 * @access public
 	 * @param string $page
 	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @param boolean $showSignUp Set to false if testing for sign up form
 	 * @return 
 	 */
 	public function userSbProfile($page, $showSignIn = false, $showSignUp = false)
@@ -419,6 +486,7 @@ class Selenium
 	 * @access public
 	 * @param string $page
 	 * @param boolean $signedIn Set to false if testing non-signed in page	
+	 * @param boolean $showSignUp Set to false if testing for sign up form
 	 * @return 
 	 */
 	public function userSbNone($page, $showSignIn = false, $showSignUp = false)

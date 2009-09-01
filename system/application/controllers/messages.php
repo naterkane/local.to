@@ -26,9 +26,8 @@ class Messages extends App_Controller
    
     /**
      * Add a message
-     *
-     * @todo Make ajax
-     * @todo Find out where `<script>` tags are being set to `[removed]` and make sure they're just escaped like other tags.
+     * Used for all messages in the db, regardless of type. Model will handle that.
+	 * @access public
      * @return
      */
     public function add()
@@ -61,7 +60,7 @@ class Messages extends App_Controller
 	 * Favorite a message
 	 *
 	 * @access public
-	 * @param id $message_id
+	 * @param int $message_id
 	 * @return 
 	 */
 	public function favorite($message_id = null)
@@ -80,7 +79,14 @@ class Messages extends App_Controller
 		$this->redirect($redirect, $message);		
 	}
 
-	function delete($id = null)
+	/**
+	 * Delete a message
+	 *
+	 * @access public
+	 * @param int $id Message id	
+	 * @return
+	 */
+    public function delete($id = null)
 	{
 		$this->mustBeSignedIn();
 		$this->checkId($id);
@@ -96,6 +102,12 @@ class Messages extends App_Controller
 		$this->redirect($redirect, $message);
 	}
 	
+	/**
+	 * View DM inbox
+	 *
+	 * @access public
+	 * @return
+	 */
 	public function inbox()
 	{
 		$this->mustBeSignedIn();
@@ -109,7 +121,13 @@ class Messages extends App_Controller
 		$this->User->updateRead('inbox', $this->data['profile']);
 		$this->load->view('messages/inbox', $this->data);
 	}
-	
+
+	/**
+	 * View sent DMs
+	 *
+	 * @access public
+	 * @return
+	 */
 	public function sent()
 	{
 		$this->mustBeSignedIn();
@@ -128,8 +146,9 @@ class Messages extends App_Controller
 	 * Public timeline
 	 *
 	 * @access public
+	 * @return
 	 */
-	function public_timeline()
+    public function public_timeline()
 	{
         $this->data['page_title'] = 'Public Timeline';
 		$pt = $this->Message->getPublicTimeline();
@@ -143,7 +162,7 @@ class Messages extends App_Controller
 	 * Favorite a message
 	 *
 	 * @access public
-	 * @param id $message_id
+	 * @param int $message_id
 	 * @return 
 	 */
 	public function unfavorite($message_id = null)
@@ -167,10 +186,10 @@ class Messages extends App_Controller
 	 *
 	 * @access public
 	 * @param string $username
-	 * @param integer $timestamp	
+	 * @param int $message_id	
 	 * @return 
 	 */
-	function view($username = null, $message_id = null)
+    public function view($username = null, $message_id = null)
 	{
 		$this->data['message'] = $this->Message->getOne($message_id);
 		$this->data['messages'] = $this->Message->getMany($this->data['message']['replies']);

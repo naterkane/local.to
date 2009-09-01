@@ -89,7 +89,7 @@ class Group_Invite extends App_Model
 	public $successes = array();
 	
 	/**
-	 * Calls parent constructor, then sets Group to parent Group
+	 * Calls parent constructor, then passes off Group from controller instance
 	 *
 	 * @access public
 	 */
@@ -130,7 +130,7 @@ class Group_Invite extends App_Model
 	 * 
 	 * @access public
 	 * @param string $emails
-	 * @param array $group data
+	 * @param array $group data (passed by reference)
 	 */
 	public function addMany($emails, &$group)
 	{
@@ -138,12 +138,10 @@ class Group_Invite extends App_Model
 		{
 			str_replace(' ','',$emails);
 			$emails = explode(',', $emails);
-			//array_map('trim',$emails);
 		}
 		$return['successes'] = 0;
 		$return['failures'] = 0;		
 		foreach ($emails as $key => $email) {
-			//echo $key . " " .$email;
 			$this->validationErrors = array();
 			$email = trim($email);
 			$data = array();
@@ -164,7 +162,8 @@ class Group_Invite extends App_Model
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean|Group->save()
+	 * @param boolean $checkOwnership Check to see whether the user deleting owns the invite
+	 * @return boolean
 	 */
 	public function delete($key = null, $checkOwnership = true)
 	{
@@ -192,7 +191,7 @@ class Group_Invite extends App_Model
 	 * Get one invite
 	 *
 	 * @access public
-	 * @param integer $invite_id
+	 * @param integer $key
 	 * @return array Full invite
 	 */
 	public function get($key)
@@ -205,7 +204,7 @@ class Group_Invite extends App_Model
 	 * Get many invites
 	 *
 	 * @access public
-	 * @param array $keys Array of invite keys (not ids)
+	 * @param array $keys Array of invite keys
 	 * @return array Full invites
 	 */
 	public function getMany($keys = array())
@@ -221,6 +220,7 @@ class Group_Invite extends App_Model
 	 * Make a response after adding many invites
 	 *
 	 * @access public
+	 * @return	
 	 */
 	public function makeResponse()
 	{
@@ -247,7 +247,7 @@ class Group_Invite extends App_Model
 	 * @access public
 	 * @return boolean
 	 */
-	function validate()
+	public function validate()
 	{
 		$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required'));
 	    return (count($this->validationErrors) == 0);

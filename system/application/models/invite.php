@@ -57,7 +57,7 @@ class Invite extends App_Model
 	/**
 	 * Deletes an invitation record
 	 * 
-	 * @return 
+	 * @return object results
 	 * @param string $email
 	 * @param string $key
 	 */

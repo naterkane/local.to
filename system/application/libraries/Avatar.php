@@ -26,37 +26,58 @@
 class Avatar{
 	
 	/**
+	 * Array of allowed mime types
 	 * @var array
 	 */
 	public $allowed_mime_types = array('image/jpeg','image/pjpeg','image/gif','image/png');
 	/**
+	 * Directories to make	
 	 * @var array
 	 */
 	public $dir = array();
 	/**
-	 * @var
+	 * Name of controller	
+	 * @var string
 	 */
 	public $controller;
 	/**
+	 * List of all errors	
 	 * @var array
 	 */
 	public $errors = array();
+	/**
+	 * File to save
+	 * @var string
+	 */	
 	public $file;
+	/**
+	 * New file to save
+	 * @var string
+	 */	
 	public $fileNew;
 	/**
+	 * Name of directory to save avatar in
 	 * @var string
 	 */
 	public $image_location = 'images';
+	/**
+	 * Model to save against
+	 * @var string
+	 */	
 	public $model;
 	/**
-	 * @var integer
+	 * Zoom? Crop?
+	 * @var boolean
 	 */
 	public $zoom_crop = 1;//do not zoom crop
 	
 	/**
 	 * Add an error to the results
+	 * @param string $msg	
+	 * @return
+	 * @access public	
 	 */
-	function addError($msg){
+	public function addError($msg){
 		$this->errors[] = $msg;
 	}
 	
@@ -69,8 +90,9 @@ class Avatar{
 	 * @param string $filename
 	 * @param string $model	
 	 * @return bool
+	 * @access public
 	 **/
-	function make($dir, $sourceFileName, $newFileName, $width, $height){
+	public function make($dir, $sourceFileName, $newFileName, $width, $height){
 		require_once(APPPATH . 'libraries/phpthumb/phpthumb.class.php');
 		$this->phpthumb = new Phpthumb();
 		$this->dir = $dir;		
@@ -102,7 +124,16 @@ class Avatar{
 		}	
 	}
 
-	function makeAll($dir, $sourceFileName, $username, $sizes){
+	/**
+	 * Make all avatars needed for a user
+	 *
+	 * @param string $dir Directory to save to
+	 * @param string $sourceFileName Name of the source file uploaded
+	 * @param string $username Name of user to be saved
+	 * @param array $sizes Array of sizes in pixels
+	 * @return bool
+	 **/
+	public function makeAll($dir, $sourceFileName, $username, $sizes){
 		//var_dump($sizes);// exit;
 		foreach ($sizes as $key=>$size) { 
 			if (!$this->make($dir, $sourceFileName, $dir . '/' .  $username . '_' . $size .'.jpg', $size, $size)) 
@@ -116,10 +147,10 @@ class Avatar{
 
 	/**
 	 * Does a file have any size?
-	 *
+	 * @access public
 	 * @return bool
 	 */
-	function hasSize() {
+	public function hasSize() {
 		if(!file_exists($this->file)){
 			$this->addError('This file does not exist');
 			return false;
@@ -130,8 +161,10 @@ class Avatar{
 
 	/**
 	 * Are there any errors?
+	 * @access public
+	 * @return bool	
 	 */
-	function isError() {
+	public function isError() {
 		if(count($this->errors) > 0){
 			return true;
 		} else {
@@ -141,10 +174,10 @@ class Avatar{
 
 	/**
 	 * Is the file system writable?
-	 *
+	 * @access public
 	 * @return bool
 	 */
-	function isWritable() {
+	public function isWritable() {
 		if(!is_writable($this->dir)){
 			$this->addError('directory: ' . $this->dir['dirname'] . ' is not writable.');
 			return false;
@@ -155,8 +188,10 @@ class Avatar{
 
 	/**
 	 * Remove a thumbnail
+	 * @access public
+	 * @return	
 	 */
-	function remove($path) {
+	public function remove($path) {
 		if(file_exists($path)){
 			unlink($path);
 		}
@@ -164,17 +199,19 @@ class Avatar{
 
 	/**
 	 * Initialize
+	 * @access public
+	 * @return 	
 	 */
-	function startup( &$controller ) {
+	public function startup( &$controller ) {
       $this->controller = &$controller;
     }
 
 	/**
 	 * Is our file is one of the valid mime type?
-	 *
-	 * @return bool	
+	 * @access public
+	 * @return bool
 	 */
-	function validMimeType() {
+	public function validMimeType() {
 		$type = filetype($this->file);
 		if(!in_array($file, $this->allowed_mime_types)){
 			$this->addError('Invalid File type: '.$this->file['type']);

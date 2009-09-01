@@ -735,7 +735,7 @@ class Message extends App_Model
 	}
 
 	/**
-	 * Is a returned message well formed
+	 * Is a returned message well formed?
 	 *
 	 * @access public
 	 * @param array $message

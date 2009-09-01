@@ -45,7 +45,7 @@ class Users extends App_Controller
 	 * @access public
 	 * @return 
 	 */
-	function change_password()
+	public function change_password()
 	{
 		$this->mustBeSignedIn();
         $this->data['page_title'] = 'Update Password';
@@ -73,7 +73,7 @@ class Users extends App_Controller
 	 * @param string $username
 	 * @return 
 	 */
-	function confirm($username = null)
+	public function confirm($username = null)
 	{
 		$this->mustBeSignedIn();
 		$this->checkId($username);
@@ -88,7 +88,13 @@ class Users extends App_Controller
 		}
 	}
 
-	function delete_account()
+	/**
+	 * Used for if a user wishes to delete her own account
+	 * If confirmed, the user will be passed to Users::delete()
+	 * @access public
+	 * @return 
+	 */
+	public function delete_account()
 	{
 		$this->mustBeSignedIn();
 		$this->data['page_title'] = 'Delete your Account';
@@ -101,11 +107,11 @@ class Users extends App_Controller
 
 	/**
 	 * Delete an account
-	 *
+	 * Can not be accessed directly, must be passed from Users::delete_account()
 	 * @access public
 	 * @return 
 	 */
-	function delete()
+	public function delete()
 	{
 		$this->mustBeSignedIn();
 		$key = $this->cookie->get('update_key');
@@ -132,7 +138,7 @@ class Users extends App_Controller
 	 * @param string $username
 	 * @return 
 	 */
-	function deny($username = null)
+	public function deny($username = null)
 	{
 		$this->mustBeSignedIn();
 		$this->checkId($username);
@@ -148,10 +154,11 @@ class Users extends App_Controller
 	}
 
 	/**
-	 * Favorites
+	 * View a user's favorite messages
 	 *
 	 * @access public
-	 * @return null
+	 * @param string $username
+	 * @return
 	 */
 	public function favorites($username = null)
 	{
@@ -175,10 +182,11 @@ class Users extends App_Controller
     /**
      * Follow a user
      *
-     * @todo check if user is not yourself
      * @param string $username
+     * @access public
+     * @return
      */
-    function follow($username = null)
+	public function follow($username = null)
     {
         $this->mustBeSignedIn();
 		$user = $this->User->getByUsername($username);
@@ -203,7 +211,9 @@ class Users extends App_Controller
    
 	/**
 	 * Show all users user is following
+	 * If username is empty, show current user's list.
 	 *
+	 * @param string $username
 	 * @access public
 	 * @return 
 	 */
@@ -228,7 +238,9 @@ class Users extends App_Controller
 	
 	/**
 	 * Show all users user is following
+	 * If username is empty, show current user's list.
 	 *
+	 * @param string $username
 	 * @access public
 	 * @return 
 	 */
@@ -252,13 +264,12 @@ class Users extends App_Controller
 	}
 
 	/**
-	 * Process a request for following
+	 * Show list of all friend requests
 	 *
 	 * @access public
-	 * @param string $key
 	 * @return 
 	 */
-	function friend_requests()
+	public function friend_requests()
 	{
 		$this->mustBeSignedIn();
 		$this->data['requests'] = $this->User->getFriendRequests($this->userData['friend_requests']);
@@ -267,9 +278,12 @@ class Users extends App_Controller
 
 	/**
 	 * User's home page
+	 * 
+	 * @access public
+	 * @param int $replyTo Id of a message user is replying to. If ID is not blank, message sent from from this page will be a reply
 	 * @return 
 	 */
-    function home($replyTo = null)
+    public function home($replyTo = null)
     {
         $this->mustBeSignedIn();
 		$this->data['message'] = null;
@@ -310,10 +324,10 @@ class Users extends App_Controller
     }
 
 	/**
-	 * Mentions
+	 * Show user mentions
 	 *
 	 * @access public
-	 * @return null
+	 * @return
 	 */
 	public function mentions()
 	{
@@ -325,8 +339,9 @@ class Users extends App_Controller
 	}
 
 	/**
-	 * Mentions
+	 * Show user's public profile
 	 *
+	 * @param string $username
 	 * @access public
 	 * @return null
 	 */
@@ -422,8 +437,10 @@ class Users extends App_Controller
 	
 	/**
 	 * RSS feed of user's messages
+	 *
 	 * @param string $username
-	 * @return null
+	 * @access public
+	 * @return
 	 */
 	public function rss($username = null)
 	{
@@ -456,7 +473,7 @@ class Users extends App_Controller
 	 * @access public
 	 * @return 
 	 */
-	function settings()
+	public function settings()
 	{
 		$this->mustBeSignedIn();
         $this->data['page_title'] = 'Settings';
@@ -485,10 +502,10 @@ class Users extends App_Controller
     /**
      * Sign in a user
      * 
+	 * @access public
      * @return
-     * @todo Move those load method calls to one place
      */
-    function signin()
+    public function signin()
     {
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign In';
@@ -512,6 +529,7 @@ class Users extends App_Controller
     /**
      * Sign out a user
      * 
+	 * @access public 
      * @return
      */
     public function signout()
@@ -522,11 +540,13 @@ class Users extends App_Controller
 
     /**
      * Sign up a new user
-     * 
+     * Key is required for signup. 
+	 *
+	 * @param string $key
+	 * @access public
      * @return
-     * @todo Move those load method calls to one place
      */
-    function signup($key = null)
+	public function signup($key = null)
     {
 		if (!$key)
 		{
@@ -570,6 +590,12 @@ class Users extends App_Controller
         $this->load->view('users/signup', $this->data);
     }
 
+    /**
+     * Change SMS settings
+	 *
+	 * @access public
+     * @return
+     */
 	public function sms()
 	{
 		$this->mustBeSignedIn();
@@ -628,11 +654,12 @@ class Users extends App_Controller
  	/**
  	 * Set the threading preference for a user
  	 * 
+ 	 * @param string $setting Either 'enabled' or 'disabled'
+ 	 * @todo Make $setting boolean
+ 	 * @access public
  	 * @return 
- 	 * @param object $setting
- 	 * @param object $uri
  	 */
- 	function threading($setting)
+ 	public function threading($setting)
 	{
 		$this->mustBeSignedIn();
 		if ($setting != ('enable' || 'disable'))
@@ -663,10 +690,11 @@ class Users extends App_Controller
 	}
 
     /**
-     * unFollow a user
+     * Unfollow a user
      *
-     * @todo check if user is not yourself
      * @param string $username
+     * @access public
+     * @return
      */
     function unfollow($username = null)
     {
@@ -684,10 +712,11 @@ class Users extends App_Controller
     /**
      * View a users public page
      *
+	 * @access public
      * @param string $username
      * @return
      */
-    function view($username = null)
+	public function view($username = null)
     {	
        	$user = $this->User->getByUsername($username);
 		$this->sidebar = "users/userprofile";

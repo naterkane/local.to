@@ -24,7 +24,13 @@
 class Groups extends App_Controller
 {
 
-	var $loadGroupSidebar = true;	
+	/**
+	 * Check to see whether a group sidebar is to be set. 
+	 * Most group views show sidebar, so set to true. Override in controller methods if otherwise.
+	 * @access public
+	 * @var boolean
+	 */
+	public $loadGroupSidebar = true;	
 
 	/**
 	 * Accept an invite
@@ -121,6 +127,8 @@ class Groups extends App_Controller
 	 * Avatar management
 	 *
 	 * @access public
+	 * @param string $groupname
+	 * @return
 	 */
 	public function avatar($groupname = null)
 	{
@@ -141,12 +149,12 @@ class Groups extends App_Controller
 	/**
 	 * View blacklist
 	 *
-	 * @todo create a way of getting a users "public" info only and not returning anything that's sensitive.	
-	 * @access public
-	 * @param string $name
+	 * @param string $groupname
+	 * @param string $sidebar	
+	 * @access public	
 	 * @return 
 	 */
-	function blacklist($groupname = null, $sidebar = null)
+	public function blacklist($groupname = null, $sidebar = null)
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->getByName($groupname);
@@ -185,11 +193,9 @@ class Groups extends App_Controller
 	/**
 	 * View a group's inbox
 	 *
-	 * @todo Check if group exists
 	 * @todo Change that bad hand-off of user data
-	 * @todo Merge with view	
-	 * @access public
-	 * @param string $name	
+	 * @param string $groupname	
+	 * @access public	
 	 * @return
 	 */
 	public function inbox($groupname = null)
@@ -225,6 +231,7 @@ class Groups extends App_Controller
 	 * List all groups
 	 *
 	 * @access public
+	 * @return	
 	 */
 	public function index()
 	{
@@ -272,13 +279,13 @@ class Groups extends App_Controller
 
 	/**
 	 * View members
-	 *
-	 * @todo create a way of getting a users "public" info only and not returning anything that's sensitive.	
+	 *	
 	 * @access public
-	 * @param string $name
+	 * @param string $groupname
+	 * @param string $sidebar	
 	 * @return 
 	 */
-	function members($groupname = null, $sidebar = null)
+	public function members($groupname = null, $sidebar = null)
 	{
 		$this->mustBeSignedIn();		
 		$group = $this->Group->getByName($groupname);
@@ -310,8 +317,9 @@ class Groups extends App_Controller
 	/**
 	 * Mentions
 	 *
+	 * @param string $groupname
 	 * @access public
-	 * @return null
+	 * @return 
 	 */
 	public function mentions($groupname = null)
 	{
@@ -338,9 +346,10 @@ class Groups extends App_Controller
 	 * @access public
 	 * @param int $group_id
 	 * @param int $user_id	
+	 * @param boolean $blacklist Also blacklist the user?		
 	 * @return 
 	 */
-	public function remove($group_id = null, $user_id = null, $blacklist = null)
+	public function remove($group_id = null, $user_id = null, $blacklist = false)
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);	//get group
@@ -375,10 +384,11 @@ class Groups extends App_Controller
 	/**
 	 * Update a user profile
 	 *
+	 * @param string $groupname 
 	 * @access public
 	 * @return 
 	 */
-	function settings($groupname = null)
+	public function settings($groupname = null)
 	{
 		$this->mustBeSignedIn();
 		$user = $this->data['User'];
@@ -424,10 +434,12 @@ class Groups extends App_Controller
 	 * Subscribe to a group
 	 *
 	 * @access public
-	 * @param string $name
+	 * @param int $group_id
+	 * @todo Make $group_id into $groupname
+	 * @todo Restore message to followers notifying that user has joined group	
 	 * @return 
 	 */
-	function subscribe($group_id = null)
+	public function subscribe($group_id = null)
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);
@@ -451,10 +463,11 @@ class Groups extends App_Controller
 	 * Unsubscribe from a group
 	 *
 	 * @access public
-	 * @param string $name
+	 * @param int $group_id
+	 * @todo Make $group_id into $groupname	
 	 * @return 
 	 */
-	function unsubscribe($group_id = null)
+	public function unsubscribe($group_id = null)
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);
@@ -475,7 +488,7 @@ class Groups extends App_Controller
 	 * @param int $user_id	
 	 * @return 
 	 */
-	function unblacklist($group_id = null, $user_id = null)
+	public function unblacklist($group_id = null, $user_id = null)
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);	//get group
@@ -493,9 +506,7 @@ class Groups extends App_Controller
 	/**
 	 * View a group
 	 *
-	 * @todo Check if group exists
 	 * @todo Change that bad hand-off of user data
-	 * @todo Merge with inbox		
 	 * @access public
 	 * @param string $name	
 	 * @return

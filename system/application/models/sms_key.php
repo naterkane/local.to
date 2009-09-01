@@ -59,7 +59,7 @@ class Sms_key extends App_Model
 	 * Delete a user's sms key
 	 * 
 	 * @access public
-	 * @param object $user_id
+	 * @param int $user_id
 	 * @return boolean
 	 */
 	public function delete($user_id)
@@ -71,8 +71,8 @@ class Sms_key extends App_Model
 	 * Find a user's sms key
 	 * 
 	 * @access public
-	 * @param object $user_id
-	 * @return object
+	 * @param int $user_id
+	 * @return array|null
 	 */
 	public function find($user_id)
 	{
@@ -83,7 +83,7 @@ class Sms_key extends App_Model
 	 * Save a user's sms key
 	 * 
 	 * @access public 
-	 * @param object $data[optional]
+	 * @param array $data[optional]
 	 * @return boolean
 	 */
 	public function save($data = array())

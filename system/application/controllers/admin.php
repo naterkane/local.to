@@ -14,19 +14,21 @@
  */
 /**
  * Database admin functions
- * 
+ * Used only for testing. Admin will be available if config['display_errors'] is set to true
+ *
  * @package 	Nomcat
  * @subpackage	nomcat-controllers
  * @category	controller
  * @author		NOM
  * @link		http://getnomcat.com/user_guide/
+ * @todo 		Remove these functions and place in a separate DB admin app.
  */
 class Admin extends App_controller
 {
 
 	/**
 	 * Check to see if in testing mode, if not, show 404
-	 *
+	 * 
 	 * @access public
 	 * @return 
 	 */
@@ -43,6 +45,7 @@ class Admin extends App_controller
 	 * Delete cookie, used for cookie tests
 	 *
 	 * @access public
+	 * @param string 'user_agent' or 'ip' -- all other values ignored
 	 * @return 
 	 */
 	public function cookie($type = null)
@@ -61,8 +64,7 @@ class Admin extends App_controller
 		}		
 		exit;
 	}
-	
-	
+		
 	/**
 	 * Flushes the database
 	 * @return 
@@ -73,7 +75,12 @@ class Admin extends App_controller
 		$this->User->tt->vanish();
 		$this->redirect('/admin/stats');
 	}
-	
+
+	/**
+	 * Show all database values 
+	 * @return 
+	 * @todo make private method and require authentication
+	 */	
 	function stats()
 	{
 		$all = array();
@@ -148,7 +155,7 @@ class Admin extends App_controller
 	}
 
 	/**
-	 * Loads the form to request an invitation code
+	 * Loads the form to request an invitation code, only used for testing
 	 * @return 
 	 */
 	function request_invite()
@@ -159,7 +166,7 @@ class Admin extends App_controller
 	}
 
 	/**
-	 * 
+	 * Create an invite. Only used for testing.
 	 * 
 	 * @return 
 	 * @todo add a flag to $config to turn on or off automatic email generation.
@@ -210,6 +217,12 @@ class Admin extends App_controller
 		}
 	}
 	
+	/**
+	 * Deletes an invite, only used for testing
+	 *
+	 * @param string $key to be deleted
+	 * @return 
+	 */	
 	function delete_invite($key)
 	{
 		$this->layout = 'bare';
@@ -218,11 +231,6 @@ class Admin extends App_controller
 		$data = array();						
 		$this->Invite->delete($key);		
 		$this->redirect('/home', 'Key has been deleted');
-	}
-
-	function test() 
-	{	
-		
 	}
 
 }

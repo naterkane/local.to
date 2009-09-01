@@ -121,16 +121,9 @@ class App_Controller extends Controller {
 	 * 
 	 * This method is used for both {@link users::avatar()} and {@link groups::avatar()}
 	 * 
-	 * @param object $id
-	 * @param object $name
-	 * @param object $type[optional]
-	 * @see Uploader
-	 * @see Uploader::upload
-	 * @see Uploader::getLastUploadInfo
-	 * @see Uploader::getName
-	 * @see Uploader::results
-	 * @see Avatar
-	 * @see Avatar::makeAll
+	 * @param int $id
+	 * @param string $name
+	 * @param string $type[optional]
 	 */
 	public function _avatar($id, $name, $type = 'user')
 	{
@@ -155,9 +148,10 @@ class App_Controller extends Controller {
 
 	/**
 	 * CheckID 
-	 *
+	 * Make sure an id is present. Used in controller methods that rely on a passed variable.
 	 * @access public
 	 * @param $id to check
+	 * @param $redirect Url to redirect to if id not present. Defaults to home.
 	 * @return 
 	 */
 	public function checkId($id = null, $redirect = '/home')
@@ -169,7 +163,7 @@ class App_Controller extends Controller {
 	}
 	
 	/**
-	 * Check if post exists
+	 * Check if data has been post from a form
 	 *
 	 * @access public
 	 * @return 
@@ -186,7 +180,7 @@ class App_Controller extends Controller {
 	 * Count all records in DB
 	 *
 	 * @access public
-	 * @return int
+	 * @return int Number of records
 	 */
 	public function countAllRecords()
 	{
@@ -214,6 +208,7 @@ class App_Controller extends Controller {
 	 * Get a users data from cookie
 	 *
 	 * @access public
+	 * @return
 	 */ 
     public function getUserData() 
 	{
@@ -250,6 +245,8 @@ class App_Controller extends Controller {
      * Checks to see if a user is signed in
      *
      * If not, sends to login
+	 * @access public
+	 * @return	
      */
     public function mustBeSignedIn() 
 	{
@@ -288,6 +285,8 @@ class App_Controller extends Controller {
      * Checks to see if a user is not signed in
      * Redirects to 404 if the user is authenticated
      * Used by signin / signup views.
+	 * @access public
+	 * @return	
      */
     public function mustNotBeSignedIn() 
 	{
@@ -338,7 +337,7 @@ class App_Controller extends Controller {
      * 
      * @access public
      * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
-     * @param todo Use CakePHP's redirect here
+	 * @return
      */
     public function redirect($url, $message=null, $type = null) 
 	{
@@ -350,7 +349,6 @@ class App_Controller extends Controller {
 	/**
 	 * Send data to html helper
 	 *
-	 * @todo Would be nice if this were done automatically
 	 * @param array $data
 	 * @access public
 	 */
@@ -366,8 +364,8 @@ class App_Controller extends Controller {
 	 * Send errors to html helper
 	 *
 	 * @access public
-	 * @todo Would be nice if this were done automatically
-	 * @param array $models[optional]
+	 * @param array $models
+	 * @return
 	 */
 	public function setErrors($models = array())
 	{

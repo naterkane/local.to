@@ -50,7 +50,9 @@ class Group extends App_Model
 	public $keepOffPublicTimeline = false;
 	
 	/**
+	 * Group Constructor
 	 * Calls the parent constructor then loads any fields defined in the current theme's configuration into the Group::$fields array
+	 * @access public
 	 */
 	public function __construct()
 	{
@@ -68,10 +70,11 @@ class Group extends App_Model
 	 * Add a group
 	 *
 	 * @param array $data
-	 * @param integer $owner
+	 * @param array $owner
+	 * @access public	
 	 * @return boolean
 	 */
-	function add($data = array(), $owner)
+	public function add($data = array(), $owner)
 	{
 		$group = $this->create($data);
 		$group['id'] = $this->makeId($this->idGenerator);
@@ -93,11 +96,12 @@ class Group extends App_Model
 	/**
 	 * Add User to a Group
 	 * 
-	 * @param array $name group object
-	 * @param array $member user object
+	 * @param array $name group object (passed by reference)
+	 * @param array $member user object (passed by reference)
+	 * @access public	
 	 * @return boolean
 	 */
-	function addMember(&$group, &$member)
+	public function addMember(&$group, &$member)
 	{
 		//if user is not already a member and is not blacklisted
 		if ((!in_array($member['id'], $group['members'])) && (!in_array($member['id'], $group['blacklist'])))
@@ -115,8 +119,8 @@ class Group extends App_Model
 	 * Add to blacklist
 	 *
 	 * @access public
-	 * @param array $group 
-	 * @param array $user_id 
+	 * @param array $group (passed by reference)
+	 * @param int $user_id 
 	 * @return
 	 */
 	public function addToBlacklist(&$group, $user_id)
@@ -147,8 +151,8 @@ class Group extends App_Model
 	 * Add to inbox
 	 *
 	 * @access public
-	 * @param array $group 
-	 * @param array $message_id 
+	 * @param array $group (passed by reference)
+	 * @param int $message_id 
 	 * @return
 	 */
 	public function addToInbox(&$group, $message_id)
@@ -172,7 +176,7 @@ class Group extends App_Model
 	 * Add to messages
 	 *
 	 * @access public
-	 * @param array $group 
+	 * @param array $group (passed by reference)
 	 * @param integer $message_id 
 	 */
 	public function addToMessages(&$group, $message)
@@ -190,7 +194,7 @@ class Group extends App_Model
 	 *
 	 * @access public
 	 * @param array $members An array of user ids
-	 * @param mixed $sender
+	 * @param array $sender
 	 * @param array $message	
 	 */
 	public function dm($members = array(), $sender, $message)
@@ -209,8 +213,9 @@ class Group extends App_Model
 	 * Is a group's full name unique?
 	 *
 	 * @return boolean
+	 * @access public	
 	 */
-	function fullNameUnique()
+	public function fullNameUnique()
 	{
 		if (isset($this->modelData['fullname'])) 
 		{
@@ -237,7 +242,7 @@ class Group extends App_Model
 	 * @param string $name
 	 * @return array Group data
 	 */
-	function get($group_id = null)
+	public function get($group_id = null)
 	{
 		if ($group_id) 
 		{
@@ -248,9 +253,10 @@ class Group extends App_Model
 	/**
 	 * Find all groups
 	 *
-	 * @return array $group_ids
+	 * @access public	
+	 * @return array Group data	
 	 */
-	function getAll()
+	public function getAll()
 	{
 		$groups = $this->find(null, array('override'=>'groups', 'ignoreModelFields'=>true));
 		if (empty($groups['all'])) 
@@ -265,8 +271,9 @@ class Group extends App_Model
 	 *
 	 * @param string $fullname
 	 * @return array Group data
+	 * @access public	
 	 */
-	function getByFullName($fullname = null)
+	public function getByFullName($fullname = null)
 	{
 		$return = null;
 		if ($fullname) 
@@ -283,9 +290,10 @@ class Group extends App_Model
 	 * Find a group by name
 	 *
 	 * @param string $name
-	 * @return array User data
+	 * @return array Group data
+	 * @access public	
 	 */
-	function getByName($name = null)
+	public function getByName($name = null)
 	{
 		$return = null;
 		if ($name) 
@@ -299,7 +307,7 @@ class Group extends App_Model
 	}
 	
     /**
-     * Get more than one group
+     * Get more than one group by their names
      *
 	 * @access public
      * @param array $groupnames
@@ -328,10 +336,10 @@ class Group extends App_Model
     }
 
     /**
-     * Get more than one group
+     * Get more than one group by their ids
      *
 	 * @access public
-     * @param array $groupnames
+     * @param array $group_ids
      * @param integer $start[optional]
      * @param integer $end[optional]
      * @return array an array of groups
@@ -358,8 +366,9 @@ class Group extends App_Model
 	 *
 	 * @param integer $group_id Name of group
 	 * @return array Members
+	 * @access public	
 	 */
-	function getMembers($member_ids)
+	public function getMembers($member_ids)
 	{
 		$members = array();
 		foreach ($member_ids as $member_id) {
@@ -378,22 +387,24 @@ class Group extends App_Model
 	 * Get's the owner of a group by the group's Id
 	 *
 	 * @param integer $group_id Name of group
-	 * @return string Owner
+	 * @return int Owner's id
+	 * @access public	
 	 */
-	function getOwner($group_id)
+	public function getOwner($group_id)
 	{
 		$group = $this->find($group_id);
 		return $this->getValue($group, 'owner_id');		
 	}
 	
 	/**
-	 * Is a user a member of a group
+	 * Is a user a member of a group?
 	 *
 	 * @param array $members array of a group's members
 	 * @param integer $user_id the Id of the user to search for
 	 * @return boolean
+	 * @access public	
 	 */
-	function isMember($members, $user_id)
+	public function isMember($members, $user_id)
 	{
 		if (!is_array($members)){
 			return false;			
@@ -445,8 +456,9 @@ class Group extends App_Model
 	 * @param integer $owner_id[optional]
 	 * @param integer $group_id[optional]
 	 * @return boolean
+	 * @access public	
 	 */
-	function isOwner($user_id, $owner_id = null, $group_id = null)
+	public function isOwner($user_id, $owner_id = null, $group_id = null)
 	{
 		if (!$owner_id) 
 		{
@@ -462,6 +474,7 @@ class Group extends App_Model
 	 * @param array $group
 	 * @return false 
 	 * @todo Make an actual function when we start using public groups 	
+	 * @access public	
 	 */
 	public function isPublic($group = array())
 	{
@@ -476,8 +489,9 @@ class Group extends App_Model
 	 *
 	 * @param string $message
 	 * @return array
+	 * @access public	
 	 */
-	function matchGroups($message)
+	public function matchGroups($message)
 	{
 		preg_match_all(GROUP_MATCH, $message, $groups);
 		if (isset($groups[2])) 
@@ -494,8 +508,9 @@ class Group extends App_Model
 	 * Is a group's name unique?
 	 *
 	 * @return boolean
+	 * @access public	
 	 */
-	function nameUnique()
+	public function nameUnique()
 	{
 		if (isset($this->modelData['name'])) 
 		{
@@ -521,8 +536,9 @@ class Group extends App_Model
 	 * @param array $group
 	 * @param integer $user_id Member to remove
 	 * @return boolean
+	 * @access public	
 	 */
-	function removeMember(&$group, $user_id)
+	public function removeMember(&$group, $user_id)
 	{
 		if (!$this->isOwner($user_id, $group['owner_id'])) 
 		{
@@ -539,8 +555,9 @@ class Group extends App_Model
 	 * @param array $group 
 	 * @param integer $user_id Member to remove
 	 * @return boolean
+	 * @access public	
 	 */
-	function removeFromBlacklist(&$group, $user_id)
+	public function removeFromBlacklist(&$group, $user_id)
 	{
 		$group['blacklist'] = $this->Group->removeFromArray($group['blacklist'], $user_id);
 		return $this->save($group);		
@@ -569,7 +586,7 @@ class Group extends App_Model
 	
 	
 	/**
-	 * Save the group list
+	 * Save the list of all groups
 	 *
 	 * @access public
 	 * @param array $group
@@ -580,17 +597,16 @@ class Group extends App_Model
 		return $this->save($groups, array('override'=>'groups', 'validate'=>false, 'ignoreTime'=>true, 'ignoreModelFields'=>true));
 	}
 	
-	
 	/**
 	 * Send a message to the members of a group if member, add to mentions if not. Checks to see if group exists as well. Does nothing if there is no mention of a group
 	 *
 	 * @todo Break this out into smaller methods
 	 * @access public	
-	 * @param array @messageData
+	 * @param array $messageData
 	 * @param integer $user_id	
 	 * @return boolean
 	 */
-	function sendTo($messageData, $user_id)
+	public function sendTo($messageData, $user_id)
 	{
 		$this->mode = null;
 		$sent = array();
@@ -617,9 +633,9 @@ class Group extends App_Model
 	 * @access public
 	 * @param array $message
 	 * @param array $member_ids	
-	 * @return boolean True if any members receive, false if none receive
+	 * @return int number of emails sent
 	 */
-	private function sendToMembers($message = array(), $member_ids = array(), $user_id = null)
+	public function sendToMembers($message = array(), $member_ids = array(), $user_id = null)
 	{
 		if (empty($message) || empty($member_ids) || !$member_ids) 
 		{
@@ -649,7 +665,7 @@ class Group extends App_Model
 	 * @param integer $user_id	
 	 * @return boolean
 	 */
-	function update($oldGroup, $newGroup, $user_id)
+	public function update($oldGroup, $newGroup, $user_id)
 	{
 		$this->mode = 'update';
 		$group = $this->updateData($oldGroup, $newGroup);
@@ -674,7 +690,7 @@ class Group extends App_Model
 	 * @access public
 	 * @return boolean
 	 */	
-	function validate()
+	public function validate()
 	{
 		$this->setAction();	
 		if (($this->mode == 'add') || ($this->mode == 'update'))

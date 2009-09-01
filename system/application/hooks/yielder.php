@@ -35,6 +35,7 @@ class Yielder {
 	 * @var string
 	 */
 	var $layout;
+	
 	/**
 	 * Determines layout to load for view
 	 *

@@ -26,9 +26,25 @@
 class App_router extends CI_Router
 {
 	
+	/**
+	 * Class to load
+	 * @var string
+	 */
 	public $class;	
+	/**
+	 * Config to load
+	 * @var sting
+	 */	
 	public $config;	
+	/**
+	 * Name of controller
+	 * @var sting
+	 */	
 	public $default_controller;	
+	/**
+	 * Directory to search
+	 * @var sting
+	 */	
 	public $directory;
 	/**
 	 * @var array

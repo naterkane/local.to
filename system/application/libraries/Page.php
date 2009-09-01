@@ -26,15 +26,75 @@
 class Page
 {
 	
+	/**
+	 * Last number of records to fetch
+	 * @access public
+	 * @static
+	 * @var int
+	 */	
 	public static $end = 1;
+	/**
+	 * Path for next link
+	 * @access public
+	 * @static
+	 * @var string
+	 */		
 	public static $next;
+	/**
+	 * Text to display for next link
+	 * @access public
+	 * @static
+	 * @var string
+	 */
 	public static $nextText = 'view older';	
+	/**
+	 * Offset for pagination count
+	 * @access public
+	 * @static
+	 * @var int
+	 */	
 	public static $offset = 20;
+	/**
+	 * Page being viewed
+	 * @access public
+	 * @static
+	 * @var int
+	 */	
 	public static $page = 1;
-	public static $previous;			
+	/**
+	 * Path for previous link
+	 * @access public
+	 * @static
+	 * @var string
+	 */	
+	public static $previous;
+	/**
+	 * Text to display for link
+	 * @access public
+	 * @static
+	 * @var string
+	 */				
 	public static $previousText = 'view newer';
+	/**
+	 * Show a 'next' link?
+	 * @access public
+	 * @static
+	 * @var boolean
+	 */	
 	public static $showNext = false;
+	/**
+	 * Show a 'previous' link?
+	 * @access public
+	 * @static
+	 * @var boolean
+	 */	
 	public static $showPrevious = false;	
+	/**
+	 * Start count
+	 * @access public
+	 * @static
+	 * @var int
+	 */	
 	public static $start = 0;
 	
 	

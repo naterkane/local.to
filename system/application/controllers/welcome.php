@@ -26,9 +26,18 @@ if (!defined('BASEPATH')) exit ('No direct script access allowed');
  */
 class Welcome extends App_Controller {
 
-	var $layout = 'public';
+	/**
+	 * Set layout for controller
+	 * @access public
+	 * @var string
+	 */
+	public $layout = 'public';
+	
 	/**
 	 * Determine site home page
+	 *
+	 * @access public
+	 * @return
 	 */
 	public function index()
 	{
@@ -51,7 +60,7 @@ class Welcome extends App_Controller {
 	 * Displays static views
 	 * 
 	 * @return 
-	 * @param string $view[optional]
+	 * @param string $view
 	 * @see /system/application/config/routes.php
 	 */
 	function page($view = null)

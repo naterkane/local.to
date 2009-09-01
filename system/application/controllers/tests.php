@@ -28,8 +28,10 @@ class Tests extends App_Controller
 	 * Handles views for testing. 
 	 *
 	 * Shows 404 if app is not error reporting.
+	 * @access public
+	 * @return	
 	 */	
-	function index() 
+	public function index() 
 	{			
         if ($this->isTesting()) {
 			if (strpos($_SERVER['REQUEST_URI'], 'testsuite') !== false) 
@@ -49,8 +51,10 @@ class Tests extends App_Controller
 	
 	/**
 	 * Shortcut to forward to testing path
+	 * @access public
+	 * @return
 	 */
-	function testme()
+	public function testme()
 	{
 		$this->redirect('/tests/TestRunner.html?test=/tests/testsuite-app');
 	}

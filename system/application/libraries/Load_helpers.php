@@ -24,17 +24,19 @@
 class Load_helpers {
 	
 	/**
+	 * Array of helpers to load
 	 * @var array
 	 */
-	var $setHelpers = array();
+	public $setHelpers = array();
 	
 	/**
 	 * Load helpers and instantiate them
 	 *
-	 * @todo Make instance dynamic, $myHelper rather than $this->myHelper
 	 * @param array $helpers array of helpers to load
+	 * @access public
+	 * @return	
 	 */
-	function load($helpers = array())
+	public function load($helpers = array())
 	{
 		$ci= & get_instance();
 		foreach ($helpers as $helper_class) 

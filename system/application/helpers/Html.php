@@ -92,7 +92,7 @@ class Html
 
 	/**
 	 * Construct
-	 *
+	 * Passes testing data, form data, timezones, and validation errors
 	 */
 	function __construct()
 	{
@@ -117,6 +117,7 @@ class Html
 	
 
 	/**
+	 * Format the element attributes
 	 * @param  string $key
 	 * @param  string $value
 	 * @return string
@@ -198,6 +199,7 @@ class Html
 	 *
 	 * @access public
 	 * @param array $message
+	 * @param boolean isOwner
 	 * @return 
 	 */
 	public function deleteMessageLink($message = array(), $isOwner = false)
@@ -241,7 +243,6 @@ class Html
 	 * @param string $text Text to wrap through htmlspecialchars
 	 * @param string $charset[optional] Character set to use when escaping.  Defaults to config value in 'App.encoding' or 'UTF-8'
 	 * @return string Wrapped text
-	 * @link http://book.cakephp.org/view/703/h
 	 */
 	function encode($text, $charset = null) {
 		if (is_array($text)) {
@@ -279,7 +280,8 @@ class Html
 	/**
 	 * compares a string against the request URI
 	 * @return 
-	 * @param object $string
+	 * @access public
+	 * @param string $string
 	 */
 	public function isSection($string)
 	{
@@ -287,7 +289,7 @@ class Html
 	}
 	
 	/**
-	 * Message
+	 * Output a message replaces links with anchor html
 	 *
 	 * @access public
 	 * @param $message[optional] $message
@@ -441,7 +443,7 @@ class Html
 	 *
 	 * @access public
 	 * @param string $url[optional] To override default
-	 * @return 
+	 * @return string '?redirect=' followed by encoded list
 	 */
 	public function sendMeHere($url = null, $pathOnly = false)
 	{

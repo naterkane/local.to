@@ -166,7 +166,8 @@ class App_Model extends Model {
 	public $insertId;		
 
 	/**
-	 * 
+	 * Model Constructor
+	 * Passes off TT database configuration, initiates memcache
 	 * @return 
 	 */
 	function __construct()
@@ -209,9 +210,9 @@ class App_Model extends Model {
 	/**
 	 * Log a query for transactions
 	 *
+	 * @deprecated Transactions are no longer used
 	 * @access protected
 	 * @param string $key
-	 * @param boolean $result	
 	 * @return 
 	 */	
 	protected function logQuery($key)
@@ -235,9 +236,10 @@ class App_Model extends Model {
 	/**
 	 * Log a query for transactions
 	 *
+	 * @deprecated Transactions are no longer used	
 	 * @access protected
-	 * @param string $key
-	 * @param boolean $result	
+	 * @param string $result
+	 * @param array $data	
 	 * @return 
 	 */	
 	protected function logQueryResult($result, $data)
@@ -252,6 +254,80 @@ class App_Model extends Model {
 			}
 			self::$queryCount++;
 		}
+	}
+	
+	/**
+	 * Make a key prefix for a find operation
+	 * For example a User with an ID of 1 would be user:id:1
+	 * @access protected
+	 * @param string value
+	 * @return string key value e.g. user:id:1
+	 */
+	protected function makeFindPrefix($value = null, $options = array())
+	{
+		if (!isset($options['prefixName'])) 
+		{
+			$options['prefixName'] = $this->name;
+		}
+		if (!isset($options['prefixValue'])) 
+		{
+			$options['prefixValue'] = 'id';
+		}
+		if (!isset($options['override'])) 
+		{
+			if (!$value) 
+			{
+				return false;
+			}
+			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
+		}		
+		else 
+		{
+			$prefix = $options['override'];
+		}		
+		return strtolower($prefix);
+	}
+	
+	/**
+	 * Sets the string to be used as the key for a record
+	 * For example a User with an ID of 1 would be user:id:1
+	 * @access protected
+	 * @param array $data [optional]
+	 * @param array $options [optional]
+	 * @return string|boolean $prefix | false on empty id value
+	 */
+	protected function makeSavePrefix($data = array(), $options = array())
+	{
+		if (!isset($options['validate'])) 
+		{
+			$options['validate'] = false;
+		}
+		if (!isset($options['prefixName'])) 
+		{
+			$options['prefixName'] = $this->name;
+		}
+		if (!isset($options['prefixValue'])) 
+		{
+			$options['prefixValue'] = 'id';
+		}		
+		if (!isset($options['override'])) 
+		{
+			$value = null;
+			if (isset($data[$options['prefixValue']])) 
+			{
+				$value = $data[$options['prefixValue']];
+			}
+			if (!$value) //if value is empty, fail 
+			{
+				return false;
+			}
+			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
+		}		
+		else 
+		{
+			$prefix = $options['override'];
+		}
+		return strtolower($prefix);
 	}
 
 	/**
@@ -285,7 +361,8 @@ class App_Model extends Model {
 	 * 
 	 * Any string encoded with this method must be decoded with base64_url_decode()
 	 * 
-	 * @see base64_url_decode()
+	 * @todo remove this
+	 * @deprecated	
 	 * @param object $input
 	 * @return string base64 encoded string
 	 */
@@ -296,7 +373,7 @@ class App_Model extends Model {
 	/**
 	 * Base64 decode a string that has been encoded with base64_url_encode
 	 * 
-	 * @see base64_url_encode()
+	 * @deprecated
 	 * @param object $input
 	 * @return string
 	 */
@@ -306,7 +383,7 @@ class App_Model extends Model {
 
 	/**
 	 * Check to see if submitted form fields are valid
-	 *
+	 * This method ensures that fields submitted by a form are in fact used by the model. If the field is not found it is unset.
 	 * @access public
 	 * @return 
 	 */
@@ -340,7 +417,6 @@ class App_Model extends Model {
 		}
 		return $array;
 	}
-	
 
 	/**
 	 * Set up a new record
@@ -430,8 +506,7 @@ class App_Model extends Model {
 	/**
 	 * Do transaction
 	 * 
-	 * @see save()
-	 * @see delete()
+	 * @deprecated
 	 * @return boolean
 	 */
 	public function endTransaction()
@@ -540,7 +615,7 @@ class App_Model extends Model {
 	 * @param string $fieldname
 	 * @return string|null
 	 */
-	function getValue($data, $fieldname)
+	public function getValue($data, $fieldname)
 	{
 		
 		if (isset($data[$fieldname])) 
@@ -560,7 +635,7 @@ class App_Model extends Model {
 	 * @param string $value
 	 * @return string Hashed value
 	 */
-	function hash($value)
+	public function hash($value)
 	{
 		return sha1($value . $this->config->item('salt'));
 	}
@@ -589,9 +664,10 @@ class App_Model extends Model {
 	 * Is a username not reserved
 	 *
 	 * @access public
+	 * @param string $fieldName
 	 * @return boolean
 	 */
-	function isNotReserved($fieldName)
+	public function isNotReserved($fieldName)
 	{
 		if (isset($this->modelData[$fieldName])) 
 		{
@@ -611,12 +687,12 @@ class App_Model extends Model {
 	}
 
 	/**
-	 * Is there an error>
+	 * Is there an error from the save?
 	 *
 	 * @access public
 	 * @return boolean
 	 */
-	function isValid()
+	public function isValid()
 	{
 		if (count($this->validationErrors) > 0) 
 		{
@@ -630,8 +706,12 @@ class App_Model extends Model {
 	
 	/**
 	 * Make a join
+	 * A join is a key with a value equal to another record's id
+	 * @param string $prefixName
+	 * @param string $prefix
+	 * @param array $data		
 	 */
-	function join($prefixName, $prefix, $data)
+	public function join($prefixName, $prefix, $data)
 	{
 		$this->mode = 'join';
 		$prefixName = 'prefix' . $prefixName;
@@ -642,10 +722,10 @@ class App_Model extends Model {
 	/**
 	 * Is a string serialized?
 	 *
-	 * @param string
+	 * @param string $str
 	 * @return boolean 	
 	 */
-	function isSerialized($str) 
+	public function isSerialized($str) 
 	{
 		if ($str === 0) 
 		{
@@ -663,10 +743,10 @@ class App_Model extends Model {
 	/**
 	 * dummy error handler set up to obsorb any errors thrown by isSerialized
 	 * @return 
-	 * @param object $errno
-	 * @param object $errstr
+	 * @param string $errno
+	 * @param string $errstr
 	 */
-	function unserialize_handler($errno, $errstr)
+	public function unserialize_handler($errno, $errstr)
 	{
 	   // don't do anything
 	}
@@ -677,7 +757,7 @@ class App_Model extends Model {
 	 * @access public
 	 * @return boolean
 	 */
-	function isTimeZone()
+	public function isTimeZone()
 	{
 		if (empty($this->modelData['time_zone'])) 
 		{
@@ -692,10 +772,10 @@ class App_Model extends Model {
 	 * Load models from controller into model
 	 *
 	 * @access public
-	 * @param array $models
+	 * @param array $files Names of Libraries capitalized
 	 * @return 
 	 */
-	function loadLibrary($files = array())
+	public function loadLibrary($files = array())
 	{
 		foreach ($files as $file) 
 		{
@@ -716,7 +796,7 @@ class App_Model extends Model {
 	 * @param array $models
 	 * @return 
 	 */
-	function loadModels($models)
+	public function loadModels($models)
 	{
 		$ci = CI_Base::get_instance();
 		foreach ($models as $model) 
@@ -732,7 +812,7 @@ class App_Model extends Model {
 	 * @param string value
 	 * @return id
 	 */
-	function makeId($key)
+	public function makeId($key)
 	{
 		$last_id = $this->mem->increment($key);
 		if (!$last_id) 
@@ -743,72 +823,6 @@ class App_Model extends Model {
 		return $last_id;
 	}
 
-	protected function makeFindPrefix($value = null, $options = array())
-	{
-		if (!isset($options['prefixName'])) 
-		{
-			$options['prefixName'] = $this->name;
-		}
-		if (!isset($options['prefixValue'])) 
-		{
-			$options['prefixValue'] = 'id';
-		}
-		if (!isset($options['override'])) 
-		{
-			if (!$value) 
-			{
-				return false;
-			}
-			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
-		}		
-		else 
-		{
-			$prefix = $options['override'];
-		}		
-		return strtolower($prefix);
-	}
-	
-	/**
-	 * Sets the string to be used as the key for a record
-	 *
-	 * @param array $data [optional]
-	 * @param array $options [optional]
-	 * @return string|boolean $prefix | false on empty id value
-	 */
-	protected function makeSavePrefix($data = array(), $options = array())
-	{
-		if (!isset($options['validate'])) 
-		{
-			$options['validate'] = false;
-		}
-		if (!isset($options['prefixName'])) 
-		{
-			$options['prefixName'] = $this->name;
-		}
-		if (!isset($options['prefixValue'])) 
-		{
-			$options['prefixValue'] = 'id';
-		}		
-		if (!isset($options['override'])) 
-		{
-			$value = null;
-			if (isset($data[$options['prefixValue']])) 
-			{
-				$value = $data[$options['prefixValue']];
-			}
-			if (!$value) //if value is empty, fail 
-			{
-				return false;
-			}
-			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
-		}		
-		else 
-		{
-			$prefix = $options['override'];
-		}
-		return strtolower($prefix);
-	}
-
 	/**
 	 * Add a value to the end of a serialized value
 	 * 
@@ -817,7 +831,7 @@ class App_Model extends Model {
 	 * @param string $value Value to push onto data
 	 * @return boolean 		 
 	 */
-	function push($key, $value)
+	public function push($key, $value)
 	{
 		$data = $this->find($key);
 		if (!$data) {
@@ -848,7 +862,7 @@ class App_Model extends Model {
 	 * @param int $length	
 	 * @return boolean
 	 */
-	function trim($key, $offset, $length)
+	public function trim($key, $offset, $length)
 	{
 		$data = $this->find($key);
 		if (is_array($data)) {
@@ -892,7 +906,7 @@ class App_Model extends Model {
 	 * @return array $data
 	 * @access public
 	 */
-	function removeFromArray($data, $value)
+	public function removeFromArray($data, $value)
 	{
 		$data = array_flip($data);
 		unset($data[$value]);
@@ -900,7 +914,15 @@ class App_Model extends Model {
 		return array_merge(array(), $data);
 	}
 	
-	function rollbackLog()
+	/**
+	 * Roll back a transaction
+	 *
+	 * @deprecated
+	 * @todo Remove this
+	 * @access public
+	 * @return boolean
+	 */
+	public function rollbackLog()
 	{
 		return self::$rollbackLog;
 	}
@@ -984,6 +1006,9 @@ class App_Model extends Model {
 
 	/**
 	 * Set the save action for validation
+	 * 
+	 * @access public
+	 * @return	
 	 */
 	function setAction()
 	{
@@ -999,6 +1024,7 @@ class App_Model extends Model {
 	 * Set's time to modified and created fields
 	 *
 	 * @access public
+	 * @return	
 	 */
 	public function setUpTimestampFields()
 	{
@@ -1019,11 +1045,14 @@ class App_Model extends Model {
 		}
 	}
 	
-
 	/**
-	 * Transactional
+	 * Start a transaction
+	 * 
+	 * @deprecated
+	 * @access public
+	 * @return
 	 */
-	function startTransaction()
+	public function startTransaction()
 	{
 		self::$transactional = true;
 		self::$queryLog = array();
@@ -1034,8 +1063,11 @@ class App_Model extends Model {
 
 	/**
 	 * Show the query log
+	 * 
+	 * @access public
+	 * @return array Of all queries
 	 */
-	function queryLog()
+	public function queryLog()
 	{
 		return self::$queryLog;
 	}
@@ -1050,7 +1082,7 @@ class App_Model extends Model {
 	 * @param array $newData[optional]	
 	 * @return $oldData;
 	 */
-	function updateData($oldData = array(), $newData = array())
+	public function updateData($oldData = array(), $newData = array())
 	{
 		foreach ($newData as $key => $value) {
 			$oldData[$key] = $value;
@@ -1068,7 +1100,7 @@ class App_Model extends Model {
 	 * @return boolean
 	 * @access public
 	 */	
-	function validate() 
+	public function validate() 
 	{
 		return true;
 	}
@@ -1079,10 +1111,11 @@ class App_Model extends Model {
 	 * @param string $callback
 	 * @param string $fieldName Name of field to be validated
 	 * @param array $options[optional]
+	 * [message] string Message to print on error 		
 	 * @return boolean
 	 * @access public
 	 */	
-	function validates_callback ($callback, $fieldName, $options=array()) 
+	public function validates_callback ($callback, $fieldName, $options=array()) 
 	{
         if ( !isset($options['message']) ) 
 		{
@@ -1180,8 +1213,12 @@ class App_Model extends Model {
 	 * @return 
 	 * @param object $fieldName
 	 * @param object $options[optional]
+	 * [allow_null] boolean Set to true to allow a null value
+	 * [message] string Message to print on error 
+	 * [on] On which mode? See AppModel::setAction or AppModel::$action
+	 * [with] Pattern to match
 	 */
-    function validates_format_of($fieldName, $options=array()) 
+	public function validates_format_of($fieldName, $options=array()) 
 	{
 		$fieldValue = $this->getValue($this->modelData, $fieldName);		
 		if ((isset($options['allow_null'])) AND (!$fieldValue)) 
@@ -1211,9 +1248,10 @@ class App_Model extends Model {
 
 	/**
 	 * Validate a join
-	 * 
+	 * @access public
+	 * @return	
 	 */
-    function validates_join() 
+	public function validates_join() 
 	{
 		if (empty($this->modelData['id'])) 
 		{
@@ -1260,8 +1298,12 @@ class App_Model extends Model {
 	 * @return 
 	 * @param object $fieldName
 	 * @param object $options[optional]
+	 * [message] string Message to print on error 
+	 * [on] string On which mode? See AppModel::setAction or AppModel::$action
+	 * [min] int Minimum length
+	 * [max] int Maximum length	
 	 */
-    function validates_length_of($fieldName, $options=array()) 
+	public function validates_length_of($fieldName, $options=array()) 
 	{
 		$fieldValue = $this->getValue($this->modelData, $fieldName);
 		if (!isset($options['message'])) 
@@ -1281,7 +1323,19 @@ class App_Model extends Model {
 		}
     }
 
-    function validates_numericality_of($fieldName,$options=array()) 
+	/**
+	 * Validate is a field is an integert
+	 * 
+	 * @return 
+	 * @param string $fieldName
+	 * @param array $options[optional]
+	 * [allow_null] boolean Set to true to allow a null value
+	 * [only_integer] boolean Set to true if only integer is allowed
+	 * [message] string Message to print on error 
+	 * [on] string On which mode? See AppModel::setAction or AppModel::$action
+	 * [with] string Pattern to match
+	 */
+    public function validates_numericality_of($fieldName,$options=array()) 
 	{
 			$fieldValue = $this->getValue($this->modelData, $fieldName);
             if ( @$options['allow_null'] && ($fieldValue == null) ) 
@@ -1319,10 +1373,12 @@ class App_Model extends Model {
 	 *
 	 * @param string $fieldName Name of field to be validated
 	 * @param array $options[optional]
+	 * [message] string Message to print on error 
+	 * [on] string On which mode? See AppModel::setAction or AppModel::$action	
 	 * @return boolean
 	 * @access public
 	 */
-    function validates_presence_of($fieldName, $options=array()) 
+ 	public function validates_presence_of($fieldName, $options=array()) 
 	{
 			$fieldValue = $this->getValue($this->modelData, $fieldName);
             if ( !isset($options['message']) ) 
@@ -1372,14 +1428,14 @@ class App_Model extends Model {
 	/**
 	 * Validate the uniqueness of a value
 	 *
-	 * @todo add code for updates, currently only works for creates.
-	 * @todo add code for mysql
 	 * @access public
 	 * @param string $fieldname
 	 * @param array $options
+	 * [fieldValue] string Use to override values sent by post
+	 * [message] string Message to print on error 
 	 * @return boolean
 	 */
-    function validates_uniqueness_of($fieldName=null, $options = array()) 
+    public function validates_uniqueness_of($fieldName=null, $options = array()) 
 	{
 			if (!isset($options['fieldValue'])) 
 			{

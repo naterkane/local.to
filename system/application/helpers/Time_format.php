@@ -29,9 +29,9 @@ class Time_format {
 	 * Generates a human readable sentence describing relative time lapsed between
 	 * the two timestamps. Only one timestamp is required to calculate against "now".
 	 * 
-	 * @param object $from_time
-	 * @param object $to_time[optional]
-	 * @param object $include_seconds[optional]
+	 * @param string $from_time
+	 * @param string $to_time[optional]
+	 * @param boolean $include_seconds[optional]
 	 * @return string 
 	 */
     function timeAgo($from_time, $to_time = null, $include_seconds = false) {

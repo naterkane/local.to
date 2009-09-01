@@ -37,7 +37,8 @@ class App_loader extends CI_Loader
 	/**
 	 * Load helpers and instantiate them
 	 *
-	 * @param array $helpers array of helpers to load
+	 * @access public
+	 * @return
 	 */
 	public function loadHelpers()
 	{
@@ -47,10 +48,12 @@ class App_loader extends CI_Loader
 		}
 	}
 	
-	/*
+	/**
 	 * Load single helper and instantiate them
 	 *
 	 * @param string $helper
+	 * @access public
+	 * @return	
 	 */
 	public function loadHelper($helper_class = null)
 	{
@@ -73,6 +76,8 @@ class App_loader extends CI_Loader
 	 * @param	string	$view
 	 * @param	array	$vars[optional]
 	 * @param	boolean	$return[optional]
+	 * @access public
+	 * @return	
 	 */
 	public function view($view, $vars = array(), $return = FALSE)
 	{

@@ -27,10 +27,13 @@ if (!defined('BASEPATH')) exit ('No direct script access allowed');
 class Form extends Html
 {
 	/**
+	 * Array of data to be passed to the form
 	 * @var array
 	 */
 	public $data = array();
+
 	/**
+	 * Array of all errors passed from the model
 	 * @var array
 	 */
 	public $validationErrors = array();	
@@ -71,10 +74,12 @@ class Form extends Html
 	 * Process form options
 	 *
 	 * @access private
-	 * @param string
+	 * @param string $field
+	 * @param string $default
+	 * @param array $options		
 	 * @return array|string
 	 */
-	private function setOptions($field, $default, $options)
+	private function setOptions($field, $default, $options = array())
 	{
 		if (!isset($options[$field])) 
 		{
@@ -217,6 +222,15 @@ class Form extends Html
 		return $return;
 	}
 	
+	/**
+	 * Make an option tag
+	 * 
+	 * @param string $fieldValue
+	 * @param string $key
+	 * @param string $value
+	 * @access public
+	 * @return
+	 */	
 	public function makeOptionTag($fieldValue, $key, $value)
 	{
 		$return = "<option value=\"$key\"";
@@ -246,8 +260,9 @@ class Form extends Html
 	/**
 	 * Creates a textarea 
 	 *
-	 * @param string $fieldName 
+	 * @param string $name 
 	 * @param array $options Array of HTML attributes.
+	 * @access public
 	 * @return string An HTML textarea element
 	 */
 	public function textarea($name, $options = array()) 
