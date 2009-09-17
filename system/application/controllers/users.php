@@ -289,22 +289,22 @@ class Users extends App_Controller
 		$this->data['message'] = null;
 		if ($replyTo) 
 		{
-			$message = $this->Message->getOne($replyTo);
-			if (!empty($message['user_id'])) 
+			$this->Message->findParent($replyTo);
+			$message = $this->Message->getOne($replyTo);	
+			$parent = $this->Message->getParent();
+			if (!empty($parent['id'])) 
 			{
-				$user = $this->User->get($message['user_id']);
-				if ($user) 
-				{
-					$this->data['reply_to'] = (integer) $message['id'];
-					$this->data['reply_to_username'] = $user['username'];
-					$this->data['message'] = '@' . $user['username'] . ' ';
-				}
-				if (!empty($message['reply_to'])){
-					$parentmessage = $this->Message->getOne($message['reply_to']);
-					$this->data['reply_to'] = (integer) $parentmessage['id'];
-				}
+				$this->data['reply_to'] = $parent['id'];
 			}
-			
+			else 
+			{
+				$this->data['reply_to'] = $message['id'];				
+			}
+			if (!empty($message['User'])) 
+			{
+				$this->data['reply_to_username'] = $parent['User']['username'];
+				$this->data['message'] = '@' . $message['User']['username'] . ' ';
+			}
 		}
         $this->data['page_title'] = 'Home';
 		$this->data['next'] = null;

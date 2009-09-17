@@ -417,14 +417,7 @@ class Html
 	 */
 	public function replyLink($message = array())
 	{
-		if ($message['reply_to']) 
-		{
-			$reply = $message['reply_to'];
-		} 
-		else 
-		{
-			$reply = $message['id'];
-		}
+		$reply = $message['id'];
 		$url = null;		
 		if ($_SERVER['PATH_INFO']) 
 		{

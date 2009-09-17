@@ -76,6 +76,11 @@ class Message extends App_Model
 			 */
 			'modified' => null,
 			/**
+			 * Array of parent's message data
+			 * @var array
+			 */
+			'parent' => array(),
+			/**
 			 * Array of message ids replying to this message
 			 * @var array
 			 */
@@ -332,6 +337,30 @@ class Message extends App_Model
 		return $this->User->addTo('favorites', $user, $message_id);
 	}
 	
+	/**
+	 * Get a message and find parent
+	 *
+	 * @access public
+	 * @param int $message_id
+	 * @return 
+	 */
+	public function findParent($message_id = null)
+	{
+		$message = $this->getOne($message_id);
+		if (!$message) 
+		{
+			return;
+		}		
+		if (($message['reply_to']) && ($message['reply_to'] != $message['id']))
+		{
+			$this->findParent($message['reply_to']);
+		}
+		else 
+		{
+			$this->parent = $message;
+			return;			
+		}
+	}
 
 	/**
 	 * Get more than one message
@@ -408,7 +437,18 @@ class Message extends App_Model
     {
         return $this->getMany($message_ids,$start,null,array("isreplies"=>true));
     }
-
+	
+	/**
+	 * Get the parent message
+	 *
+	 * @access public
+	 * @return 
+	 */
+	public function getParent()
+	{
+		return $this->parent;
+	}
+	
 	/**
 	 * Get Public Timeline
 	 * 
@@ -556,7 +596,7 @@ class Message extends App_Model
 	 */
 	public function parse($message, $user)
 	{
-		$data = $this->create($message);		
+		$data = $this->create($message);
 		//check if the message is a dm even not sent through dm form
 		$parts = split(" ", $data['message'], 3);
 		if ((strtolower($parts[0]) == 'd') AND isset($parts[1]) AND isset($parts[2]))
