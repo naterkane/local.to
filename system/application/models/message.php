@@ -189,7 +189,12 @@ class Message extends App_Model
 			if ($this->save($data))
 			{
 				$this->mode = null;
-				$this->User->addToPublicAndPrivate($user, $data);	
+				$this->User->addToPrivate($user, $data);
+				//if not a group message then add to the user's public stream
+				if (!$data['to_group']) 
+				{
+					$this->User->addToPublic($user, $data);
+				}
 				$this->User->mode = null;
 				$this->Group->sendTo($data, $this->userData['id']);
 				if (!$user['locked'] && !$this->Group->keepOffPublicTimeline) 
