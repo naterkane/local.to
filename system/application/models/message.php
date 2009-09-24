@@ -206,7 +206,10 @@ class Message extends App_Model
 				{
 					$this->addToPublicTimeline($data);
 				}
-		    	$this->User->sendToFollowers($data, $this->userData['followers']);				
+				if (!$data['to_group']) 
+				{
+		    		$this->User->sendToFollowers($data, $this->userData['followers']);				
+				}
 				foreach ($this->userMentions as $mention_username => $user_mention) {
 					// query here just in case the user is mentioning herself, which would reset the data
 					$umention = $this->User->getByUsername($mention_username);
