@@ -206,7 +206,7 @@ class Html
 	{
 		if ($isOwner && !$message['deleted_by_user']) 
 		{
-			return "[" . $this->link('Delete', '/messages/delete/' . $message['id'] . $this->sendMeHere(), array('id'=>'delete_' . $message['id']), 'Are your sure you want to delete this message? This can not be undone.') . "]";
+			return $this->link('Delete', '/messages/delete/' . $message['id'] . $this->sendMeHere(), array('id'=>'delete_' . $message['id']), 'Are your sure you want to delete this message? This can not be undone.');
 		}
 	}
 
@@ -224,7 +224,7 @@ class Html
 		{
 			return;
 		}
-		$return = "[";
+		$return = "";
 		if (in_array($message['id'], $user['favorites'])) 
 		{
 			$return .= $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'on', 'id'=>'favorite_link_' . $message['id']));
@@ -233,7 +233,6 @@ class Html
 		{
 			$return .= $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'off', 'id'=>'favorite_link_' . $message['id']));
 		}
-		$return .= "]";
 		return $return;
 	}
 
@@ -368,18 +367,19 @@ class Html
 			$return .= "class=\"current\"";
 		}
 		$return .= ">";
+		$return .= $this->link($title, $url, $linkAttributes, $confirmMessage, $escapeTitle);
 		if (is_array($count)) 
 		{
 			$count = count($count);
 			if ($count > 0) 
 			{
-				$title .= " (" . $count . ")";
+				$return .= " <span class=\"unread-count\">" . $count . "</span>";
 			}
 		}
 		elseif(is_int($count) && $count > 0) {
-				$title .= " (" . $count . ")";			
+				$return .= " <span class=\"unread-count\">" . $count . "</span>";			
 		}		
-		$return .= $this->link($title, $url, $linkAttributes, $confirmMessage, $escapeTitle);
+		
 		$return .= "</li>\n";
 		return $return;
 	}
@@ -427,7 +427,7 @@ class Html
 				$url = '/home';
 			}
 		}
-		return "[" . $this->link('Reply', '/home/' . $reply . $this->sendMeHere($url, true), array('id'=>'reply_link_' . $message['id'])) . "]";
+		return $this->link('Reply', '/home/' . $reply . $this->sendMeHere($url, true), array('id'=>'reply_link_' . $message['id']));
 	}
 	
 	
