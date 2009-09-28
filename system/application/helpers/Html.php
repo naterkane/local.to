@@ -354,15 +354,17 @@ class Html
 	 *
 	 * @param  string  $title The content to be wrapped by <a> tags.
 	 * @param  mixed   $url Cake-relative URL or array of URL parameters, or external URL (starts with http://)
+	 * @param  boolean $current Whether or not the menu item should be given the "current" classname
 	 * @param  array   $htmlAttributes[optional] Array of HTML attributes.
 	 * @param  string  $confirmMessage[optional] JavaScript confirmation message.
 	 * @param  boolean $escapeTitle[optional]	Whether or not $title should be HTML escaped.
 	 * @return string	An <a /> element wrapped in a formatted <li>
 	 */
-	public function menuItem($title, $url, $count = null, $linkAttributes = array(), $confirmMessage = false, $escapeTitle = true)
+	public function menuItem($title, $url, $current = false,$count = null, $linkAttributes = array(), $confirmMessage = false, $escapeTitle = true)
 	{
 		$return = "<li ";
-		if ($this->isSection($url)) 
+		
+		if ($current) 
 		{
 			$return .= "class=\"current\"";
 		}
