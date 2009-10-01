@@ -215,7 +215,7 @@ class Groups extends App_Controller
 			$this->data['group'] = $group;
 			$this->data['page_title'] = $group['name'] . ' Inbox';
 			$this->data['groupname'] = $group['name'];
-			$this->data['message'] = 'd !' . $group['name'] . ' ';			
+			$this->data['to'] = '!' . $group['name'] . ' ';			
 			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 			$this->data['group']['member_count'] = count($group['members']);			
 			$this->data['messages'] = $this->Message->getMany($group['inbox']);

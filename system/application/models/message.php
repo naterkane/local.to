@@ -627,6 +627,7 @@ class Message extends App_Model
 				$data['dm'] = true;	//set this twice				
 				$groupname = str_replace('!', '', $data['to']);
 				$this->to = $this->Group->getByName($groupname);
+				$data['group_name'] = $this->to['name'];
 			} 
 			else 
 			{
