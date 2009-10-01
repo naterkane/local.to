@@ -802,7 +802,9 @@ class User extends App_Model
     {
         if (! empty($data['username']))
         {
-            $user = $this->getByUsername($data['username']);
+            
+			$user = (stristr($data['username'],"@"))? $this->getByEmaiL($data['username']) : $this->getByUsername($data['username']);
+			
             if ((! empty($user)) && ($this->hashPassword($data['password']) == $user['password']))
             {
                 return $user;
