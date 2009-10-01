@@ -204,7 +204,7 @@ class Messages extends App_Controller
 			}
 		}
 		$this->data['messages'] = $this->Message->getMany($this->data['message']['replies']);
-		$user = $this->User->getByUserName($username);		
+		$user = $this->User->getByUserName($username);
 		if (($this->data['message']) AND ($user['username'] == $username) AND (!isset($this->data['message']['to']))) {
 			$this->data['remove_reply_context'] = true;
 			$this->load->view('messages/view', $this->data);
