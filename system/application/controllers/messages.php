@@ -114,6 +114,7 @@ class Messages extends App_Controller
 		$this->data['page_title'] = 'Inbox';
 		$this->data['message'] = null;
 		$this->data['dm'] = true;
+		$this->Message->threaded = false;
         $this->data['messages'] = Page::make('Message', $this->userData['inbox']);
 		$this->data['friend_select'] = $this->User->friendSelect($this->userData, $this->Group);	
 		$this->data['profile'] = $this->userData;
@@ -135,6 +136,7 @@ class Messages extends App_Controller
 		$this->data['dm'] = true;	
 		$this->data['sent'] = true;			
 		$this->data['message'] = null;
+		$this->Message->threaded = false;		
         $this->data['messages'] = Page::make('Message', $this->userData['sent']);
 		$this->data['friend_select'] = $this->User->friendSelect($this->userData, $this->Group);	
 		$this->data['profile'] = $this->userData;
@@ -192,8 +194,17 @@ class Messages extends App_Controller
     public function view($username = null, $message_id = null)
 	{
 		$this->data['message'] = $this->Message->getOne($message_id);
+		if ($this->data['message']['group_name']) 
+		{
+			$this->mustBeSignedIn();
+			$group = $this->Group->getByName($this->data['message']['group_name']);
+			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
+			{
+				$this->show404();				
+			}
+		}
 		$this->data['messages'] = $this->Message->getMany($this->data['message']['replies']);
-		$user = $this->User->getByUserName($username);
+		$user = $this->User->getByUserName($username);		
 		if (($this->data['message']) AND ($user['username'] == $username) AND (!isset($this->data['message']['to']))) {
 			$this->data['remove_reply_context'] = true;
 			$this->load->view('messages/view', $this->data);

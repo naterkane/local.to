@@ -417,19 +417,30 @@ class Html
 	 * @param array $message
 	 * @return 
 	 */
-	public function replyLink($message = array())
+	public function replyLink($message = array(), $dm = false)
 	{
-		$reply = $message['id'];
-		$url = null;		
-		if ($_SERVER['PATH_INFO']) 
+		if ($dm) 
 		{
-			$parts = explode('/', $_SERVER['PATH_INFO']);
-			if ((!empty($parts[1])) && (strtolower($parts[1]) == 'home'))
-			{
-				$url = '/home';
-			}
+			$onclick = 'javascript:';
+			$onclick .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
+			$onclick .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
+			return $this->link('Reply', '#top', array('id'=>'reply_link_' . $message['id'], 'onclick'=>$onclick));
 		}
-		return $this->link('Reply', '/home/' . $reply . $this->sendMeHere($url, true), array('id'=>'reply_link_' . $message['id']));
+		else 
+		{
+			$reply = $message['id'];
+			$url = null;		
+			if ($_SERVER['PATH_INFO']) 
+			{
+				$parts = explode('/', $_SERVER['PATH_INFO']);
+				if ((!empty($parts[1])) && (strtolower($parts[1]) == 'home'))
+				{
+					$url = '/home';
+				}
+			}
+			$urlLink = '/home/' . $reply . $this->sendMeHere($url, true);			
+		}
+		return $return . $this->link('Reply', $urlLink, array('id'=>'reply_link_' . $message['id']));
 	}
 	
 	

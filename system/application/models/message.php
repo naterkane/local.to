@@ -61,6 +61,11 @@ class Message extends App_Model
 			 */
 			'dm_group' => false,
 			/**
+			 * Group name (if group message)
+			 * @var null|string
+			 */
+			'group_name' => null,			
+			/**
 			 * Plain text of message
 			 * @var string
 			 */
@@ -371,6 +376,7 @@ class Message extends App_Model
 	 * @access public
      * @param array $messages
      * @param integer index of where to start
+     * @param array $options
      * @return array of messages
      */
     public function getMany ($messages = array(), $start = 0, $end = 20000)

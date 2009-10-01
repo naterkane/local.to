@@ -1,7 +1,6 @@
 /**
  * @author naterkane
  */
-jQuery.noConflict();
 jQuery(document).ready(function(){
 		// hides a flashmessage shortly after loading
 		jQuery("#flashMessage").css({
