@@ -440,7 +440,7 @@ class Html
 			}
 			$urlLink = '/home/' . $reply . $this->sendMeHere($url, true);			
 		}
-		return $return . $this->link('Reply', $urlLink, array('id'=>'reply_link_' . $message['id']));
+		return $this->link('Reply', $urlLink, array('id'=>'reply_link_' . $message['id']));
 	}
 	
 	
