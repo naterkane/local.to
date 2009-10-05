@@ -194,6 +194,10 @@ class Messages extends App_Controller
     public function view($username = null, $message_id = null)
 	{
 		$this->data['message'] = $this->Message->getOne($message_id);
+		if (!$this->data['message']) 
+		{
+			$this->show404();
+		}
 		if ($this->data['message']['group_name']) 
 		{
 			$this->mustBeSignedIn();
@@ -205,7 +209,7 @@ class Messages extends App_Controller
 		}
 		$this->data['messages'] = $this->Message->getMany($this->data['message']['replies']);
 		$user = $this->User->getByUserName($username);
-		if (($this->data['message']) AND ($user['username'] == $username) AND (!isset($this->data['message']['to']))) {
+		if (($this->data['message']) AND ($user['username'] == $username)) {
 			$this->data['remove_reply_context'] = true;
 			$this->load->view('messages/view', $this->data);
 		} else{
