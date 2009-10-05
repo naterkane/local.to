@@ -634,6 +634,8 @@ class Message extends App_Model
 				$this->mode = 'dm';
 				$data['dm'] = true;	//set this twice
 				$this->to = $this->User->getByUsername($message['to']);
+				$data['group_name'] = null; //make sure to unset this in case it came from the group form
+				$message['group_name'] = null; //make sure to unset this in case it came from the group form				
 			}
 			if (isset($this->to['id'])) 
 			{

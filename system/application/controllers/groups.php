@@ -213,9 +213,9 @@ class Groups extends App_Controller
 			$user = $this->data['User'];
 			$this->data = $group; //necessary, but should be removed, this was accidently coded to overwriter user data
 			$this->data['group'] = $group;
+			$this->data['group_select'] = $this->Group->membersSelect($this->userData, $group);
 			$this->data['page_title'] = $group['name'] . ' Inbox';
-			$this->data['groupname'] = $group['name'];
-			$this->data['to'] = '!' . $group['name'] . ' ';			
+			$this->data['groupname'] = $group['name'];		
 			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 			$this->data['group']['member_count'] = count($group['members']);			
 			$this->data['messages'] = $this->Message->getMany($group['inbox']);
@@ -275,7 +275,7 @@ class Groups extends App_Controller
 		}
 		$this->data['invite_list'] = $this->Group_Invite->getMany($this->data['group']['invites']);
 		$this->load->view('groups/invites', $this->data);
-	}
+	}	
 
 	/**
 	 * View members

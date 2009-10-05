@@ -444,7 +444,14 @@ class Html
 	{
 		$options = array();
 		$options['id'] = 'reply_link_' . $message['id'];
-		if ($group_page)
+		if ($group_page && $dm) 
+		{
+			$options['onclick'] = 'javascript:';
+			$options['onclick'] .= '$(\'#to\').val(\'!' . $group['name'] . '\');';
+			$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
+			$link = '#top';
+		}
+		elseif ($group_page)
 		{
 			if (empty($group['name'])) 
 			{

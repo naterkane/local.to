@@ -116,7 +116,7 @@ class Messages extends App_Controller
 		$this->data['dm'] = true;
 		$this->Message->threaded = false;
         $this->data['messages'] = Page::make('Message', $this->userData['inbox']);
-		$this->data['friend_select'] = $this->User->friendSelect($this->userData, $this->Group);	
+		$this->data['friend_select'] = $this->User->friendSelect($this->userData, $this->Group);
 		$this->data['profile'] = $this->userData;
 		$this->data['homeMenu'] = true;		
 		$this->User->updateRead('inbox', $this->data['profile']);

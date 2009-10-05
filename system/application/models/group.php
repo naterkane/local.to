@@ -504,6 +504,35 @@ class Group extends App_Model
 		}
 	}
 
+
+	/**
+	 * Get data for a member select
+	 *
+	 * @access public
+	 * @param array $user Signed in user data
+	 * @param array $group Group Data
+	 * @return 
+	 */
+	public function membersSelect($user = array(), $g = array())
+	{
+		$return = array();
+		if (empty($g['members'])) 
+		{
+			return $return;
+		}
+		$return[0]['DM Team']['!' . $g['name']] = $g['name'];
+		$members = $this->getMembers($g['members']);
+		$i = 1;
+		foreach ($members as $member) {
+			if ($user['id'] != $member['id']) 
+			{
+				$return[$i][$g['name']][$member['username']] = $member['username'];
+				$i++;				
+			}
+		}
+		return $return;
+	}
+
 	/**
 	 * Is a group's name unique?
 	 *
