@@ -287,25 +287,7 @@ class Users extends App_Controller
     {
         $this->mustBeSignedIn();
 		$this->data['message'] = null;
-		if ($replyTo) 
-		{
-			$this->Message->findParent($replyTo);
-			$message = $this->Message->getOne($replyTo);	
-			$parent = $this->Message->getParent();
-			if (!empty($parent['id'])) 
-			{
-				$this->data['reply_to'] = $parent['id'];
-			}
-			else 
-			{
-				$this->data['reply_to'] = $message['id'];				
-			}
-			if (!empty($message['User'])) 
-			{
-				$this->data['reply_to_username'] = $parent['User']['username'];
-				$this->data['message'] = '@' . $message['User']['username'] . ' ';
-			}
-		}
+		$this->setReplyTo($replyTo);
         $this->data['page_title'] = 'Home';
 		$this->data['next'] = null;
 		if ($this->userData['threading']) 

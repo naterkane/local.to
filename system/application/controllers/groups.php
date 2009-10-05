@@ -511,10 +511,11 @@ class Groups extends App_Controller
 	 * @param string $name	
 	 * @return
 	 */
-	public function view($groupname = null)
+	public function view($groupname = null, $replyTo = null)
 	{		
 		if ($groupname) {
 			$group = $this->Group->getByName($groupname);
+			$this->setReplyTo($replyTo);
 			if ($group == null) $this->redirect('/groups');
 			if (isset($this->data['User'])) 
 			{
@@ -553,7 +554,7 @@ class Groups extends App_Controller
         	$this->data['messages'] = Page::make('Message', $messages);			
 			if ($this->data['group']['member_count'] > 0) {
 				$this->User->updateReadGroup($this->userData, $group);
-				$this->data['redirect'] = '/group/' . $group['name'];
+				$this->data['redirect'] = $this->getRedirect();				
 				$this->load->view('groups/view', $this->data);
 			} 
 			else {

@@ -117,6 +117,37 @@ class App_Controller extends Controller {
     }
 
 	/**
+	 * Set a reply to link
+	 *
+	 * @access protected
+	 * @param int $replyTo
+	 * @return 
+	 */
+	protected function setReplyTo($replyTo = null)
+	{
+		if ($replyTo) 
+		{
+			$this->Message->findParent($replyTo);
+			$message = $this->Message->getOne($replyTo);	
+			$parent = $this->Message->getParent();
+			if (!empty($parent['id'])) 
+			{
+				$this->data['reply_to'] = $parent['id'];
+			}
+			else 
+			{
+				$this->data['reply_to'] = $message['id'];				
+			}
+			if (!empty($message['User'])) 
+			{
+				$this->data['reply_to_username'] = $parent['User']['username'];
+				$this->data['message'] = '@' . $message['User']['username'] . ' ';
+			}
+		}
+	}
+	
+
+	/**
 	 * Handles the loading of the Uploader and Avatar classes and handles the files
 	 * 
 	 * This method is used for both {@link users::avatar()} and {@link groups::avatar()}
@@ -200,7 +231,7 @@ class App_Controller extends Controller {
 		if (isset($this->params['redirect'])) 
 		{
 			$redirect = $this->params['redirect'];
-		}
+		}	
 		return $redirect;
 	}
 

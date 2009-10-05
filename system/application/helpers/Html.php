@@ -195,6 +195,29 @@ class Html
 	}
 
 	/**
+	 * Make a reply path for a reply link
+	 *
+	 * @access private
+	 * @param int $message_id
+	 * @param string $path e.g. 'home', 'group/my_group_name', no leading or trailing slashes
+	 * @return 
+	 */
+	private function replyPath($message_id, $path)
+	{
+		$url = null;		
+		if ($_SERVER['PATH_INFO']) 
+		{
+			$parts = explode('/', $_SERVER['PATH_INFO']);
+			$matches = explode('/', $path);
+			if ((!empty($parts[1])) && (strtolower($parts[1]) == $matches[0]))
+			{
+				$url = '/' . $path;
+			}
+		}
+		return '/' . $path . '/' . $message_id . $this->sendMeHere($url, true);
+	}
+
+	/**
 	 * Make a delete message link
 	 *
 	 * @access public
@@ -417,32 +440,33 @@ class Html
 	 * @param array $message
 	 * @return 
 	 */
-	public function replyLink($message = array(), $dm = false)
+	public function replyLink($message = array(), $dm = false, $group_page = false, $group = array())
 	{
-		if ($dm) 
+		$options = array();
+		$options['id'] = 'reply_link_' . $message['id'];
+		if ($group_page)
 		{
-			$onclick = 'javascript:';
-			$onclick .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
-			$onclick .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
-			return $this->link('Reply', '#top', array('id'=>'reply_link_' . $message['id'], 'onclick'=>$onclick));
-		}
-		else 
-		{
-			$reply = $message['id'];
-			$url = null;		
-			if ($_SERVER['PATH_INFO']) 
+			if (empty($group['name'])) 
 			{
-				$parts = explode('/', $_SERVER['PATH_INFO']);
-				if ((!empty($parts[1])) && (strtolower($parts[1]) == 'home'))
-				{
-					$url = '/home';
-				}
+				return;
 			}
-			$urlLink = '/home/' . $reply . $this->sendMeHere($url, true);			
+			else 
+			{
+				$link = $this->replyPath($message['id'], 'group/' . $group['name']);
+			}
 		}
-		return $this->link('Reply', $urlLink, array('id'=>'reply_link_' . $message['id']));
+		elseif ($dm) 
+		{
+			$options['onclick'] = 'javascript:';
+			$options['onclick'] .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
+			$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
+			$link = '#top';
+		}
+		else {
+			$link = $this->replyPath($message['id'], 'home');
+		}
+		return $this->link('Reply', $link, $options);
 	}
-	
 	
 	/**
 	 * Create a redirect query string to send a user back to requesting page
