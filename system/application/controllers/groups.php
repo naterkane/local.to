@@ -220,6 +220,7 @@ class Groups extends App_Controller
 			$this->data['group']['member_count'] = count($group['members']);			
 			$this->data['messages'] = $this->Message->getMany($group['inbox']);
 			$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+			$this->data['to'] = '!' . $group['name'];
 			$this->data['User'] = $user;
 			$this->load->view('groups/inbox', $this->data);
 		} else {
