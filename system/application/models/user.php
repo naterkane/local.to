@@ -862,16 +862,20 @@ class User extends App_Model
 	 * @param integer $id
 	 * @return boolean
 	 */
-	public function sms($to = array(), $from = array(), $message = null)
+	public function sms($to = array(), $from = array(), $message = null, $subject = null)
 	{
 		if (!empty($this->mail)) 
 		{
 			unset($this->mail);
 		}
+		if (!$subject) 
+		{
+			$subject = 'Private Message from ' . $from['username'];
+		}
 		$this->load->library('Mail');		
 		if ($to['device_updates'] && $to['phone']  && $to['carrier'])
 		{
-			return $this->mail->sms($to['phone'] . $to['carrier'], $from['email'], $message, $to['sms_activated']);
+			return $this->mail->sms($to['phone'] . $to['carrier'], $from['email'], $message, $to['sms_activated'], null, $subject);
 		}
 		return true;
 	}

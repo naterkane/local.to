@@ -193,18 +193,18 @@ class Group extends App_Model
 	 * Add group dms to member inboxes
 	 *
 	 * @access public
-	 * @param array $members An array of user ids
+	 * @param array $group 
 	 * @param array $sender
 	 * @param array $message	
 	 */
-	public function dm($members = array(), $sender, $message)
+	public function dm($group = array(), $sender, $message)
 	{		
-		foreach ($members as $member) {
+		foreach ($group['members'] as $member) {
 			$user = $this->User->get($member);
 			if ($user) 
 			{
 				$this->User->addToInbox($user, $message['id']);
-				$this->User->sms($user, $sender, $message['message']);
+				$this->User->sms($user, $sender, $message['message'], 'Private message from ' . $sender['username'] . ' to ' . $group['name']);
 			}
 		}
 	}

@@ -256,7 +256,7 @@ class Mail
 	 * @param boolean $mustBeActivated[optional]
 	 * @return boolean TRUE on success, FALSE if the user is not activated.
 	 */
-	public function sms($to, $from, $message = null, $activated = false, $mustBeAccivated = true)
+	public function sms($to, $from, $message = null, $activated = false, $mustBeActivated = true, $subject = null)
 	{
 		if ($mustBeActivated && !$activated) 
 		{
@@ -267,6 +267,7 @@ class Mail
 			$this->mail->AddAddress($to);
 			$this->mail->SetFrom($from);
 			$this->mail->Body = $message;
+			$this->mail->Subject = $subject;
 			$this->mail->Send();
 			return true;
 		}
