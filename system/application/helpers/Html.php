@@ -373,6 +373,27 @@ class Html
 	}
 
 	/**
+	 * Output a location
+	 *
+	 * @access public
+	 * @param array $user User data
+	 * @return 
+	 */
+	public function location($user = array())
+	{
+		$return = array();
+		if (!empty($user['city'])) 
+		{
+			$return[] = $user['city'];
+		}
+		if (!empty($user['state'])) 
+		{
+			$return[] = $user['state'];
+		}
+		return '<address id="profile_location"><strong>Location</strong>: ' . implode(', ', $return) . '</adress>';
+	}
+	
+	/**
 	 * Output a menu item
 	 *
 	 * @param  string  $title The content to be wrapped by <a> tags.
@@ -440,7 +461,7 @@ class Html
 	 * @param array $message
 	 * @return 
 	 */
-	public function replyLink($message = array(), $dm = false, $group_page = false, $group = array())
+	public function replyLink($message = array(), $dm = false)
 	{
 		$options = array();
 		$options['id'] = 'reply_link_' . $message['id'];
