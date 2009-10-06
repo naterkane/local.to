@@ -390,7 +390,7 @@ class Html
 		{
 			$return[] = $user['state'];
 		}
-		return '<address id="profile_location"><strong>Location</strong>: ' . implode(', ', $return) . '</adress>';
+		return '<address id="profile_location"><strong>Location</strong>: ' . implode(', ', $return) . '</address>';
 	}
 	
 	/**
