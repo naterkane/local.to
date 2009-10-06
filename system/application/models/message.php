@@ -226,7 +226,7 @@ class Message extends App_Model
 				foreach ($this->groupMentions as $mention_groupname => $group_mention) {
 					// query here just in case the user is mentioning herself, which would reset the data
 					$gmention = $this->Group->getByName($mention_groupname);
-					if ($gmention) 
+					if (($gmention) && (!$data['group_name']))
 					{
 						$this->Group->addToMentions($gmention, $data['id']);
 					}					
