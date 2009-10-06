@@ -615,7 +615,7 @@ class Users extends App_Controller
 			{
 				if ($this->User->updateSms($this->userData))
 				{	
-					$this->mail->sms($this->postData['phone'] . $this->postData['carrier'], null, $this->User->Sms_key->code, true, true);
+					$this->mail->sms($this->postData['phone'] . $this->postData['carrier'], null, 'Secret Key: ' . $this->User->Sms_key->code, true, true);
 					$this->redirect('/settings/sms', 'Your sms settings were updated');
 				}
 				else 
