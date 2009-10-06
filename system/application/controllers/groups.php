@@ -541,10 +541,6 @@ class Groups extends App_Controller
 				{
 					$messages = $this->data['group']['messages'];
 				}
-				if (!empty($this->data['group']['inbox'])) 
-				{
-					$messages = array_merge($messages, $this->data['group']['inbox']);
-				}
 				rsort($messages);
 			} 
 			else 
