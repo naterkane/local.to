@@ -88,6 +88,7 @@ class Html
 			'error' => '<div%s>%s</div>'
 		);
 	public $testingData;
+	public $userData = array();
 	public $validationErrors = array();
 
 	/**
@@ -109,6 +110,10 @@ class Html
 		else
 		{
 			$this->data = $ci->data;
+		}
+		if (!empty($ci->userData)) 
+		{
+			$this->userData = $ci->userData;
 		}
 		$this->timeZones = $ci->User->timeZones;
 		$this->validationErrors = $ci->validationErrors;		
@@ -473,6 +478,16 @@ class Html
 				$options['onclick'] .= '$(\'#to\').val(\'!' . $message['group_name'] . '\');';
 				$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
 				$link = '#top';
+				$return = $this->link('Reply to Team', $link, $options);
+				if ($this->userData['username'] != $message['User']['username']) 
+				{
+					$return .= "<br/>";
+					$options['onclick'] = 'javascript:';
+					$options['onclick'] .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
+					$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';				
+					$return .= $this->link('Reply to ' . $message['User']['username'], $link, $options);
+				}
+				return $return;				
 			} 
 			else 
 			{
