@@ -444,33 +444,31 @@ class Html
 	{
 		$options = array();
 		$options['id'] = 'reply_link_' . $message['id'];
-		if ($group_page && $dm) 
+		if ($message['group_name']) 
 		{
-			$options['onclick'] = 'javascript:';
-			$options['onclick'] .= '$(\'#to\').val(\'!' . $group['name'] . '\');';
-			$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
-			$link = '#top';
-		}
-		elseif ($group_page)
-		{
-			if (empty($group['name'])) 
+			if ($dm) 
 			{
-				return;
-			}
+				$options['onclick'] = 'javascript:';
+				$options['onclick'] .= '$(\'#to\').val(\'!' . $message['group_name'] . '\');';
+				$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
+				$link = '#top';
+			} 
 			else 
 			{
-				$link = $this->replyPath($message['id'], 'group/' . $group['name']);
+				$link = $this->replyPath($message['id'], 'group/' . $message['group_name']);
 			}
 		}
-		elseif ($dm) 
-		{
-			$options['onclick'] = 'javascript:';
-			$options['onclick'] .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
-			$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
-			$link = '#top';
-		}
 		else {
-			$link = $this->replyPath($message['id'], 'home');
+			if ($dm) 
+			{
+				$options['onclick'] = 'javascript:';
+				$options['onclick'] .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
+				$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
+				$link = '#top';
+			}
+			else {
+				$link = $this->replyPath($message['id'], 'home');
+			}	
 		}
 		return $this->link('Reply', $link, $options);
 	}
