@@ -870,7 +870,7 @@ class User extends App_Model
 		}
 		if (!$subject) 
 		{
-			$subject = 'Private Message';
+			$subject = 'PM from ' . $from['username'];
 		}
 		$this->load->library('Mail');		
 		if ($to['device_updates'] && $to['phone']  && $to['carrier'])
