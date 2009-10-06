@@ -485,7 +485,7 @@ class Html
 					$options['onclick'] = 'javascript:';
 					$options['onclick'] .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
 					$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';				
-					$return .= $this->link('Reply to ' . $message['User']['username'], $link, $options);
+					$return .= $this->link('Reply to User', $link, $options);
 				}
 				return $return;				
 			} 
