@@ -192,7 +192,11 @@ class Admin extends App_controller
 						$path = 'signup/' . $data['key'];
 						$url = $this->config->item("base_url") . $path;
 						$this->mail->sendInvite($data['email'], $url);
-						$this->redirect('/' . $path, "We've got your info, please click the link in the email we've sent to <strong>" . $data['email'] . "</strong>.");
+						if (!$this->config->item('testing')) 
+						{
+							$path = null;
+						}
+						$this->redirect('/' . $path, "We've got your info, please click the link in the email we've sent to <strong>" . $data['email'] . "</strong>.");							
 					} 
 					else 
 					{
@@ -206,14 +210,21 @@ class Admin extends App_controller
 		} 
 		else 
 		{
-			$this->layout = 'bare';
-			$this->load->model(array('Invite'));
-			$this->load->database();				
-			$this->data['email'] = "nomcat+" . $this->Invite->randomString(10) . '@wearenom.com';
-			$this->data['key'] = $this->util->base64_url_encode(preg_replace('/@/',$this->Invite->randomString(9),$this->data['email']));
-			$this->Invite->create($this->data);		
-			$this->data['email'] = $this->util->base64_url_encode($this->data['email']);
-			$this->load->view('admin/create_invite', $this->data);
+			if ($this->config->item('testing')) 
+			{
+				$this->layout = 'bare';
+				$this->load->model(array('Invite'));
+				$this->load->database();				
+				$this->data['email'] = "nomcat+" . $this->Invite->randomString(10) . '@wearenom.com';
+				$this->data['key'] = $this->util->base64_url_encode(preg_replace('/@/',$this->Invite->randomString(9),$this->data['email']));
+				$this->Invite->create($this->data);		
+				$this->data['email'] = $this->util->base64_url_encode($this->data['email']);
+				$this->load->view('admin/create_invite', $this->data);
+			}
+			else 
+			{
+				$this->show404();
+			}
 		}
 	}
 	

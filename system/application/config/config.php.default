@@ -351,6 +351,11 @@ $config['password'] = 'nomcat';
 $config['from_email'] = 'nomcat@wearenom.com';
 $config['from_name'] = 'NomCat Admin';
 
+//registration settings
+$config['registration_open'] = true;
+
+//testing settings
+$config['testing'] = true;
 
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
