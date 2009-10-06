@@ -265,10 +265,11 @@ class Mail
 		else
 		{
 			$this->mail->AddAddress($to);
-			$this->mail->SetFrom($from);
+			$this->mail->SetFrom($this->settings['noreply'], $from);
 			$this->mail->Body = $message;
 			$this->mail->Subject = $subject;
 			$this->mail->Send();
+			$this->mail->ClearAllRecipients();			
 			return true;
 		}
 	}
