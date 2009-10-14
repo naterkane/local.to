@@ -56,6 +56,8 @@ class Mail
 		$this->ci = get_instance();
 		if (file_exists(APPPATH . 'views/themes/' . $this->ci->config->item('theme') . '/config/email.php')) 
 		{
+			$settings['base_url'] = $this->ci->config->item('base_url');
+			$settings['noreply'] = "noreply@".substr($settings['base_url'],7);
 			require_once(APPPATH . 'views/themes/' . $this->ci->config->item('theme') . '/config/email.php');
 			$this->settings = $settings;
 		}
