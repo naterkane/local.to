@@ -182,14 +182,37 @@ class Mail
 		$this->email_updates = $to['email_updates'];
 		$message = $this->getSetting('message_friend_request');		
 		$message = str_replace('{link}', $link, $message);
-		$message = str_replace('{username}', $from['username'], $message);
-		$message = str_replace('{to}', $to['username'], $message);				
+		$message = str_replace('{username}', $from['realname'], $message);
+		$message = str_replace('{to}', $to['realname'], $message);				
 		$message .= $this->getSetting('email_settings_link');	
 		$message .= $this->getSetting('signature');			
 		$subject = $this->getSetting('subject_friend_request');
-		$subject = str_replace('{username}', $from['username'], $subject);		
+		$subject = str_replace('{username}', $from['realname'], $subject);		
 		$this->send($to['email'], $subject, $message);
 	}
+
+	/**
+	 * Send an email notifying a user of a new follower
+	 *
+	 * @access public
+	 * @param array $to
+	 * @param array $following	
+	 * @return 
+	 */
+	public function sendFollowingConfirmation($to = array(), $following = array())
+	{
+		$this->email_updates = $to['email_updates'];
+		$message = $this->getSetting('message_following');	
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $following['realname'], $message);
+		$message = str_replace('{link}', $this->ci->config->item('base_url') . $following['username'], $message);		
+		$message .= $this->getSetting('email_settings_link');	
+		$message .= $this->getSetting('signature');		
+		$subject = $this->getSetting('subject_following');
+		$subject = str_replace('{username}', $following['realname'], $subject);		
+		$this->send($to['email'], $subject, $message);				
+	}
+	
 	
 	/**
 	 * Sends an email notifying a user that they have been invited to be a member of a group
@@ -245,6 +268,29 @@ class Mail
 		$subject = $this->getSetting('subject_recover_password');
 		$this->send($to, $subject, $message);
 	}
+
+	/**
+	 * Send an email notifying a user has been confirmed by a user
+	 *
+	 * @access public
+	 * @param array $to
+	 * @param array $following	
+	 * @return 
+	 */
+	public function sendRequestConfirmation($to = array(), $user = array())
+	{
+		$this->email_updates = $to['email_updates'];
+		$message = $this->getSetting('message_confirm');	
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $user['realname'], $message);
+		$message = str_replace('{link}', $this->ci->config->item('base_url') . $user['username'], $message);		
+		$message .= $this->getSetting('email_settings_link');	
+		$message .= $this->getSetting('signature');		
+		$subject = $this->getSetting('subject_confirm');
+		$subject = str_replace('{username}', $user['realname'], $subject);		
+		$this->send($to['email'], $subject, $message);				
+	}
+
 	
 	/**
 	 * Sends an email to a user that contains a link with a new/reset password for their account

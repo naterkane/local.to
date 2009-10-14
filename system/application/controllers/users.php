@@ -80,6 +80,8 @@ class Users extends App_Controller
 		$redirect = $this->getRedirect();				
 		if ($this->User->confirm($username, $this->userData)) 
 		{
+			$user = $this->User->getByUsername($username);
+			$this->mail->sendRequestConfirmation($user, $this->userData);			
 			$this->redirect($redirect, $username . ' is now following your posts.');
 		} 
 		else 
@@ -199,6 +201,7 @@ class Users extends App_Controller
 			} 
 			else 
 			{
+				$this->mail->sendFollowingConfirmation($user, $this->userData);
 				$message = 'You are now following ' . $user['username'] . '.';				
 			}
 			$this->redirect('/' . $username, $message);
