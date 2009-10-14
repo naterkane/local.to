@@ -862,21 +862,34 @@ class User extends App_Model
 	 * @param integer $id
 	 * @return boolean
 	 */
-	public function sms($to = array(), $from = array(), $message = null, $subject = null)
+	public function sms($to = array(), $from = array(), $message = null, $group = null)
 	{
 		if (!empty($this->mail)) 
 		{
 			unset($this->mail);
 		}
-		if (!$subject) 
+		if ($group) 
 		{
-			$subject = 'PM from ' . $from['username'];
+			$subject = $from['username'] . ' sent you a message for ' . $group;
 		}
-		$this->load->library('Mail');		
+		else 
+		{
+			$subject = $from['username'] . ' sent you a message on Teamitup.';
+		}
+		$this->load->library('Mail');				
 		if ($to['device_updates'] && $to['phone']  && $to['carrier'])
 		{
-			return $this->mail->sms($to['phone'] . $to['carrier'], $from['username'], $message, $to['sms_activated'], null, $subject);
+			if ($group) 
+			{
+				$sms_message = $group . ': ' . $message;
+			}
+			else 
+			{
+				$sms_message = $from['username'] . ': ' . $message;				
+			}
+			$this->mail->sms($to['phone'] . $to['carrier'], $from['username'], $sms_message, $to['sms_activated'], null, null);
 		}
+		$this->mail->dmEmail($to, $message, $subject);
 		return true;
 	}
     

@@ -33,6 +33,10 @@ class Mail
 	 */
 	public $carriers = array('@sms.3rivers.net'=>'3 River Wireless', '@cingularme.com'=>'7-11 Speakout', '@airtelkk.com'=>'Airtel (Karnataka, India)', '@msg.acsalaska.com'=>'Alaska Communications Systems', '@message.alltel.com'=>'Alltel Wireless', '@txt.att.net'=>'AT&T Wireless', '@txt.bell.ca'=>'Bell Mobility (Canada)', '@myboostmobile.com'=>'Boost Mobile', '@mobile.celloneusa.com'=>'Cellular One (Dobson)', '@cingularme.com'=>'Cingular (Postpaid)', '@cwemail.com'=>'Centennial Wireless', '@cingularme.com'=>'Cingular (GoPhone prepaid)', '@ideasclaro-ca.com'=>'Claro (Nicaragua)', '@comcel.com.co'=>'Comcel', '@sms.mycricket.com'=>'Cricket', '@sms.ctimovil.com.ar'=>'CTI', '@emtelworld.net'=>'Emtel (Mauritius)', '@fido.ca'=>'Fido (Canada)', '@msg.gci.net'=>'General Communications Inc.', '@msg.globalstarusa.com'=>'Globalstar', '@myhelio.com'=>'Helio', '@ivctext.com'=>'Illinois Valley Cellular', '.iws@iwspcs.net'=>'i wireless', '@sms.mymeteor.ie'=>'Meteor (Ireland)', '@sms.spicenepal.com'=>'Mero Mobile (Nepal)', '@mymetropcs.com'=>'MetroPCS', '@movimensaje.com.ar'=>'Movicom', '@sms.mobitel.lk'=>'Mobitel (Sri Lanka)', '@movistar.com.co'=>'Movistar (Colombia)', '@sms.co.za'=>'MTN (South Africa)', '@text.mtsmobility.com'=>'MTS (Canada)', '@nextel.net.ar'=>'Nextel (Argentina)', '@orange.pl'=>'Orange (Poland)', '@personal-net.com.ar'=>'Personal (Argentina)', '@text.plusgsm.pl'=>'Plus GSM (Poland)', '@txt.bell.ca'=>'President\'s Choice (Canada)', '@qwestmp.com'=>'Qwest', '@pcs.rogers.com'=>'Rogers (Canada)', '@sms.sasktel.com'=>'Sasktel (Canada)', '@mas.aw'=>'Setar Mobile email (Aruba)', '@txt.bell.ca'=>'Solo Mobile', '@messaging.sprintpcs.com'=>'Sprint (PCS)', '@page.nextel.com'=>'Sprint (Nextel)', '@tms.suncom.com'=>'Suncom', '@tmomail.net'=>'T-Mobile', '@sms.t-mobile.at'=>'T-Mobile (Austria)', '@msg.telus.com'=>'Telus Mobility (Canada)', '@sms.thumbcellular.com'=>'Thumb Cellular', '@sms.tigo.com.co'=>'Tigo (Formerly Ola)', '@utext.com'=>'Unicel', '@email.uscc.net'=>'US Cellular', '@vtext.com'=>'Verizon', '@vmobile.ca'=>'Virgin Mobile (Canada)', '@vmobl.com'=>'Virgin Mobile (USA)', '@sms.ycc.ru'=>'YCC', '@orange.net'=>'Orange (UK)', '@gocbw.com'=>'Cincinnati Bell Wireless', '@t-mobile-sms.de'=>'T-Mobile Germany', '@vodafone-sms.de'=>'Vodafone Germany', '@smsmail.eplus.de'=>'E-Plus');
 	/**
+	 * @var boolean $email_updates does the user receive email updates?
+	 */
+	public $email_updates = true;
+	/**
 	 * @var string
 	 */
 	public $from_email;
@@ -71,6 +75,24 @@ class Mail
 	}
 	
 	/**
+	 * Send a user a DM via email email 
+	 *
+	 * @access public
+	 * @param $user
+	 * @param $message	
+	 * @return 
+	 */
+	public function dmEmail($to = array(), $message = null, $subject = null)
+	{
+		$this->email_updates = $to['email_updates'];
+		$message .= "\n\nThis email was intended for: " . $to['email'];			
+		$message .= $this->getSetting('email_settings_link');	
+		$message .= $this->getSetting('signature');		
+		$this->send($to['email'], $subject, $message);			
+	}
+	
+	
+	/**
 	 * Get the value of a setting
 	 * 
 	 * @param string $setting
@@ -102,6 +124,10 @@ class Mail
 	 */
 	private function send($to, $subject = null, $message = null, $from_email = null, $from_name = null)
 	{
+		if (!$this->email_updates) 
+		{
+			return false;
+		}
 		if (!$from_email) 
 		{
 			$from_email = $this->from_email;
@@ -146,19 +172,23 @@ class Mail
 	 * Sends an email notifying a user that a user has requested to follow their public stream
 	 * 
 	 * @access public
-	 * @param string $to
-	 * @param string $username
+	 * @param array $to
+	 * @param array $username
 	 * @param string $link
 	 * @see send()
 	 */
-	public function sendFriendRequest($to, $username, $link)
+	public function sendFriendRequest($to, $from, $link)
 	{
-		$message = $this->getSetting('message_friend_request');
-		$message = str_replace('{link}', $message, $link);		
+		$this->email_updates = $to['email_updates'];
+		$message = $this->getSetting('message_friend_request');		
+		$message = str_replace('{link}', $link, $message);
+		$message = str_replace('{username}', $from['username'], $message);
+		$message = str_replace('{to}', $to['username'], $message);				
+		$message .= $this->getSetting('email_settings_link');	
 		$message .= $this->getSetting('signature');			
 		$subject = $this->getSetting('subject_friend_request');
-		$subject = str_replace('{username}', $subject, $username);
-		$this->send($to, $subject, $message);
+		$subject = str_replace('{username}', $from['username'], $subject);		
+		$this->send($to['email'], $subject, $message);
 	}
 	
 	/**
@@ -173,10 +203,12 @@ class Mail
 	public function sendGroupInvite($to, $groupname, $link)
 	{
 		$message = $this->getSetting('message_group_invite');
-		$message = str_replace('{link}', $message, $link);		
+		$message = str_replace('{link}', $link, $message);
+		$message = str_replace('{group}', $groupname, $message);
+		$message .= $this->getSetting('email_settings_link');				
 		$message .= $this->getSetting('signature');			
 		$subject = $this->getSetting('subject_group_invite');
-		$subject = str_replace('{groupname}', $subject, $groupname);
+		$subject = str_replace('{groupname}', $groupname, $subject);
 		$this->send($to, $subject, $message);
 	}
 	
@@ -191,7 +223,7 @@ class Mail
 	public function sendInvite($to, $link)
 	{
 		$message = $this->getSetting('message_invite');
-		$message = str_replace('{link}', $message, $link);			
+		$message = str_replace('{link}', $link, $message);			
 		$message .= $this->getSetting('signature');		
 		$subject = $this->getSetting('subject_invite');
 		$this->send($to, $subject, $message);
@@ -208,7 +240,7 @@ class Mail
 	public function sendRecoverPassword($to, $link)
 	{
 		$message = $this->getSetting('message_recover_password');
-		$message = str_replace('{link}', $message, $link);	
+		$message = str_replace('{link}', $link, $message);	
 		$message .= $this->getSetting('signature');		
 		$subject = $this->getSetting('subject_recover_password');
 		$this->send($to, $subject, $message);

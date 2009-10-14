@@ -204,7 +204,7 @@ class Group extends App_Model
 			if ($user) 
 			{
 				$this->User->addToInbox($user, $message['id']);
-				$this->User->sms($user, $sender, $message['message'], 'Private message to '. $group['name']);
+				$this->User->sms($user, $sender, $message['message'], $group['name']);
 			}
 		}
 	}

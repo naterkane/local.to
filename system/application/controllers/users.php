@@ -194,7 +194,7 @@ class Users extends App_Controller
 		{
 			if ($user['locked']) 
 			{
-				$this->mail->sendFriendRequest($user['email'], $this->userData['email'], 'Welcome', $this->config->item('base_url') . 'friend_requests');
+				$this->mail->sendFriendRequest($user, $this->userData, $this->config->item('base_url') . 'friend_requests');
 				$message = 'A confirmation request has been sent to ' . $user['username'] . '.';								
 			} 
 			else 
