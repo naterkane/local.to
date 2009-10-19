@@ -1,20 +1,10 @@
 /**
  * @author naterkane
  */
-jQuery(document).ready(function(){
+if(!(('console' in window) && ('log' in console)))
+    window.console = { log: function(){} };
+$(document).ready(function(){
 		// hides a flashmessage shortly after loading
-		jQuery("#flashMessage").css({
-			"position": "absolute",
-			"top": "0pt",
-			"left": "0pt",
-			"color": "#000000",
-			"border-bottom-width": "2px",
-			"border-bottom-style": "solid",
-			"border-bottom-color": "rgba(0, 0, 0, 0.15)",
-			"width": "100%",
-			"cursor": "pointer",
-			"zindex": "99999"
-		})
-		jQuery("#flashMessage").slideDown(1000);
+		$("#flashMessage").slideDown(1000);
 		var hideFlashMessage = setTimeout(function(){jQuery("#flashMessage").slideUp(1000);},3000);
 	});
