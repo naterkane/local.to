@@ -339,12 +339,12 @@ class Users extends App_Controller
 		$this->sidebar = "users/userprofile";
 		$this->data['user_profile'] = $this->User->getByUsername($username);	
 		$this->isProfile = true;
-		if (empty($this->data['profile'])) 
+		if (empty($this->data['user_profile'])) 
 		{
 			$this->show404();
 		}		
-		$this->data['username'] = $this->data['profile']['username'];	
-		$this->data['page_title'] = $this->data['profile']['username'];
+		$this->data['username'] = $this->data['user_profile']['username'];	
+		$this->data['page_title'] = $this->data['user_profile']['username'];
 		$this->load->view('users/profile', $this->data);
 	}
 	
