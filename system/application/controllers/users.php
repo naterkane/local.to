@@ -192,6 +192,7 @@ class Users extends App_Controller
     {
         $this->mustBeSignedIn();
 		$user = $this->User->getByUsername($username);
+		$type = null;
 		if ($this->User->follow($user, $this->userData))
 		{
 			if ($user['locked']) 
@@ -202,9 +203,10 @@ class Users extends App_Controller
 			else 
 			{
 				$this->mail->sendFollowingConfirmation($user, $this->userData);
-				$message = 'You are now following ' . $user['username'] . '.';				
+				$message = 'You are now following ' . $user['username'] . '.';		
+				$type = "success";		
 			}
-			$this->redirect('/' . $username, $message);
+			$this->redirect('/' . $username, $message, $type);
 		}
 		else
 		{
@@ -368,7 +370,7 @@ class Users extends App_Controller
 				$this->Email_key->save($data);
 				$this->load->library('Mail');			
 				$this->mail->sendRecoverPassword($user['email'],  $this->config->item('base_url') . 'reset_password/' . $data['id_unhashed']);
-				$this->redirect('/recover_password', 'An email has been sent to ' . $user['email'] . ' with instructions on how to reset your password.', 'error');
+				$this->redirect('/recover_password', 'An email has been sent to ' . $user['email'] . ' with instructions on how to reset your password.', 'neutral');
 			}
 			else 
 			{
@@ -389,7 +391,7 @@ class Users extends App_Controller
 	{
 		if (!$key) 
 		{
-			$this->redirect('/', "Sorry, we can't reset your password at this time.");
+			$this->redirect('/', "Sorry, we can't reset your password at this time.","error");
 		}
 		else 
 		{
@@ -409,11 +411,11 @@ class Users extends App_Controller
 						$this->Email_key->delete(md5($key));
 						$this->load->library(array('Mail'));
 						$this->mail->sendResetPassword($user['email']);
-						$this->redirect('/signin', 'Your password has been updated. Please sign in.');
+						$this->redirect('/signin', 'Your password has been updated. Please sign in.',"success");
 					} 
 					else 
 					{
-						$this->cookie->setFlash('There was an error updating your password. Please see below for details');
+						$this->cookie->setFlash('There was an error updating your password. Please see below for details',"error");
 					}
 				}
 				$this->load->view('users/reset_password');
@@ -470,7 +472,7 @@ class Users extends App_Controller
 		{
 			if ($this->User->updateProfile($this->userData['id'])) 
 			{
-				$this->redirect('/settings', 'Your profile was updated.');
+				$this->redirect('/settings', 'Your profile was updated.',"success");
 			} 
 			else 
 			{
@@ -521,7 +523,7 @@ class Users extends App_Controller
     public function signout()
     {
         $this->cookie->remove('user');
-        $this->redirect('/signin', 'You have successfully signed out.');
+        $this->redirect('/signin', 'You have successfully signed out.',"success");
     }
 
     /**
@@ -534,9 +536,10 @@ class Users extends App_Controller
      */
 	public function signup($key = null)
     {
+		$this->mustNotBeSignedIn();
 		if (!$key)
 		{
-			$this->redirect('/request_invite', "Sorry, you must request an invitation before you can sign up.");
+			$this->redirect('/request_invite', "Sorry, you must request an invitation before you can sign up.","error");
 		}
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign Up';
@@ -549,7 +552,7 @@ class Users extends App_Controller
 		}
 		if ($invite['activated'] == 1) 
 		{
-			$this->redirect('/signin', 'This invite has already been activated.');
+			$this->redirect('/signin', 'This invite has already been activated.',"error");
 		}		
         if ($this->postData)
         {
@@ -577,12 +580,12 @@ class Users extends App_Controller
     }
 
     /**
-     * Change SMS settings
+     * Change SMS/Notification settings
 	 *
 	 * @access public
      * @return
      */
-	public function sms()
+	public function notifications()
 	{
 		$this->mustBeSignedIn();
 		$this->load->model(array('Sms_key'));		
@@ -596,30 +599,33 @@ class Users extends App_Controller
 			$this->userData['sms_activated'] = false;
 			$this->userData['device_updates'] = false;			
 			$this->User->save($this->userData);
-			$this->redirect('/settings/sms', 'Your sms activation has been canceled.');
+			$this->redirect('/settings/notifications', 'Your sms activation has been canceled.','neutral');
 		}
-        $this->data['page_title'] = 'Settings / SMS';		
+        $this->data['page_title'] = 'Settings / Notifications';		
 		$this->load->library(array('Mail'));
 		$this->data['carriers'] = $this->mail->carriers;
 		if ($this->postData)
 		{
+			
+			
 			if ($this->postDataKey('key')) 
 			{
 				if ($this->User->smsKey($this->postData['key'], $this->userData)) 
 				{
-					$this->redirect('/settings/sms', 'Your sms number has been activated');
+					$this->redirect('/settings/notifications', 'Your sms number has been activated',"success");
 				} 
 				else 
 				{
-					$this->cookie->setFlash('The sms code is incorrect.', 'error');
+					$this->cookie->setFlash('The SMS code you entered doesn\'t match what we sent you. Please try again.', 'error');
 				}
+				
 			}
 			else 
 			{
 				if ($this->User->updateSms($this->userData))
 				{	
 					$this->mail->sms($this->postData['phone'] . $this->postData['carrier'], null, 'Secret Key: ' . $this->User->Sms_key->code, true, true);
-					$this->redirect('/settings/sms', 'Your sms settings were updated');
+					$this->cookie->setFlash('Your sms settings were updated','success');
 				}
 				else 
 				{
@@ -627,6 +633,16 @@ class Users extends App_Controller
 					$this->cookie->setFlash('There was an error updating your sms settings. See below for more details.', 'error');
 				}
 			}
+			if ($this->User->updateProfile($this->userData['id'])) 
+			{
+				$this->cookie->setFlash('Your notification settings have been updated.',"success");
+			} 
+			else 
+			{
+				$this->setErrors(array('User'));
+				$this->cookie->setFlash('There was an error updating your profile. See below for more details.', 'error');
+			}
+			$this->redirect('/settings/notifications');
 		}
 		else 
 		{
@@ -634,7 +650,7 @@ class Users extends App_Controller
 			$this->setData($this->userData);
 		}
 		$this->data['key'] = null;
-		$this->load->view('users/sms', $this->data);
+		$this->load->view('users/notifications', $this->data);
 	}
 
  	/**
@@ -654,6 +670,7 @@ class Users extends App_Controller
 		}
 		else 
 		{
+			$type = null;
 			$redirect = $this->getRedirect();
 			if ($setting == 'enable') 
 			{
@@ -666,12 +683,14 @@ class Users extends App_Controller
 			if ($this->User->save($this->userData))
 			{
 				$message = "You have {$setting}d threading";
+				$type = "success";
 			}
 			else
 			{
 				$message = "Something went wrong! You have not {$setting}d threading";
+				$type = "error";
 			}
-			$this->redirect($redirect, $message);			
+			$this->redirect($redirect, $message, $type);			
 		}
 	}
 

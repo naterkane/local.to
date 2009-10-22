@@ -881,7 +881,7 @@ class User extends App_Model
 		{
 			if ($group) 
 			{
-				$sms_message = $group . ': ' . $message;
+				$sms_message = $from['username'] .' to ' . $group . ': ' . $message;
 			}
 			else 
 			{
@@ -978,6 +978,11 @@ class User extends App_Model
 	 */
 	public function updateReadGroup(&$user = array(), $group = array())
 	{
+		/*  
+		print_r("<pre>");
+		var_dump($user);
+		print_r("</pre>");
+		*/
 		$counter_array = 'group_messages_read';
 		$group_name = $group['name'];
 		$message_count = count($group['messages']);		

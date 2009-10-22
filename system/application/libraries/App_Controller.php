@@ -291,6 +291,25 @@ class App_Controller extends Controller {
         }
     }
 
+    /**
+     * Checks to see if a user is not signed in
+     *
+     * If so, sends to home
+	 * @access public
+	 * @return	
+     */
+    public function mustNotBeSignedIn() 
+	{
+        if (empty($this->userData)) 
+		{
+            $this->getUserData();
+        }
+		if (!empty($this->userData)) 
+		{
+			$this->redirect('/');
+		}
+    }
+
 	/**
 	 * Must be the owner of a group
 	 *
@@ -311,21 +330,6 @@ class App_Controller extends Controller {
 		return true;
 	}
 	
-
-    /**
-     * Checks to see if a user is not signed in
-     * Redirects to 404 if the user is authenticated
-     * Used by signin / signup views.
-	 * @access public
-	 * @return	
-     */
-    public function mustNotBeSignedIn() 
-	{
-        if (!empty($this->userData)) 
-		{
-            $this->show404();
-        }
-    }
 
 	/**
 	 * Does a key exist in post data?
