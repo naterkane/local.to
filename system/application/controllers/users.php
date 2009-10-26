@@ -211,11 +211,28 @@ class Users extends App_Controller
 		}
 		else
 		{
-			$message = "Oh my! We had trouble finding the user you're trying to follow. Please make sure you're clicking a link and not typing the address in directly.";
+			$message = "Oh my! We had trouble finding the user you're trying to follow. We don't know anyone called ". $user['username'];
 			$type = "error";
 			$this->redirect($redirect,$message,$type);
 		}
     }
+
+    /**
+     * Unfollow a user
+     *
+     * @param string $username
+     * @access public
+     * @return
+     */
+    function unfollow($username = null)
+    {
+        $this->mustBeSignedIn();
+		$redirect = $this->getRedirect();
+		$user = $this->User->getByUsername($username);
+		$username = $user['username'];
+		$action = $this->User->unfollow($username, $this->userData);
+		$this->redirect($redirect,$action['message'],$action['type']);
+    } 
    
 	/**
 	 * Show all users user is following
@@ -699,26 +716,6 @@ class Users extends App_Controller
 			$this->redirect($redirect, $message, $type);			
 		}
 	}
-
-    /**
-     * Unfollow a user
-     *
-     * @param string $username
-     * @access public
-     * @return
-     */
-    function unfollow($username = null)
-    {
-        $this->mustBeSignedIn();
-		if ($this->User->unfollow($username, $this->userData))
-		{
-			$this->redirect('/' . $username);
-		}
-		else
-		{
-			$this->show404();
-		}
-    } 
 
     /**
      * View a users public page

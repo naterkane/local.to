@@ -348,9 +348,14 @@ class User extends App_Model
 	 * @param array $following Data of user following
 	 * @return boolean
 	 */
-	public function follow($followed, $following)
+	public function follow($followed = null, $following)
 	{
-		if ($followed) 
+		if (empty($followed)) {
+			return false;
+		} elseif (is_string($followed)){
+			$followed = $this->User->getByUsername($followed);
+		}
+		if (!empty($followed)) 
 		{
 			$this->startTransaction();
 			if ($followed['locked']) 
@@ -362,12 +367,37 @@ class User extends App_Model
 				$this->_follow($followed, $following);
 				$this->addFollowedMessages($followed, $following);
 			}
-			return $this->endTransaction();;			
+			
+			return $this->endTransaction();
 		} 
 		else 
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Unfollow a user
+	 *
+	 * @access public	
+	 * @param string $username[optional] of user to follow
+	 * @param array $user data of user following
+	 * @return boolean
+	 */
+	public function unfollow($username = null, $following)
+	{
+		$this->startTransaction();
+		$user = $this->getByUsername($username);
+		if (empty($user)){
+		 $this->endTransaction();
+		 return array('message'=>"Oops! There was an error trying to unfollow that user. Please make sure you're not typing the URL manually.","type"=>"error");
+		}
+		$user['followers'] = $this->removeFromArray($user['followers'], $following['id']);
+		$this->save($user);
+		$following['following'] = $this->removeFromArray($following['following'], $user['id']);		
+		$this->save($following);
+		$this->endTransaction();
+		return array('message'=>"You are no longer following " . $username,"type"=>"success");
 	}
 	
 	/**
@@ -1077,24 +1107,6 @@ class User extends App_Model
 		return $this->endTransaction();
 	}
 
-	/**
-	 * Unfollow a user
-	 *
-	 * @access public	
-	 * @param string $username[optional] of user to follow
-	 * @param array $user data of user following
-	 * @return boolean
-	 */
-	public function unfollow($username = null, $following)
-	{
-		$this->startTransaction();
-		$user = $this->getByUsername($username);
-		$user['followers'] = $this->removeFromArray($user['followers'], $following['id']);
-		$this->save($user);
-		$following['following'] = $this->removeFromArray($following['following'], $user['id']);		
-		$this->save($following);
-		return $this->endTransaction();
-	}
 	
 	/**
 	 * Validates a user

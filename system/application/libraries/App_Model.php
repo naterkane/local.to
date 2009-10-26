@@ -174,6 +174,7 @@ class App_Model extends Model {
 	{
 		$ci = CI_Base::get_instance();
 		$this->loadLibrary(array('Tt'));
+		//$this->loadLibrary(array('Tt','Bitly'));
 		if( $_SERVER['HTTP_HOST'] == $ci->config->item('tt_host'))
 		{
 			$host = $ci->config->item('tt_host_local');

@@ -686,6 +686,41 @@ class Message extends App_Model
 		{
 			$this->parseMentions($data, '!', 'groupMentions');
 		}
+		
+		if(preg_match_all(URL_MATCH, $data['message_html'],$links,PREG_SET_ORDER)){
+			$links = $links[0];
+			
+			for($l = count($links)-1;$l>=0; $l--){
+				$link = $links[$l];
+				$links[$l] = (substr($link,0,4) != "http") ? "http://".$link : $link;
+			}
+			echo "<pre>";
+			var_dump($data['message_html']);
+			$links = array_unique($links);
+			//require_once('../libraries/Bitly.php');
+			//$bitly = new Bitly("naterkane","R_9b8f735f58c040da05dd6806470466e7");
+			var_dump($links);
+			for($l = count($links)-1; $l>=0; $l--){
+				var_dump($links[$l]);
+				if (20 < count($links[$l])) { 
+				$replace = $this->bitly->shorten($links[$l]);
+				var_dump($replace);
+				$data['message_html'] = str_ireplace($links[$l], $replace, $data['message_html']);
+				 }
+			}
+			//echo $curlstr;
+			//$responsestr = "" ;//exec("curl --location http://api.bit.ly/shorten?version=2.0.1".$curlstr."&login=naterkane&apiKey=R_9b8f735f58c040da05dd6806470466e7 --include");
+			//require_once '../libraries/Bitly.php';
+			//$bitly = new Bitly("naterkane","R_9b8f735f58c040da05dd6806470466e7");
+			//$bitly->shorten('http://blog.verkoyen.eu/blog/p/detail/bit-ly-php-wrapper-class');
+			
+			
+			var_dump($data['message_html']);
+			//($this->bitly->errors());
+			exit;
+		}
+		
+		
 		$data['message_html'] = preg_replace(URL_MATCH, '<a href="$1">$1</a>', $data['message_html']);
 		//if sent from group form, add group name
 		if (!empty($message['group_name'])) 
