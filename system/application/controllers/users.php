@@ -82,7 +82,7 @@ class Users extends App_Controller
 		{
 			$user = $this->User->getByUsername($username);
 			$this->mail->sendRequestConfirmation($user, $this->userData);			
-			$this->redirect($redirect, $username . ' is now following your posts.');
+			$this->redirect($redirect, $username . ' is now following your updates.');
 		} 
 		else 
 		{
