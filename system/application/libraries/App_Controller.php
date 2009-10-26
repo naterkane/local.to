@@ -223,15 +223,22 @@ class App_Controller extends Controller {
 	 * Get redirect param from url
 	 *
 	 * @access public
-	 * @param string $default Url to redirect id none is supplied by query string
+	 * @param boolean[optional] $force Flag to allow user to either force redirection to a specified url, or to the HTTP_REFERRER if available.
+	 * @param string[optional] $default Url to redirect id none is supplied by query string
 	 * @return string
 	 */
-	public function getRedirect($redirect = '/home')
+	public function getRedirect($force = false,$redirect = '/')
 	{
 		if (isset($this->params['redirect'])) 
 		{
 			$redirect = $this->params['redirect'];
-		}	
+		} 
+		elseif (true == $force && '/' !== $redirect){
+		}
+		elseif (!empty($_SERVER['HTTP_REFERER']) && true == $force)
+		{
+			$redirect = $_SERVER['HTTP_REFERER'];
+		}		
 		return $redirect;
 	}
 

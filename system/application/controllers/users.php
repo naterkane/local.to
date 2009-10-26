@@ -192,6 +192,7 @@ class Users extends App_Controller
     {
         $this->mustBeSignedIn();
 		$user = $this->User->getByUsername($username);
+		$redirect = $this->getRedirect();
 		$type = null;
 		if ($this->User->follow($user, $this->userData))
 		{
@@ -206,11 +207,13 @@ class Users extends App_Controller
 				$message = 'You are now following ' . $user['username'] . '.';		
 				$type = "success";		
 			}
-			$this->redirect('/' . $username, $message, $type);
+			$this->redirect($redirect, $message, $type);
 		}
 		else
 		{
-			$this->show404();
+			$message = "Oh my! We had trouble finding the user you're trying to follow. Please make sure you're clicking a link and not typing the address in directly.";
+			$type = "error";
+			$this->redirect($redirect,$message,$type);
 		}
     }
    

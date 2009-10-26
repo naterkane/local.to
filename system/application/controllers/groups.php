@@ -551,7 +551,7 @@ class Groups extends App_Controller
         	$this->data['messages'] = Page::make('Message', $messages);			
 			if ($this->data['group']['member_count'] > 0) {
 				$this->User->updateReadGroup($this->userData, $group);
-				$this->data['redirect'] = $this->getRedirect('/group/' . $group['name']);				
+				$this->data['redirect'] = $this->getRedirect(true,'/group/' . $group['name']);				
 				$this->load->view('groups/view', $this->data);
 			} 
 			else {
