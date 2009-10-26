@@ -337,14 +337,17 @@ class Users extends App_Controller
 	{
 		$this->checkId($username);		
 		$this->sidebar = "users/userprofile";
-		$this->data['user_profile'] = $this->User->getByUsername($username);	
+		$this->data['user'] = $this->User->getByUsername($username);
+		$this->data['profile'] = $this->data['user'];		
 		$this->isProfile = true;
-		if (empty($this->data['user_profile'])) 
+		if (empty($this->data['user'])) 
 		{
 			$this->show404();
 		}		
-		$this->data['username'] = $this->data['user_profile']['username'];	
-		$this->data['page_title'] = $this->data['user_profile']['username'];
+		$this->data['username'] = $this->data['user']['username'];	
+		$this->data['page_title'] = $this->data['user']['username'];
+		$this->data['isLocked'] = $this->data['user']['locked'];
+		$this->data['rss_updates'] = !$this->data['user']['locked'];
 		$this->load->view('users/profile', $this->data);
 	}
 	
