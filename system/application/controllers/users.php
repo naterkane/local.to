@@ -345,31 +345,6 @@ class Users extends App_Controller
 		$this->User->updateRead('mentions', $this->data['profile']);
 		$this->load->view('users/mentions', $this->data);
 	}
-
-	/**
-	 * Show user's public profile
-	 *
-	 * @param string $username
-	 * @access public
-	 * @return null
-	 */
-	public function profile($username = null)
-	{
-		$this->checkId($username);		
-		$this->sidebar = "users/userprofile";
-		$this->data['user'] = $this->User->getByUsername($username);
-		$this->data['profile'] = $this->data['user'];		
-		$this->isProfile = true;
-		if (empty($this->data['user'])) 
-		{
-			$this->show404();
-		}		
-		$this->data['username'] = $this->data['user']['username'];	
-		$this->data['page_title'] = $this->data['user']['username'];
-		$this->data['isLocked'] = $this->data['user']['locked'];
-		$this->data['rss_updates'] = !$this->data['user']['locked'];
-		$this->load->view('users/profile', $this->data);
-	}
 	
 	/**
 	 * Recover password
@@ -379,6 +354,7 @@ class Users extends App_Controller
 	 */
 	public function recover_password()
 	{
+		$this->layout = 'public';
 		if (!empty($this->postData['email']))
 		{
 			$user = $this->User->getByEmail($this->postData['email']);
@@ -752,6 +728,31 @@ class Users extends App_Controller
             $this->show404();
         }
     }
+
+	/**
+	 * Show user's public profile
+	 *
+	 * @param string $username
+	 * @access public
+	 * @return null
+	 */
+	public function profile($username = null)
+	{
+		$this->checkId($username);		
+		$this->sidebar = "users/userprofile";
+		$this->data['user'] = $this->User->getByUsername($username);
+		$this->data['profile'] = $this->data['user'];		
+		$this->isProfile = true;
+		if (empty($this->data['user'])) 
+		{
+			$this->show404();
+		}		
+		$this->data['username'] = $this->data['user']['username'];	
+		$this->data['page_title'] = $this->data['user']['username'];
+		$this->data['isLocked'] = ($this->userData['id'] == $this->data['user']['id']) ? false : ($this->data['user']['locked'] && !$this->User->isFollowing($this->userData['id'],$this->data['user']['followers']));
+		$this->data['rss_updates'] = !$this->data['isLocked'];
+		$this->load->view('users/profile', $this->data);
+	}
 
 }
 ?>
