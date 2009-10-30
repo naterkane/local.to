@@ -686,7 +686,7 @@ class Message extends App_Model
 		{
 			$this->parseMentions($data, '!', 'groupMentions');
 		}
-		
+		/*
 		if(preg_match_all(URL_MATCH, $data['message_html'],$links,PREG_SET_ORDER)){
 			$links = $links[0];
 			
@@ -719,7 +719,8 @@ class Message extends App_Model
 			//($this->bitly->errors());
 			exit;
 		}
-		
+		*/
+
 		
 		$data['message_html'] = preg_replace(URL_MATCH, '<a href="$1">$1</a>', $data['message_html']);
 		//if sent from group form, add group name
