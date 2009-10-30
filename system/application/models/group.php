@@ -725,13 +725,13 @@ class Group extends App_Model
 		if (($this->mode == 'add') || ($this->mode == 'update'))
 		{
 			$this->validates_callback('isNotReserved', 'name', array('message'=>'This is a reserved name'));			
-			$this->validates_format_of('name', array('with'=>ALPHANUM, 'message'=>'A group name may only be made up of numbers, letters, and underscores'));
-			$this->validates_length_of('name', array('min'=>1, 'max'=>15, 'message'=>'A group name must be between 1 and 15 characters'));
-			$this->validates_callback('nameUnique', 'name', array('message'=>'Group name has already been taken'));
+			$this->validates_format_of('name', array('with'=>ALPHANUM, 'message'=>'A '.$this->config->item('group').' name may only be made up of numbers, letters, and underscores'));
+			$this->validates_length_of('name', array('min'=>1, 'max'=>15, 'message'=>'A '.$this->config->item('group').' name must be between 1 and 15 characters'));
+			$this->validates_callback('nameUnique', 'name', array('message'=>ucfirst($this->config->item('group')).' name has already been taken'));
 			$this->validates_presence_of('name', array('message'=>'A group name is required'));				
-			$this->validates_length_of('fullname', array('min'=>1, 'max'=>50, 'message'=>'A full group name must be between 1 and 50 characters'));
-			$this->validates_callback('fullNameUnique', 'fullname', array('message'=>'Group full name has already been taken'));
-			$this->validates_presence_of('fullname', array('message'=>'A full group name is required'));
+			$this->validates_length_of('fullname', array('min'=>1, 'max'=>50, 'message'=>'A full '.$this->config->item('group').' name must be between 1 and 50 characters'));
+			$this->validates_callback('fullNameUnique', 'fullname', array('message'=>ucfirst($this->config->item('group')).' full name has already been taken'));
+			$this->validates_presence_of('fullname', array('message'=>'A full '.$this->config->item('group').' name is required'));
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required', 'allow_null'=>true));
 			if ($this->mode == 'update') 
 			{

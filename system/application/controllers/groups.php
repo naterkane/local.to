@@ -84,7 +84,7 @@ class Groups extends App_Controller
 			$group = $this->Group->get($invite['group_id']);
 			if ($this->Group->isMember($group['members'], $this->userData['id']))
 			{
-				$this->redirect('/group/' . $group['name'], 'You are already a member of this group.');
+				$this->redirect('/group/' . $group['name'], 'You are already a member of this '.$this->config->item('group').'.');
 			}
 			if ($this->Group->addMember($group, $this->userData)) 
 			{
@@ -96,7 +96,7 @@ class Groups extends App_Controller
 			}
 			else 
 			{
-				$this->redirect('/home', 'There was a problem joining this group');
+				$this->redirect('/home', 'There was a problem joining this '.$this->config->item('group').'');
 			}
 		}
 	}
@@ -116,7 +116,7 @@ class Groups extends App_Controller
 				$this->redirect('/group/' . $this->postData['name']);
 			} else {
 				$this->setErrors(array('Group'));
-				$this->cookie->setFlash('There was an error adding your group. Please see below for details.', 'error');
+				$this->cookie->setFlash('There was an error adding your '.$this->config->item('group').'. Please see below for details.', 'error');
 			}
 		} 
 		$this->loadGroupSidebar = false;		
@@ -377,7 +377,7 @@ class Groups extends App_Controller
 			} 
 			else 
 			{
-				$this->redirect('/groups/members/' . $group['name'], 'Could not remove member from group.', 'error');
+				$this->redirect('/groups/members/' . $group['name'], 'Could not remove member from '.$this->config->item('group').'.', 'error');
 			}
 		}
 	}
@@ -398,7 +398,7 @@ class Groups extends App_Controller
 			$this->redirect('/groups/');
 		}
 		
-		$this->data['page_title'] = 'Group Settings';
+		$this->data['page_title'] = ucfirst($this->config->item('group')).' Settings';
 		
 		if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
 		{
@@ -411,12 +411,12 @@ class Groups extends App_Controller
 			{
 				if ($this->Group->update($group, $this->postData, $this->userData['id'])) 
 				{
-					$this->redirect('/groups/settings/' . $this->postData['name'], 'The group was updated.');
+					$this->redirect('/groups/settings/' . $this->postData['name'], 'The '.$this->config->item('group').' info was updated.');
 				} 
 				else 
 				{
 					$this->setErrors(array('Group'));
-					$this->cookie->setFlash('There was an error updating your group. See below for more details.', 'error');
+					$this->cookie->setFlash('There was an error updating your '.$this->config->item('group').'. See below for more details.', 'error');
 				}
 			}
 			else 
