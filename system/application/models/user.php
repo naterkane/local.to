@@ -1119,71 +1119,71 @@ class User extends App_Model
 		if (($this->mode == 'signup') OR  ($this->mode == 'profile'))
 		{
 			$this->setAction();			
-			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required'));
-			$this->validates_uniqueness_of('email', array('message'=>'Email is already in use'));
-			$this->validates_presence_of('email', array('message'=>'A valid email is required'));
-			$this->validates_callback('isNotReserved', 'username', array('message'=>'This is a reserved username'));
-			$this->validates_length_of('username', array('min'=>1, 'max'=>15, 'message'=>'A username must be between 1 and 15 characters long'));
-			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken'));
-			$this->validates_format_of('username', array('with'=>ALPHANUM, 'message'=>'A username may only be made up of numbers, letters, and underscores'));
-			$this->validates_presence_of('username', array('message'=>'A username is required'));
-			$this->validates_length_of('realname', array('min'=>1, 'max'=>50, 'message'=>'Full name must be between 1 and 50 characters long'));
-			$this->validates_presence_of('realname', array('message'=>'Full name is required'));
+			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required.'));
+			$this->validates_uniqueness_of('email', array('message'=>'Email is already in use.'));
+			$this->validates_presence_of('email', array('message'=>'A valid email is required.'));
+			$this->validates_callback('isNotReserved', 'username', array('message'=>'This is a reserved screenname.'));
+			$this->validates_length_of('username', array('min'=>1, 'max'=>15, 'message'=>'A screenname must be between 1 and 15 characters long.'));
+			$this->validates_uniqueness_of('username', array('message'=>'Username has already been taken.'));
+			$this->validates_format_of('username', array('with'=>ALPHANUM, 'message'=>'A screenname may only contain letters (A-Za-z), numbers (0-9), and underscores (_). No spaces allowed.'));
+			$this->validates_presence_of('username', array('message'=>'A username is required.'));
+			$this->validates_length_of('realname', array('min'=>1, 'max'=>50, 'message'=>'Full name must be between 1 and 50 characters long.'));
+			$this->validates_presence_of('realname', array('message'=>'Full name is required.'));
 		}
 		if ($this->mode == 'change_password') 
 		{
-			$this->validates_callback('passwordMatches', 'old_password', array('message'=>'Your password does not match the one on record'));
+			$this->validates_callback('passwordMatches', 'old_password', array('message'=>'Your password does not match the one on record.'));
 			$this->modelData['password'] = $this->modelData['new_password'];
 			$this->modelData['passwordconfirm'] = $this->modelData['new_password_confirm'];
 		}		
 		if (($this->mode == 'signup') || ($this->mode == 'change_password') || ($this->mode == 'reset_password'))
 		{
-			$this->validates_length_of('password', array('min'=>6, 'max'=>25, 'message'=>'A password must be between 6 and 25 characters long'));
-			$this->validates_callback('passwordUsernameDoNotMatch', 'password', array('message'=>'Your password cannot be the same as your username'));
-			$this->validates_callback('passwordsMatch', 'password', array('message'=>'Your password and the confirmation do not match'));
-			$this->validates_format_of('password', array('with'=>ALPHANUM, 'message'=>'A password may only be made up of numbers, letters, and underscores'));
-			$this->validates_presence_of('password', array('message'=>'A password is required'));
+			$this->validates_length_of('password', array('min'=>6, 'max'=>25, 'message'=>'A password must be between 6 and 25 characters long.'));
+			$this->validates_callback('passwordUsernameDoNotMatch', 'password', array('message'=>'Your password cannot be the same as your username.'));
+			$this->validates_callback('passwordsMatch', 'password', array('message'=>'Your password and the confirmation do not match.'));
+			$this->validates_format_of('password', array('with'=>ALPHANUM, 'message'=>'A password may only contain letters (A-Za-z), numbers (0-9), and underscores (_). No spaces allowed.'));
+			$this->validates_presence_of('password', array('message'=>'A password is required.'));
 			$this->modelData['password'] = $this->hashPassword($this->modelData['password']);	//has to be here in order not to screw up character counts and matching
 		}
 		if ($this->mode == 'profile') 
 		{
-			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list'));
+			$this->validates_callback('isTimeZone', 'time_zone', array('message'=>'You must select a time zone from the list.'));
 			$this->validates_length_of('about_me', array('min'=>0, 'max'=>160, 'message'=>'Bio must be fewer than 160 characters.'));
-			$this->validates_length_of('hometown', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));	
-			$this->validates_length_of('birthdate', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('height', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('weight', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('handed_footed', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('athletic', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('academics', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('about_me', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('favorite_sports', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('favorite_teams', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('favorite_players', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));	
-			$this->validates_length_of('phone', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('im', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('address', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('address_line2', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('state', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('city', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('postal_code', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('country', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));		
-			$this->validates_length_of('college', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('degree', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('high_school', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('employer', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('position', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('employment_description', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));	
-			$this->validates_length_of('employment_location', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
-			$this->validates_length_of('employment_time_period', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters'));
+			$this->validates_length_of('hometown', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));	
+			$this->validates_length_of('birthdate', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('height', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('weight', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('handed_footed', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('athletic', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('academics', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('about_me', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('favorite_sports', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('favorite_teams', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('favorite_players', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));	
+			$this->validates_length_of('phone', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('im', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('address', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('address_line2', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('state', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('city', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('postal_code', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('country', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));		
+			$this->validates_length_of('college', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('degree', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('high_school', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('employer', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('position', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('employment_description', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));	
+			$this->validates_length_of('employment_location', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
+			$this->validates_length_of('employment_time_period', array('min'=>0, 'max'=>520, 'message'=>'Must be fewer than 500 characters.'));
 		}
 		if ($this->mode == 'sms') 
 		{
 			if ($this->modelData['device_updates'] != 0) 
 			{
-				$this->validates_numericality_of('phone', array('message'=>'A phone number can only be made up of numbers'));				
-				$this->validates_presence_of('phone', array('message'=>'A phone is required'));
-				$this->validates_presence_of('carrier', array('message'=>'A carrier is required'));				
+				$this->validates_numericality_of('phone', array('message'=>'A phone number can only be made up of numbers.'));				
+				$this->validates_presence_of('phone', array('message'=>'A phone is required.'));
+				$this->validates_presence_of('carrier', array('message'=>'A carrier is required.'));				
 			}
 		}
 		if (!empty($this->modelData['passwordconfirm'])) 
