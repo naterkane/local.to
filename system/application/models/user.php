@@ -416,11 +416,13 @@ class User extends App_Model
 		{
 			$return[0]['Friends'] = array();
 			foreach ($user['followers'] as $friend_id) {
-				$data = $this->get($friend_id);
-				if ($data) 
-				{
-					$return[0]['Friends'][$data['username']] = $data['username'];
-				}
+				if (in_array($friend_id, $user['following'])):
+					$data = $this->get($friend_id);
+					if ($data) 
+					{
+						$return[0]['Friends'][$data['username']] = $data['username'];
+					}
+				endif;
 			}
 		}
 		//Add groups
