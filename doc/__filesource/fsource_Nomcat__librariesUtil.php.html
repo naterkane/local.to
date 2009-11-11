@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>File Source for Util.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">Nomcat</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+        
+                                    
+                              		  [ <a href="../classtrees_Nomcat.html" class="menu">class tree: Nomcat</a> ]
+		  [ <a href="../elementindex_Nomcat.html" class="menu">index: Nomcat</a> ]
+		  	    [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+      <b>Packages:</b><br />
+              <a href="../li_Nomcat.html">Nomcat</a><br />
+            <br /><br />
+                  
+      
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Source for file Util.php</h1>
+<p>Documentation is available at <a href="../Nomcat/_libraries---Util.php.html">Util.php</a></p>
+<div class="src-code">
+<ol><li><div class="src-line"><a name="a1"></a><span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line"><a name="a2"></a><span class="src-key">if&nbsp;</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-id">defined</span><span class="src-sym">(</span><span class="src-str">'BASEPATH'</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a3"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">exit</span><span class="src-sym">(</span><span class="src-str">'No&nbsp;direct&nbsp;script&nbsp;access&nbsp;allowed'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a4"></a><span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a5"></a>/**</div></li>
+<li><div class="src-line"><a name="a6"></a>&nbsp;*&nbsp;Nomcat</div></li>
+<li><div class="src-line"><a name="a7"></a>&nbsp;*</div></li>
+<li><div class="src-line"><a name="a8"></a>&nbsp;*&nbsp;An&nbsp;open&nbsp;source&nbsp;microsharing&nbsp;platform&nbsp;built&nbsp;on&nbsp;CodeIgniter</div></li>
+<li><div class="src-line"><a name="a9"></a>&nbsp;*</div></li>
+<li><div class="src-line"><a name="a10"></a>&nbsp;*&nbsp;@package&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nomcat</div></li>
+<li><div class="src-line"><a name="a11"></a>&nbsp;*&nbsp;@author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOM</div></li>
+<li><div class="src-line"><a name="a12"></a>&nbsp;*&nbsp;@copyright&nbsp;&nbsp;&nbsp;&nbsp;Copyright&nbsp;(c)&nbsp;2009,&nbsp;NOM&nbsp;llc.</div></li>
+<li><div class="src-line"><a name="a13"></a>&nbsp;*&nbsp;@license&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://creativecommons.org/licenses/by-sa/3.0/</div></li>
+<li><div class="src-line"><a name="a14"></a>&nbsp;*&nbsp;@link&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://getnomcat.com</div></li>
+<li><div class="src-line"><a name="a15"></a>&nbsp;*&nbsp;@version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$Id:&nbsp;Util.php&nbsp;322&nbsp;2009-09-01&nbsp;18:42:22Z&nbsp;johnmenick&nbsp;$</div></li>
+<li><div class="src-line"><a name="a16"></a>&nbsp;*&nbsp;@filesource</div></li>
+<li><div class="src-line"><a name="a17"></a>&nbsp;*/</div></li>
+<li><div class="src-line"><a name="a18"></a>&nbsp;/**</div></li>
+<li><div class="src-line"><a name="a19"></a>&nbsp;*&nbsp;Util</div></li>
+<li><div class="src-line"><a name="a20"></a>&nbsp;*&nbsp;</div></li>
+<li><div class="src-line"><a name="a21"></a>&nbsp;*&nbsp;Provides&nbsp;some&nbsp;basic&nbsp;reusable&nbsp;utility&nbsp;methods</div></li>
+<li><div class="src-line"><a name="a22"></a>&nbsp;*&nbsp;</div></li>
+<li><div class="src-line"><a name="a23"></a>&nbsp;*&nbsp;@package&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nomcat</div></li>
+<li><div class="src-line"><a name="a24"></a>&nbsp;*&nbsp;@subpackage&nbsp;&nbsp;&nbsp;&nbsp;Libraries</div></li>
+<li><div class="src-line"><a name="a25"></a>&nbsp;*&nbsp;@category&nbsp;&nbsp;&nbsp;&nbsp;Exception</div></li>
+<li><div class="src-line"><a name="a26"></a>&nbsp;*&nbsp;@author&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOM</div></li>
+<li><div class="src-line"><a name="a27"></a>&nbsp;*&nbsp;@link&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://getnomcat.com/user_guide/</div></li>
+<li><div class="src-line"><a name="a28"></a>&nbsp;*/</div></li>
+<li><div class="src-line"><a name="a29"></a><span class="src-key">class&nbsp;</span><span class="src-id">Util</span></div></li>
+<li><div class="src-line"><a name="a30"></a><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a31"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a32"></a>&nbsp;&nbsp;&nbsp;&nbsp;/**</div></li>
+<li><div class="src-line"><a name="a33"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Encode&nbsp;a&nbsp;string&nbsp;to&nbsp;base&nbsp;64</div></li>
+<li><div class="src-line"><a name="a34"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;</div></li>
+<li><div class="src-line"><a name="a35"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$input</div></li>
+<li><div class="src-line"><a name="a36"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</div></li>
+<li><div class="src-line"><a name="a37"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">base64_url_encode</span><span class="src-sym">(</span><span class="src-var">$input</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a38"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">strtr</span><span class="src-sym">(</span><span class="src-id">base64_encode</span><span class="src-sym">(</span><span class="src-var">$input</span><span class="src-sym">)</span><span class="src-sym">,&nbsp;</span><span class="src-str">'+/='</span><span class="src-sym">,&nbsp;</span><span class="src-str">'-_'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a39"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a40"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a41"></a>&nbsp;&nbsp;&nbsp;&nbsp;/**</div></li>
+<li><div class="src-line"><a name="a42"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Decode&nbsp;a&nbsp;string&nbsp;from&nbsp;base&nbsp;64</div></li>
+<li><div class="src-line"><a name="a43"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;</div></li>
+<li><div class="src-line"><a name="a44"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$input</div></li>
+<li><div class="src-line"><a name="a45"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</div></li>
+<li><div class="src-line"><a name="a46"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">base64_url_decode</span><span class="src-sym">(</span><span class="src-var">$input</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a47"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">base64_decode</span><span class="src-sym">(</span><span class="src-id">strtr</span><span class="src-sym">(</span><span class="src-var">$input</span><span class="src-sym">,&nbsp;</span><span class="src-str">'-_'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'+/='</span><span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a48"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a49"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a50"></a>&nbsp;&nbsp;&nbsp;&nbsp;/**</div></li>
+<li><div class="src-line"><a name="a51"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;compares&nbsp;a&nbsp;string&nbsp;against&nbsp;the&nbsp;request&nbsp;URI</div></li>
+<li><div class="src-line"><a name="a52"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;</div></li>
+<li><div class="src-line"><a name="a53"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$string</div></li>
+<li><div class="src-line"><a name="a54"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</div></li>
+<li><div class="src-line"><a name="a55"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">isSection</span><span class="src-sym">(</span><span class="src-var">$string</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line"><a name="a56"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a57"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">stristr</span><span class="src-sym">(</span><span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'HTTP_HOST'</span><span class="src-sym">]</span>.<span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REQUEST_URI'</span><span class="src-sym">]</span><span class="src-sym">,</span><span class="src-var">$string</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a58"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a59"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a60"></a><span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a61"></a><span class="src-php">?&gt;</span></div></li>
+</ol>
+</div>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Wed, 11 Nov 2009 13:33:58 -0500 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.0</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
