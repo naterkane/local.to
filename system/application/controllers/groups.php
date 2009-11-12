@@ -383,6 +383,39 @@ class Groups extends App_Controller
 	}
 
 	/**
+	 * Show group's public profile
+	 *
+	 * @param string $groupname
+	 * @access public
+	 * @return null
+	 */
+	public function profile($groupname = null)
+	{
+			$user = $this->data['User'];
+		$group = $this->Group->getByName($groupname);
+		if (!$group){
+			$this->redirect('/groups/');
+		}
+		
+		$this->data['page_title'] = ucfirst($this->config->item('group')).' Settings';
+		
+		//if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
+		//{
+			$this->data = $group;
+			$this->data['group'] = $group;
+			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
+			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
+			$this->data['User'] = $user;
+			$this->setData($this->data);
+			$this->load->view('groups/profile', $this->data); 
+		//} 
+		//else 
+		//{
+		//	$this->redirect('/groups/'.$group['name']);
+		//}
+	}
+
+	/**
 	 * Update a user profile
 	 *
 	 * @param string $groupname 
