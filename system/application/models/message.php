@@ -742,6 +742,7 @@ class Message extends App_Model
 	 */
 	private function parseMentions($data, $separator, $property)
 	{
+		$data['message'] = preg_replace('[\,\|\'\"\.\{\}\[\]\\\/\?\<\>\#\$\%\^\&\*\(\)\-\=\_\+\;\:\`\~]', ' ', $data['message']);
 		$parts = explode(' ', $data['message']);
 		foreach ($parts as $part) {
 			if ($part[0] == $separator) 
