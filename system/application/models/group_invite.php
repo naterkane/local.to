@@ -226,7 +226,8 @@ class Group_Invite extends App_Model
 	{
 		if (!empty($this->successes)) 
 		{
-			$this->message .= count($this->successes) . ' invites(s) added. ';
+			$this->message .= count($this->successes) . ' invite';
+			$this->message .= (count($this->successes) > 1) ? 's added': ' added. ';
 		}
 		if (!empty($this->failures)) 
 		{
