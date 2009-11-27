@@ -79,12 +79,14 @@ class Avatar extends Html
 	 */
 	private function make($data = array(), $size = null, $group = false, $link = false)
 	{
+		$return = "";
+		$dir = "";
+		$field = "";
+		$path = "";
 		if ($size == null)
 		{
 			$size = $this->defaultSize;
 		}
-		
-		$dir = '';
 		if ($group != false) 
 		{
 			$field = 'id';
@@ -124,22 +126,22 @@ class Avatar extends Html
 				$path = '/uploads/' . $dir . '/' . $data[$field] . '_default.jpg';
 			}
 		}
+		
 		if (!file_exists(WEBROOT . $path)) 
 		{
-			$return = "";
-			
-			
 			if (file_exists(WEBROOT .  $this->defaultPath . '_' . $size . '.jpg'))
 			{
 				$path = $this->defaultPath . '_' . $size . '.jpg';	
 				$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}			
-			else {
+			else 
+			{
 				$path = $this->defaultPath . '_48.jpg';	
 				$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}
-			
-		} else {
+		} 
+		else 
+		{
 			if ($link == true){
 				//echo "link is true<br/>";
 				$exts = array('png','jpg','gif','jpeg');
@@ -159,9 +161,5 @@ class Avatar extends Html
 		}
 		return $return;
 	}
-	
-
-
 }
-
 ?>
