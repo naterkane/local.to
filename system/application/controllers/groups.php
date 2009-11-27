@@ -113,7 +113,7 @@ class Groups extends App_Controller
 		$this->data['page_title'] = 'Add a group';
 		if ($this->postData) {
 			if ($this->Group->add($this->postData, $this->userData)) {
-				$this->redirect('/group/' . $this->postData['name']);
+				$this->redirect('/groups/settings/' . $this->postData['name'],"Your ".$this->config->item('group')." has been created. Please fill out your ".$this->config->item('group')."'s info.");
 			} else {
 				$this->setErrors(array('Group'));
 				$this->cookie->setFlash('There was an error adding your '.$this->config->item('group').'. Please see below for details.', 'error');
