@@ -66,12 +66,15 @@ class Assets extends App_controller
 	function img($file)
 	{
 		$file = APPPATH . 'views/themes/'. $this->config->item('theme') .'/img/' . $file;
-		if (file_exists($file))
+		if (file_exists($file) && is_readable($file))
 		{
 		    $this->setHeader($file);
 		    header("Content-size: " . filesize($file));
-		    readfile($file);
-			exit;
+		    $handle = fopen($file, "r");
+			$contents = fread($handle, filesize($file));
+			fclose($handle);
+			print $contents;
+ 			exit;
 		}
 	}
 	
@@ -93,6 +96,9 @@ class Assets extends App_controller
 			case 'png': $cytpe = 'image/png';break;
 			case 'js': $ctype = 'text/javascript';break;
 			case 'css': $ctype = 'text/css';break;
+			case 'ico': $ctype = 'image/x-icon';
+				//vnd.microsoft.icon'; 
+				break;
 			default: $ctype = 'text/plain';break;
 		}
 		
