@@ -27,7 +27,7 @@ class Admin extends App_controller
 {
 
 	/**
-	 * Check to see if in testing mode, if not, show 404
+	 * Check to see if in testing mode, if not, redirect to root
 	 * 
 	 * @access public
 	 * @return 
@@ -37,7 +37,7 @@ class Admin extends App_controller
 		parent::__construct();
 		if (!$this->testing()) 
 		{
-			$this->show404();
+			$this->redirect('/');
 		}
 	}
 
@@ -77,6 +77,31 @@ class Admin extends App_controller
 	}
 
 	/**
+	 * Syncs in-memory data to disk
+	 * @return 
+	 */
+	function sync()
+	{
+		$this->User->tt->sync();
+		$this->redirect('/admin/stats');
+	}
+
+	function delete($key = null) {
+		if (null == $key)
+			$this->redirect('/admin/stats');
+			
+		try
+		{
+			$this->User->tt->out($key);
+		}
+		catch (Exception $e)
+		{
+			$this->redirect('/admin/stats',"Sorry but we had trouble deleting the record: '.$key.'<br/>".$e,"error");
+		}		
+	$this->redirect('/admin/stats','Successfully deleted: '.$key,"success");
+	}
+
+	/**
 	 * Show all database values 
 	 * @return 
 	 * @todo make private method and require authentication
@@ -102,7 +127,7 @@ class Admin extends App_controller
 		$i = 1;
 		foreach ($all as $key => $value) {
 			echo "<tr><td>$i</td>";
-			echo "<td>$key</td>";
+			echo "<td valign='top'>$key <a href='delete/$key'>delete</a></td>";
 			echo "<td><pre>";
 			print_r($value);
 			echo "<pre></td></tr>\n";
