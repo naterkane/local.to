@@ -45,11 +45,12 @@ class Avatar extends Html
 	 * @access public
 	 * @param array $group[optional]
 	 * @param string $size[optional]
+	 * @param boolean $link['optional']
 	 * @return string
 	 */
-	public function group($group = array(), $size = null)
+	public function group($group = array(), $size = null, $link = false)
 	{
-		return $this->make($group, $size, true);
+		return $this->make($group, $size, true, $link);
 	}
 
 	/**
@@ -58,11 +59,12 @@ class Avatar extends Html
 	 * @access public
 	 * @param object $user[optional]
 	 * @param string $size[optional]
+	 * @param boolean $link['optional']
 	 * @return string
 	 */
-	public function user($user = array(), $size = null)
+	public function user($user = array(), $size = null, $link = false)
 	{
-		return $this->make($user, $size);
+		return $this->make($user, $size, false, $link);
 	}
 	
 	/**
@@ -72,17 +74,18 @@ class Avatar extends Html
 	 * @param object $data[optional]
 	 * @param string $size[optional]
 	 * @param boolean $group[optional]
+	 * @param boolean $link['optional']
 	 * @return string
 	 */
-	private function make($data = array(), $size = null, $group = false)
+	private function make($data = array(), $size = null, $group = false, $link = false)
 	{
 		if ($size == null)
 		{
 			$size = $this->defaultSize;
 		}
 		
-		$dir = null;
-		if ($group) 
+		$dir = '';
+		if ($group != false) 
 		{
 			$field = 'id';
 			$dir .= 'group_';
@@ -101,7 +104,7 @@ class Avatar extends Html
 		}
 		if (empty($data[$field]) || empty($data['id'])) 
 		{
-			$path = $this->defaultPath . '_' . $size . '.jpg';
+			$path = $this->defaultPath . '_' . $size . '.png';
 		}
 		else 
 		{
@@ -114,8 +117,8 @@ class Avatar extends Html
 				$dir .= $data['id'];				
 			}
 			
-			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.jpg';
-			
+			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.png';
+			//echo WEBROOT . $path.'<br/>';
 			if (!file_exists(WEBROOT . $path))
 			{
 				$path = '/uploads/' . $dir . '/' . $data[$field] . '_default.jpg';
@@ -123,17 +126,36 @@ class Avatar extends Html
 		}
 		if (!file_exists(WEBROOT . $path)) 
 		{
+			$return = "";
+			
+			
 			if (file_exists(WEBROOT .  $this->defaultPath . '_' . $size . '.jpg'))
 			{
 				$path = $this->defaultPath . '_' . $size . '.jpg';	
-				$return = '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
+				$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}			
 			else {
 				$path = $this->defaultPath . '_48.jpg';	
-				$return = '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
+				$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}
+			
 		} else {
-			$return = '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
+			if ($link == true){
+				//echo "link is true<br/>";
+				$exts = array('png','jpg','gif','jpeg');
+				foreach ($exts as $ext) {
+					//echo WEBROOT .  '/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext."<br/>";
+					if (file_exists(WEBROOT .   '/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext)):
+						
+						$return .= '<a href="/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext.'">';
+						break;
+					endif;
+				}
+			}
+			$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
+			if ($link == true) {
+				$return .= "</a>";
+			}
 		}
 		return $return;
 	}
