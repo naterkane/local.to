@@ -905,7 +905,7 @@ class User extends App_Model
 		}
 		if ($group) 
 		{
-			$subject = $from['username'] . ' sent you a message for ' . $group;
+			$subject = $from['username'] . ' sent a message to ' . $group;
 		}
 		else 
 		{
