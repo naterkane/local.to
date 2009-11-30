@@ -89,7 +89,8 @@ class Admin extends App_controller
 	function delete($key = null) {
 		if (null == $key)
 			$this->redirect('/admin/stats');
-			
+		// decode base64 encoded key
+		$key = base64_decode($key);
 		try
 		{
 			$this->User->tt->out($key);
@@ -127,7 +128,7 @@ class Admin extends App_controller
 		$i = 1;
 		foreach ($all as $key => $value) {
 			echo "<tr><td>$i</td>";
-			echo "<td valign='top'>$key <a href='delete/$key'>delete</a></td>";
+			echo "<td valign='top'>$key <a href='delete/".base64_encode($key)."'>delete</a></td>";
 			echo "<td><pre>";
 			print_r($value);
 			echo "<pre></td></tr>\n";
