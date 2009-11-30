@@ -299,22 +299,22 @@ class App_Model extends Model {
 	 */
 	protected function makeSavePrefix($data = array(), $options = array())
 	{
-		if (!isset($options['validate'])) 
+		if (empty($options['validate'])) 
 		{
 			$options['validate'] = false;
 		}
-		if (!isset($options['prefixName'])) 
+		if (empty($options['prefixName'])) 
 		{
 			$options['prefixName'] = $this->name;
 		}
-		if (!isset($options['prefixValue'])) 
+		if (empty($options['prefixValue'])) 
 		{
 			$options['prefixValue'] = 'id';
 		}		
-		if (!isset($options['override'])) 
+		if (empty($options['override'])) 
 		{
 			$value = null;
-			if (isset($data[$options['prefixValue']])) 
+			if (!empty($data[$options['prefixValue']])) 
 			{
 				$value = $data[$options['prefixValue']];
 			}
