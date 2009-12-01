@@ -741,10 +741,11 @@ class Message extends App_Model
 	 * @return 
 	 */
 	private function parseMentions($data, $separator, $property)
-	{
-		$data['message'] = preg_replace('[\,\|\'\"\.\{\}\[\]\\\/\?\<\>\#\$\%\^\&\*\(\)\-\=\_\+\;\:\`\~]', ' ', $data['message']);
-		$parts = explode(' ', $data['message']);
+	{ 
+		$parts = preg_split("/[,\.\<\>\^\*\+\?\{\}\[\]\\\|\(\);~`\-_%#&\/:$\s]+/", $data['message'], null, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
 		foreach ($parts as $part) {
+			$part = preg_split("/[@\!]\z/",$part);
+			$part = $part[0];
 			if ($part[0] == $separator) 
 			{
 				$username = str_replace($separator, '', $part);
