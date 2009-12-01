@@ -299,6 +299,7 @@ class App_Model extends Model {
 	 */
 	protected function makeSavePrefix($data = array(), $options = array())
 	{
+
 		if (empty($options['validate'])) 
 		{
 			$options['validate'] = false;
