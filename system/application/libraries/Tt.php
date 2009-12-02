@@ -45,17 +45,6 @@ class Net_TokyoTyrantNetworkException extends Net_TokyoTyrantException {};
  */
 class Net_TokyoTyrantProtocolException extends Net_TokyoTyrantException {};
 
- /**
- * Tt
- * 
- * @package 	Noncat
- * @subpackage	Libraries
- * @category	Classes
- * @author		NOM
- * @link		http://getnomcat.com/user_guide/
- */
-class Tt extends Net_TokyoTyrant {};
-
 /**
  * TokyoTyrant Base Class
  * 
@@ -578,4 +567,15 @@ class Net_TokyoTyrant
         return $result;
     }
 }
+
+ /**
+ * Tt
+ * 
+ * @package 	Noncat
+ * @subpackage	Libraries
+ * @category	Classes
+ * @author		NOM
+ * @link		http://getnomcat.com/user_guide/
+ */
+class Tt extends Net_TokyoTyrant {};
 ?>
