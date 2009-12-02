@@ -33,59 +33,132 @@ class Net_TokyoTyrantException extends Exception {};
  */
 class Tt
 {
+    /* @access private */
     private $connect = false;
     private $socket;
     private $errorNo, $errorMessage;
+    private $socket_timeout;
 
+    /* @access public */
     const RDBXOLCKNON = 0;
     const RDBXOLCKREC = 1;
     const RDBXOLCKGLB = 2;
-    
+
+    /**
+     * server connect
+     * @param string $server servername
+     * @param string $server port number
+     * @param string $server timeout (connection only)
+     */
     public function connect($server, $port, $timeout = 10)
     {
-        $this->socket = @fsockopen($server,$port, $this->errorNo, $errorMessage);
+        $this->close();
+        $this->socket = @fsockopen($server,$port, $this->errorNo, $errorMessage, $timeout);
         if (! $this->socket) {
-            throw new Net_TokyoTyrantException(sprintf('%s, %s', $this->errorNo, $errorMessage));
+            throw new Net_TokyoTyrantNetworkException(sprintf('%s, %s', $this->errorNo, $errorMessage));
         }
+        $this->connect = true;
     }
 
+    /**
+     * setting socket timeout
+     * @param integer $timeout timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->socket_timeout = $timeout;
+        stream_set_timeout($this->socket, $timeout);
+    }
+
+    /**
+     * get timeout
+     * @return integer timeout
+     */
+    public function getTimeout()
+    {
+        return $this->socket_timeout;
+    }
+
+    /**
+     * close session
+     */
     public function close()
     {
-        fclose($this->socket);
+        if ($this->connect) {
+            fclose($this->socket);
+        }
     }
 
-
+    /**
+     * read buffer
+     * @access private
+     * @param $length readlength
+     * @result string buffer data
+     */
     private function _read($length)
     {
+        if ($this->connect === false) {
+            throw new Net_TokyoTyrantException('not connected');
+        }
+
         if (@feof($this->socket)) 
         {
-            throw new Net_TokyoTyrantException('socket read eof error');
+            throw new Net_TokyoTyrantNetworkException('socket read eof error');
         }
-		$result = null;
-		if ($length) 
-		{
-	        $result = fread($this->socket, $length);
-	        if ($result === false) {
-	            throw new Net_TokyoTyrantException('socket read error');
-	        }
-		}
+
+        $result = $this->_fullread($this->socket, $length);
+        if ($result === false) {
+            throw new Net_TokyoTyrantNetworkException('socket read error');
+        }
         return $result;
     }
 
-
+    /**
+     * send data
+     * @param $data data
+     */
     private function _write($data)
     {
-        $result = fwrite($this->socket, $data);
+        $result = $this->_fullwrite($this->socket, $data);
         if ($result === false) {
-            throw new Net_TokyoTyrantException('socket read error');
+            throw new Net_TokyoTyrantNetworkException('socket read error');
         }
     }
+
+    private function _fullread ($sd, $len) {
+        $ret = '';
+        $read = 0;
+
+        while ($read < $len && ($buf = fread($sd, $len - $read))) {
+            $read += strlen($buf);
+            $ret .= $buf;
+        }
+
+        return $ret;
+    }
+
+    private function _fullwrite ($sd, $buf) {
+        $total = 0;
+        $len = strlen($buf);
+
+        while ($total < $len && ($written = fwrite($sd, $buf))) {
+            $total += $written;
+            $buf = substr($buf, $written);
+        }
+
+        return $total;
+    } 
 
     private function _doRequest($cmd, $values = array())
     {
         $this->_write($cmd . $this->_makeBin($values));
     }
 
+    /**
+     * make tokyotyrant data
+     * @param array $values send data
+     * @return string tokyotyrant data
+     */
     private function _makeBin($values){
         $int = '';
         $str = '';
@@ -107,13 +180,20 @@ class Tt
         return $int . $str;
     }
 
-
+    /**
+     * get data
+     * @return 
+     */
     protected function _getResponse()
     {
         $res = fread($this->socket, 1);
         $res = unpack('c', $res);
+        if ($res[1] === -1) {
+            throw new Net_TokyoTyrantProtocolException('Error send');
+        }
+
         if ($res[1] !== 0) {
-            return false;
+            throw new Net_TokyoTyrantProtocolException('Error Response');
         }
         return true; 
     }
@@ -123,7 +203,7 @@ class Tt
     {
         $result = '';
         $res = $this->_read(1);
-        $res = unpack('c', $res);
+        $res = unpack('C', $res);
         return $res[1];
     }
 
@@ -197,50 +277,83 @@ class Tt
 
     public function put($key, $value)
     {
-        $cmd = pack('c*', 0xC8,0x10);
-        $this->_doRequest($cmd, array($key, $value));
-        return $this->_getResponse();
+        $cmd = pack('C*', 0xC8,0x10);
+        $this->_doRequest($cmd, array((string) $key,(string) $value));
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            return false;
+        }
+        return true;
     }
-    
+
     public function putkeep($key, $value)
     {
-        $cmd = pack('c*', 0xC8,0x11);
-        $this->_doRequest($cmd, array($key, $value));
-        return $this->_getResponse();
+        $cmd = pack('C*', 0xC8,0x11);
+        $this->_doRequest($cmd, array((string) $key,(string) $value));
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            return false;
+        }
+        return true;
     }
     
     public function putcat($key, $value)
     {
-        $cmd = pack('c*', 0xC8,0x12);
-        $this->_doRequest($cmd, array($key, $value));
-        return $this->_getResponse();
+        $cmd = pack('C*', 0xC8,0x12);
+        $this->_doRequest($cmd, array((string) $key,(string) $value));
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            return false;
+        }
+        return true;
     }
     
     public function putrtt($key, $value, $width)
     {
-        $cmd = pack('c*', 0xC8,0x13);
-        $this->_doRequest($cmd, array($key, $value, $width));
-        return $this->_getResponse();
+        $cmd = pack('C*', 0xC8,0x13);
+        $this->_doRequest($cmd, array((string) $key, (string) $value, $width));
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            return false;
+        }
+        return true;
     }
 
     public function putnr($key, $value)
     {
-        $cmd = pack('c*', 0xC8,0x18);
-        $this->_doRequest($cmd, array($key, $value, $width));
+        $cmd = pack('C*', 0xC8,0x18);
+        $this->_doRequest($cmd, array((string) $key, (string) $value, (int) $width));
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            return ;
+        }
+        return ; 
     }
 
     public function out($key)
     {
-        $cmd = pack('c*', 0xC8,0x20);
-        $this->_doRequest($cmd, array($key));
-        return $this->_getResponse();
+        $cmd = pack('C*', 0xC8,0x20);
+        $this->_doRequest($cmd, array((string) $key));
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            return false;
+        }
+        return true;
     }
     
     public function get($key)
     {
-        $cmd = pack('c*', 0xC8,0x30);
-        $this->_doRequest($cmd, array($key));
-        if ($this->_getResponse() === false) {
+        $cmd = pack('C*', 0xC8,0x30);
+        $this->_doRequest($cmd, array((string) $key));
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
             return false;
         }
         return $this->_getData();
@@ -248,38 +361,35 @@ class Tt
     
     public function mget($keys)
     {
-        $cmd = pack('c*', 0xC8,0x31);
+        $cmd = pack('C*', 0xC8,0x31);
         $values = array();
         $values[] = count($keys);
         foreach($keys as $key) {
-          $values[] = array($key);
+          $values[] = array((string) $key);
         }
         
         $this->_doRequest($cmd, $values);
-        if ($this->_getResponse() === false) {
-            return false;
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            return false; 
         }
-        
         return $this->_getKeyValueList();
     }
 
     public function fwmkeys($prefix, $max)
     {
-        $cmd = pack('c*', 0xC8,0x58);
-        $this->_doRequest($cmd, array($prefix, $max));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $cmd = pack('C*', 0xC8,0x58);
+        $this->_doRequest($cmd, array((string) $prefix, (int) $max));
+        $this->_getResponse();
         return $this->_getDataList();
     }
     
     public function addint($key, $num)
     {
-        $cmd = pack('c*', 0xC8,0x60);
-        $this->_doRequest($cmd, array($key, $num));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $cmd = pack('C*', 0xC8,0x60);
+        $this->_doRequest($cmd, array((string) $key, (int) $num));
+        $this->_getResponse();
         return $this->_getInt4();
     }
   
@@ -297,50 +407,44 @@ class Tt
 
     public function adddouble($key, $integ, $fract)
     {
-        $cmd = pack('c*', 0xC8,0x61);
-        $this->_doRequest($cmd, array($key, $intteg, $fract));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $cmd = pack('C*', 0xC8,0x61);
+        $this->_doRequest($cmd, array((string) $key, (int) $intteg, (int) $fract));
+        $this->_getResponse();
         return array($this->_getInt8(), $this->_getInt8());
     }
 
 
     public function ext($extname, $key, $value, $option = 0)
     {
-        $cmd = pack('c*', 0xC8,0x68);
-        $this->_doRequest($cmd, array($extname, $option, $key, $value));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $cmd = pack('C*', 0xC8,0x68);
+        $this->_doRequest($cmd, array((string) $extname, (int) $option, (string) $key, (string) $value));
+        $this->_getResponse();
         return $this->_getData();
     }
 
     public function vsize($key)
     {
-        $cmd = pack('c*', 0xC8,0x38);
-        $this->_doRequest($cmd, array($key));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $cmd = pack('C*', 0xC8,0x38);
+        $this->_doRequest($cmd, array((string) $key));
+        $this->_getResponse();
         return $this->_getInt4();
     }
     
     public function iterinit()
     {
-        $cmd = pack('c*', 0xC8,0x50);
+        $cmd = pack('C*', 0xC8,0x50);
         $this->_doRequest($cmd);
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $this->_getResponse();
         return true;
     }
     
     public function iternext()
     {
-        $cmd = pack('c*', 0xC8,0x51);
+        $cmd = pack('C*', 0xC8,0x51);
         $this->_doRequest($cmd);
-        if ($this->_getResponse() === false) {
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
             return false;
         }
         return $this->_getValue();
@@ -348,82 +452,97 @@ class Tt
 
     public function sync()
     {
-        $cmd = pack('c*', 0xC8,0x70);
+        $cmd = pack('C*', 0xC8,0x70);
         $this->_doRequest($cmd);
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $this->_getResponse();
         return true;
     }
     
+    public function optimize($param)
+    {
+        $cmd = pack('C*', 0xC8,0x71);
+        $this->_doRequest($cmd, array((string) $param));
+        $this->_getResponse();
+        return true;
+    }
+
     public function vanish()
     {
-        $cmd = pack('c*', 0xC8,0x71);
+        $cmd = pack('C*', 0xC8,0x72);
         $this->_doRequest($cmd);
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $this->_getResponse();
         return true;
     }
     
     public function copy($path)
     {
-        $cmd = pack('c*', 0xC8,0x72);
-        $this->_doRequest($cmd, array($path));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $cmd = pack('C*', 0xC8,0x73);
+        $this->_doRequest($cmd, array((string) $path));
+        $this->_getResponse();
         return true;
     }
     
-    public function restore($path)
-    {
-        $cmd = pack('c*', 0xC8,0x73);
-        $this->_doRequest($cmd, array($path));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
-        return true;
-    }
+//    public function restore($path)
+//    {
+//        $cmd = pack('c*', 0xC8,0x74);
+//        $this->_doRequest($cmd, array((string) $path));
+//        $this->_getResponse();
+//        return true;
+//    }
     
     public function setmst($host, $port)
     {
-        $cmd = pack('c*', 0xC8,0x78);
-        $this->_doRequest($cmd, array($host,$port));
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $cmd = pack('C*', 0xC8,0x78);
+        $this->_doRequest($cmd, array((string) $host, (int) $port));
+        $this->_getResponse();
         return true;
     }
  
     public function rnum()
     {
-        $cmd = pack('c*', 0xC8,0x80);
+        $cmd = pack('C*', 0xC8,0x80);
         $this->_doRequest($cmd);
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $this->_getResponse();
         return $this->_getInt8();
     }
  
     public function size()
     {
-        $cmd = pack('c*', 0xC8,0x81);
+        $cmd = pack('C*', 0xC8,0x81);
         $this->_doRequest($cmd);
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $this->_getResponse();
         return $this->_getInt8();
     }
 
     public function stat()
     {
-        $cmd = pack('c*', 0xC8,0x88);
+        $cmd = pack('C*', 0xC8,0x88);
         $this->_doRequest($cmd);
-        if ($this->_getResponse() === false) {
-            return false;
-        }
+        $this->_getResponse();
         return $this->_getValue();
+    }
+
+    public function misc($name, $args, $opts = 0)
+    {
+        $cmd = pack('C*', 0xC8, 0x90);
+        $data = $cmd . pack('N*', strlen($name), $opts, count($args)) . $name;
+
+        foreach ($args as $arg) {
+            $data .= pack('N', strlen($arg)) . $arg;
+        }
+        $this->_write($data);
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            $result_count = $this->_getInt4();
+            throw $e;
+        }
+        $result_count = $this->_getInt4();
+        $result = array();
+        for ($i = 0 ; $i < $result_count; $i++) {
+            $result[] = $this->_getValue();
+        }
+        return $result;
     }
 }
 ?>
