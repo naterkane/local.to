@@ -8,30 +8,63 @@
  * @author		NOM
  * @copyright	Copyright (c) 2009, NOM llc.
  * @license		http://creativecommons.org/licenses/by-sa/3.0/
- * @link		http://getnomcat.com
+ * @link			http://getnomcat.com
  * @version		$Id$
  * @filesource
  */
  /**
- * Net_TokyoTyrantException
+ * Base Error
  * 
- * @package 	Nomcat
+ * @package 	Net_TokyoTyrant
  * @subpackage	Libraries
  * @category	Exception
  * @author		NOM
- * @link		http://getnomcat.com/user_guide/
+ * @link			http://getnomcat.com/user_guide/
  */
 class Net_TokyoTyrantException extends Exception {};
+
+/**
+ * Network Error
+ * 
+ * @package 	Net_TokyoTyrant
+ * @subpackage	Libraries
+ * @category	Exception
+ * @author		NOM
+ * @link			http://getnomcat.com/user_guide/
+ */
+class Net_TokyoTyrantNetworkException extends Net_TokyoTyrantException {};
+
+/**
+ * TokyoTyrant Error
+ * 
+ * @package 	Net_TokyoTyrant
+ * @subpackage	Libraries
+ * @category	Exception
+ * @author		NOM
+ * @link			http://getnomcat.com/user_guide/
+ */
+class Net_TokyoTyrantProtocolException extends Net_TokyoTyrantException {};
+
  /**
  * Tt
  * 
- * @package 	Nomcat
+ * @package 	Noncat
  * @subpackage	Libraries
  * @category	Classes
  * @author		NOM
  * @link		http://getnomcat.com/user_guide/
  */
-class Tt
+class Tt extends Net_TokyoTyrant {};
+
+/**
+ * TokyoTyrant Base Class
+ * 
+ * @category Net
+ * @package Net_TokyoTyrant
+ * @author Keita Arai <cocoiti@gmail.com>
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
+class Net_TokyoTyrant
 {
     /* @access private */
     private $connect = false;
