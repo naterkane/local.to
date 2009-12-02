@@ -75,13 +75,13 @@ class App_Model extends Model {
 	/**
 	 * @access protected
 	 * @var string
-	 * @todo move the setting of $memcacheHost to config
+	 * @depreciated
 	 */	
 	protected $memcacheHost = '67.23.9.219';
 	/**
 	 * @access protected
 	 * @var integer
-	 * @todo move the setting of $memcachePort to config
+	 * @depreciated
 	 */	
 	protected $memcachePort = '21201';
 	/**
@@ -299,7 +299,14 @@ class App_Model extends Model {
 	 */
 	protected function makeSavePrefix($data = array(), $options = array())
 	{
-
+		//echo "<pre>";
+		//var_dump($data);
+		//var_dump($options);
+		if (!is_array($options)) {
+			echo "options isn't an array";
+			$options = (array)$options;
+		}
+		//echo "</pre>";
 		if (empty($options['validate'])) 
 		{
 			$options['validate'] = false;
@@ -323,13 +330,13 @@ class App_Model extends Model {
 			{
 				return false;
 			}
-			$prefix = $options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value;
+			$prefix =strtolower($options['prefixName'] . $this->prefixSeparator . $options['prefixValue'] . $this->prefixSeparator . $value);
 		}		
 		else 
 		{
 			$prefix = $options['override'];
 		}
-		return strtolower($prefix);
+		return $prefix;
 	}
 
 	/**
@@ -820,7 +827,7 @@ class App_Model extends Model {
 		if (!$last_id) 
 		{
 			$last_id = 1;
-			$this->save($key, $last_id);			
+			$this->save($last_id,array('override'=>$key,'validate'=>false,'ignoreTime'=>true));			
 		}
 		return $last_id;
 	}
@@ -946,6 +953,13 @@ class App_Model extends Model {
 	function save($data, $options = array()) 
 	{
 		$this->key = $this->makeSavePrefix($data, $options);
+		//echo "<pre>";
+		//var_dump($data);
+		//var_dump($options);
+		//var_dump($this->key);
+		//echo "</pre>";
+		//exit;
+		
 		if (!$this->key) //if key was returned as false value, fail
 		{
 			return false;
