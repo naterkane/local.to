@@ -67,7 +67,7 @@ class Groups extends App_Controller
 					$this->userData['followers'] = array();
 					$message = 'I just became a member of !'. $group['name'];
 					$message_id = $this->Message->add(array('message'=>$message), $user);
-					$this->mail->sendWelcome($user['email']);
+					$this->mail->sendWelcome($user);
 	                $this->redirect('/signin?redirect=' . urlencode('/group/' . $group['name']), 'Your account has been created. Please sign in.');
 	            }
 				else 
@@ -270,7 +270,14 @@ class Groups extends App_Controller
 		{
 			$this->Group_Invite->addMany($this->postData['invites'], $this->data['group']);
 			foreach ($this->Group_Invite->successes as $invite) {
-				$this->mail->sendGroupInvite($invite['email'], $this->data['group']['name'], $this->config->item('base_url') . 'groups/accept/' . $invite['key']);
+				echo "<pre>";
+				var_dump($invite);
+				$invitee = $this->User->getByEmail($invite['email']);
+				$invite =  (!empty($invitee)) ? $invite + $invitee : $invite;
+				var_dump($invite);
+				echo "</pre>";
+				//exit;
+				$this->mail->sendGroupInvite($invite, $this->userData, $this->data['group']['name'], $this->config->item('base_url') . 'groups/accept/' . $invite['key']);
 			}
 			$this->redirect($_SERVER['REQUEST_URI'], $this->Group_Invite->message);			
 		}

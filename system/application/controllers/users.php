@@ -54,7 +54,7 @@ class Users extends App_Controller
 			if ($this->User->changePassword($this->userData['id'], $this->userData['password']))
 			{
 				$this->load->library(array('Mail'));
-				$this->mail->sendResetPassword($this->userData['email']);				
+				$this->mail->sendResetPassword($this->userData);				
 				$this->redirect('/home', 'Your password was updated.');
 			} 
 			else 
@@ -123,7 +123,7 @@ class Users extends App_Controller
 		}
 		if ($this->User->deleteMe($this->userData)) 
 		{
-			$this->mail->sendDeletion($this->userData['email']);			
+			$this->mail->sendDeletion($this->userData);			
         	$this->cookie->remove('user');
 			$this->redirect('/signin', 'Your account has been deleted.');
 		} 
@@ -368,7 +368,7 @@ class Users extends App_Controller
 				$data['user_id'] = $user['id'];		
 				$this->Email_key->save($data);
 				$this->load->library('Mail');			
-				$this->mail->sendRecoverPassword($user['email'],  $this->config->item('base_url') . 'reset_password/' . $data['id_unhashed']);
+				$this->mail->sendRecoverPassword($user,  $this->config->item('base_url') . 'reset_password/' . $data['id_unhashed']);
 				$this->redirect('/recover_password', 'An email has been sent to ' . $user['email'] . ' with instructions on how to reset your password.', 'neutral');
 			}
 			else 
@@ -559,7 +559,7 @@ class Users extends App_Controller
             if ($this->User->signUp($this->postData, $invite['permission']))
             {
 				$this->Invite->accept($key);
-				$this->mail->sendWelcome($this->postData['email']);
+				$this->mail->sendWelcome($this->postData);
 				$user = $this->User->getByUsername($this->postData['username']);
 				$this->cookie->set('user', $user['id']);
                 $this->redirect('/settings', 'Your account has been created.');

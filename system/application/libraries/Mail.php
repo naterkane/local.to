@@ -159,12 +159,14 @@ class Mail
 	 * Sends an email notifying a user that their account has been deleted
 	 * 
 	 * @access public
-	 * @param string $to
+	 * @param array $to
 	 * @see send()
 	 */
-	public function sendDeletion($to)
+	public function sendDeletion($to = array())
 	{
 		$message = $this->getSetting('message_deletion');
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
 		$message .= $this->getSetting('signature');			
 		$subject = $this->getSetting('subject_deletion');
 		$this->send($to, $subject, $message);
@@ -175,11 +177,11 @@ class Mail
 	 * 
 	 * @access public
 	 * @param array $to
-	 * @param array $username
+	 * @param array $from
 	 * @param string $link
 	 * @see send()
 	 */
-	public function sendFriendRequest($to, $from, $link)
+	public function sendFriendRequest($to = array(), $from = array(), $link)
 	{
 		$this->email_updates = $to['email_updates'];
 		$message = $this->getSetting('message_friend_request');		
@@ -206,7 +208,9 @@ class Mail
 		$this->email_updates = $to['email_updates'];
 		$message = $this->getSetting('message_following');	
 		$message = str_replace('{to}', $to['realname'], $message);
-		$message = str_replace('{username}', $following['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
+		$message = str_replace('{followerrealname}', $following['realname'], $message);
+		$message = str_replace('{followerusername}', $following['username'], $message);
 		$message = str_replace('{link}', $this->ci->config->item('base_url') . $following['username'], $message);		
 		$message .= $this->getSetting('email_settings_link');	
 		$message .= $this->getSetting('signature');		
@@ -220,21 +224,29 @@ class Mail
 	 * Sends an email notifying a user that they have been invited to be a member of a group
 	 * 
 	 * @access public
-	 * @param string $to
+	 * @param array $to
+	 * @param array $from
 	 * @param string $groupname
 	 * @param string $link
 	 * @see send()
 	 */
-	public function sendGroupInvite($to, $groupname, $link)
+	public function sendGroupInvite($to = array(), $from = array(), $groupname, $link)
 	{
 		$message = $this->getSetting('message_group_invite');
+		if (!empty($to['username'])):
+			$message = str_replace("{to}", " ".$to['realname'] . " (".$to['username'].")",$message);
+		else: 
+			$message = str_replace("{to}","", $message);
+		endif;
+		$message = str_replace('{fromfullname}', $from['realname'], $message);
+		$message = str_replace('{fromusername}', $from['username'], $message);
 		$message = str_replace('{link}', $link, $message);
 		$message = str_replace('{group}', $groupname, $message);
 		$message .= $this->getSetting('email_settings_link');				
 		$message .= $this->getSetting('signature');			
 		$subject = $this->getSetting('subject_group_invite');
 		$subject = str_replace('{groupname}', $groupname, $subject);
-		$this->send($to, $subject, $message);
+		$this->send($to['email'], $subject, $message);
 	}
 	
 	/**
@@ -258,17 +270,19 @@ class Mail
 	 * Sends an email to a user who has forgotten their password
 	 * 
 	 * @access public 
-	 * @param string $to
+	 * @param array $to
 	 * @param string $link
 	 * @see send()
 	 */
-	public function sendRecoverPassword($to, $link)
+	public function sendRecoverPassword($to = array(), $link)
 	{
 		$message = $this->getSetting('message_recover_password');
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
 		$message = str_replace('{link}', $link, $message);	
 		$message .= $this->getSetting('signature');		
 		$subject = $this->getSetting('subject_recover_password');
-		$this->send($to, $subject, $message);
+		$this->send($to['email'], $subject, $message);
 	}
 
 	/**
@@ -277,7 +291,7 @@ class Mail
 	 * @access public
 	 * @param array $to
 	 * @param array $following	
-	 * @return 
+	 * @see send() 
 	 */
 	public function sendRequestConfirmation($to = array(), $user = array())
 	{
@@ -298,15 +312,17 @@ class Mail
 	 * Sends an email to a user that contains a link with a new/reset password for their account
 	 * 
 	 * @access public 
-	 * @param string $to
+	 * @param array $to
 	 * @see send()
 	 */
-	public function sendResetPassword($to)
+	public function sendResetPassword($to = array())
 	{
 		$message = $this->getSetting('message_reset_password');
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
 		$message .= $this->getSetting('signature');		
 		$subject = $this->getSetting('subject_reset_password');
-		$this->send($to, $subject, $message);
+		$this->send($to['email'], $subject, $message);
 	}
 	
 	/**
@@ -314,15 +330,17 @@ class Mail
 	 * and welcoming them to the system
 	 * 
 	 * @access public 
-	 * @param object $to
+	 * @param array $to
 	 * @see send()
 	 */
-	public function sendWelcome($to)
+	public function sendWelcome($to = array())
 	{
 		$message = $this->getSetting('message_welcome');
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
 		$message .= $this->getSetting('signature');			
 		$subject = $this->getSetting('subject_welcome');
-		$this->send($to, $subject, $message);
+		$this->send($to['email'], $subject, $message);
 	}
 	
 	/**
