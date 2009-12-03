@@ -270,13 +270,10 @@ class Groups extends App_Controller
 		{
 			$this->Group_Invite->addMany($this->postData['invites'], $this->data['group']);
 			foreach ($this->Group_Invite->successes as $invite) {
-				echo "<pre>";
-				var_dump($invite);
 				$invitee = $this->User->getByEmail($invite['email']);
-				$invite =  (!empty($invitee)) ? $invite + $invitee : $invite;
-				var_dump($invite);
-				echo "</pre>";
-				//exit;
+				if (!empty($invitee)) { 
+					$invite = $invite + $invitee;
+				}
 				$this->mail->sendGroupInvite($invite, $this->userData, $this->data['group']['name'], $this->config->item('base_url') . 'groups/accept/' . $invite['key']);
 			}
 			$this->redirect($_SERVER['REQUEST_URI'], $this->Group_Invite->message);			
