@@ -201,17 +201,17 @@ class Message extends App_Model
 				$this->mode = null;
 				$this->User->addToPrivate($user, $data);
 				//if not a group message then add to the user's public stream
-				if (!$data['to_group']) 
+				if (empty($data['to_group'])) 
 				{
 					$this->User->addToPublic($user, $data);
 				}
 				$this->User->mode = null;
 				$this->Group->sendTo($data, $this->userData['id']);
-				if (!$user['locked'] && !$this->Group->keepOffPublicTimeline) 
+				if (empty($user['locked']) && !$this->Group->keepOffPublicTimeline) 
 				{
 					$this->addToPublicTimeline($data);
 				}
-				if (!$data['to_group']) 
+				if (empty($data['to_group'])) 
 				{
 		    		$this->User->sendToFollowers($data, $this->userData['followers']);				
 				}
@@ -617,7 +617,8 @@ class Message extends App_Model
 		}
 		if (isset($message['to'])) //if it's a dm of some sort
 		{
-			if ($data['to'][0] == '!') 
+			$exclamationpos = strpos($data['to'],"!"); 
+			if ($exclamationpos !== false && $exclamationpos < 1) 
 			{
 				$data['dm_group'] = true;
 			}
