@@ -186,12 +186,15 @@ class Mail
 		$this->email_updates = $to['email_updates'];
 		$message = $this->getSetting('message_friend_request');		
 		$message = str_replace('{link}', $link, $message);
-		$message = str_replace('{username}', $from['realname'], $message);
-		$message = str_replace('{to}', $to['realname'], $message);				
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
+		$message = str_replace('{followerrealname}', $from['realname'], $message);
+		$message = str_replace('{followerusername}', $from['username'], $message);			
 		$message .= $this->getSetting('email_settings_link');	
 		$message .= $this->getSetting('signature');			
 		$subject = $this->getSetting('subject_friend_request');
-		$subject = str_replace('{username}', $from['realname'], $subject);		
+		$subject = str_replace('{followerrealname}', $from['realname'], $subject);
+		$subject = str_replace('{followerusername}', $from['username'], $subject);	
 		$this->send($to['email'], $subject, $message);
 	}
 
