@@ -237,7 +237,9 @@ class App_Controller extends Controller {
 		}
 		elseif (!empty($_SERVER['HTTP_REFERER']) && true == $force)
 		{
-			$redirect = $_SERVER['HTTP_REFERER'];
+			$redirect = explode($_SERVER['HTTP_HOST'],$_SERVER['HTTP_REFERER']);
+			$redirect = $redirect[1];
+			
 		}		
 		return $redirect;
 	}
