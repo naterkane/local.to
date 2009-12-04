@@ -520,13 +520,13 @@ class Group extends App_Model
 		{
 			return $return;
 		}
-		$return[0]['DM Team']['!' . $g['name']] = $g['name'];
+		$return[0][$this->config->item("group")]['!' . $g['name']] = $g['name'];
 		$members = $this->getMembers($g['members']);
 		$i = 1;
 		foreach ($members as $member) {
 			if ($user['id'] != $member['id']) 
 			{
-				$return[$i][$g['name']][$member['username']] = $member['username'];
+				$return[$i]['members'][$member['username']] = $member['username'];
 				$i++;				
 			}
 		}
