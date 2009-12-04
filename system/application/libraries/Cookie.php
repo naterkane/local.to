@@ -38,7 +38,7 @@ class Cookie {
 	 */	
 	private $domain = '/';
 	/**
-	 * Date cookie expires
+	 * last_accessed cookie expires
 	 * @var string
 	 * @access private	
 	 */	
@@ -48,7 +48,7 @@ class Cookie {
 	 * @var string
 	 * @access private	
 	 */	
-	private $name = 'Microblog';
+	private $name = 'nomcat_session_data';
 	/**
 	 * Random String for cookie key
 	 * @var boolean
@@ -76,6 +76,7 @@ class Cookie {
 		$ci->load->model(array('Cookie_model'));
 		$this->cookie = $ci->Cookie_model;
 		$this->salt = $ci->config->item('salt');
+		$this->name = strtolower($ci->config->item('service_name'))."_session_data";
 		$this->randomString = $ci->randomString(10);		
 		unset($ci);
 		$this->check();
