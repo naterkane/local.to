@@ -192,7 +192,7 @@ class Users extends App_Controller
     {
         $this->mustBeSignedIn();
 		$user = $this->User->getByUsername($username);
-		$redirect = $this->getRedirect();
+		$redirect = $this->getRedirect(true);
 		$type = null;
 		if ($this->User->follow($user, $this->userData))
 		{
