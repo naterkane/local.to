@@ -497,6 +497,9 @@ class Users extends App_Controller
         $this->layout = 'public';
 		$this->data['page_title'] = 'Sign In';
 		$this->data['redirect'] = $this->getRedirect();	
+		if ($this->userData) {
+			$this->redirect($this->getRedirect("true"));
+		}
         if ($this->postData)
         {
             $user = $this->User->signIn($this->postData);
