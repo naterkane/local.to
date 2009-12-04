@@ -522,14 +522,14 @@ class Group extends App_Model
 		}
 		$return[0][$this->config->item("group")]['!' . $g['name']] = $g['name'];
 		$members = $this->getMembers($g['members']);
-		$i = 1;
+		$m = array();
 		foreach ($members as $member) {
 			if ($user['id'] != $member['id']) 
 			{
-				$return[$i]['members'][$member['username']] = $member['username'];
-				$i++;				
+				$m[$member['username']] = $member['username'];
 			}
 		}
+		$return[1]['members'] = $m;
 		return $return;
 	}
 
