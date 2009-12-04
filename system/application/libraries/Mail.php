@@ -190,8 +190,8 @@ class Mail
 		$message = str_replace('{username}', $to['username'], $message);
 		$message = str_replace('{followerrealname}', $from['realname'], $message);
 		$message = str_replace('{followerusername}', $from['username'], $message);			
-		$message .= $this->getSetting('email_settings_link');	
-		$message .= $this->getSetting('signature');			
+		$message .= $this->getSetting('signature');		
+		$message .= $this->getSetting('email_settings_link');		
 		$subject = $this->getSetting('subject_friend_request');
 		$subject = str_replace('{followerrealname}', $from['realname'], $subject);
 		$subject = str_replace('{followerusername}', $from['username'], $subject);	
@@ -215,8 +215,8 @@ class Mail
 		$message = str_replace('{followerrealname}', $following['realname'], $message);
 		$message = str_replace('{followerusername}', $following['username'], $message);
 		$message = str_replace('{link}', $this->ci->config->item('base_url') . $following['username'], $message);		
-		$message .= $this->getSetting('email_settings_link');	
 		$message .= $this->getSetting('signature');		
+		$message .= $this->getSetting('email_settings_link');		
 		$subject = $this->getSetting('subject_following');
 		$subject = str_replace('{username}', $following['realname'], $subject);		
 		$this->send($to['email'], $subject, $message);				
@@ -245,8 +245,8 @@ class Mail
 		$message = str_replace('{fromusername}', $from['username'], $message);
 		$message = str_replace('{link}', $link, $message);
 		$message = str_replace('{group}', $groupname, $message);
-		$message .= $this->getSetting('email_settings_link');				
-		$message .= $this->getSetting('signature');			
+		$message .= $this->getSetting('signature');		
+		$message .= $this->getSetting('email_settings_link');			
 		$subject = $this->getSetting('subject_group_invite');
 		$subject = str_replace('{groupname}', $groupname, $subject);
 		$this->send($to['email'], $subject, $message);
@@ -303,8 +303,8 @@ class Mail
 		$message = str_replace('{to}', $to['realname'], $message);
 		$message = str_replace('{username}', $user['realname'], $message);
 		$message = str_replace('{link}', $this->ci->config->item('base_url') . $user['username'], $message);		
-		$message .= $this->getSetting('email_settings_link');	
 		$message .= $this->getSetting('signature');		
+		$message .= $this->getSetting('email_settings_link');			
 		$subject = $this->getSetting('subject_confirm');
 		$subject = str_replace('{username}', $user['realname'], $subject);		
 		$this->send($to['email'], $subject, $message);				
