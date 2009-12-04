@@ -425,7 +425,7 @@ class User extends App_Model
 				endif;
 			}
 			if (!empty($friends)){
-				$return[0]['Friends'] = $friends;
+				$return[0]['friends'] = $friends;
 			}
 		}
 		//Add groups
@@ -435,19 +435,19 @@ class User extends App_Model
 			return $return;
 		}
 		//add dm to groups
-		$return[1]['Teams'] = array();
+		$return[1][$this->config->item("group")."s"] = array();
 		foreach ($groups as $g) {
-			$return[1]['Teams']['!' . $g['name']] = $g['name'];
+			$return[1][$this->config->item("group")."s"]['!' . $g['name']] = $g['name'];
 		}
 		//add group members
 		$i = 2;
 		foreach ($groups as $g) {
-			$return[$i][$g['name']] = array();
+			$return[$i][strtolower($g['name'])] = array();
 			$members = $Group->getMembers($g['members']);
 			foreach ($members as $member) {
 				if ($user['id'] != $member['id']) 
 				{
-					$return[$i][$g['name']][$member['username']] = $member['username'];
+					$return[$i][strtolower($g['name'])][$member['username']] = $member['username'];
 				}
 			}
 			$i++;
