@@ -83,6 +83,7 @@ class Avatar extends Html
 		$dir = "";
 		$field = "";
 		$path = "";
+		$noCacheQuery = "";
 		if ($size == null)
 		{
 			$size = $this->defaultSize;
@@ -118,13 +119,19 @@ class Avatar extends Html
 			{
 				$dir .= $data['id'];				
 			}
-			
 			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.png';
+			
+			if ((time() - filemtime(WEBROOT . $path)) < 129600) { // 24 hours
+				
+				$noCacheQuery = "?".filemtime(WEBROOT . $path) ."=";
+			}
+			
 			//echo WEBROOT . $path.'<br/>';
 			if (!file_exists(WEBROOT . $path))
 			{
 				$path = '/uploads/' . $dir . '/' . $data[$field] . '_default.jpg';
-			}
+			} 
+			//$path .= $noCacheQuery;
 		}
 		
 		if (!file_exists(WEBROOT . $path)) 
@@ -132,11 +139,13 @@ class Avatar extends Html
 			if (file_exists(WEBROOT .  $this->defaultPath . '_' . $size . '.jpg'))
 			{
 				$path = $this->defaultPath . '_' . $size . '.jpg';	
+				$path .= $noCacheQuery;
 				$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}			
 			else 
 			{
 				$path = $this->defaultPath . '_48.jpg';	
+				$path .= $noCacheQuery;
 				$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			}
 		} 
@@ -149,12 +158,12 @@ class Avatar extends Html
 					//echo WEBROOT .  '/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext."<br/>";
 					if (file_exists(WEBROOT .   '/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext)):
 						
-						$return .= '<a href="/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext.'">';
+						$return .= '<a href="/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext.$noCacheQuery.'">';
 						break;
 					endif;
 				}
 			}
-			$return .= '<img src="' . $path . '" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
+			$return .= '<img src="' . $path . $noCacheQuery.'" width="'.$size.'" height="'.$size.'" alt="' . $data[$field] . '" />';
 			if ($link == true) {
 				$return .= "</a>";
 			}
