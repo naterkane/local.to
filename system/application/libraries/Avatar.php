@@ -97,22 +97,25 @@ class Avatar{
 		$this->phpthumb = new Phpthumb();
 		$this->dir = $dir;		
 		$this->file = $this->dir . '/' . $sourceFileName;
-		$this->fileNew = $this->dir . '/' . $newFileName;
+		$this->fileNew = $newFileName;
 		$this->phpthumb->config_cache_directory = $this->dir;
 		if (($this->hasSize()) && ($this->isWritable())) {
 			$this->phpthumb->setSourceFilename($this->file);
-			$this->phpthumb->setParameter('new', $newFileName);
+			$this->phpthumb->setParameter('new', $this->fileNew);
 			$this->phpthumb->setParameter('w', $width);
 			$this->phpthumb->setParameter('h', $height);
 			$this->phpthumb->setParameter('zc', $this->zoom_crop);
 			if($this->phpthumb->generateThumbnail()){
-				if(!$this->phpthumb->RenderToFile($newFileName)){
+				if(!$this->phpthumb->RenderToFile($this->fileNew)){
 					$this->addError('Could not render file to: '. $this->dir['dirname']);
 				}
 			} else {
 				$this->addError('could not generate thumbnail');
 			}
-			chmod($this->fileNew, 0777);	
+			if (substr(sprintf('%o', fileperms($this->fileNew)), -4) != "0777") {
+				chmod($this->fileNew, 0777);
+			} 
+			var_dump(fileperms($this->fileNew));
 			if ($this->isError()) {
 				$this->remove($this->fileNew);
 				return false;
