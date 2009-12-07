@@ -121,9 +121,9 @@ class Avatar extends Html
 			}
 			$path = '/uploads/' . $dir . '/' . $data[$field] . '_' . $size . '.png';
 			
-			if ((time() - filemtime(WEBROOT . $path)) < 129600) { // 24 hours
+			if ((time() - @filemtime(WEBROOT . $path)) < 129600) { // 24 hours
 				
-				$noCacheQuery = "?".filemtime(WEBROOT . $path) ."=";
+				$noCacheQuery = "?".filemtime(WEBROOT . $path);
 			}
 			
 			//echo WEBROOT . $path.'<br/>';
