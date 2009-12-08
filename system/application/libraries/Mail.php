@@ -88,8 +88,8 @@ class Mail
 	{
 		$this->email_updates = $to['email_updates'];
 		$message .= "\n\nThis email was intended for: " . $to['email'];			
-		$message .= $this->getSetting('email_settings_link');	
-		$message .= $this->getSetting('signature');		
+		$message .= $this->getSetting('signature');	
+		$message .= $this->getSetting('email_settings_link');		
 		$this->send($to['email'], $subject, $message);			
 	}
 	
