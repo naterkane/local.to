@@ -909,7 +909,7 @@ class User extends App_Model
 		}
 		else 
 		{
-			$subject = $from['username'] . ' sent you a message on Teamitup.';
+			$subject = $from['username'] . ' sent you a message on '. $this->config->item('service_name').'.';
 		}
 		$this->load->library('Mail');				
 		if ($to['device_updates'] && $to['phone']  && $to['carrier'])
