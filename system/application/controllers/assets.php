@@ -93,6 +93,7 @@ class Assets extends App_controller
 			case 'jpeg':
 			case 'jpg':
 			case 'jpe': $ctype = 'image/jpeg';break;
+			case 'pjpeg': $ctype = 'image/pjpeg';break;
 			case 'png': $cytpe = 'image/png';break;
 			case 'js': $ctype = 'text/javascript';break;
 			case 'css': $ctype = 'text/css';break;

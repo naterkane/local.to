@@ -153,7 +153,7 @@ class Avatar extends Html
 		{
 			if ($link == true){
 				//echo "link is true<br/>";
-				$exts = array('png','jpg','gif','jpeg');
+				$exts = array('png','jpg','gif','jpeg','pjpeg');
 				foreach ($exts as $ext) {
 					//echo WEBROOT .  '/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext."<br/>";
 					if (file_exists(WEBROOT .   '/uploads/' . $dir . '/' . $data[$field]. '_original.' . $ext)):
