@@ -473,24 +473,26 @@ class Html
 	public function replyLink($message = array(), $dm = false)
 	{
 		$options = array();
+		$link = '#top';
 		$options['id'] = 'reply_link_' . $message['id'];
 		if ($message['group_name']) 
 		{
 			if ($dm) 
 			{
-				$options['onclick'] = 'javascript:';
-				$options['onclick'] .= '$(\'#to\').val(\'!' . $message['group_name'] . '\');';
-				$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
-				$link = '#top';
-				$return = $this->link('Reply to Team', $link, $options);
+				$return = "";
 				if ($this->userData['username'] != $message['User']['username']) 
 				{
-					$return .= "<br/>";
+					
 					$options['onclick'] = 'javascript:';
 					$options['onclick'] .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
 					$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';				
-					$return .= $this->link('Reply to User', $link, $options);
+					$return .= $this->link('Reply', $link, $options);
+					$return .= "<br/>";
 				}
+				$options['onclick'] = 'javascript:';
+				$options['onclick'] .= '$(\'#to\').val(\'!' . $message['group_name'] . '\');';
+				$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
+				$return .= $this->link('Reply All', $link, $options);
 				return $return;				
 			} 
 			else 
@@ -504,7 +506,6 @@ class Html
 				$options['onclick'] = 'javascript:';
 				$options['onclick'] .= '$(\'#to\').val(\'' . $message['User']['username'] . '\');';
 				$options['onclick'] .= 'window.location = this.href; $(\'#comment-box\').focus(); return false;';
-				$link = '#top';
 			}
 			else {
 				$link = $this->replyPath($message['id'], 'home');
