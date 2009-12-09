@@ -136,7 +136,8 @@ class Groups extends App_Controller
 	public function avatar($groupname = null)
 	{
 		$this->mustBeSignedIn();
-        $this->data['page_title'] = 'Upload Avatar';		
+        $this->data['page_title'] = 'Upload Avatar';	
+		$group = $this->Group->getByName($groupname);	
 		if (!$group){
 				$this->redirect("/groups");
 		}
