@@ -303,6 +303,23 @@ class User extends App_Model
 			$this->delete($data['username'], array('prefixValue'=>'username'));
 			$this->delete($data['email'], array('prefixValue'=>'email'));	
 			
+			// unfollow all users
+			if (!empty($data['following'])):
+			foreach ($data['following'] as $following){
+				$this->unfollow($following,$data);
+			}
+			endif;
+			
+			// we can't do anything about people who are following this user, so do nothing till we come up with a decent solution
+			if (!empty($data['groups']) && !empty($ci)):
+				
+				// leave all groups
+				foreach ($data['groups'] as $group){
+					if ($ci->Group->removeMember($group,$data['id'])){
+						echo "deleted from group". $group;
+					}
+				}
+			endif; 
 			// remove the user's avatars
 			$id = $data['id'];
 			$uploads = WEBROOT . "/uploads/";
@@ -407,7 +424,7 @@ class User extends App_Model
 	 * Unfollow a user
 	 *
 	 * @access public	
-	 * @param string $username[optional] of user to follow
+	 * @param string $username[optional] of user to follow, could be username, or id
 	 * @param array $user data of user following
 	 * @return boolean
 	 */
@@ -416,8 +433,12 @@ class User extends App_Model
 		$this->startTransaction();
 		$user = $this->getByUsername($username);
 		if (empty($user)){
-		 $this->endTransaction();
-		 return array('message'=>"Oops! There was an error trying to unfollow that user. Please make sure you're not typing the URL manually.","type"=>"error");
+			// sometimes we might pass an ID (for mass unfollowing upon user account deletion, for example.)
+			$user = $this->get($username);
+			if (empty($user)){
+		 		$this->endTransaction();
+		 		return array('message'=>"Oops! There was an error trying to unfollow that user. Please make sure you're not typing the URL manually.","type"=>"error");
+			}
 		}
 		$user['followers'] = $this->removeFromArray($user['followers'], $following['id']);
 		$this->save($user);

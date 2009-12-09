@@ -577,13 +577,19 @@ class Group extends App_Model
 	/**
 	 * Remove a user from a group
 	 *
-	 * @param array $group
+	 * @param array|integer $group Group array, or ID
 	 * @param integer $user_id Member to remove
 	 * @return boolean
 	 * @access public	
 	 */
 	public function removeMember(&$group, $user_id)
 	{
+		if (!is_array($group)) {
+			$group = $this->get($group);
+		}
+		if (empty($group)){
+			return false;	
+		}
 		if (!$this->isOwner($user_id, $group['owner_id'])) 
 		{
 			$group['members'] = $this->Group->removeFromArray($group['members'], $user_id);

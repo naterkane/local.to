@@ -67,6 +67,7 @@ class Groups extends App_Controller
 					$this->userData['followers'] = array();
 					$message = 'I just became a member of !'. $group['name'];
 					$message_id = $this->Message->add(array('message'=>$message), $user);
+					$this->User->addToPrivate($user, $this->Message->getOne($message_id));
 					$this->mail->sendWelcome($user);
 	                $this->redirect('/signin?redirect=' . urlencode('/group/' . $group['name']), 'Your account has been created. Please sign in.');
 	            }
@@ -92,6 +93,7 @@ class Groups extends App_Controller
 				$this->Group_Invite->delete($invite['key'], false);
 				$message = 'I just became a member of !'. $group['name'];
 				$message_id = $this->Message->add(array('message'=>$message), $this->userData);
+				$this->User->addToPrivate($this->userData, $this->Message->getOne($message_id));
 				$this->redirect('/group/' . $group['name'], 'Welcome to ' . $group['name'] . '!');
 			}
 			else 

@@ -116,6 +116,7 @@ class Users extends App_Controller
 	public function delete()
 	{
 		$this->mustBeSignedIn();
+		$this->load->model("group");
 		$key = $this->cookie->get('update_key');
 		$data = $this->userData;
 		if ((empty($this->postData['update_key'])) ||  ($this->postData['update_key'] != $key))
