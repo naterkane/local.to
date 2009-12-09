@@ -49,6 +49,7 @@ class Groups extends App_Controller
 		{
 			$this->redirect('/home','Sorry but that invite has already been accepted.','error');
 		}
+		$this->data['page_title'] = "Join " . ucwords($group['fullname']);
 		if (empty($this->userData)) 
 		{	
 	        $this->layout = 'public';
@@ -112,7 +113,7 @@ class Groups extends App_Controller
 	public function add()
 	{
 		$this->mustBeSignedIn();
-		$this->data['page_title'] = 'Add a group';
+		$this->data['page_title'] = 'Add a ' . $this->config->item('group');
 		if ($this->postData) {
 			if ($this->Group->add($this->postData, $this->userData)) {
 				$this->redirect('/groups/settings/' . $this->postData['name'],"Your ".$this->config->item('group')." has been created. Please fill out your ".$this->config->item('group')."'s info.");
@@ -136,7 +137,11 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();
         $this->data['page_title'] = 'Upload Avatar';		
-		$this->data['group'] = $this->Group->getByName($groupname);
+		if (!$group){
+				$this->redirect("/groups");
+		}
+		$this->data['page_title'] = ucwords($group['fullname']);
+		$this->data['group'] = $group;
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $this->data['group']['id']);
 		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $this->data['group']['members']);	
 		$this->data['avatartype'] = 'Group';
@@ -160,6 +165,10 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->getByName($groupname);
+		if (!$group){
+				$this->redirect("/groups");
+		}
+		$this->data['page_title'] = ucwords($group['fullname']);
 		$this->mustBeOwner($group);
 		$this->data['group'] = $group;
 		$this->data['page_title'] = $group['name'] . ' Blacklist';
@@ -206,8 +215,9 @@ class Groups extends App_Controller
 		if ($groupname) {
 			$group = $this->Group->getByName($groupname);
 			if (!$group){
-				$this->redirect("/groups/","Sorry but we couldn't find what you were looking for","error");
+				$this->redirect("/groups");
 			}
+			$this->data['page_title'] = ucwords($group['fullname']);
 			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
 			{
 				$this->redirect('/group/'.$group['name']);
@@ -239,6 +249,7 @@ class Groups extends App_Controller
 	public function index()
 	{
 		$groups = $this->Group->getAll();
+		$this->data['page_title']  = $this->config->item('group')."s";
        	$this->data['groups'] = Page::make('Group', $groups['all'], array('method'=>'getMany'));
 		$this->loadGroupSidebar = false;
 		$this->load->view('groups/index', $this->data);
@@ -258,9 +269,13 @@ class Groups extends App_Controller
 		{
 			$this->redirect('/groups/');
 		}
-		
 		$this->load->model(array('Group_Invite'));		
-		$this->data['group'] = $this->Group->getByName($groupname);
+		$group =  $this->Group->getByName($groupname);
+		if (empty($group)){
+			$this->redirect('/groups');
+		}
+		$this->data['page_title'] = ucwords($group['fullname']);
+		$this->data['group'] = $group;
 		$this->data['page_title'] = 'Invite people to '.$this->data['group']['name'];
 		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
 		{
@@ -296,6 +311,7 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();		
 		$group = $this->Group->getByName($groupname);
+		$this->data['page_title'] = ucwords($group['fullname']);
 		if ($group) 
 		{
 			$this->data = $group;
@@ -332,6 +348,7 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->getByName($groupname);
+		$this->data['page_title'] = ucwords($group['fullname']);
 		if ($group) 
 		{
 			$this->data['group'] = $group;
@@ -397,28 +414,20 @@ class Groups extends App_Controller
 	 */
 	public function profile($groupname = null)
 	{
-			$user = $this->data['User'];
+		$user = $this->data['User'];
 		$group = $this->Group->getByName($groupname);
+		$this->data['page_title'] = ucwords($group['fullname']);
 		if (!$group){
 			$this->redirect('/groups/');
 		}
-		
 		$this->data['page_title'] = ucfirst($this->config->item('group')).' Settings';
-		
-		//if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
-		//{
-			$this->data = $group;
-			$this->data['group'] = $group;
-			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
-			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
-			$this->data['User'] = $user;
-			$this->setData($this->data);
-			$this->load->view('groups/profile', $this->data); 
-		//} 
-		//else 
-		//{
-		//	$this->redirect('/groups/'.$group['name']);
-		//}
+		$this->data = $group;
+		$this->data['group'] = $group;
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
+		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
+		$this->data['User'] = $user;
+		$this->setData($this->data);
+		$this->load->view('groups/profile', $this->data); 
 	}
 
 	/**
@@ -433,12 +442,11 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$user = $this->data['User'];
 		$group = $this->Group->getByName($groupname);
+		$this->data['page_title'] = ucwords($group['fullname']);
 		if (!$group){
 			$this->redirect('/groups/');
 		}
-		
 		$this->data['page_title'] = ucfirst($this->config->item('group')).' Settings';
-		
 		if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
 		{
 			$this->data = $group;
@@ -483,20 +491,16 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);
-		if ($group) 
-		{
-			$this->Group->addMember($group, $this->userData);
-			$this->User->addGroup($this->userData, $group_id);
-			//need to send array to send to followers
-			//$message = 'I just became a member of !'. $group['name'];
-			//$message_id = $this->Message->add(array('message'=>$message), $this->userData);
-			//$this->User->sendToFollowers($message_id, $this->userData['followers']);
-			$this->redirect('/group/' . $group['name']);
-		} 
-		else 
-		{
-			$this->redirect("/groups");
+		if (!$group){
+				$this->redirect("/groups");
 		}
+		$this->Group->addMember($group, $this->userData);
+		$this->User->addGroup($this->userData, $group_id);
+		//need to send array to send to followers
+		//$message = 'I just became a member of !'. $group['name'];
+		//$message_id = $this->Message->add(array('message'=>$message), $this->userData);
+		//$this->User->sendToFollowers($message_id, $this->userData['followers']);
+		$this->redirect('/group/' . $group['name']);
 	}
 	
 	/**
@@ -511,13 +515,12 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);
-		if ($group) {
-			$this->Group->removeMember($group, $this->userData['id']);
-			$this->User->removeGroup($this->userData['id'], $group_id);
-			$this->redirect('/group/' . $group['name']);
-		} else {
-			$this->redirect("/groups");
-		}		
+		if (!$group){
+				$this->redirect("/groups");
+		}
+		$this->Group->removeMember($group, $this->userData['id']);
+		$this->User->removeGroup($this->userData['id'], $group_id);
+		$this->redirect('/group/' . $group['name']);
 	}	
 	
 	/**
@@ -532,6 +535,9 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->get($group_id);	//get group
+		if (!$group){
+				$this->redirect("/groups");
+		}
 		$this->mustBeOwner($group);
 		if ($this->Group->removeFromBlacklist($group, $user_id))	//remove member 
 		{
@@ -553,50 +559,49 @@ class Groups extends App_Controller
 	 */
 	public function view($groupname = null, $replyTo = null)
 	{		
-		if ($groupname) {
-			$group = $this->Group->getByName($groupname);
-			$this->setReplyTo($replyTo);
-			if ($group == null) $this->redirect('/groups');
-			if (isset($this->data['User'])) 
+		$group = $this->Group->getByName($groupname);
+		if (!$group){
+				$this->redirect("/groups");
+		}
+		$this->data['page_title'] = ucwords($group['fullname']);
+		$this->setReplyTo($replyTo);
+		if (isset($this->data['User'])) 
+		{
+			$user = $this->data['User'];
+		}
+		else 
+		{
+			$user = array();
+		}
+		$this->data['group'] = $group;
+		$this->data['page_title'] = $group['name'];
+		$this->data['group']['groupname'] = $group['name'];
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+		$this->data['group']['member_count'] = count($group['members']);			
+		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+		if ($this->data['group']['im_a_member']) 
+		{
+			if ($this->userData['threading']) 
 			{
-				$user = $this->data['User'];
+				$messages = $this->data['group']['messages_threaded'];
 			}
 			else 
 			{
-				$user = array();
+				$messages = $this->data['group']['messages'];
 			}
-			$this->data['group'] = $group;
-			$this->data['page_title'] = $group['name'];
-			$this->data['group']['groupname'] = $group['name'];
-			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
-			$this->data['group']['member_count'] = count($group['members']);			
-			$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
-			if ($this->data['group']['im_a_member']) 
-			{
-				if ($this->userData['threading']) 
-				{
-					$messages = $this->data['group']['messages_threaded'];
-				}
-				else 
-				{
-					$messages = $this->data['group']['messages'];
-				}
-				rsort($messages);
-			} 
-			else 
-			{
-				$messages = $this->data['group']['mentions'];				
-			}
-        	$this->data['messages'] = Page::make('Message', $messages);			
-			if ($this->data['group']['member_count'] > 0) {
-				$this->User->updateReadGroup($this->userData, $group);
-				$this->data['redirect'] = $this->getRedirect(true,'/group/' . $group['name']);				
-				$this->load->view('groups/view', $this->data);
-			} 
-			else {
-				$this->redirect('/groups');
-			}
-		} else {
+			rsort($messages);
+		} 
+		else 
+		{
+			$messages = $this->data['group']['mentions'];				
+		}
+   	 	$this->data['messages'] = Page::make('Message', $messages);			
+		if ($this->data['group']['member_count'] > 0) {
+			$this->User->updateReadGroup($this->userData, $group);
+			$this->data['redirect'] = $this->getRedirect(true,'/group/' . $group['name']);				
+			$this->load->view('groups/view', $this->data);
+		} 
+		else {
 			$this->redirect('/groups');
 		}
 	}
