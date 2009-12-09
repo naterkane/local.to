@@ -10,11 +10,11 @@
  * @license		http://creativecommons.org/licenses/by-sa/3.0/
  * @link		http://getnomcat.com
  * @version		$Id$
- * @filesource
+ * @filesource	/system/application/controllers/admin.php
  */
 /**
  * Database admin functions
- * Used only for testing. Admin will be available if config['display_errors'] is set to true
+ * Used only for testing. Admin will be available if <code>$config['display_errors']</code> or <code>$config['testing']</code> is set to true
  *
  * @package 	Nomcat
  * @subpackage	nomcat-controllers
@@ -89,10 +89,11 @@ class Admin extends App_controller
 	function delete($key = null) {
 		if (null == $key)
 			$this->redirect('/admin/stats');
-		// decode base64 encoded key
-		$key = base64_decode($key);
+		
 		try
 		{
+			// decode base64 encoded key
+			$key = base64_decode($key);
 			$this->User->tt->out($key);
 		}
 		catch (Exception $e)
@@ -100,6 +101,16 @@ class Admin extends App_controller
 			$this->redirect('/admin/stats',"Sorry but we had trouble deleting the record: '.$key.'<br/>".$e,"error");
 		}		
 	$this->redirect('/admin/stats','Successfully deleted: '.$key,"success");
+	}
+
+	/**
+	 * Show phpinfo content
+	 * 
+	 * @return 
+	 */
+	function _info(){
+		phpinfo();
+		exit();
 	}
 
 	/**
@@ -124,22 +135,22 @@ class Admin extends App_controller
 		ksort($all);
 		echo "<a href=\"/admin/flush\">Flush again</a> <a href=\"/admin/flush\">Go to Tests</a> <a href=\"/admin/showdata\">Reloads</a><br>";		
 		echo "<table border=\"1\" cellspacing=\"5\" cellpadding=\"5\">\n";
-		echo "<tr><th>Count (" . count($all) . ")</th><th>Key</th><th>Value</th></tr>\n";
+		echo "<tr><th></th><th>Count (" . count($all) . ")</th><th>Key</th><th>Value</th></tr>\n";
 		$i = 1;
 		foreach ($all as $key => $value) {
-			echo "<tr><td>$i</td>";
-			echo "<td valign='top'>$key <a href='delete/".base64_encode($key)."'>delete</a></td>";
+			echo "<tr><td><form action='delete/".base64_encode($key)."' method='post'><button>delete</button></form></td><td>$i</td>";
+			echo "<td valign='top'><code>$key</code></td>";
 			echo "<td><pre>";
 			print_r($value);
 			echo "<pre></td></tr>\n";
 			$i++;
 		}
-		echo "<tr><td>&nbsp;</td><td>Stats</td><td>";
+		echo "</table>";
+		echo "<h3>Stats</h3>";
 		echo "<pre>";
 		print_r($this->User->tt->stat());
 		echo "</pre>";
-		echo "</td></tr>";
-		echo "</table>";
+		$this->_info();
 		exit;
 	}
 
@@ -186,9 +197,16 @@ class Admin extends App_controller
 	 */
 	function request_invite()
 	{
-		$this->layout = "public";
-		$this->load->model("message");
-		$this->load->view('admin/request_invite', $this->data);	
+		if ($this->config->item('registration_open') == true) 
+		{
+			$this->layout = "public";
+			$this->load->model("message");
+			$this->load->view('admin/request_invite', $this->data);	
+		}
+		else 
+		{
+			$this->redirect("/");
+		}
 	}
 
 	/**
