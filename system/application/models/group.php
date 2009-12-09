@@ -528,15 +528,15 @@ class Group extends App_Model
 	 * @param array $group Group Data
 	 * @return 
 	 */
-	public function membersSelect($user = array(), $g = array())
+	public function membersSelect($user = array(), $group = array())
 	{
 		$return = array();
-		if (empty($g['members'])) 
+		if (empty($group['members'])) 
 		{
 			return $return;
 		}
-		$return[0][$this->config->item("group")]['!' . $g['name']] = $g['name'];
-		$members = $this->getMembers($g['members']);
+		$return[0][$this->config->item("group")]['!' . $group['name']] = $group['name'];
+		$members = $this->getMembers($group);
 		$m = array();
 		foreach ($members as $member) {
 			if ($user['id'] != $member['id']) 
