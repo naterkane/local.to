@@ -262,7 +262,7 @@ class Groups extends App_Controller
 		$this->data['page_title'] = 'Invite people to '.$this->data['group']['name'];
 		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
 		{
-			$this->show404();
+			$this->redirect('/groups');
 		}
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $this->data['group']['id']);
 		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $this->data['group']['members']);	
@@ -315,7 +315,7 @@ class Groups extends App_Controller
 		} 
 		else 
 		{
-			$this->show404();
+			$this->redirect("/groups");
 		}
 	}
 
@@ -361,7 +361,7 @@ class Groups extends App_Controller
 		$this->mustBeOwner($group);
 		if (empty($group)) 	//if either returns no data show 404
 		{
-			$this->show404();
+			$this->redirect("/groups");
 		} 
 		else 
 		{
@@ -493,7 +493,7 @@ class Groups extends App_Controller
 		} 
 		else 
 		{
-			$this->show404();
+			$this->redirect("/groups");
 		}
 	}
 	
@@ -514,7 +514,7 @@ class Groups extends App_Controller
 			$this->User->removeGroup($this->userData['id'], $group_id);
 			$this->redirect('/group/' . $group['name']);
 		} else {
-			$this->show404();
+			$this->redirect("/groups");
 		}		
 	}	
 	
@@ -592,10 +592,10 @@ class Groups extends App_Controller
 				$this->load->view('groups/view', $this->data);
 			} 
 			else {
-				$this->show404();
+				$this->redirect('/groups');
 			}
 		} else {
-			$this->show404();
+			$this->redirect('/groups');
 		}
 	}
 }
