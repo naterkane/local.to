@@ -19,6 +19,7 @@ $config['admin_base_url']	= "http://admin.example.com/";
 $config['avatar_sizes'] = array(24,36,48,60,200);
 $config['group'] = "group";
 $config['public_timeline'] = "public timeline";
+$config['title_tag_separator'] = " | ";
 // make sure to replace single quote characters ' referenced in javascript with unescape(%27)
 $config['footer_code'] = "";
 

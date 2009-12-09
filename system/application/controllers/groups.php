@@ -136,12 +136,12 @@ class Groups extends App_Controller
 	public function avatar($groupname = null)
 	{
 		$this->mustBeSignedIn();
-        $this->data['page_title'] = 'Upload Avatar';	
+        
 		$group = $this->Group->getByName($groupname);	
 		if (!$group){
 				$this->redirect("/groups");
 		}
-		$this->data['page_title'] = ucwords($group['fullname']);
+		$this->data['page_title'] = ucwords($group['fullname']) . $this->config->item('title_tag_separator') . "Add/Edit Logo";	
 		$this->data['group'] = $group;
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $this->data['group']['id']);
 		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $this->data['group']['members']);	
@@ -169,7 +169,7 @@ class Groups extends App_Controller
 		if (!$group){
 				$this->redirect("/groups");
 		}
-		$this->data['page_title'] = ucwords($group['fullname']);
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Member Blacklist";
 		$this->mustBeOwner($group);
 		$this->data['group'] = $group;
 		$this->data['page_title'] = $group['name'] . ' Blacklist';
@@ -213,32 +213,29 @@ class Groups extends App_Controller
 	public function inbox($groupname = null)
 	{
 		$this->mustBeSignedIn();
-		if ($groupname) {
-			$group = $this->Group->getByName($groupname);
-			if (!$group){
-				$this->redirect("/groups");
-			}
-			$this->data['page_title'] = ucwords($group['fullname']);
-			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
-			{
-				$this->redirect('/group/'.$group['name']);
-			}	
-			$user = $this->data['User'];
-			$this->data = $group; //necessary, but should be removed, this was accidently coded to overwriter user data
-			$this->data['group'] = $group;
-			$this->data['group_select'] = $this->Group->membersSelect($this->userData, $group);
-			$this->data['page_title'] = $group['name'] . ' Inbox';
-			$this->data['groupname'] = $group['name'];		
-			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
-			$this->data['group']['member_count'] = count($group['members']);			
-			$this->data['messages'] = $this->Message->getMany($group['inbox']);
-			$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
-			$this->data['to'] = '!' . $group['name'];
-			$this->data['User'] = $user;
-			$this->load->view('groups/inbox', $this->data);
-		} else {
-			$this->redirect("/groups/","Sorry but we couldn't find what you were looking for","error");
+		$group = $this->Group->getByName($groupname);
+		if (!$group){
+			$this->redirect("/groups");
 		}
+		$user = $this->data['User'];
+		$this->data = $group; //necessary, but should be removed, this was accidently coded to overwriter user data
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Inbox";
+		if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
+		{
+			$this->redirect('/group/'.$group['name']);
+		}	
+		
+		$this->data['group'] = $group;
+		$this->data['group_select'] = $this->Group->membersSelect($this->userData, $group);
+		$this->data['groupname'] = $group['name'];		
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+		$this->data['group']['member_count'] = count($group['members']);			
+		$this->data['messages'] = $this->Message->getMany($group['inbox']);
+		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+		$this->data['to'] = '!' . $group['name'];
+		$this->data['User'] = $user;
+		$this->load->view('groups/inbox', $this->data);
+	
 	}
 
 	/**
@@ -275,9 +272,8 @@ class Groups extends App_Controller
 		if (empty($group)){
 			$this->redirect('/groups');
 		}
-		$this->data['page_title'] = ucwords($group['fullname']);
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Invites";
 		$this->data['group'] = $group;
-		$this->data['page_title'] = 'Invite people to '.$this->data['group']['name'];
 		if ((!$this->data['group']) || (!$this->Group->isOwner($this->userData['id'], $this->data['group']['owner_id'])))
 		{
 			$this->redirect('/groups');
@@ -312,30 +308,26 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();		
 		$group = $this->Group->getByName($groupname);
-		$this->data['page_title'] = ucwords($group['fullname']);
-		if ($group) 
-		{
-			$this->data = $group;
-			$this->data['group'] = $group;
-			$this->data['User'] = $this->userData;
-			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
-			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);			
-			$this->data['page_title'] = $group['name'] . ' Members';
-			$this->data['groupname'] = $group['name'];
-			$this->data['owner'] = $group['owner_id'];			
-        	$this->data['members'] = Page::make('Group', $group, array('method'=>'getMembers'));
-			if (empty($sidebar))
-			{
-				$this->load->view('groups/members', $this->data);
-			}
-			else{
-				return $this->data;
-			}						
-		} 
-		else 
+		if (!$group) 
 		{
 			$this->redirect("/groups");
 		}
+		$this->data = $group;
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Members";
+		$this->data['group'] = $group;
+		$this->data['User'] = $this->userData;
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
+		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);			
+		$this->data['groupname'] = $group['name'];
+		$this->data['owner'] = $group['owner_id'];			
+    		$this->data['members'] = Page::make('Group', $group, array('method'=>'getMembers'));
+		if (empty($sidebar))
+		{
+			$this->load->view('groups/members', $this->data);
+		}
+		else{
+			return $this->data;
+		}						
 	}
 
 	/**
@@ -349,13 +341,12 @@ class Groups extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$group = $this->Group->getByName($groupname);
-		$this->data['page_title'] = ucwords($group['fullname']);
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Mentions";
 		if ($group) 
 		{
 			$this->data['group'] = $group;
 			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
 			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
-			$this->data['page_title'] = 'Mentions';	
 	        $this->data['messages'] = Page::make('Message', $group['mentions']);
 			$this->load->view('groups/mentions', $this->data);
 		} 
@@ -417,12 +408,11 @@ class Groups extends App_Controller
 	{
 		$user = $this->data['User'];
 		$group = $this->Group->getByName($groupname);
-		$this->data['page_title'] = ucwords($group['fullname']);
 		if (!$group){
 			$this->redirect('/groups/');
 		}
-		$this->data['page_title'] = ucfirst($this->config->item('group')).' Settings';
 		$this->data = $group;
+		$this->data['page_title'] = ucwords($group['fullname'] . $this->config->item('title_tag_separator') . $this->config->item('group') . " Info");
 		$this->data['group'] = $group;
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
 		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
@@ -443,14 +433,14 @@ class Groups extends App_Controller
 		$this->mustBeSignedIn();
 		$user = $this->data['User'];
 		$group = $this->Group->getByName($groupname);
-		$this->data['page_title'] = ucwords($group['fullname']);
 		if (!$group){
 			$this->redirect('/groups/');
 		}
-		$this->data['page_title'] = ucfirst($this->config->item('group')).' Settings';
+		
 		if ($this->Group->isOwner($this->userData['id'], $group['owner_id'])) 
 		{
 			$this->data = $group;
+			$this->data['page_title'] = ucwords($group['fullname'] . $this->config->item('title_tag_separator') . "Edit " . $this->config->item('group'). " Info");
 			$this->data['group'] = $group;
 			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
 			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
