@@ -246,15 +246,16 @@ class Form extends Html
 	 * Create a hidden testing field only visible when testing
 	 *
 	 * @access public
-	 * @param fieldName
-	 * @return null|string
+	 * @param string fieldName
+	 * @return boolean|string
 	 */
-	function testInput($fieldName)
+	function testInput($fieldName = null)
 	{
 		if (!empty($this->testingData)) 
 		{
 			return $this->input('testing_' . $fieldName, array('value'=>$this->testingData[$fieldName], 'type'=>'hidden'));
 		}
+		return false;
 	}
 
 	/**
