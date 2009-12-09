@@ -152,7 +152,7 @@ class Messages extends App_Controller
 	 */
     public function public_timeline()
 	{
-        $this->data['page_title'] = 'Public Timeline';
+        $this->data['page_title'] = ucwords($this->config->item('public_timeline'));
 		$pt = $this->Message->getPublicTimeline();
         $this->data['messages'] = Page::make('Message', $pt);
 		$this->data['profile'] = $this->userData;
@@ -193,7 +193,10 @@ class Messages extends App_Controller
 	 */
     public function view($username = null, $message_id = null)
 	{
+		
 		$this->data['message'] = $this->Message->getOne($message_id);
+		$user = $this->User->getByUsername($username);
+		$this->data['page_title'] = ucwords($user['realname']);
 		if (!$this->data['message']) 
 		{
 			$this->show404();
@@ -208,7 +211,6 @@ class Messages extends App_Controller
 			}
 		}
 		$this->data['messages'] = $this->Message->getMany($this->data['message']['replies']);
-		$user = $this->User->getByUserName($username);
 		if (($this->data['message']) AND ($user['username'] == $username)) {
 			$this->data['remove_reply_context'] = true;
 			$this->load->view('messages/view', $this->data);
