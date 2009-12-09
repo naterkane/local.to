@@ -249,7 +249,7 @@ class Groups extends App_Controller
 	public function index()
 	{
 		$groups = $this->Group->getAll();
-		$this->data['page_title']  = $this->config->item('group')."s";
+		$this->data['page_title']  = ucwords($this->config->item('group')."s");
        	$this->data['groups'] = Page::make('Group', $groups['all'], array('method'=>'getMany'));
 		$this->loadGroupSidebar = false;
 		$this->load->view('groups/index', $this->data);
