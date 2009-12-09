@@ -17,7 +17,8 @@ $config['service_name'] = "Microblog";
 $config['base_url']	= "http://example.com/";
 $config['admin_base_url']	= "http://admin.example.com/";
 $config['avatar_sizes'] = array(24,36,48,60,200);
-$config['group'] = "team";
+$config['group'] = "group";
+$config['public_timeline'] = "public timeline";
 /*
 |--------------------------------------------------------------------------
 | Index File
