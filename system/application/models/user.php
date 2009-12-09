@@ -305,19 +305,33 @@ class User extends App_Model
 			
 			// unfollow all users
 			if (!empty($data['following'])):
-			foreach ($data['following'] as $following){
-				$this->unfollow($following,$data);
-			}
+				foreach ($data['following'] as $following){
+					$this->unfollow($following,$data);
+				}
+			endif;
+			
+			// have all users unfollow me
+			if (!empty($data['followers'])):
+				foreach ($data['followers'] as $follower){
+					$this->unfollow($data['id'],$this->User->get($follower));
+				}
 			endif;
 			
 			// we can't do anything about people who are following this user, so do nothing till we come up with a decent solution
-			if (!empty($data['groups']) && !empty($ci)):
-				
-				// leave all groups
-				foreach ($data['groups'] as $group){
-					if ($ci->Group->removeMember($group,$data['id'])){
-						echo "deleted from group". $group;
+			if (!empty($data['groups'])):
+				try {
+					$this->ci = get_instance();
+					$this->ci->load->model(array('group'));
+					// leave all groups
+					foreach ($data['groups'] as $group){
+						if ($this->ci->Group->removeMember($group,$data['id'])){
+							echo "deleted from group". $group;
+						}
 					}
+					unset($this->ci);
+				}
+				catch (Exception $e) {
+					// oops, we couldn't delete group memberships. we'll have to let the group's code remove the user's record on it's own (which it will)
 				}
 			endif; 
 			// remove the user's avatars
