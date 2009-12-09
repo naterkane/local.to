@@ -470,7 +470,7 @@ class User extends App_Model
 		$i = 2;
 		foreach ($groups as $g) {
 			$return[$i][strtolower($g['name'])] = array();
-			$members = $Group->getMembers($g['members']);
+			$members = $Group->getMembers($g);
 			foreach ($members as $member) {
 				if ($user['id'] != $member['id']) 
 				{
