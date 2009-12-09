@@ -207,7 +207,7 @@ class Mail
 		$message .= $this->getSetting('signature');		
 		$message .= $this->getSetting('email_settings_link');		
 		$message .= "\n\nThis email was intended for " . $to['email'];
-		$subject = $this->getSetting('subject_dm');
+		$subject = $this->getSetting('subject_dm_group');
 		$subject = str_replace('{fromrealname}', $from['realname'], $subject);
 		$subject = str_replace('{fromusername}', $from['username'], $subject);	
 		$subject = str_replace('{group}',htmlspecialchars_decode($group['name']), $subject);
