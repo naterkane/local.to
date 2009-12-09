@@ -389,6 +389,7 @@ class Users extends App_Controller
 	 */
 	public function reset_password($key = null)
 	{
+		$this->layout = "public";
 		if (!$key) 
 		{
 			$this->redirect('/', "Sorry, we can't reset your password at this time.","error");
