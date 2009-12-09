@@ -295,11 +295,38 @@ class User extends App_Model
 	 */
 	public function deleteMe($data = array())
 	{
-		if ($data) 
+		//make sure we have all of the required information
+		if (!empty($data['id']) && !empty($data['username']) && !empty($data['email'])) 
 		{
 			$this->delete($data['id']);
+			// don't quarentine usernames, free them immediately
 			$this->delete($data['username'], array('prefixValue'=>'username'));
-			$this->delete($data['email'], array('prefixValue'=>'email'));			
+			$this->delete($data['email'], array('prefixValue'=>'email'));	
+			
+			// remove the user's avatars
+			$id = $data['id'];
+			$uploads = WEBROOT . "/uploads/";
+			if (is_dir($uploads . "user_" . $id)){
+				try {
+					// first try to do it the brute force way
+					exec('rm -Rf ' . $uploads . "user_" . $id);	
+				}
+				catch (Exception $e){
+					// if that doesn't work, remove everything recursively
+					foreach ($this->config->item('avatar_sizes') as $size):
+						unlink($uploads . "user_" . $id . "/" . $data['id'] . "_" . $size . ".png");
+					endforeach;
+					$exts = array('gif','jpg','jpeg','pjpeg','png');
+					// loop through all possible file types
+					foreach ($exts as $ext):
+						$file = $uploads . "user_" . $id . "/" . $id . "_original." . $ext;
+						if (file_exists($file)) {
+							@unlink($file);
+						}
+					endforeach;
+					rmdir($uploads . "user_" . $id);
+				}
+			}
 			return true;
 		} 
 		else 
@@ -890,12 +917,16 @@ class User extends App_Model
 		return $this->endTransaction();
     }
 
+	
 	/**
 	 * SMS a user
-	 *
+	 * 
 	 * @access public
-	 * @param integer $id
-	 * @return boolean
+	 * @param array $to [optional]
+	 * @param array $from [optional]
+	 * @param string $message [optional]
+	 * @param array $group [optional]
+	 * @return 
 	 */
 	public function sms($to = array(), $from = array(), $message = null, $group = null)
 	{
@@ -924,7 +955,6 @@ class User extends App_Model
 			}
 			$this->mail->sms($to['phone'] . $to['carrier'], $from['username'], $sms_message, $to['sms_activated'], null, null);
 		}
-		$this->mail->dmEmail($to, $message, $subject);
 		return true;
 	}
     

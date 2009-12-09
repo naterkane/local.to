@@ -77,24 +77,6 @@ class Mail
 	}
 	
 	/**
-	 * Send a user a DM via email email 
-	 *
-	 * @access public
-	 * @param $user
-	 * @param $message	
-	 * @return 
-	 */
-	public function dmEmail($to = array(), $message = null, $subject = null)
-	{
-		$this->email_updates = $to['email_updates'];
-		$message .= "\n\nThis email was intended for: " . $to['email'];			
-		$message .= $this->getSetting('signature');	
-		$message .= $this->getSetting('email_settings_link');		
-		$this->send($to['email'], $subject, $message);			
-	}
-	
-	
-	/**
 	 * Get the value of a setting
 	 * 
 	 * @param string $setting
@@ -168,9 +150,69 @@ class Mail
 		$message = str_replace('{to}', $to['realname'], $message);
 		$message = str_replace('{username}', $to['username'], $message);
 		$message .= $this->getSetting('signature');			
+		$message .= "\n\nThis email was intended for " . $to['email'];
 		$subject = $this->getSetting('subject_deletion');
-		$this->send($to, $subject, $message);
+		$this->send($to['email'], $subject, $message);
 	}
+	
+	/**
+	 * Send a user a DM via email email 
+	 *
+	 * @access public
+	 * @param array $to
+	 * @param array $from
+	 * @param string $message	
+	 * @return 
+	 */
+	public function sendPrivateMessage($to = array(), $from = array(), $dm)
+	{
+		$this->email_updates = $to['email_updates'];
+		$message = $this->getSetting('message_dm');		
+		$message = str_replace('{link}', $this->ci->config->item('base_url')."inbox", $message);
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
+		$message = str_replace('{fromrealname}', $from['realname'], $message);
+		$message = str_replace('{fromusername}', $from['username'], $message);	
+		$message = str_replace('{message}', $dm, $message);		
+		$message .= $this->getSetting('signature');		
+		$message .= $this->getSetting('email_settings_link');		
+		$message .= "\n\nThis email was intended for " . $to['email'];
+		$subject = $this->getSetting('subject_dm');
+		$subject = str_replace('{fromrealname}', $from['realname'], $subject);
+		$subject = str_replace('{fromusername}', $from['username'], $subject);	
+		$this->send($to['email'], $subject, $message);	
+	}
+	
+	/**
+	 * Send a user a DM sent to a group via email 
+	 *
+	 * @access public
+	 * @param array $to
+	 * @param array $from
+	 * @param array $group
+	 * @param array $message	
+	 * @return 
+	 */
+	public function sendGroupPrivateMessage($to = array(),$from = array(),$group = array(), $dm)
+	{
+		$this->email_updates = $to['email_updates'];
+		$message = $this->getSetting('message_dm_group');		
+		$message = str_replace('{link}', $this->ci->config->item('base_url')."inbox", $message);
+		$message = str_replace('{to}', $to['realname'], $message);
+		$message = str_replace('{username}', $to['username'], $message);
+		$message = str_replace('{fromrealname}', $from['realname'], $message);
+		$message = str_replace('{fromusername}', $from['username'], $message);
+		$message = str_replace('{group}', $group['fullname'], $message);
+		$message = str_replace('{message}', $dm['message'], $message);	
+		$message .= $this->getSetting('signature');		
+		$message .= $this->getSetting('email_settings_link');		
+		$message .= "\n\nThis email was intended for " . $to['email'];
+		$subject = $this->getSetting('subject_dm');
+		$subject = str_replace('{fromrealname}', $from['realname'], $subject);
+		$subject = str_replace('{fromusername}', $from['username'], $subject);	
+		$subject = str_replace('{group}',htmlspecialchars_decode($group['name']), $subject);
+		$this->send($to['email'], $subject, $message);	
+	}	
 	
 	/**
 	 * Sends an email notifying a user that a user has requested to follow their public stream
@@ -192,6 +234,7 @@ class Mail
 		$message = str_replace('{followerusername}', $from['username'], $message);			
 		$message .= $this->getSetting('signature');		
 		$message .= $this->getSetting('email_settings_link');		
+		$message .= "\n\nThis email was intended for " . $to['email'];
 		$subject = $this->getSetting('subject_friend_request');
 		$subject = str_replace('{followerrealname}', $from['realname'], $subject);
 		$subject = str_replace('{followerusername}', $from['username'], $subject);	
@@ -217,6 +260,7 @@ class Mail
 		$message = str_replace('{link}', $this->ci->config->item('base_url') . $following['username'], $message);		
 		$message .= $this->getSetting('signature');		
 		$message .= $this->getSetting('email_settings_link');		
+		$message .= "\n\nThis email was intended for " . $to['email'];
 		$subject = $this->getSetting('subject_following');
 		$subject = str_replace('{username}', $following['realname'], $subject);		
 		$this->send($to['email'], $subject, $message);				
@@ -246,7 +290,8 @@ class Mail
 		$message = str_replace('{link}', $link, $message);
 		$message = str_replace('{group}', $groupname, $message);
 		$message .= $this->getSetting('signature');		
-		$message .= $this->getSetting('email_settings_link');			
+		$message .= $this->getSetting('email_settings_link');		
+		$message .= "\n\nThis email was intended for " . $to['email'];	
 		$subject = $this->getSetting('subject_group_invite');
 		$subject = str_replace('{groupname}', $groupname, $subject);
 		$this->send($to['email'], $subject, $message);
@@ -265,6 +310,7 @@ class Mail
 		$message = $this->getSetting('message_invite');
 		$message = str_replace('{link}', $link, $message);			
 		$message .= $this->getSetting('signature');		
+		$message .= "\n\nThis email was intended for " . $to;
 		$subject = $this->getSetting('subject_invite');
 		$this->send($to, $subject, $message);
 	}
@@ -284,6 +330,7 @@ class Mail
 		$message = str_replace('{username}', $to['username'], $message);
 		$message = str_replace('{link}', $link, $message);	
 		$message .= $this->getSetting('signature');		
+		$message .= "\n\nThis email was intended for " . $to['email'];
 		$subject = $this->getSetting('subject_recover_password');
 		$this->send($to['email'], $subject, $message);
 	}
@@ -304,7 +351,8 @@ class Mail
 		$message = str_replace('{username}', $user['realname'], $message);
 		$message = str_replace('{link}', $this->ci->config->item('base_url') . $user['username'], $message);		
 		$message .= $this->getSetting('signature');		
-		$message .= $this->getSetting('email_settings_link');			
+		$message .= $this->getSetting('email_settings_link');		
+		$message .= "\n\nThis email was intended for " . $to['email'];	
 		$subject = $this->getSetting('subject_confirm');
 		$subject = str_replace('{username}', $user['realname'], $subject);		
 		$this->send($to['email'], $subject, $message);				
@@ -324,6 +372,7 @@ class Mail
 		$message = str_replace('{to}', $to['realname'], $message);
 		$message = str_replace('{username}', $to['username'], $message);
 		$message .= $this->getSetting('signature');		
+		$message .= "\n\nThis email was intended for " . $to['email'];
 		$subject = $this->getSetting('subject_reset_password');
 		$this->send($to['email'], $subject, $message);
 	}
@@ -341,7 +390,8 @@ class Mail
 		$message = $this->getSetting('message_welcome');
 		$message = str_replace('{to}', $to['realname'], $message);
 		$message = str_replace('{username}', $to['username'], $message);
-		$message .= $this->getSetting('signature');			
+		$message .= $this->getSetting('signature');	
+		$message .= "\n\nThis email was intended for " . $to['email'];
 		$subject = $this->getSetting('subject_welcome');
 		$this->send($to['email'], $subject, $message);
 	}

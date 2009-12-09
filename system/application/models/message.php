@@ -183,13 +183,14 @@ class Message extends App_Model
 				if ($data['dm_group']) 
 				{
 					$this->Group->addToInbox($this->to, $data['id']);
-					$this->User->addToSent($user, $data['id']);					
+					$this->User->addToSent($user, $data['id']);		
 					$this->Group->dm($this->to, $user, $data);
 				}
 				else 
 				{
 					$this->User->addToInbox($this->to, $data['id']);					
 					$this->User->sms($this->to, $user, $data['message']);
+					$this->mail->sendPrivateMessage($this->to,$user,$data['message']);
 					$this->User->addToSent($user, $data['id']);					
 				}
 			}

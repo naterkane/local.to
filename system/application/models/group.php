@@ -204,6 +204,7 @@ class Group extends App_Model
 			if ($user) 
 			{
 				$this->User->addToInbox($user, $message['id']);
+				$this->mail->sendGroupPrivateMessage($user,$sender,$group,$message);
 				$this->User->sms($user, $sender, $message['message'], $group['name']);
 			}
 		}
@@ -368,17 +369,31 @@ class Group extends App_Model
 	 * @return array Members
 	 * @access public	
 	 */
-	public function getMembers($member_ids)
+	public function getMembers($group)
 	{
+		if (!empty($group['members'])){
+			$member_ids = $group['members'];
+		} else {
+			$member_ids = $group;
+		}
+		
 		$members = array();
 		foreach ($member_ids as $member_id) {
 			$member = array();
 			$member = $this->User->get($member_id);
-			$member['password'] = null;
-			$member['passwordconfirm'] = null;			
-			$member['realname'] = (!empty($member['realname']))? $member['realname'] : $member['username'];	
-			$member['friend_status'] = $this->User->getFriendStatus($member, $this->userData);
-			$members[] = $member;
+			if (!empty($member)):
+				
+				$member['password'] = null;
+				$member['passwordconfirm'] = null;			
+				$member['realname'] = (!empty($member['realname']))? $member['realname'] : $member['username'];	
+				$member['friend_status'] = $this->User->getFriendStatus($member, $this->userData);
+				$members[] = $member;
+			else: 
+				// member has been deleted, so remove them from the group
+				if (!empty($group['members'])){
+					$this->removeMember($group, $member_id);
+				}
+			endif;
 		}		
 		return $members;
 	}

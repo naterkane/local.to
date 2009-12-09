@@ -304,7 +304,7 @@ class Groups extends App_Controller
 			$this->data['page_title'] = $group['name'] . ' Members';
 			$this->data['groupname'] = $group['name'];
 			$this->data['owner'] = $group['owner_id'];			
-        	$this->data['members'] = Page::make('Group', $group['members'], array('method'=>'getMembers'));
+        	$this->data['members'] = Page::make('Group', $group, array('method'=>'getMembers'));
 			if (empty($sidebar))
 			{
 				$this->load->view('groups/members', $this->data);

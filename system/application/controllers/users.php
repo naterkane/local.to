@@ -117,20 +117,21 @@ class Users extends App_Controller
 	{
 		$this->mustBeSignedIn();
 		$key = $this->cookie->get('update_key');
+		$data = $this->userData;
 		if ((empty($this->postData['update_key'])) ||  ($this->postData['update_key'] != $key))
 		{
 			$this->redirect('/home');
 		}
-		if ($this->User->deleteMe($this->userData)) 
-		{
-			$this->mail->sendDeletion($this->userData);			
-        	$this->cookie->remove('user');
-			$this->redirect('/signin', 'Your account has been deleted.');
+		try {
+			$this->User->deleteMe($data);
+			$this->mail->sendDeletion($data);		
+        		$this->cookie->remove('user');
 		} 
-		else 
+		catch (Exception $e) 
 		{
-			$this->redirect('/home', 'There was a problem deleting your account.', 'error');
-		}		
+			$this->redirect('/home', "There was a problem deleting your account.<br/>\n".$e, 'error');
+		}
+		$this->redirect('/signin', 'Your account has been deleted.');		
 	}
 
 	/**
