@@ -258,7 +258,7 @@ class Users extends App_Controller
 			$this->data['user'] = $this->data['profile'];
 			$this->isProfile = true;									
 		}
-		$this->data['page_title'] = 'people ' . $this->data['user']['username'] . ' is following';
+		$this->data['page_title'] = 'People ' . ucwords($this->data['user']['username']) . ' is Following';
 		$this->data['users'] = Page::make('User', $this->data['user']['following']);		
 		$this->load->view('users/viewlist', $this->data);
 	}
@@ -285,7 +285,7 @@ class Users extends App_Controller
 			$this->data['user'] = $this->data['profile'];
 			$this->isProfile = true;									
 		}
-		$this->data['page_title'] = 'people following '.$this->data['user']['username'];
+		$this->data['page_title'] = 'People Following '.ucwords($this->data['user']['realname']);
 		$this->data['users'] = Page::make('User', $this->data['user']['followers']);		
 		$this->load->view('users/viewlist', $this->data);		
 	}
@@ -299,6 +299,7 @@ class Users extends App_Controller
 	public function friend_requests()
 	{
 		$this->mustBeSignedIn();
+		$this->data['page_title'] = 'Friend Requests';
 		$this->data['requests'] = $this->User->getFriendRequests($this->userData['friend_requests']);
         $this->load->view('users/friend_requests', $this->data);		
 	}
@@ -357,26 +358,23 @@ class Users extends App_Controller
 	public function recover_password()
 	{
 		$this->layout = 'public';
+		$this->data['page_title'] = "Recover Password";
 		if (!empty($this->postData['email']))
 		{
 			$user = $this->User->getByEmail($this->postData['email']);
-			if ($user) 
-			{
-				$this->load->model(array('Email_key'));
-				$key = $this->randomString(10);			
-				$data = $this->Email_key->create();
-				$data['id'] = md5($key);
-				$data['id_unhashed'] = $key;
-				$data['user_id'] = $user['id'];		
-				$this->Email_key->save($data);
-				$this->load->library('Mail');			
-				$this->mail->sendRecoverPassword($user,  $this->config->item('base_url') . 'reset_password/' . $data['id_unhashed']);
-				$this->redirect('/recover_password', 'An email has been sent to ' . $user['email'] . ' with instructions on how to reset your password.', 'neutral');
-			}
-			else 
-			{
+			if (!$user) {
 				$this->redirect('/recover_password', 'Email not found.', 'error');
 			}
+			$this->load->model(array('Email_key'));
+			$key = $this->randomString(10);			
+			$data = $this->Email_key->create();
+			$data['id'] = md5($key);
+			$data['id_unhashed'] = $key;
+			$data['user_id'] = $user['id'];		
+			$this->Email_key->save($data);
+			$this->load->library('Mail');			
+			$this->mail->sendRecoverPassword($user,  $this->config->item('base_url') . 'reset_password/' . $data['id_unhashed']);
+			$this->redirect('/recover_password', 'An email has been sent to ' . $user['email'] . ' with instructions on how to reset your password.', 'neutral');
 		}
 		$this->load->view('users/recover_password');
 	}
@@ -391,6 +389,7 @@ class Users extends App_Controller
 	public function reset_password($key = null)
 	{
 		$this->layout = "public";
+		$this->data['page_title'] = "Reset Password";
 		if (!$key) 
 		{
 			$this->redirect('/', "Sorry, we can't reset your password at this time.","error");
@@ -402,7 +401,7 @@ class Users extends App_Controller
 			$user = $this->User->get($data['user_id']);
 			if (empty($data) || empty($user)) 
 			{
-				$this->show404();
+				$this->redirect('/');
 			} 
 			else 
 			{
@@ -593,6 +592,7 @@ class Users extends App_Controller
 	public function notifications()
 	{
 		$this->mustBeSignedIn();
+		$this->data['page_title'] = "Notification Settings";
 		$this->load->model(array('Sms_key'));		
 		$this->User->Sms_key = $this->Sms_key;
 		$this->data['sms_pending'] = $this->User->smsPending($this->userData);				
@@ -710,29 +710,26 @@ class Users extends App_Controller
     {	
        	$user = $this->User->getByUsername($username);
 		$this->sidebar = "users/userprofile";
-        if ($user)
-        {
-			$this->load->loadHelper('Html');
-			$this->data['page_title'] = $this->load->passData['html']->name($user);
-			$this->data['view_user'] = $user;
-			$this->data['username'] = $user['username'];
-			$this->data['profile'] = $user;	
-			$this->isProfile = true;
-			$this->data['isLocked'] = $this->User->isLocked($user, $this->userData);
-			$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);			
-			if (!$this->data['isLocked']) 
-			{
-				$this->Message->threaded = false; //force threading
-	        	$this->data['messages'] = Page::make('Message', $user['public']);
-			}
-			//if a user is locked, don't show rss. Doesn't matter what the relationship is
-			$this->data['rss_updates'] = !$user['locked'];
-			$this->load->view('users/view', $this->data);			
-        }
-        else
-        {
-            $this->show404();
-        }
+        	if (!$user){
+			$this->show404();
+		}
+		$this->data['page_title'] = ucwords($user['realname']);		
+		$this->load->loadHelper('Html');
+		$this->data['page_title'] = $this->load->passData['html']->name($user);
+		$this->data['view_user'] = $user;
+		$this->data['username'] = $user['username'];
+		$this->data['profile'] = $user;	
+		$this->isProfile = true;
+		$this->data['isLocked'] = $this->User->isLocked($user, $this->userData);
+		$this->data['friend_status'] = $this->User->getFriendStatus($user, $this->userData);			
+		if (!$this->data['isLocked']) 
+		{
+			$this->Message->threaded = false; //force threading
+        	$this->data['messages'] = Page::make('Message', $user['public']);
+		}
+		//if a user is locked, don't show rss. Doesn't matter what the relationship is
+		$this->data['rss_updates'] = !$user['locked'];
+		$this->load->view('users/view', $this->data);			
     }
 
 	/**
@@ -744,10 +741,15 @@ class Users extends App_Controller
 	 */
 	public function profile($username = null)
 	{
-		$this->checkId($username);		
+		$this->checkId($username);
+		$user = $this->User->getByUsername($username);
+		if (!$user){
+			$this->redirect("/");
+		}
+		$this->data['page_title'] = ucwords($user['realname']);		
 		$this->sidebar = "users/userprofile";
-		$this->data['user'] = $this->User->getByUsername($username);
-		$this->data['profile'] = $this->data['user'];		
+		$this->data['user'] = $user;
+		$this->data['profile'] = $user;		
 		$this->isProfile = true;
 		if (empty($this->data['user'])) 
 		{
