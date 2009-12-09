@@ -565,7 +565,6 @@ class Groups extends App_Controller
 			$user = array();
 		}
 		$this->data['group'] = $group;
-		$this->data['page_title'] = $group['name'];
 		$this->data['group']['groupname'] = $group['name'];
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 		$this->data['group']['member_count'] = count($group['members']);			
