@@ -28,7 +28,6 @@ class Messages extends App_Controller
      * Add a message
      * Used for all messages in the db, regardless of type. Model will handle that.
 	 * @access public
-     * @return
      */
     public function add()
     {
@@ -61,7 +60,6 @@ class Messages extends App_Controller
 	 *
 	 * @access public
 	 * @param int $message_id
-	 * @return 
 	 */
 	public function favorite($message_id = null)
 	{
@@ -84,7 +82,6 @@ class Messages extends App_Controller
 	 *
 	 * @access public
 	 * @param int $id Message id	
-	 * @return
 	 */
     public function delete($id = null)
 	{
@@ -94,19 +91,20 @@ class Messages extends App_Controller
 		if ($this->Message->delete($id)) 
 		{
 			$message = 'The message was deleted';
+			$type = 'success';
 		} 
 		else 
 		{
 			$message = 'There was an error deleting the message';
+			$type = 'error';
 		}
-		$this->redirect($redirect, $message);
+		$this->redirect($redirect, $message, $type);
 	}
 	
 	/**
 	 * View DM inbox
 	 *
 	 * @access public
-	 * @return
 	 */
 	public function inbox()
 	{
@@ -127,7 +125,6 @@ class Messages extends App_Controller
 	 * View sent DMs
 	 *
 	 * @access public
-	 * @return
 	 */
 	public function sent()
 	{
@@ -148,7 +145,6 @@ class Messages extends App_Controller
 	 * Public timeline
 	 *
 	 * @access public
-	 * @return
 	 */
     public function public_timeline()
 	{
@@ -165,7 +161,6 @@ class Messages extends App_Controller
 	 *
 	 * @access public
 	 * @param int $message_id
-	 * @return 
 	 */
 	public function unfavorite($message_id = null)
 	{
@@ -175,12 +170,14 @@ class Messages extends App_Controller
 		if ($this->Message->unfavorite($message_id, $this->userData)) 
 		{
 			$message = 'The message removed from your favorites';
+			$type = 'success';
 		} 
 		else 
 		{
 			$message = 'There was an error removing the message from your favorites';
+			$type = 'error';
 		}
-		$this->redirect($redirect, $message);		
+		$this->redirect($redirect, $message, $type);		
 	}
 	
 	/**
@@ -189,17 +186,19 @@ class Messages extends App_Controller
 	 * @access public
 	 * @param string $username
 	 * @param int $message_id	
-	 * @return 
 	 */
     public function view($username = null, $message_id = null)
 	{
 		
 		$this->data['message'] = $this->Message->getOne($message_id);
 		$user = $this->User->getByUsername($username);
+		if (!$user){
+			$this->redirect('/');
+		}
 		$this->data['page_title'] = ucwords($user['realname']);
 		if (!$this->data['message']) 
 		{
-			$this->show404();
+			$this->redirect('/'.$user['username']);
 		}
 		if ($this->data['message']['group_name']) 
 		{
@@ -207,7 +206,7 @@ class Messages extends App_Controller
 			$group = $this->Group->getByName($this->data['message']['group_name']);
 			if (!$this->Group->isMember($group['members'], $this->userData['id'])) 
 			{
-				$this->show404();				
+				$this->redirect('/groups/'.$this->data['message']['group_name']);				
 			}
 		}
 		$this->data['messages'] = $this->Message->getMany($this->data['message']['replies']);
@@ -215,10 +214,8 @@ class Messages extends App_Controller
 			$this->data['remove_reply_context'] = true;
 			$this->load->view('messages/view', $this->data);
 		} else{
-			$this->show404();
+			$this->redirect('/'.$user['username']);
 		}
 	}
 
 }
-
-?>
