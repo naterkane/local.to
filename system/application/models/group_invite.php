@@ -129,7 +129,7 @@ class Group_Invite extends App_Model
 	 * Add Many invites
 	 * 
 	 * @access public
-	 * @param string $emails
+	 * @param string $emails comma or semicolon separated values.
 	 * @param array $group data (passed by reference)
 	 */
 	public function addMany($emails, &$group)
@@ -137,7 +137,7 @@ class Group_Invite extends App_Model
 		if (!is_array($emails)) 
 		{
 			str_replace(' ','',$emails);
-			$emails = explode(',', $emails);
+			$emails = preg_split("/[,;]/", $emails);
 		}
 		$return['successes'] = 0;
 		$return['failures'] = 0;		
