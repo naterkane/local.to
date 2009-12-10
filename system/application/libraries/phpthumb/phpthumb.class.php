@@ -2969,6 +2969,9 @@ exit;
 		$this->SetOrientationDependantWidthHeight();
 
 		if (phpthumb_functions::version_compare_replacement(phpversion(), '4.2.0', '>=') && function_exists('exif_read_data')) {
+			/**
+			 * @todo wrap in filetype check to prevent throwing a warning for non tiff/jpg files.
+			 */
 			$this->exif_raw_data = @exif_read_data($this->sourceFilename, 0, true);
 		}
 		if (function_exists('exif_thumbnail') && ($this->getimagesizeinfo[2] == 2)) {
