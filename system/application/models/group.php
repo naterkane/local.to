@@ -85,7 +85,7 @@ class Group extends App_Model
 		$this->startTransaction();
 		if ($this->save($group)) 
 		{
-			$this->save($group, array('prefixValue'=>'fullname', 'saveOnly'=>'id', 'validate'=>false));
+			//$this->save($group, array('prefixValue'=>'fullname', 'saveOnly'=>'id', 'validate'=>false));
 			$this->save($group, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
 			$this->addToGroupList($group['name']);			
 			$this->User->addGroup($owner, $group['id']);			
@@ -215,6 +215,7 @@ class Group extends App_Model
 	 *
 	 * @return boolean
 	 * @access public	
+	 * @depreciated
 	 */
 	public function fullNameUnique()
 	{
@@ -273,6 +274,7 @@ class Group extends App_Model
 	 * @param string $fullname
 	 * @return array Group data
 	 * @access public	
+	 * @depreciated
 	 */
 	public function getByFullName($fullname = null)
 	{
@@ -751,7 +753,7 @@ class Group extends App_Model
 			$this->validates_callback('nameUnique', 'name', array('message'=>'The Screenname you entered has already been taken.'));
 			$this->validates_presence_of('name', array('message'=>'A group name is required'));				
 			$this->validates_length_of('fullname', array('min'=>1, 'max'=>50, 'message'=>'A full '.$this->config->item('group').' Name must be between 1 and 50 characters.'));
-			$this->validates_callback('fullNameUnique', 'fullname', array('message'=>'The '.ucfirst($this->config->item('group')).' Name you entered has already been taken.'));
+			//$this->validates_callback('fullNameUnique', 'fullname', array('message'=>'The '.ucfirst($this->config->item('group')).' Name you entered has already been taken.'));
 			$this->validates_presence_of('fullname', array('message'=>'A '.ucfirst($this->config->item('group')).' Name is required.'));
 			$this->validates_format_of('email', array('with'=>VALID_EMAIL, 'message'=>'A valid email is required.', 'allow_null'=>true));
 			if ($this->mode == 'update') 
