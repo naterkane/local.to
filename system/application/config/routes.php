@@ -1,17 +1,29 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/*
-
-| There are two reserved routes:
-|
-|	$route['default_controller'] = 'welcome';
-|
-| This route indicates which controller class should be loaded if the
-| URI contains no data. In the above example, the "welcome" class
-| would be loaded.
-|
-|	$route['scaffolding_trigger'] = 'scaffolding';
-|
-*/
+/**
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @since		Version 1.0
+ * @filesource
+ */
+/**
+  * There are two reserved routes:
+  *
+  *	$route['default_controller'] = 'welcome';
+  *
+  * This route indicates which controller class should be loaded if the
+  * URI contains no data. In the above example, the "welcome" class
+  * would be loaded.
+  *
+  *	$route['scaffolding_trigger'] = 'scaffolding';
+  *
+  */
 
 $route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";

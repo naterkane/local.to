@@ -28,7 +28,7 @@ class Assets extends App_controller
 {
 	/**
 	 * Returns the contents of the css file passed as a parameter
-	 * @return 
+	 * 
 	 * @param string $file
 	 */
 	function css($file)
@@ -44,7 +44,7 @@ class Assets extends App_controller
 	
 	/**
 	 * Returns the contents of the javascript file passed as a parameter
-	 * @return 
+	 * 
 	 * @param string $file
 	 */
 	function js($file)
@@ -60,7 +60,7 @@ class Assets extends App_controller
 	
 	/**
 	 * Return the contents of the image file passed as a parameter
-	 * @return 
+	 * 
 	 * @param string $file
 	 */
 	function img($file)
@@ -80,7 +80,7 @@ class Assets extends App_controller
 	
 	/**
 	 * Set the appropriate header for whichever file type is requested
-	 * @return 
+	 * 
 	 * @param string $file
 	 */
 	private function setHeader($file)
@@ -106,4 +106,3 @@ class Assets extends App_controller
 		header('Content-type: '.$ctype);
 	}
 }
-?>

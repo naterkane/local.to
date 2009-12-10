@@ -29,7 +29,6 @@ class Tests extends App_Controller
 	 *
 	 * Shows 404 if app is not error reporting.
 	 * @access public
-	 * @return	
 	 */	
 	public function index() 
 	{			
@@ -52,7 +51,6 @@ class Tests extends App_Controller
 	/**
 	 * Shortcut to forward to testing path
 	 * @access public
-	 * @return
 	 */
 	public function testme()
 	{
@@ -61,4 +59,3 @@ class Tests extends App_Controller
 	
 	
 }
-?>

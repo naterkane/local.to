@@ -30,7 +30,6 @@ class Admin extends App_controller
 	 * Check to see if in testing mode, if not, redirect to root
 	 * 
 	 * @access public
-	 * @return 
 	 */
 	public function __construct()
 	{
@@ -46,7 +45,6 @@ class Admin extends App_controller
 	 *
 	 * @access public
 	 * @param string 'user_agent' or 'ip' -- all other values ignored
-	 * @return 
 	 */
 	public function cookie($type = null)
 	{
@@ -78,7 +76,6 @@ class Admin extends App_controller
 
 	/**
 	 * Syncs in-memory data to disk
-	 * @return 
 	 */
 	function sync()
 	{
@@ -105,8 +102,6 @@ class Admin extends App_controller
 
 	/**
 	 * Show phpinfo content
-	 * 
-	 * @return 
 	 */
 	function _info(){
 		phpinfo();
@@ -115,7 +110,7 @@ class Admin extends App_controller
 
 	/**
 	 * Show all database values 
-	 * @return 
+	 * 
 	 * @todo make private method and require authentication
 	 */	
 	function stats()
@@ -155,8 +150,8 @@ class Admin extends App_controller
 	}
 
 	/**
-	 * loads the memcache control panel
-	 * @return 
+	 * Loads the memcache control panel
+	 * 
 	 * @todo rewrite views/admin/memcache.php and make it work with TT/TC
 	 */
 	function memcache()
@@ -170,7 +165,6 @@ class Admin extends App_controller
 	 * path to database file needs to exist on the same server on which the App is running
 	 * 
 	 * @todo make the path to the .tch file dynamic or configurable
-	 * @return 
 	 */
     function showdata($prefix = null)
     {
@@ -193,7 +187,6 @@ class Admin extends App_controller
 
 	/**
 	 * Loads the form to request an invitation code, only used for testing
-	 * @return 
 	 */
 	function request_invite()
 	{
@@ -212,11 +205,13 @@ class Admin extends App_controller
 	/**
 	 * Create an invite. Only used for testing.
 	 * 
-	 * @return 
 	 * @todo add a flag to $config to turn on or off automatic email generation.
 	 */
 	function create_invite()
 	{
+		if (!$this->config->item('testing')) {
+			$this->redirect('/');
+		}
 		//$this->load->helper('Util');
 		if ($this->postData){
 			
@@ -276,7 +271,6 @@ class Admin extends App_controller
 	 * Deletes an invite, only used for testing
 	 *
 	 * @param string $key to be deleted
-	 * @return 
 	 */	
 	function delete_invite($key)
 	{
@@ -289,4 +283,3 @@ class Admin extends App_controller
 	}
 
 }
-?>

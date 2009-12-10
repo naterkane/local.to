@@ -121,7 +121,6 @@ class App_Controller extends Controller {
 	 *
 	 * @access protected
 	 * @param int $replyTo
-	 * @return 
 	 */
 	protected function setReplyTo($replyTo = null)
 	{
@@ -183,7 +182,6 @@ class App_Controller extends Controller {
 	 * @access public
 	 * @param $id to check
 	 * @param $redirect Url to redirect to if id not present. Defaults to home.
-	 * @return 
 	 */
 	public function checkId($id = null, $redirect = '/home')
 	{
@@ -197,7 +195,6 @@ class App_Controller extends Controller {
 	 * Check if data has been post from a form
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function checkPost()
 	{
@@ -248,7 +245,6 @@ class App_Controller extends Controller {
 	 * Get a users data from cookie
 	 *
 	 * @access public
-	 * @return
 	 */ 
     public function getUserData() 
 	{
@@ -273,8 +269,8 @@ class App_Controller extends Controller {
 	/**
 	 * Is the app in testing mode?
 	 *
-	 * @return boolean
 	 * @access public
+	 * @return boolean
 	 */
 	public function isTesting()
 	{
@@ -305,7 +301,6 @@ class App_Controller extends Controller {
      *
      * If so, sends to home
 	 * @access public
-	 * @return	
      */
     public function mustNotBeSignedIn() 
 	{
@@ -381,7 +376,6 @@ class App_Controller extends Controller {
      * 
      * @access public
      * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
-	 * @return
      */
     public function redirect($url, $message=null, $type = null) 
 	{
@@ -409,7 +403,6 @@ class App_Controller extends Controller {
 	 *
 	 * @access public
 	 * @param array $models
-	 * @return
 	 */
 	public function setErrors($models = array())
 	{
@@ -426,7 +419,6 @@ class App_Controller extends Controller {
 	 * Show 404
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function show404()
 	{

@@ -1,12 +1,25 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/*
-| -------------------------------------------------------------------
-| MIME TYPES
-| -------------------------------------------------------------------
-| This file contains an array of mime types.  It is used by the
-| Upload class to help identify allowed file types.
-|
-*/
+/**
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @since		Version 1.0
+ * @filesource
+ */
+/**
+  * -------------------------------------------------------------------
+  * MIME TYPES
+  * -------------------------------------------------------------------
+  * This file contains an array of mime types.  It is used by the
+  * Upload class to help identify allowed file types.
+  *
+  */
 
 $mimes = array(	'hqx'	=>	'application/mac-binhex40',
 				'cpt'	=>	'application/mac-compactpro',

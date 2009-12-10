@@ -27,7 +27,6 @@ class Users extends App_Controller
 	 * Avatar management
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function avatar()
 	{
@@ -43,7 +42,6 @@ class Users extends App_Controller
 	 * Update a password
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function change_password()
 	{
@@ -71,7 +69,6 @@ class Users extends App_Controller
 	 *
 	 * @access public
 	 * @param string $username
-	 * @return 
 	 */
 	public function confirm($username = null)
 	{
@@ -94,7 +91,6 @@ class Users extends App_Controller
 	 * Used for if a user wishes to delete her own account
 	 * If confirmed, the user will be passed to Users::delete()
 	 * @access public
-	 * @return 
 	 */
 	public function delete_account()
 	{
@@ -111,7 +107,6 @@ class Users extends App_Controller
 	 * Delete an account
 	 * Can not be accessed directly, must be passed from Users::delete_account()
 	 * @access public
-	 * @return 
 	 */
 	public function delete()
 	{
@@ -140,7 +135,6 @@ class Users extends App_Controller
 	 *
 	 * @access public
 	 * @param string $username
-	 * @return 
 	 */
 	public function deny($username = null)
 	{
@@ -162,7 +156,6 @@ class Users extends App_Controller
 	 *
 	 * @access public
 	 * @param string $username
-	 * @return
 	 */
 	public function favorites($username = null)
 	{
@@ -188,7 +181,6 @@ class Users extends App_Controller
      *
      * @param string $username
      * @access public
-     * @return
      */
 	public function follow($username = null)
     {
@@ -224,7 +216,6 @@ class Users extends App_Controller
      *
      * @param string $username
      * @access public
-     * @return
      */
     function unfollow($username = null)
     {
@@ -242,7 +233,6 @@ class Users extends App_Controller
 	 *
 	 * @param string $username
 	 * @access public
-	 * @return 
 	 */
 	public function following($username = null)
 	{
@@ -250,7 +240,6 @@ class Users extends App_Controller
 		{
 			$this->mustBeSignedIn();
 			$this->data['user'] = $this->userData;
-			//$this->data['User']['threading'] = false;
 		}
 		else 
 		{
@@ -269,7 +258,6 @@ class Users extends App_Controller
 	 *
 	 * @param string $username
 	 * @access public
-	 * @return 
 	 */
 	public function followers($username = null)
 	{
@@ -277,7 +265,6 @@ class Users extends App_Controller
 		{
 			$this->mustBeSignedIn();
 			$this->data['user'] = $this->userData;
-			//$this->data['User']['threading'] = false;
 		}
 		else 
 		{
@@ -294,7 +281,6 @@ class Users extends App_Controller
 	 * Show list of all friend requests
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function friend_requests()
 	{
@@ -309,7 +295,6 @@ class Users extends App_Controller
 	 * 
 	 * @access public
 	 * @param int $replyTo Id of a message user is replying to. If ID is not blank, message sent from from this page will be a reply
-	 * @return 
 	 */
     public function home($replyTo = null)
     {
@@ -338,7 +323,6 @@ class Users extends App_Controller
 	 * Show user mentions
 	 *
 	 * @access public
-	 * @return
 	 */
 	public function mentions()
 	{
@@ -353,7 +337,6 @@ class Users extends App_Controller
 	 * Recover password
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function recover_password()
 	{
@@ -384,7 +367,6 @@ class Users extends App_Controller
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return 
 	 */
 	public function reset_password($key = null)
 	{
@@ -434,33 +416,29 @@ class Users extends App_Controller
 	public function rss($username = null)
 	{
        	$user = $this->User->getByUsername($username);
-        if ($user)
+        if (!empty($user))
         {
-			//if user is locked no one can view rss, regardless of relationship
-			if ($user['locked']) 
-			{
-				$this->show404();
-			} 
-			else 
-			{
-				$this->layout = 'rss';	
-				$this->data['user'] = $user;
-				$this->data['page_title'] = $user['username'];	
-	        	$this->data['messages'] = Page::make('Message', $user['public']);
-	            $this->load->view('users/view.rss.php', $this->data);
-			}
-        }
+        		if ($user['locked']){
+        			print "This user's privacy settings prevent you from viewing their updates";
+				exit;
+        		}
+		$this->layout = 'rss';	
+		$this->data['user'] = $user;
+		$this->data['page_title'] = $user['username'];	
+        	$this->data['messages'] = Page::make('Message', $user['public']);
+        $this->load->view('users/view.rss.php', $this->data);
+		}
         else
         {
-            $this->show404();
-        }
+            print "Sorry we couldn't find the user you're looking for.";
+			exit;
+		}
 	}
 
 	/**
 	 * Update a user profile
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function settings()
 	{
@@ -492,7 +470,6 @@ class Users extends App_Controller
      * Sign in a user
      * 
 	 * @access public
-     * @return
      */
     public function signin()
     {
@@ -522,7 +499,6 @@ class Users extends App_Controller
      * Sign out a user
      * 
 	 * @access public 
-     * @return
      */
     public function signout()
     {
@@ -536,7 +512,6 @@ class Users extends App_Controller
 	 *
 	 * @param string $key
 	 * @access public
-     * @return
      */
 	public function signup($key = null)
     {
@@ -552,7 +527,7 @@ class Users extends App_Controller
 		$invite = $this->Invite->get($key);
 		if (empty($invite)) 
 		{
-			$this->show404();
+			$this->redirect('/request_invite', "Sorry, your invitation is invalid. You must request a new invitation before you can sign up.","error");
 		}
 		if ($invite['activated'] == 1) 
 		{
@@ -587,7 +562,6 @@ class Users extends App_Controller
      * Change SMS/Notification settings
 	 *
 	 * @access public
-     * @return
      */
 	public function notifications()
 	{
@@ -611,8 +585,6 @@ class Users extends App_Controller
 		$this->data['carriers'] = $this->mail->carriers;
 		if ($this->postData)
 		{
-			
-			
 			if ($this->postDataKey('key')) 
 			{
 				if ($this->User->smsKey($this->postData['key'], $this->userData)) 
@@ -664,7 +636,6 @@ class Users extends App_Controller
  	 * @param string $setting Either 'enabled' or 'disabled'
  	 * @todo Make $setting boolean
  	 * @access public
- 	 * @return 
  	 */
  	public function threading($setting)
 	{
@@ -704,7 +675,6 @@ class Users extends App_Controller
      *
 	 * @access public
      * @param string $username
-     * @return
      */
 	public function view($username = null)
     {	
@@ -737,7 +707,6 @@ class Users extends App_Controller
 	 *
 	 * @param string $username
 	 * @access public
-	 * @return null
 	 */
 	public function profile($username = null)
 	{
@@ -763,4 +732,3 @@ class Users extends App_Controller
 	}
 
 }
-?>

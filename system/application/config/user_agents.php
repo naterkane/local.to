@@ -1,14 +1,27 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/*
-| -------------------------------------------------------------------
-| USER AGENT TYPES
-| -------------------------------------------------------------------
-| This file contains four arrays of user agent data.  It is used by the
-| User Agent Class to help identify browser, platform, robot, and
-| mobile device data.  The array keys are used to identify the device
-| and the array values are used to set the actual name of the item.
-|
-*/
+/**
+ * Nomcat
+ *
+ * An open source microsharing platform built on CodeIgniter
+ *
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @since		Version 1.0
+ * @filesource
+ */
+/**
+  * -------------------------------------------------------------------
+  * USER AGENT TYPES
+  * -------------------------------------------------------------------
+  * This file contains four arrays of user agent data.  It is used by the
+  * User Agent Class to help identify browser, platform, robot, and
+  * mobile device data.  The array keys are used to identify the device
+  * and the array values are used to set the actual name of the item.
+  *
+  */
 
 $platforms = array (
 					'windows nt 6.0'	=> 'Windows Longhorn',

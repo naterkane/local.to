@@ -168,7 +168,6 @@ class App_Model extends Model {
 	/**
 	 * Model Constructor
 	 * Passes off TT database configuration, initiates memcache
-	 * @return 
 	 */
 	function __construct()
 	{
@@ -193,10 +192,10 @@ class App_Model extends Model {
 	/**
 	* Random Alpha-Numeric String
 	*
-	* @param int length
+	* @access private
+	* @param integer length
 	* @param array $chars length	
 	* @return string 
-	* @access private
 	*/
 	private function _random($length, $chars) {
 		$randstr = null;
@@ -214,7 +213,6 @@ class App_Model extends Model {
 	 * @deprecated Transactions are no longer used
 	 * @access protected
 	 * @param string $key
-	 * @return 
 	 */	
 	protected function logQuery($key)
 	{
@@ -241,7 +239,6 @@ class App_Model extends Model {
 	 * @access protected
 	 * @param string $result
 	 * @param array $data	
-	 * @return 
 	 */	
 	protected function logQueryResult($result, $data)
 	{
@@ -259,7 +256,9 @@ class App_Model extends Model {
 	
 	/**
 	 * Make a key prefix for a find operation
-	 * For example a User with an ID of 1 would be user:id:1
+	 * 
+	 * For example a <code>User</code> with an <code>ID</code> of <code>1</code> would be <code>user:id:1</code>
+	 * 
 	 * @access protected
 	 * @param string value
 	 * @return string key value e.g. user:id:1
@@ -291,7 +290,9 @@ class App_Model extends Model {
 	
 	/**
 	 * Sets the string to be used as the key for a record
-	 * For example a User with an ID of 1 would be user:id:1
+	 * 
+	 * For example a <code>User</code> with an <code>ID</code> of <code>1</code> would be <code>user:id:1</code>
+	 * 
 	 * @access protected
 	 * @param array $data [optional]
 	 * @param array $options [optional]
@@ -299,14 +300,10 @@ class App_Model extends Model {
 	 */
 	protected function makeSavePrefix($data = array(), $options = array())
 	{
-		//echo "<pre>";
-		//var_dump($data);
-		//var_dump($options);
 		if (!is_array($options)) {
 			echo "options isn't an array";
 			$options = (array)$options;
 		}
-		//echo "</pre>";
 		if (empty($options['validate'])) 
 		{
 			$options['validate'] = false;
@@ -346,7 +343,7 @@ class App_Model extends Model {
 	 * @param string $arrayName
 	 * @param string $prefix
 	 * @param array $data Passed by reference	
-	 * @param int $id
+	 * @param integer $id
 	 * @return array $data
 	 */
 	public function addTo($arrayName, &$data, $id, $push = false)
@@ -376,7 +373,7 @@ class App_Model extends Model {
 	 * @return string base64 encoded string
 	 */
 	public function base64_url_encode($input) {
-    	return strtr(base64_encode($input), '+/=', '-_,');
+    		return strtr(base64_encode($input), '+/=', '-_,');
     }
 
 	/**
@@ -392,9 +389,10 @@ class App_Model extends Model {
 
 	/**
 	 * Check to see if submitted form fields are valid
+	 * 
 	 * This method ensures that fields submitted by a form are in fact used by the model. If the field is not found it is unset.
+	 * 
 	 * @access public
-	 * @return 
 	 */
 	public function checkFields()
 	{
@@ -414,8 +412,8 @@ class App_Model extends Model {
 	 *
 	 * @access public
 	 * @param array $array to clip
-	 * @param int $start postion
-	 * @param int $end postion		
+	 * @param integer $start postion
+	 * @param integer $end postion		
 	 * @return array
 	 */
 	public function clip($array = array(), $start = null, $end = null)
@@ -429,8 +427,9 @@ class App_Model extends Model {
 
 	/**
 	 * Set up a new record
+	 * 
 	 * Takes the data passed to it and adds the values of those fields passed to it. 
-	 * Will not add any fields not in the models $fields variable
+	 * Will not add any fields not in the models <code>$fields</code> variable
 	 * 
 	 * @see getFields()
 	 * @access public
@@ -751,7 +750,7 @@ class App_Model extends Model {
 	
 	/**
 	 * dummy error handler set up to obsorb any errors thrown by isSerialized
-	 * @return 
+	 * 
 	 * @param string $errno
 	 * @param string $errstr
 	 */
@@ -782,7 +781,6 @@ class App_Model extends Model {
 	 *
 	 * @access public
 	 * @param array $files Names of Libraries capitalized
-	 * @return 
 	 */
 	public function loadLibrary($files = array())
 	{
@@ -803,7 +801,6 @@ class App_Model extends Model {
 	 *
 	 * @access public
 	 * @param array $models
-	 * @return 
 	 */
 	public function loadModels($models)
 	{
@@ -819,7 +816,7 @@ class App_Model extends Model {
 	 *
 	 * @access public
 	 * @param string value
-	 * @return id
+	 * @return integer id
 	 */
 	public function makeId($key)
 	{
@@ -867,8 +864,8 @@ class App_Model extends Model {
 	 *
 	 * @access public
 	 * @param string $key 
-	 * @param int $offset 	
-	 * @param int $length	
+	 * @param integer $offset 	
+	 * @param integer $length	
 	 * @return boolean
 	 */
 	public function trim($key, $offset, $length)
@@ -885,10 +882,11 @@ class App_Model extends Model {
 
 	/**
 	* Random Alpha-Numeric String
-	*
-	* @param int length
-	* @return string 
+	* 
+	* @see randomNum()
 	* @access public
+	* @param integet length
+	* @return string 
 	*/
 	public function randomString($length) {
 		$chars = array( 'a','b','c','d','e','f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A','B','C','D','E','F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
@@ -896,11 +894,14 @@ class App_Model extends Model {
 	}
 	
 	/**
-	* Random Alpha-Numeric String
-	*
-	* @param int length
-	* @return int
+	* Random Numeric String
+	* 
+	* This 
+	* 
+	* @see randomString()
 	* @access public
+	* @param integer length
+	* @return string
 	*/
 	public function randomNum($length) {
 		$chars = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
@@ -909,11 +910,11 @@ class App_Model extends Model {
 
 	/**
 	 * Remove an item from an array and reorder (used to remove followers, members, etc)
-	 *
+	 * 
+	 * @access public
 	 * @param array $data
 	 * @param string $value 
 	 * @return array $data
-	 * @access public
 	 */
 	public function removeFromArray($data, $value)
 	{
@@ -953,12 +954,6 @@ class App_Model extends Model {
 	function save($data, $options = array()) 
 	{
 		$this->key = $this->makeSavePrefix($data, $options);
-		//echo "<pre>";
-		//var_dump($data);
-		//var_dump($options);
-		//var_dump($this->key);
-		//echo "</pre>";
-		//exit;
 		
 		if (!$this->key) //if key was returned as false value, fail
 		{
@@ -1012,7 +1007,6 @@ class App_Model extends Model {
 				catch(Exception $e)
 				{
 					$this->log_message("error",$e);
-					//$this->flashMessage = $valid;
 				}
 			}
 		}
@@ -1024,7 +1018,7 @@ class App_Model extends Model {
 	 * Set the save action for validation
 	 * 
 	 * @access public
-	 * @return	
+	 * @return boolean
 	 */
 	function setAction()
 	{
@@ -1040,7 +1034,6 @@ class App_Model extends Model {
 	 * Set's time to modified and created fields
 	 *
 	 * @access public
-	 * @return	
 	 */
 	public function setUpTimestampFields()
 	{
@@ -1096,7 +1089,7 @@ class App_Model extends Model {
 	 * @access public
 	 * @param array $oldData[optional]
 	 * @param array $newData[optional]	
-	 * @return $oldData;
+	 * @return array reference to <code>$oldData</code>
 	 */
 	public function updateData($oldData = array(), $newData = array())
 	{
@@ -1111,10 +1104,9 @@ class App_Model extends Model {
 	 * Validate data
 	 *
 	 * Empty method to be inherited by models. 
-	 *
-	 * @param array $data
-	 * @return boolean
+	 * 
 	 * @access public
+	 * @return boolean
 	 */	
 	public function validate() 
 	{
@@ -1123,13 +1115,12 @@ class App_Model extends Model {
 
 	/**
 	 * Validate by calling a user-created callback
-	 *
+	 * 
+	 * @access public
 	 * @param string $callback
 	 * @param string $fieldName Name of field to be validated
 	 * @param array $options[optional]
-	 * [message] string Message to print on error 		
-	 * @return boolean
-	 * @access public
+	 * 								[message] string Message to print on error
 	 */	
 	public function validates_callback ($callback, $fieldName, $options=array()) 
 	{
@@ -1143,7 +1134,15 @@ class App_Model extends Model {
 		}
 	}
 
-	/* Pending
+	/**
+	 * Validates condition of a field or value
+	 * 
+	 * @depreciated
+	 * @param object $conditions
+	 * @param object $fieldName
+	 * @param object $options [optional]
+	 * @return boolean|null
+	 */
     function validates_condition_of($conditions, $fieldName,$options=array()) 
 	{
 			$fieldValue = $this->getValue($fieldName);
@@ -1168,9 +1167,19 @@ class App_Model extends Model {
 			{
 				$this->validationErrors[$fieldName] = $options['message'];
 			}
-    }*/
+    }
 
-	/* Pending
+	/**
+	 * Validates existence of a field or value
+	 * 
+	 * @depreciated
+	 * @param object $fieldName
+	 * @param object $options [optional]
+	 * 									[allow_null] boolean Set to true to allow a null value
+	 * 									[message] string Message to print on error 
+	 * 									[on] On which mode? See AppModel::setAction or AppModel::$action
+	 * @return boolean|null
+	 */
 	function validates_existence_of($fieldName, $options=array())  
 	{
 		$fieldValue = $this->getValue($fieldName);
@@ -1195,9 +1204,19 @@ class App_Model extends Model {
 		{
 		       $this->validationErrors[$fieldName] = $options['message'];
 		}
-	}*/
+	}
 
-	/* Pending
+	/**
+	 * Validates exclusion of a field or value
+	 * 
+	 * @param object $fieldName
+	 * @param object $options [optional]
+	 * 									[allow_null] boolean Set to true to allow a null value
+	 * 									[in] 
+	 * 									[message] string Message to print on error 
+	 * 									[on] On which mode? See AppModel::setAction or AppModel::$action
+	 * @return boolean|null
+	 */
     function validates_exclusion_of($fieldName,$options=array()) 
 	{
 			$fieldValue = $this->getValue($fieldName);
@@ -1221,7 +1240,7 @@ class App_Model extends Model {
                             $this->validationErrors[$fieldName] = $options['message'];
                     }
             }
-    }*/
+    }
 
 	/**
 	 * Validate by checking for format of value
@@ -1229,10 +1248,10 @@ class App_Model extends Model {
 	 * @return 
 	 * @param object $fieldName
 	 * @param object $options[optional]
-	 * [allow_null] boolean Set to true to allow a null value
-	 * [message] string Message to print on error 
-	 * [on] On which mode? See AppModel::setAction or AppModel::$action
-	 * [with] Pattern to match
+	 * 									[allow_null] boolean Set to true to allow a null value
+	 * 									[message] string Message to print on error 
+	 * 									[on] On which mode? See AppModel::setAction or AppModel::$action
+	 * 									[with] Pattern to match
 	 */
 	public function validates_format_of($fieldName, $options=array()) 
 	{
@@ -1264,8 +1283,8 @@ class App_Model extends Model {
 
 	/**
 	 * Validate a join
+	 * 
 	 * @access public
-	 * @return	
 	 */
 	public function validates_join() 
 	{
@@ -1279,7 +1298,16 @@ class App_Model extends Model {
 		}
     }
 
-	/* Pending
+	/**
+	 * Validate inclusion of a field or value
+	 * @param object $fieldName
+	 * @param object $options [optional]
+	 * 									[allow_null] boolean Set to true to allow a null value
+	 * 									[in] 
+	 * 									[message] string Message to print on error 
+	 * 									[on] On which mode? See AppModel::setAction or AppModel::$action
+	 * @return 
+	 */
     function validates_inclusion_of($fieldName,$options=array()) 
 	{
             $fieldValue = $this->getValue($this->data);
@@ -1306,7 +1334,7 @@ class App_Model extends Model {
                             $this->validationErrors[$fieldName] = $options['message'];
                     }
             }
-    }*/
+    }
 
 	/**
 	 * Validate by checking length of value
@@ -1314,10 +1342,10 @@ class App_Model extends Model {
 	 * @return 
 	 * @param object $fieldName
 	 * @param object $options[optional]
-	 * [message] string Message to print on error 
-	 * [on] string On which mode? See AppModel::setAction or AppModel::$action
-	 * [min] int Minimum length
-	 * [max] int Maximum length	
+	 * 								[message] string Message to print on error 
+	 * 								[on] string On which mode? See AppModel::setAction or AppModel::$action
+	 * 								[min] int Minimum length
+	 * 								[max] int Maximum length	
 	 */
 	public function validates_length_of($fieldName, $options=array()) 
 	{
@@ -1345,11 +1373,11 @@ class App_Model extends Model {
 	 * @return 
 	 * @param string $fieldName
 	 * @param array $options[optional]
-	 * [allow_null] boolean Set to true to allow a null value
-	 * [only_integer] boolean Set to true if only integer is allowed
-	 * [message] string Message to print on error 
-	 * [on] string On which mode? See AppModel::setAction or AppModel::$action
-	 * [with] string Pattern to match
+	 * 								[allow_null] boolean Set to true to allow a null value
+	 * 								[only_integer] boolean Set to true if only integer is allowed
+	 * 								[message] string Message to print on error 
+	 * 								[on] string On which mode? See AppModel::setAction or AppModel::$action
+	 * 								[with] string Pattern to match
 	 */
     public function validates_numericality_of($fieldName,$options=array()) 
 	{
@@ -1389,8 +1417,8 @@ class App_Model extends Model {
 	 *
 	 * @param string $fieldName Name of field to be validated
 	 * @param array $options[optional]
-	 * [message] string Message to print on error 
-	 * [on] string On which mode? See AppModel::setAction or AppModel::$action	
+	 * 								[message] string Message to print on error 
+	 * 								[on] string On which mode? See AppModel::setAction or AppModel::$action	
 	 * @return boolean
 	 * @access public
 	 */
@@ -1414,7 +1442,16 @@ class App_Model extends Model {
             }
     }
 
-	/* Pending
+	/**
+	 * Validate quantity of field or value
+	 * @param object $fieldName
+	 * @param object $options [optional]
+	 * 								[less_than] integer
+	 * 								[more_than] integer
+	 * 								[message] string Message to print on error 
+	 * 								[on] string On which mode? See AppModel::setAction or AppModel::$action	
+	 * @return 
+	 */
     function validates_quantity_of($fieldName,$options=array()) 
 	{
 	        if ( !isset($options['less_than']) ) 
@@ -1439,7 +1476,7 @@ class App_Model extends Model {
                             $this->validationErrors[$fieldName] = $options['message'];
                     }
             }
-    }*/
+    }
 
 	/**
 	 * Validate the uniqueness of a value
@@ -1447,8 +1484,8 @@ class App_Model extends Model {
 	 * @access public
 	 * @param string $fieldname
 	 * @param array $options
-	 * [fieldValue] string Use to override values sent by post
-	 * [message] string Message to print on error 
+	 * 								[fieldValue] string Use to override values sent by post
+	 * 								[message] string Message to print on error 
 	 * @return boolean
 	 */
     public function validates_uniqueness_of($fieldName=null, $options = array()) 

@@ -37,7 +37,6 @@ class Welcome extends App_Controller {
 	 * Determine site home page
 	 *
 	 * @access public
-	 * @return
 	 */
 	public function index()
 	{
@@ -59,7 +58,6 @@ class Welcome extends App_Controller {
 	/**
 	 * Displays static views
 	 * 
-	 * @return 
 	 * @param string $view
 	 * @see /system/application/config/routes.php
 	 */

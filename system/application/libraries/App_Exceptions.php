@@ -65,7 +65,6 @@ class App_exceptions extends CI_Exceptions
 	 * @param	string	$message	the error string
 	 * @param	string	$filepath	the error filepath
 	 * @param	string	$line		the error line number
-	 * @return	string
 	 */
 	function show_php_error($severity, $message, $filepath, $line)
 	{	

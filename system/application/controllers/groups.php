@@ -37,7 +37,6 @@ class Groups extends App_Controller
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return 
 	 */
 	public function accept($key = null)
 	{
@@ -108,7 +107,6 @@ class Groups extends App_Controller
 	 * Add a new group
 	 *
 	 * @access public
-	 * @return 
 	 */
 	public function add()
 	{
@@ -131,7 +129,6 @@ class Groups extends App_Controller
 	 *
 	 * @access public
 	 * @param string $groupname
-	 * @return
 	 */
 	public function avatar($groupname = null)
 	{
@@ -160,7 +157,6 @@ class Groups extends App_Controller
 	 * @param string $groupname
 	 * @param string $sidebar	
 	 * @access public	
-	 * @return 
 	 */
 	public function blacklist($groupname = null, $sidebar = null)
 	{
@@ -185,7 +181,6 @@ class Groups extends App_Controller
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return 
 	 */
 	public function deleteinvite($key = null)
 	{
@@ -208,7 +203,6 @@ class Groups extends App_Controller
 	 * @todo Change that bad hand-off of user data
 	 * @param string $groupname	
 	 * @access public	
-	 * @return
 	 */
 	public function inbox($groupname = null)
 	{
@@ -242,7 +236,6 @@ class Groups extends App_Controller
 	 * List all groups
 	 *
 	 * @access public
-	 * @return	
 	 */
 	public function index()
 	{
@@ -258,7 +251,6 @@ class Groups extends App_Controller
 	 *
 	 * @access public
 	 * @param string $groupname
-	 * @return 
 	 */
 	public function invites($groupname = null)
 	{
@@ -302,7 +294,7 @@ class Groups extends App_Controller
 	 * @access public
 	 * @param string $groupname
 	 * @param string $sidebar	
-	 * @return 
+	 * @return array|null
 	 */
 	public function members($groupname = null, $sidebar = null)
 	{
@@ -335,7 +327,6 @@ class Groups extends App_Controller
 	 *
 	 * @param string $groupname
 	 * @access public
-	 * @return 
 	 */
 	public function mentions($groupname = null)
 	{
@@ -362,8 +353,7 @@ class Groups extends App_Controller
 	 * @access public
 	 * @param int $group_id
 	 * @param int $user_id	
-	 * @param boolean $blacklist Also blacklist the user?		
-	 * @return 
+	 * @param boolean $blacklist Also blacklist the user?
 	 */
 	public function remove($group_id = null, $user_id = null, $blacklist = false)
 	{
@@ -402,7 +392,6 @@ class Groups extends App_Controller
 	 *
 	 * @param string $groupname
 	 * @access public
-	 * @return null
 	 */
 	public function profile($groupname = null)
 	{
@@ -426,7 +415,6 @@ class Groups extends App_Controller
 	 *
 	 * @param string $groupname 
 	 * @access public
-	 * @return 
 	 */
 	public function settings($groupname = null)
 	{
@@ -476,7 +464,6 @@ class Groups extends App_Controller
 	 * @param int $group_id
 	 * @todo Make $group_id into $groupname
 	 * @todo Restore message to followers notifying that user has joined group	
-	 * @return 
 	 */
 	public function subscribe($group_id = null)
 	{
@@ -500,7 +487,6 @@ class Groups extends App_Controller
 	 * @access public
 	 * @param int $group_id
 	 * @todo Make $group_id into $groupname	
-	 * @return 
 	 */
 	public function unsubscribe($group_id = null)
 	{
@@ -520,7 +506,6 @@ class Groups extends App_Controller
 	 * @access public
 	 * @param int $group_id
 	 * @param int $user_id	
-	 * @return 
 	 */
 	public function unblacklist($group_id = null, $user_id = null)
 	{
@@ -546,7 +531,6 @@ class Groups extends App_Controller
 	 * @todo Change that bad hand-off of user data
 	 * @access public
 	 * @param string $name	
-	 * @return
 	 */
 	public function view($groupname = null, $replyTo = null)
 	{		
@@ -596,4 +580,3 @@ class Groups extends App_Controller
 		}
 	}
 }
-?>
