@@ -1,15 +1,16 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * CodeIgniter
+/**
+ * Nomcat
  *
- * An open source application development framework for PHP 4.3.2 or newer
+ * An open source microsharing platform built on CodeIgniter
  *
- * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
- * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @package		Nomcat
+ * @author		NOM
+ * @copyright	Copyright (c) 2009, NOM llc.
+ * @license		http://creativecommons.org/licenses/by-sa/3.0/
+ * @link		http://getnomcat.com
+ * @version		$Id$
  * @filesource
  */
 
@@ -18,7 +19,7 @@
 /**
  * Logging Class
  *
- * @package		CodeIgniter
+ * @package		Nomcat
  * @subpackage	Libraries
  * @category	Logging
  * @author		ExpressionEngine Dev Team

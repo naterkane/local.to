@@ -571,7 +571,7 @@ class Net_TokyoTyrant
  /**
  * Tt
  * 
- * @package 	Noncat
+ * @package 	Nomcat
  * @subpackage	Libraries
  * @category	Classes
  * @author		NOM
