@@ -37,10 +37,10 @@ define('FOPEN_WRITE_CREATE_STRICT', 			'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 //App matches
-define('MESSAGE_MATCH', '/(^  *\s+)@([A-Za-z0-9\-\_]{1,64})/e');
-define('GROUP_MATCH', '/(^  *\s)!([A-Za-z0-9\-\_]{1,64})/e');
-define('DM_MATCH', '/^[(d  *D)(m  *M?)]{1}.\s(\w+)\s.*?/e');
-define('VALID_EMAIL', "/^[a-z0-9!#$%&'*+\/=?^_`{  *}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{  *}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}  *museum  *travel)$/i");
+define('MESSAGE_MATCH', '/(^|\s+)@([A-Za-z0-9\-\_]{1,64})/e');
+define('GROUP_MATCH', '/(^|\s)!([A-Za-z0-9\-\_]{1,64})/e');
+define('DM_MATCH', '/^[(d|D)(m|M?)]{1}.\s(\w+)\s.*?/e');
+define('VALID_EMAIL', "/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i");
 define('URL_MATCH', '#\[(([a-zA-Z]+://)([a-zA-Z0-9?&%.;:/=+_-]*))\]#e'); //'@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)?\s@');
 define('ALPHANUM', '/^\w+$/');
 
