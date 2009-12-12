@@ -14,7 +14,7 @@
     <td class="header_menu">
         
                                     
-                                                  		  [ <a href="classtrees_Nomcat.html" class="menu">class tree: Nomcat</a> ]
+                                                                                          		  [ <a href="classtrees_Nomcat.html" class="menu">class tree: Nomcat</a> ]
 		  [ <a href="elementindex_Nomcat.html" class="menu">index: Nomcat</a> ]
 		  	    [ <a href="elementindex.html" class="menu">all elements</a> ]
     </td>
@@ -30,7 +30,9 @@
 	</div>
       <b>Packages:</b><br />
               <a href="li_Nomcat.html">Nomcat</a><br />
+              <a href="li_FirePHP.html">FirePHP</a><br />
               <a href="li_Incendiary.html">Incendiary</a><br />
+              <a href="li_Net_TokyoTyrant.html">Net_TokyoTyrant</a><br />
             <br /><br />
                   
       
@@ -40,18 +42,13 @@
 
 <div align="center"><h1>Todo List</h1></div>
 <h2>Nomcat</h2>
-<h3><a href="Nomcat/Libraries/App_Model.html#var$memcacheHost">App_Model::$memcacheHost</a></h3>
+<h3><a href="Nomcat/nomcat-controllers/Admin.html">Admin</a></h3>
 <ul>
-    <li>move the setting of $memcacheHost to config</li>
+    <li>Remove these functions and place in a separate DB admin app.</li>
 </ul>
-<h3><a href="Nomcat/Libraries/App_Model.html#var$memcachePort">App_Model::$memcachePort</a></h3>
+<h3><a href="Nomcat/_libraries---App_Model.php.html#functionbase64_url_encode">base64_url_encode()</a></h3>
 <ul>
-    <li>move the setting of $memcachePort to config</li>
-</ul>
-<h3><a href="Nomcat/nomcat-controllers/Messages.html#methodadd">Messages::add()</a></h3>
-<ul>
-    <li>Find out where `&lt;script&gt;` tags are being set to `[removed]` and make sure they're just escaped like other tags.</li>
-    <li>Make ajax</li>
+    <li>remove this</li>
 </ul>
 <h3><a href="Nomcat/nomcat-controllers/Admin.html#methodcreate_invite">Admin::create_invite()</a></h3>
 <ul>
@@ -61,99 +58,59 @@
 <ul>
     <li>make private method and require authentication</li>
 </ul>
-<h3><a href="Nomcat/nomcat-controllers/Users.html#methodfollow">Users::follow()</a></h3>
-<ul>
-    <li>check if user is not yourself</li>
-</ul>
-<h3><a href="Nomcat/Models/Message.html#methodgetTimeline">Message::getTimeline()</a></h3>
-<ul>
-    <li>Clip the timeline at a limited number of messages</li>
-</ul>
-<h3><a href="Nomcat/Models/Message.html#methodgetTimelineThreaded">Message::getTimelineThreaded()</a></h3>
-<ul>
-    <li>Clip the timeline at a limited number of messages</li>
-</ul>
 <h3><a href="Nomcat/nomcat-controllers/Groups.html#methodinbox">Groups::inbox()</a></h3>
 <ul>
     <li>Change that bad hand-off of user data</li>
-    <li>Check if group exists</li>
-    <li>Merge with view</li>
 </ul>
-<h3><a href="Nomcat/Libraries/Load_helpers.html#methodload">Load_helpers::load()</a></h3>
+<h3><a href="Nomcat/Models/Group.html#methodisPublic">Group::isPublic()</a></h3>
 <ul>
-    <li>Make instance dynamic, $myHelper rather than $this-&gt;myHelper</li>
-</ul>
-<h3><a href="Nomcat/Libraries/App_loader.html#methodloadHelpers">App_loader::loadHelpers()</a></h3>
-<ul>
-    <li>Make instance dynamic, $myHelper rather than $this-&gt;myHelper</li>
-</ul>
-<h3><a href="Nomcat/nomcat-controllers/Groups.html#methodmembers">Groups::members()</a></h3>
-<ul>
-    <li>create a way of getting a users &quot;public&quot; info only and not returning anything that's sensitive.</li>
+    <li>Make an actual function when we start using public groups</li>
 </ul>
 <h3><a href="Nomcat/nomcat-controllers/Admin.html#methodmemcache">Admin::memcache()</a></h3>
 <ul>
     <li>rewrite views/admin/memcache.php and make it work with TT/TC</li>
 </ul>
-<h3><a href="Nomcat/_config---routes.php.html">routes.php</a></h3>
+<h3><a href="Nomcat/_libraries---App_Model.php.html#functionrollbackLog">rollbackLog()</a></h3>
 <ul>
-    <li>need to make this dynamic/flexible in the future</li>
+    <li>Remove this</li>
 </ul>
-<h3><a href="Nomcat/Models/Group.html#methodsendToMembers">Group::sendToMembers()</a></h3>
+<h3><a href="Nomcat/Models/Group.html#methodsendTo">Group::sendTo()</a></h3>
 <ul>
     <li>Break this out into smaller methods</li>
-</ul>
-<h3><a href="Nomcat/Libraries/App_Controller.html#methodsetData">App_Controller::setData()</a></h3>
-<ul>
-    <li>Would be nice if this were done automatically</li>
-</ul>
-<h3><a href="Nomcat/Libraries/App_Controller.html#methodsetErrors">App_Controller::setErrors()</a></h3>
-<ul>
-    <li>Would be nice if this were done automatically</li>
 </ul>
 <h3><a href="Nomcat/nomcat-controllers/Admin.html#methodshowdata">Admin::showdata()</a></h3>
 <ul>
     <li>make the path to the .tch file dynamic or configurable</li>
-</ul>
-<h3><a href="Nomcat/nomcat-controllers/Users.html#methodsignin">Users::signin()</a></h3>
-<ul>
-    <li>Move those load method calls to one place</li>
-</ul>
-<h3><a href="Nomcat/nomcat-controllers/Users.html#methodsignup">Users::signup()</a></h3>
-<ul>
-    <li>Move those load method calls to one place</li>
 </ul>
 <h3><a href="Nomcat/Models/User.html#methodsignUp">User::signUp()</a></h3>
 <ul>
     <li>Make return reflect actual save and transactional</li>
     <li>Move create and modified to parent</li>
 </ul>
-<h3><a href="Nomcat/Helpers/Selenium.html#methodsignUp">Selenium::signUp()</a></h3>
+<h3><a href="Nomcat/nomcat-controllers/Admin.html#methodstats">Admin::stats()</a></h3>
 <ul>
-    <li>This will expanded into its own test with validation</li>
+    <li>make private method and require authentication</li>
 </ul>
-<h3><a href="Nomcat/nomcat-controllers/Users.html#methodunfollow">Users::unfollow()</a></h3>
+<h3><a href="Nomcat/nomcat-controllers/Groups.html#methodsubscribe">Groups::subscribe()</a></h3>
 <ul>
-    <li>check if user is not yourself</li>
+    <li>Make $group_id into $groupname</li>
+    <li>Restore message to followers notifying that user has joined group</li>
 </ul>
-<h3><a href="Nomcat/Libraries/App_Model.html#methodvalidates_uniqueness_of">App_Model::validates_uniqueness_of()</a></h3>
+<h3><a href="Nomcat/nomcat-controllers/Users.html#methodthreading">Users::threading()</a></h3>
 <ul>
-    <li>add code for mysql</li>
-    <li>add code for updates, currently only works for creates.</li>
+    <li>Make $setting boolean</li>
+</ul>
+<h3><a href="Nomcat/nomcat-controllers/Groups.html#methodunsubscribe">Groups::unsubscribe()</a></h3>
+<ul>
+    <li>Make $group_id into $groupname</li>
 </ul>
 <h3><a href="Nomcat/nomcat-controllers/Groups.html#methodview">Groups::view()</a></h3>
 <ul>
     <li>Change that bad hand-off of user data</li>
-    <li>Check if group exists</li>
-    <li>Merge with inbox</li>
-</ul>
-<h3><a href="Nomcat/Libraries/Cookie.html#method__construct">Cookie::__construct()</a></h3>
-<ul>
-    <li>Check performance on this. See if there is a better way.</li>
 </ul>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Mon, 29 Jun 2009 11:49:39 -0400 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.0</a>
+		    Documentation generated on Sat, 12 Dec 2009 16:51:53 -0500 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.0</a>
 	      </div>
       </td></tr></table>
     </td>

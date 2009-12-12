@@ -1,0 +1,2062 @@
+<html>
+<head>
+<title>Docs For Class FirePHP</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">FirePHP</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+        
+                                                        
+                                                                      		  [ <a href="../classtrees_FirePHP.html" class="menu">class tree: FirePHP</a> ]
+		  [ <a href="../elementindex_FirePHP.html" class="menu">index: FirePHP</a> ]
+		  	    [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_Nomcat.html">Nomcat</a><br />
+              <a href="../li_FirePHP.html">FirePHP</a><br />
+              <a href="../li_Incendiary.html">Incendiary</a><br />
+              <a href="../li_Net_TokyoTyrant.html">Net_TokyoTyrant</a><br />
+            <br /><br />
+                        <b>Files:</b><br />
+      	  <div class="package">
+			<a href="../FirePHP/_libraries---FirePHP.php.html">		FirePHP.php
+		</a><br>
+	  </div><br />
+      
+      
+            <b>Classes:</b><br />
+        <div class="package">
+		    		<a href="../FirePHP/FirePHP.html">FirePHP</a><br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1>Class: FirePHP</h1>
+Source Location: /libraries/FirePHP.php<br /><br />
+
+
+<table width="100%" border="0">
+<tr><td valign="top">
+
+<h3><a href="#class_details">Class Overview</a></h3>
+<pre></pre><br />
+<div class="description">Sends the given data to the FirePHP Firefox Extension.</div><br /><br />
+<h4>Author(s):</h4>
+<ul>
+          <li>Christoph Dorn &lt;<a href="mailto:christoph@christophdorn.com">christoph@christophdorn.com</a>&gt;</li>
+              <li>Nater Kane &lt;<a href="mailto:nater@wearenom.com">nater@wearenom.com</a>&gt;</li>
+                  </ul>
+
+
+
+
+              
+      
+
+<h4>Copyright:</h4>
+<ul>
+  <li>Copyright (C) 2007-2009 Christoph Dorn</li>
+</ul>
+        
+</td>
+
+<td valign="top">
+<h3><a href="#class_vars">Variables</a></h3>
+<ul>
+    <li><a href="../FirePHP/FirePHP.html#var$convertAssertionErrorsToExceptions">$convertAssertionErrorsToExceptions</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$enabled">$enabled</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$inExceptionHandler">$inExceptionHandler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$instance">$instance</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$messageIndex">$messageIndex</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$objectFilters">$objectFilters</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$objectStack">$objectStack</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$options">$options</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$throwAssertionExceptions">$throwAssertionExceptions</a></li>
+    <li><a href="../FirePHP/FirePHP.html#var$throwErrorExceptions">$throwErrorExceptions</a></li>
+  </ul>
+</td>
+
+<td valign="top">
+<h3><a href="#class_consts">Constants</a></h3>
+<ul>
+    <li><a href="../FirePHP/FirePHP.html#constDUMP">DUMP</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constERROR">ERROR</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constEXCEPTION">EXCEPTION</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constGROUP_END">GROUP_END</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constGROUP_START">GROUP_START</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constINFO">INFO</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constLOG">LOG</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constTABLE">TABLE</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constTRACE">TRACE</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constVERSION">VERSION</a></li>
+    <li><a href="../FirePHP/FirePHP.html#constWARN">WARN</a></li>
+  </ul>
+</td>
+
+<td valign="top">
+<h3><a href="#class_methods">Methods</a></h3>
+<ul>
+    <li><a href="../FirePHP/FirePHP.html#methodassertionHandler">assertionHandler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methoddetectClientExtension">detectClientExtension</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methoddump">dump</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodencodeObject">encodeObject</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodencodeTable">encodeTable</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methoderror">error</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methoderrorHandler">errorHandler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#method__construct">__construct</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodexceptionHandler">exceptionHandler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodfb">fb</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodgetEnabled">getEnabled</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodgetInstance">getInstance</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodgetOptions">getOptions</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodgetUserAgent">getUserAgent</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodgroup">group</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodgroupEnd">groupEnd</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodinfo">info</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodinit">init</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodis_utf8">is_utf8</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodjsonEncode">jsonEncode</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodjsonEncode_handler">jsonEncode_handler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodlog">log</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodnewException">newException</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodregisterAssertionHandler">registerAssertionHandler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodregisterErrorHandler">registerErrorHandler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodregisterExceptionHandler">registerExceptionHandler</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodsetEnabled">setEnabled</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodsetHeader">setHeader</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodsetObjectFilter">setObjectFilter</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodsetOptions">setOptions</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodsetProcessorUrl">setProcessorUrl</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodsetRendererUrl">setRendererUrl</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodtable">table</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodtrace">trace</a></li>
+    <li><a href="../FirePHP/FirePHP.html#methodwarn">warn</a></li>
+    <li><a href="../FirePHP/FirePHP.html#method_escapeTrace">_escapeTrace</a></li>
+    <li><a href="../FirePHP/FirePHP.html#method_escapeTraceFile">_escapeTraceFile</a></li>
+    <li><a href="../FirePHP/FirePHP.html#method_standardizePath">_standardizePath</a></li>
+    <li><a href="../FirePHP/FirePHP.html#method__sleep">__sleep</a></li>
+  </ul>
+</td>
+
+</tr></table>
+<hr />
+
+<table width="100%" border="0"><tr>
+
+
+
+
+
+
+</tr></table>
+<hr />
+
+<a name="class_details"></a>
+<h3>Class Details</h3>
+<div class="tags">
+[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a59">59</a>]<br />
+Sends the given data to the FirePHP Firefox Extension.<br /><br /><p>Sends the given data to the FirePHP Firefox Extension. The data can be displayed in the Firebug Console or in the &quot;Server&quot; request tab.
+ For more information see: http://www.firephp.org/</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>author:</b>&nbsp;&nbsp;</td><td>Christoph Dorn &lt;<a href="mailto:christoph@christophdorn.com">christoph@christophdorn.com</a>&gt;</td>
+  </tr>
+  <tr>
+    <td><b>author:</b>&nbsp;&nbsp;</td><td>Nater Kane &lt;<a href="mailto:nater@wearenom.com">nater@wearenom.com</a>&gt;</td>
+  </tr>
+  <tr>
+    <td><b>copyright:</b>&nbsp;&nbsp;</td><td>Copyright (C) 2007-2009 Christoph Dorn</td>
+  </tr>
+  <tr>
+    <td><b>license:</b>&nbsp;&nbsp;</td><td><a href="http://www.opensource.org/licenses/bsd-license.php">http://www.opensource.org/licenses/bsd-license.php</a></td>
+  </tr>
+</table>
+</div>
+</div><br /><br />
+<div class="top">[ <a href="#top">Top</a> ]</div><br />
+
+<hr />
+<a name="class_vars"></a>
+<h3>Class Variables</h3>
+<div class="tags">
+	<a name="var$instance"></a>
+	<p></p>
+	<h4>static $instance = <span class="value">&nbsp;null</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a153">153</a>]</p>
+  Singleton instance of FirePHP<br /><br /><p>Singleton instance of FirePHP</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td><a href="../FirePHP/FirePHP.html">FirePHP</a></td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$convertAssertionErrorsToExceptions"></a>
+	<p></p>
+	<h4>$convertAssertionErrorsToExceptions = <span class="value">&nbsp;true</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a174">174</a>]</p>
+  Flag whether to convert PHP assertion errors to Exceptions<br /><br /><p>Flag whether to convert PHP assertion errors to Exceptions</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>boolean</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$enabled"></a>
+	<p></p>
+	<h4>$enabled = <span class="value">&nbsp;true</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a219">219</a>]</p>
+  Flag to enable/disable logging<br /><br /><p>Flag to enable/disable logging</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>boolean</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$inExceptionHandler"></a>
+	<p></p>
+	<h4>$inExceptionHandler = <span class="value">&nbsp;false</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a160">160</a>]</p>
+  Flag whether we are logging from within the exception handler<br /><br /><p>Flag whether we are logging from within the exception handler</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>boolean</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$messageIndex"></a>
+	<p></p>
+	<h4>$messageIndex = <span class="value">&nbsp;1</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a188">188</a>]</p>
+  Wildfire protocol message index<br /><br /><p>Wildfire protocol message index</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>int</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$objectFilters"></a>
+	<p></p>
+	<h4>$objectFilters = <span class="value">array()</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a205">205</a>]</p>
+  Filters used to exclude object members when encoding<br /><br /><p>Filters used to exclude object members when encoding</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>array</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$objectStack"></a>
+	<p></p>
+	<h4>$objectStack = <span class="value">array()</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a212">212</a>]</p>
+  A stack of objects used to detect recursion during object encoding<br /><br /><p>A stack of objects used to detect recursion during object encoding</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>object</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$options"></a>
+	<p></p>
+	<h4>$options = <span class="value">array('maxObjectDepth'&nbsp;=&gt;&nbsp;10,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'maxArrayDepth'&nbsp;=&gt;&nbsp;20,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'useNativeJsonEncode'&nbsp;=&gt;&nbsp;true,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'includeLineNumbers'&nbsp;=&gt;&nbsp;true)</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a195">195</a>]</p>
+  Options for the library<br /><br /><p>Options for the library</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>array</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$throwAssertionExceptions"></a>
+	<p></p>
+	<h4>$throwAssertionExceptions = <span class="value">&nbsp;false</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a181">181</a>]</p>
+  Flag whether to throw PHP assertion errors that have been converted to Exceptions<br /><br /><p>Flag whether to throw PHP assertion errors that have been converted to Exceptions</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>boolean</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$throwErrorExceptions"></a>
+	<p></p>
+	<h4>$throwErrorExceptions = <span class="value">&nbsp;true</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a167">167</a>]</p>
+  Flag whether to throw PHP errors that have been converted to ErrorExceptions<br /><br /><p>Flag whether to throw PHP errors that have been converted to ErrorExceptions</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>boolean</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+</div><br />
+
+<hr />
+<a name="class_methods"></a>
+<h3>Class Methods</h3>
+<div class="tags">
+  <hr />
+	<a name="methodgetInstance"></a>
+	<h3>static method getInstance <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a242">242</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>static <a href="../FirePHP/FirePHP.html">FirePHP</a> getInstance(
+[boolean
+$AutoCreate = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Gets singleton instance of FirePHP<br /><br /><p>Gets singleton instance of FirePHP</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">boolean&nbsp;&nbsp;</td>
+        <td><b>$AutoCreate</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodinit"></a>
+	<h3>static method init <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a254">254</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>static <a href="../FirePHP/FirePHP.html">FirePHP</a> init(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Creates FirePHP object and stores it for singleton access<br /><br /><p>Creates FirePHP object and stores it for singleton access</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodis_utf8"></a>
+	<h3>static method is_utf8 <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a1166">1166</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>static boolean is_utf8(
+mixed
+$str)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Returns true if $string is valid UTF-8 and false otherwise.<br /><br /><p>Returns true if $string is valid UTF-8 and false otherwise.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>$str</b>&nbsp;&nbsp;</td>
+        <td>String to be tested</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+
+  <hr />
+	<a name="methodassertionHandler"></a>
+	<h3>method assertionHandler <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a422">422</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void assertionHandler(
+string
+$file, int
+$line, mixed
+$code)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		FirePHP's assertion handler
+ Logs all assertions to your firebug console and then stops the script.<br /><br /><p>FirePHP's assertion handler
+ Logs all assertions to your firebug console and then stops the script.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$file</b>&nbsp;&nbsp;</td>
+        <td>File source of assertion</td>
+      </tr>
+          <tr>
+        <td class="type">int&nbsp;&nbsp;</td>
+        <td><b>$line</b>&nbsp;&nbsp;</td>
+        <td>Line source of assertion</td>
+      </tr>
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>$code</b>&nbsp;&nbsp;</td>
+        <td>Assertion code</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methoddetectClientExtension"></a>
+	<h3>method detectClientExtension <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a597">597</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>boolean detectClientExtension(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Check if FirePHP is installed on client<br /><br /><p>Check if FirePHP is installed on client</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methoddump"></a>
+	<h3>method dump <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a563">563</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true dump(
+string
+$Key, mixed
+$Variable)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Dumps key and variable to firebug server panel<br /><br /><p>Dumps key and variable to firebug server panel</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="../FirePHP/FirePHP.html#constDUMP">FirePHP::DUMP</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Key</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>$Variable</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodencodeObject"></a>
+	<h3>method encodeObject <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a1027">1027</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>array encodeObject(
+Object
+$Object, [
+$ObjectDepth = 1], [
+$ArrayDepth = 1], int
+$Depth)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Encodes an object including members with<br /><br /><p>Encodes an object including members with protected and private visibility</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>All members of the object</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">Object&nbsp;&nbsp;</td>
+        <td><b>$Object</b>&nbsp;&nbsp;</td>
+        <td>The object to be encoded</td>
+      </tr>
+          <tr>
+        <td class="type">int&nbsp;&nbsp;</td>
+        <td><b>$Depth</b>&nbsp;&nbsp;</td>
+        <td>The current traversal depth</td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$ObjectDepth</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$ArrayDepth</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodencodeTable"></a>
+	<h3>method encodeTable <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a998">998</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>array encodeTable(
+array
+$Table)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Encodes a table by encoding each row and column with encodeObject()<br /><br /><p>Encodes a table by encoding each row and column with encodeObject()</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$Table</b>&nbsp;&nbsp;</td>
+        <td>The table to be encoded</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methoderror"></a>
+	<h3>method error <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a550">550</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true error(
+mixes
+$Object, [string
+$Label = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Log object with label to firebug console<br /><br /><p>Log object with label to firebug console</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="../FirePHP/FirePHP.html#constERROR">FirePHP::ERROR</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixes&nbsp;&nbsp;</td>
+        <td><b>$Object</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Label</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methoderrorHandler"></a>
+	<h3>method errorHandler <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a345">345</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void errorHandler(
+int
+$errno, string
+$errstr, string
+$errfile, int
+$errline, array
+$errcontext)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		FirePHP's error handler
+ Throws exception for each php error that will occur.<br /><br /><p>FirePHP's error handler
+ Throws exception for each php error that will occur.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">int&nbsp;&nbsp;</td>
+        <td><b>$errno</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$errstr</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$errfile</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">int&nbsp;&nbsp;</td>
+        <td><b>$errline</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$errcontext</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method__construct"></a>
+	<h3>constructor __construct <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a224">224</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>FirePHP __construct(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		The object constructor<br /><br /><p>The object constructor</p><br /><br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodexceptionHandler"></a>
+	<h3>method exceptionHandler <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a383">383</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void exceptionHandler(
+Exception
+$Exception)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		FirePHP's exception handler
+ Logs all exceptions to your firebug console and then stops the script.<br /><br /><p>FirePHP's exception handler
+ Logs all exceptions to your firebug console and then stops the script.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">Exception&nbsp;&nbsp;</td>
+        <td><b>$Exception</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodfb"></a>
+	<h3>method fb <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a614">614</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true fb(
+mixed
+$Object)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Log varible to Firebug<br /><br /><p>Log varible to Firebug</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Return TRUE if message was added to headers, FALSE otherwise</td>
+  </tr>
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="http://www.firephp.org/Wiki/Reference/Fb">http://www.firephp.org/Wiki/Reference/Fb</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>$Object</b>&nbsp;&nbsp;</td>
+        <td>The variable to be logged</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetEnabled"></a>
+	<h3>method getEnabled <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a273">273</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>boolean getEnabled(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Check if logging is enabled<br /><br /><p>Check if logging is enabled</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>TRUE if enabled</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetOptions"></a>
+	<h3>method getOptions <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a311">311</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>array getOptions(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Get options from the library<br /><br /><p>Get options from the library</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>The currently set options</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetUserAgent"></a>
+	<h3>method getUserAgent <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a939">939</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string|false getUserAgent(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Get user agent<br /><br /><p>Get user agent</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgroup"></a>
+	<h3>method group <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a474">474</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true group(
+string
+$Name, [array
+$Options = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Start a group for following messages.<br /><br /><p>Start a group for following messages.
+ Options:   Collapsed: [true|false]   Color:     [#RRGGBB|ColorName]</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Name</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$Options</b>&nbsp;&nbsp;</td>
+        <td>OPTIONAL Instructions on how to log the group</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgroupEnd"></a>
+	<h3>method groupEnd <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a498">498</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true groupEnd(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Ends a group you have started before<br /><br /><p>Ends a group you have started before</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodinfo"></a>
+	<h3>method info <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a524">524</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true info(
+mixes
+$Object, [string
+$Label = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Log object with label to firebug console<br /><br /><p>Log object with label to firebug console</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="../FirePHP/FirePHP.html#constINFO">FirePHP::INFO</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixes&nbsp;&nbsp;</td>
+        <td><b>$Object</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Label</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodjsonEncode"></a>
+	<h3>method jsonEncode <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a962">962</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string jsonEncode(
+object
+$Object, [
+$skipObjectEncode = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Encode an object into a JSON string<br /><br /><p>Encode an object into a JSON string
+ Uses PHP's json_encode() if available</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>The JSON string</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">object&nbsp;&nbsp;</td>
+        <td><b>$Object</b>&nbsp;&nbsp;</td>
+        <td>The object to be encoded</td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$skipObjectEncode</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodjsonEncode_handler"></a>
+	<h3>method jsonEncode_handler <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a987">987</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void jsonEncode_handler(
+object
+$errno, object
+$errstr)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Dummy error handler<br /><br /><p>Dummy error handler
+ Set to to obsorb any errors (including recursion warnings) thrown by jsonEncode</p><br /><br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">object&nbsp;&nbsp;</td>
+        <td><b>$errno</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">object&nbsp;&nbsp;</td>
+        <td><b>$errstr</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodlog"></a>
+	<h3>method log <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a511">511</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true log(
+mixes
+$Object, [string
+$Label = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Log object with label to firebug console<br /><br /><p>Log object with label to firebug console</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="../FirePHP/FirePHP.html#constLOG">FirePHP::LOG</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixes&nbsp;&nbsp;</td>
+        <td><b>$Object</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Label</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodnewException"></a>
+	<h3>method newException <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a950">950</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>Exception newException(
+string
+$Message)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Returns a new exception<br /><br /><p>Returns a new exception</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Message</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodregisterAssertionHandler"></a>
+	<h3>method registerAssertionHandler <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a401">401</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>mixed registerAssertionHandler(
+[boolean
+$convertAssertionErrorsToExceptions = true], [boolean
+$throwAssertionExceptions = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Register FirePHP driver as your assert callback<br /><br /><p>Register FirePHP driver as your assert callback</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Returns the original setting or FALSE on errors</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">boolean&nbsp;&nbsp;</td>
+        <td><b>$convertAssertionErrorsToExceptions</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">boolean&nbsp;&nbsp;</td>
+        <td><b>$throwAssertionExceptions</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodregisterErrorHandler"></a>
+	<h3>method registerErrorHandler <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a322">322</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>mixed registerErrorHandler(
+[
+$throwErrorExceptions = true])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Register FirePHP as your error handler
+ Will throw exceptions for each php error.<br /><br /><p>Register FirePHP as your error handler
+ Will throw exceptions for each php error.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Returns a string containing the previously defined error handler (if any)</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$throwErrorExceptions</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodregisterExceptionHandler"></a>
+	<h3>method registerExceptionHandler <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a370">370</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>mixed registerExceptionHandler(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Register FirePHP as your exception handler<br /><br /><p>Register FirePHP as your exception handler</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Returns the name of the previously defined exception handler,               or NULL on error.               If no previous handler was defined, NULL is also returned.</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetEnabled"></a>
+	<h3>method setEnabled <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a264">264</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void setEnabled(
+boolean
+$Enabled)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Enable and disable logging to Firebug<br /><br /><p>Enable and disable logging to Firebug</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">boolean&nbsp;&nbsp;</td>
+        <td><b>$Enabled</b>&nbsp;&nbsp;</td>
+        <td>TRUE to enable, FALSE to disable</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetHeader"></a>
+	<h3>method setHeader <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a930">930</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void setHeader(
+string
+$Name, string_type
+$Value)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Send header<br /><br /><p>Send header</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Name</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string_type&nbsp;&nbsp;</td>
+        <td><b>$Value</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetObjectFilter"></a>
+	<h3>method setObjectFilter <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a286">286</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void setObjectFilter(
+string
+$Class, array
+$Filter)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Specify a filter to be used when encoding an object
+ Filters are used to exclude object members.<br /><br /><p>Specify a filter to be used when encoding an object
+ Filters are used to exclude object members.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Class</b>&nbsp;&nbsp;</td>
+        <td>The class name of the object</td>
+      </tr>
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$Filter</b>&nbsp;&nbsp;</td>
+        <td>An array of members to exclude</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetOptions"></a>
+	<h3>method setOptions <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a302">302</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void setOptions(
+array
+$Options)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Set some options for the library<br /><br /><p>Set some options for the library
+ Options:<ul><li>maxObjectDepth: The maximum depth to traverse objects (default: 10)</li><li>maxArrayDepth: The maximum depth to traverse arrays (default: 20)</li><li>useNativeJsonEncode: If true will use json_encode() (default: true)</li><li>includeLineNumbers: If true will include line numbers and filenames (default: true)</li></ul></p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$Options</b>&nbsp;&nbsp;</td>
+        <td>The options to be set</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetProcessorUrl"></a>
+	<h3>method setProcessorUrl <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a447">447</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void setProcessorUrl(
+string
+$URL)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Set custom processor url for FirePHP<br /><br /><p>Set custom processor url for FirePHP</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$URL</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetRendererUrl"></a>
+	<h3>method setRendererUrl <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a457">457</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void setRendererUrl(
+string
+$URL)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Set custom renderer url for FirePHP<br /><br /><p>Set custom renderer url for FirePHP</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$URL</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtable"></a>
+	<h3>method table <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a588">588</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true table(
+string
+$Label, string
+$Table)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Log a table in the firebug console<br /><br /><p>Log a table in the firebug console</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="../FirePHP/FirePHP.html#constTABLE">FirePHP::TABLE</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Label</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Table</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtrace"></a>
+	<h3>method trace <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a575">575</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true trace(
+string
+$Label)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Log a trace in the firebug console<br /><br /><p>Log a trace in the firebug console</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="../FirePHP/FirePHP.html#constTRACE">FirePHP::TRACE</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Label</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodwarn"></a>
+	<h3>method warn <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a537">537</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>true warn(
+mixes
+$Object, [string
+$Label = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Log object with label to firebug console<br /><br /><p>Log object with label to firebug console</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>see:</b>&nbsp;&nbsp;</td><td><a href="../FirePHP/FirePHP.html#constWARN">FirePHP::WARN</a></td>
+  </tr>
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>Exception</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixes&nbsp;&nbsp;</td>
+        <td><b>$Object</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Label</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_escapeTrace"></a>
+	<h3>method _escapeTrace <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a893">893</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>array _escapeTrace(
+array
+$Trace)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Escape trace path for windows systems<br /><br /><p>Escape trace path for windows systems</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$Trace</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_escapeTraceFile"></a>
+	<h3>method _escapeTraceFile <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a912">912</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string _escapeTraceFile(
+string
+$File)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Escape file information of trace for windows systems<br /><br /><p>Escape file information of trace for windows systems</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$File</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_standardizePath"></a>
+	<h3>method _standardizePath <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a883">883</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string _standardizePath(
+string
+$Path)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Standardizes path for windows systems.<br /><br /><p>Standardizes path for windows systems.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Path</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method__sleep"></a>
+	<h3>method __sleep <span class="smalllinenumber">[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a232">232</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>array __sleep(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		When the object gets serialized only include specific object members.<br /><br /><p>When the object gets serialized only include specific object members.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+</div><br />
+
+<hr />
+<a name="class_constss"></a>
+<h3>Class Constants</h3>
+<div class="tags">
+	<a name="constDUMP"></a>
+	<p></p>
+	<h4>DUMP = <span class="value">&nbsp;'DUMP'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a109">109</a>]</p>
+  Dumps a variable to firebug's server panel<br /><br /><p>Dumps a variable to firebug's server panel</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constERROR"></a>
+	<p></p>
+	<h4>ERROR = <span class="value">&nbsp;'ERROR'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a102">102</a>]</p>
+  Firebug ERROR level
+ Logs a message to firebug console, displays an error icon before the message and colors the line yellow.<br /><br /><p>Firebug ERROR level
+ Logs a message to firebug console, displays an error icon before the message and colors the line yellow. Also increments the firebug error count.</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constEXCEPTION"></a>
+	<p></p>
+	<h4>EXCEPTION = <span class="value">&nbsp;'EXCEPTION'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a125">125</a>]</p>
+  Displays an exception in firebug console
+ Increments the firebug error count.<br /><br /><p>Displays an exception in firebug console
+ Increments the firebug error count.</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constGROUP_END"></a>
+	<p></p>
+	<h4>GROUP_END = <span class="value">&nbsp;'GROUP_END'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a146">146</a>]</p>
+  Ends a group in firebug console<br /><br /><p>Ends a group in firebug console</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constGROUP_START"></a>
+	<p></p>
+	<h4>GROUP_START = <span class="value">&nbsp;'GROUP_START'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a139">139</a>]</p>
+  Starts a group in firebug console<br /><br /><p>Starts a group in firebug console</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constINFO"></a>
+	<p></p>
+	<h4>INFO = <span class="value">&nbsp;'INFO'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a84">84</a>]</p>
+  Firebug INFO level
+ Logs a message to firebug console and displays an info icon before the message.<br /><br /><p>Firebug INFO level
+ Logs a message to firebug console and displays an info icon before the message.</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constLOG"></a>
+	<p></p>
+	<h4>LOG = <span class="value">&nbsp;'LOG'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a75">75</a>]</p>
+  Firebug LOG level
+ Logs a message to firebug console.<br /><br /><p>Firebug LOG level
+ Logs a message to firebug console.</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constTABLE"></a>
+	<p></p>
+	<h4>TABLE = <span class="value">&nbsp;'TABLE'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a132">132</a>]</p>
+  Displays an table in firebug console<br /><br /><p>Displays an table in firebug console</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constTRACE"></a>
+	<p></p>
+	<h4>TRACE = <span class="value">&nbsp;'TRACE'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a116">116</a>]</p>
+  Displays a stack trace in firebug console<br /><br /><p>Displays a stack trace in firebug console</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constVERSION"></a>
+	<p></p>
+	<h4>VERSION = <span class="value">&nbsp;'0.3'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a66">66</a>]</p>
+  FirePHP version<br /><br /><p>FirePHP version</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="constWARN"></a>
+	<p></p>
+	<h4>WARN = <span class="value">&nbsp;'WARN'</span></h4>
+	<p>[line <a href="../__filesource/fsource_FirePHP__librariesFirePHP.php.html#a93">93</a>]</p>
+  Firebug WARN level
+ Logs a message to firebug console, displays an warning icon before the message and colors the line turquoise.<br /><br /><p>Firebug WARN level
+ Logs a message to firebug console, displays an warning icon before the message and colors the line turquoise.</p><br />
+  <br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+</div><br />
+
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Sat, 12 Dec 2009 16:51:06 -0500 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.0</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
