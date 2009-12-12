@@ -411,7 +411,7 @@ class Users extends App_Controller
 	 *
 	 * @param string $username
 	 * @access public
-	 * @return
+	 * @return void
 	 */
 	public function rss($username = null)
 	{
@@ -438,7 +438,8 @@ class Users extends App_Controller
 	/**
 	 * Update a user profile
 	 *
-	 * @access public
+	 * @access	public
+	 * @return	void
 	 */
 	public function settings()
 	{

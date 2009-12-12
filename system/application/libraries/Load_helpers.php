@@ -34,7 +34,6 @@ class Load_helpers {
 	 *
 	 * @param array $helpers array of helpers to load
 	 * @access public
-	 * @return	
 	 */
 	public function load($helpers = array())
 	{

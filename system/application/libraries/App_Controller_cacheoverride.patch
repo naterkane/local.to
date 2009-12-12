@@ -1,0 +1,38 @@
+### Eclipse Workspace Patch 1.0
+#P Nomcat
+Index: system/application/libraries/App_Controller.php
+===================================================================
+--- system/application/libraries/App_Controller.php	(revision 401)
++++ system/application/libraries/App_Controller.php	(working copy)
+@@ -171,8 +171,14 @@
+ 			{
+ 				$file = $this->uploader->getLastUploadInfo();
+ 				$this->avatar->makeAll($file['dir'], $this->uploader->getName(), $name, $sizes);
++			} else {
++				
+ 			}
+-			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results());
++			/**
++			 * override cache-control if an image was uploaded, see if this negates file level cache.
++			 */
++			$headers = array();//array("Cache-Control: no-cache, must-revalidate","Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
++			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results(),null,$headers);
+ 		}
+ 		$this->load->view($type.'s/avatar', $this->data);
+ 	}
+@@ -383,9 +389,14 @@
+      * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
+ 	 * @return
+      */
+-    public function redirect($url, $message=null, $type = null) 
++    public function redirect($url, $message=null, $type = null, $headers = array()) 
+ 	{
+ 		$this->cookie->setFlash($message, $type);
++		if (!empty($headers)){
++			foreach ($headers as $h){
++				header($h);
++			}
++		}
+         header("Location: http://".$_SERVER['HTTP_HOST'].$url, TRUE, 302);
+         exit ;
+     }

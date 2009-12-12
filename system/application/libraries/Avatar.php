@@ -74,7 +74,6 @@ class Avatar{
 	/**
 	 * Add an error to the results
 	 * @param string $msg	
-	 * @return
 	 * @access public	
 	 */
 	public function addError($msg){
@@ -89,7 +88,7 @@ class Avatar{
 	 *
 	 * @param string $filename
 	 * @param string $model	
-	 * @return bool
+	 * @return boolean
 	 * @access public
 	 **/
 	public function make($dir, $sourceFileName, $newFileName, $width, $height){
@@ -134,7 +133,7 @@ class Avatar{
 	 * @param string $sourceFileName Name of the source file uploaded
 	 * @param string $username Name of user to be saved
 	 * @param array $sizes Array of sizes in pixels
-	 * @return bool
+	 * @return boolean
 	 **/
 	public function makeAll($dir, $sourceFileName, $username, $sizes){
 		//var_dump($sizes);// exit;
@@ -151,7 +150,7 @@ class Avatar{
 	/**
 	 * Does a file have any size?
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function hasSize() {
 		if(!file_exists($this->file)){
@@ -165,7 +164,7 @@ class Avatar{
 	/**
 	 * Are there any errors?
 	 * @access public
-	 * @return bool	
+	 * @return boolean
 	 */
 	public function isError() {
 		if(count($this->errors) > 0){
@@ -178,7 +177,7 @@ class Avatar{
 	/**
 	 * Is the file system writable?
 	 * @access public
-	 * @return bool
+	 * @return boolean 
 	 */
 	public function isWritable() {
 		if(!is_writable($this->dir)){
@@ -192,7 +191,6 @@ class Avatar{
 	/**
 	 * Remove a thumbnail
 	 * @access public
-	 * @return	
 	 */
 	public function remove($path) {
 		if(file_exists($path)){
@@ -202,8 +200,8 @@ class Avatar{
 
 	/**
 	 * Initialize
+	 * 
 	 * @access public
-	 * @return 	
 	 */
 	public function startup( &$controller ) {
       $this->controller = &$controller;
@@ -212,7 +210,7 @@ class Avatar{
 	/**
 	 * Is our file is one of the valid mime type?
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function validMimeType() {
 		$type = filetype($this->file);
@@ -225,4 +223,3 @@ class Avatar{
 	}
 	
 }
-?>

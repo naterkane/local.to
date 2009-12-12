@@ -108,7 +108,7 @@ class Group_Invite extends App_Model
 	 * @param array $data Passed by reference
 	 * @param string $email
 	 * @param array $group Passed by reference 
-	 * @return boolean|Group
+	 * @return boolean
 	 */
 	public function add(&$data = array(), $email, &$group)
 	{
@@ -220,7 +220,6 @@ class Group_Invite extends App_Model
 	 * Make a response after adding many invites
 	 *
 	 * @access public
-	 * @return	
 	 */
 	public function makeResponse()
 	{
@@ -255,4 +254,3 @@ class Group_Invite extends App_Model
 	}
 	
 }
-?>

@@ -281,8 +281,8 @@ class App_Controller extends Controller {
      * Checks to see if a user is signed in
      *
      * If not, sends to login
+     * 
 	 * @access public
-	 * @return	
      */
     public function mustBeSignedIn() 
 	{
@@ -300,6 +300,7 @@ class App_Controller extends Controller {
      * Checks to see if a user is not signed in
      *
      * If so, sends to home
+     * 
 	 * @access public
      */
     public function mustNotBeSignedIn() 

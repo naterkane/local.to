@@ -251,7 +251,8 @@ class Message extends App_Model
 	 *
 	 * @access public
 	 * @param integer $message_id
-	 * @return 
+	 * @return boolean the result of Message::save
+	 * @see Message::save
 	 */
     public function addToPublicTimeline($message)
 	{
@@ -308,7 +309,6 @@ class Message extends App_Model
 	 *
 	 * @access public
 	 * @param Array $message Passed by reference
-	 * @return 
 	 */
 	public function checkIsDeleted(&$message = array())
 	{
@@ -351,14 +351,14 @@ class Message extends App_Model
 	 *
 	 * @access public
 	 * @param int $message_id
-	 * @return 
+	 * @return boolean|void
 	 */
 	public function findParent($message_id = null)
 	{
 		$message = $this->getOne($message_id);
 		if (!$message) 
 		{
-			return;
+			return false;
 		}		
 		if (($message['reply_to']) && ($message['reply_to'] != $message['id']))
 		{
@@ -367,7 +367,7 @@ class Message extends App_Model
 		else 
 		{
 			$this->parent = $message;
-			return;			
+			return false;
 		}
 	}
 
@@ -378,7 +378,7 @@ class Message extends App_Model
      * @param array $messages
      * @param integer index of where to start
      * @param array $options
-     * @return array of messages
+     * @return array messages
      */
     public function getMany ($messages = array(), $start = 0, $end = 20000)
     {
@@ -417,7 +417,7 @@ class Message extends App_Model
 	 *
 	 * @access public
      * @param integer $message_id
-     * @return array Message
+     * @return array message
      */
     public function getOne($message_id)
 	{
@@ -441,7 +441,7 @@ class Message extends App_Model
      *
      * @access public
      * @param integer $messages
-     * @return array Messages
+     * @return array messages
      */
     public function getReplies($message_ids, $start = null)
     {
@@ -452,7 +452,7 @@ class Message extends App_Model
 	 * Get the parent message
 	 *
 	 * @access public
-	 * @return 
+	 * @return array
 	 */
 	public function getParent()
 	{
@@ -503,11 +503,11 @@ class Message extends App_Model
 	 *
 	 * @access public
 	 * @param array $message
-	 * @return 
+	 * @return boolean
 	 */
 	public function isDeleted($message = array())
 	{
-		return ($message['deleted_by_user'] || $message['deleted_by_admin']);
+		return (!empty($message['deleted_by_user']) || !empty($message['deleted_by_admin']));
 	}
 	
 
@@ -740,7 +740,6 @@ class Message extends App_Model
 	 * @param array $data
 	 * @param string $separator @ or !	
 	 * @param string $property userMention, groupMention, etc.
-	 * @return 
 	 */
 	private function parseMentions($data, $separator, $property)
 	{ 
@@ -836,7 +835,7 @@ class Message extends App_Model
 	 *
 	 * @access public
 	 * @param array $message
-	 * @return 
+	 * @return boolean
 	 */
 	public function wellFormed($message = array())
 	{
@@ -859,6 +858,4 @@ class Message extends App_Model
 		return true;
 	}
 	
-
 }
-?>

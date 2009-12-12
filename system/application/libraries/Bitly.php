@@ -21,12 +21,21 @@
  * 3. The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
  *
  * This software is provided by the author "as is" and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall the author be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
- *
+ * 
+ * @package		Nomcat
  * @author			Tijs Verkoyen <php-bitly@verkoyen.eu>
  * @version			1.0.1
  *
  * @copyright		Copyright (c) 2008, Tijs Verkoyen. All rights reserved.
  * @license			BSD License
+ */
+/**
+ * Bitly
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Classes
+ * @link		http://getnomcat.com/user_guide/
  */
 class Bitly
 {
@@ -303,7 +312,7 @@ class Bitly
 	/**
 	 * Get a list of bit.ly API error codes.
 	 *
-	 * @return	array
+	 * @return	array|boolean
 	 */
 	public function errors()
 	{
@@ -321,7 +330,7 @@ class Bitly
 	/**
 	 * Given a bit.ly url or hash return long source url
 	 *
-	 * @return	string
+	 * @return	string|boolean
 	 * @param	string $shortUrlOrHash	A bit.ly-url (eg: http://bit.ly/1RmnUT) or hash (eg: 1RmnUT)
 	 */
 	public function expand($shortUrlOrHash)
@@ -346,7 +355,7 @@ class Bitly
 	/**
 	 * Given a bit.ly url or hash, return information about that page, such as the long source url, ...
 	 *
-	 * @return	array
+	 * @return	array|boolean
 	 * @param	string $shortUrlOrHash	A bit.ly-url (eg: http://bit.ly/1RmnUT) or hash (eg: 1RmnUT)
 	 */
 	public function info($shortUrlOrHash)
@@ -371,7 +380,7 @@ class Bitly
 	/**
 	 * Given a long url, returns a shorter one.
 	 *
-	 * @return	string
+	 * @return	string|boolean
 	 * @param	string $url	    A long URL to shorten, eg: http://betaworks.com
 	 * @param	bool[optional] $publishToHistory	Should this url be published into your history? Default is true
 	 */
@@ -395,7 +404,7 @@ class Bitly
 	/**
 	 * Given a bit.ly url or hash, return traffic and referrer data.
 	 *
-	 * @return	array
+	 * @return	array|boolena
 	 * @param	string $shortUrlOrHash	A bit.ly-url (eg: http://bit.ly/1RmnUT) or hash (eg: 1RmnUT)
 	 */
 	public function stats($shortUrlOrHash)
@@ -420,11 +429,12 @@ class Bitly
 
 /**
  * Bitly Exception class
- *
+ * 
+ * @package 	Nomcat
+ * @subpackage	Libraries
+ * @category	Classes
  * @author	Tijs Verkoyen <php-bitly@verkoyen.eu>
  */
 class BitlyException extends Exception
 {
 }
-
-?>

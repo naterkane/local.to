@@ -44,7 +44,7 @@
  *
  * Prototype: $autoload['libraries'] = array('database', 'session', 'xmlrpc');
  * 
- * @var
+ * @var array The Libraries to be automatically loaded
  */
 $autoload['libraries'] = array('Cookie', 'Tt','Util', 'Page');
 
@@ -54,7 +54,7 @@ $autoload['libraries'] = array('Cookie', 'Tt','Util', 'Page');
  * 
  * Prototype: $autoload['helper'] = array('url', 'file');
  * 
- * @var
+ * @var array The Helper libraries to be autoloaded
  */
 $autoload['helper'] = array();
 
@@ -64,7 +64,7 @@ $autoload['helper'] = array();
  * 
  * Prototype: $autoload['plugin'] = array('captcha', 'js_calendar');
  * 
- * @var
+ * @var array The Plugins to be autoloaded
  */
 $autoload['plugin'] = array();
 
@@ -76,7 +76,7 @@ $autoload['plugin'] = array();
  * 
  * NOTE: This item is intended for use ONLY if you have created custom config files.  Otherwise, leave it blank.
  * 
- * @var
+ * @var array The Config files to be auto loaded
  */
 $autoload['config'] = array('config');
 
@@ -87,7 +87,7 @@ $autoload['config'] = array('config');
  * Prototype: $autoload['language'] = array('lang1', 'lang2');
  * 
  * NOTE: Do not include the "_lang" part of your file.  For example "codeigniter_lang.php" would be referenced as array('codeigniter');
- * @var
+ * @var array The Language files to be auto loaded
  */
 $autoload['language'] = array();
 
@@ -97,7 +97,7 @@ $autoload['language'] = array();
  * 
  * Prototype: $autoload['model'] = array('model1', 'model2');
  * 
- * @var
+ * @var array The Models to be auto loaded
  */
 $autoload['model'] = array();
 

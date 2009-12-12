@@ -34,9 +34,8 @@ class Invite extends App_Model
 	/**
 	 * Flags an invitation record as having been accepted, the account associated with the attached email will be considered active.
 	 * 
-	 * @return 
-	 * @param string $email
 	 * @param string $key
+	 * @return boolean
 	 */
 	public function accept($key)
 	{
@@ -46,8 +45,8 @@ class Invite extends App_Model
 	/**
 	 * Creates an invitation record
 	 * 
-	 * @return 
-	 * @param object $data
+	 * @param array $data
+	 * @return boolean
 	 */
 	public function create($data)
 	{
@@ -57,9 +56,9 @@ class Invite extends App_Model
 	/**
 	 * Deletes an invitation record
 	 * 
-	 * @return object results
 	 * @param string $email
 	 * @param string $key
+	 * @return boolean results
 	 */
 	public function delete($email, $key)
 	{
@@ -89,7 +88,5 @@ class Invite extends App_Model
 			return $invites[0];			
 		}
 	}
-	
-	
+		
 }
-?>

@@ -121,7 +121,6 @@ class Group extends App_Model
 	 * @access public
 	 * @param array $group (passed by reference)
 	 * @param int $user_id 
-	 * @return
 	 */
 	public function addToBlacklist(&$group, $user_id)
 	{
@@ -153,7 +152,6 @@ class Group extends App_Model
 	 * @access public
 	 * @param array $group (passed by reference)
 	 * @param int $message_id 
-	 * @return
 	 */
 	public function addToInbox(&$group, $message_id)
 	{
@@ -469,11 +467,11 @@ class Group extends App_Model
 	/**
 	 * Is a user an owner of a group?
 	 *
+	 * @access public	
 	 * @param integer $user_id
 	 * @param integer $owner_id[optional]
 	 * @param integer $group_id[optional]
 	 * @return boolean
-	 * @access public	
 	 */
 	public function isOwner($user_id, $owner_id = null, $group_id = null)
 	{
@@ -486,12 +484,13 @@ class Group extends App_Model
 
 	/**
 	 * Is group public
+	 * 
+	 * For now, groups are never public.
 	 *
 	 * @access public
 	 * @param array $group
-	 * @return false 
+	 * @return boolean 
 	 * @todo Make an actual function when we start using public groups 	
-	 * @access public	
 	 */
 	public function isPublic($group = array())
 	{
@@ -528,7 +527,7 @@ class Group extends App_Model
 	 * @access public
 	 * @param array $user Signed in user data
 	 * @param array $group Group Data
-	 * @return 
+	 * @return array
 	 */
 	public function membersSelect($user = array(), $group = array())
 	{
@@ -620,13 +619,13 @@ class Group extends App_Model
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return 
+	 * @return boolean
 	 */
 	public function removeFromGroupList($name = null)
 	{
 		if (!$name) 
 		{
-			return;
+			return false;
 		}
 		$groups = $this->getAll();			
 		$groups['all'] = array_flip($groups['all']);
@@ -642,7 +641,7 @@ class Group extends App_Model
 	 *
 	 * @access public
 	 * @param array $group
-	 * @return 
+	 * @return boolean
 	 */
 	public function saveGroupList($groups = array())
 	{

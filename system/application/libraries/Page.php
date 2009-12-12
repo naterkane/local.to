@@ -104,7 +104,6 @@ class Page
 	 * @access public
 	 * @static	
 	 * @param array $segments
-	 * @return 
 	 */
 	public static function setUp(&$segments = array())
 	{

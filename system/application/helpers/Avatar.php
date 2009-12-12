@@ -171,4 +171,3 @@ class Avatar extends Html
 		return $return;
 	}
 }
-?>

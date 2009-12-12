@@ -12,7 +12,7 @@
  * @version		$Id$
  * @filesource
  */
- /**
+/**
  * Cookie
  * 
  * Extended Cookie class
@@ -68,7 +68,6 @@ class Cookie {
 	 * Loads controller into Library, then loads cookie model.
 	 * 
 	 * @access public
-	 * @return	
 	 */
 	public function __construct() 
 	{
@@ -86,7 +85,6 @@ class Cookie {
 	 * Check if cookie is set, if not, set one
 	 * 
 	 * @access public
-	 * @return 
 	 */
 	public function check()
 	{
@@ -112,7 +110,6 @@ class Cookie {
 	 * Create a new cookie
 	 * 
 	 * @access public
-	 * @return
 	 */
 	public function create()
 	{
@@ -129,7 +126,6 @@ class Cookie {
 	 * Delete a cookie
 	 * 
 	 * @access public
-	 * @return
 	 */
 	public function delete() 
 	{
@@ -215,7 +211,7 @@ class Cookie {
 		{
 			return $this->cookie->find($_COOKIE[$this->name]);
 		} else {
-			return;
+			return null;
 		}		
 	}
 
@@ -266,7 +262,6 @@ class Cookie {
 	 * @access public
 	 * @param string $message
 	 * @param string $type	
-	 * @return 
 	 */
 	public function setFlash($message, $type = null)
 	{
@@ -279,4 +274,3 @@ class Cookie {
 	}
 	
 }
-?>

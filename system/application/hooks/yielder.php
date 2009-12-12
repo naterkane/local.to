@@ -62,9 +62,9 @@ class Yielder {
 	
 	/**
 	 * defines a layout if it was set in the controller
+	 * 
 	 * <code>$this->layout = "{nameOfTheLayout}"</code>
 	 * 
-	 * @return 
 	 * @param object $layout[optional]
 	 */
 	function setlayout($layout = null){
@@ -76,9 +76,9 @@ class Yielder {
 	
 	/**
 	 * defines a sidebar to be used if it was set in the controller
+	 * 
 	 * <code>$this->sidebar = "{directoryOfTheSidebar}/{nameOfTheSidebar}"</code>
 	 * 
-	 * @return 
 	 * @param object $layout[optional]
 	 */
 	function setsidebar($sidebar = null){
@@ -89,4 +89,3 @@ class Yielder {
 	}
 
 }
-?>

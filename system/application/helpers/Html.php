@@ -205,7 +205,7 @@ class Html
 	 * @access private
 	 * @param int $message_id
 	 * @param string $path e.g. 'home', 'group/my_group_name', no leading or trailing slashes
-	 * @return 
+	 * @return string
 	 */
 	private function replyPath($message_id, $path)
 	{
@@ -228,7 +228,8 @@ class Html
 	 * @access public
 	 * @param array $message
 	 * @param boolean isOwner
-	 * @return 
+	 * @return string an anchor (<code><a href=""></a></code>) element that allows a user to delete a message by ID
+	 * @see Messages::delete
 	 */
 	public function deleteMessageLink($message = array(), $isOwner = false)
 	{
@@ -244,7 +245,8 @@ class Html
 	 * @access public
 	 * @param array $message
 	 * @param array $user	
-	 * @return 
+	 * @return string an anchor (<code><a href=""></a></code>) element that allows a user to flag a message as a favorite
+	 * @see Messages::favorite
 	 */
 	public function favoriteLink($message = array(), $user = array())
 	{
@@ -269,7 +271,7 @@ class Html
 	 *
 	 * @param string $text Text to wrap through htmlspecialchars
 	 * @param string $charset[optional] Character set to use when escaping.  Defaults to config value in 'App.encoding' or 'UTF-8'
-	 * @return string Wrapped text
+	 * @return string html encoded text
 	 */
 	function encode($text, $charset = null) {
 		if (is_array($text)) {
@@ -286,7 +288,7 @@ class Html
 	 *
 	 * @access public
 	 * @param array $group Group data
-	 * @return string
+	 * @return string the fullname name of a group, if available, else the short name.
 	 */
 	public function groupName($group=array())
 	{
@@ -305,10 +307,11 @@ class Html
 	}	
 	
 	/**
-	 * compares a string against the request URI
-	 * @return 
+	 * Compares a string against the request URI
+	 * 
 	 * @access public
-	 * @param string $string
+	 * @param string $string the string to match against the current URI
+	 * @return boolean
 	 */
 	public function isSection($string)
 	{
@@ -319,8 +322,8 @@ class Html
 	 * Output a message replaces links with anchor html
 	 *
 	 * @access public
-	 * @param $message[optional] $message
-	 * @return $message with tags processed	
+	 * @param string $message[optional] $message
+	 * @return string $message with tags processed	
 	 */
 	function message($message = null)
 	{
@@ -342,7 +345,7 @@ class Html
 	 * @param  array   $htmlAttributes[optional] Array of HTML attributes.
 	 * @param  string  $confirmMessage[optional] JavaScript confirmation message.
 	 * @param  boolean $escapeTitle[optional]	Whether or not $title should be HTML escaped.
-	 * @return string	An <a /> element.
+	 * @return string	An anchor (<code><a href=""></a></code>) element.
 	 */	
 	function link($title, $url, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true)
 	{
@@ -382,7 +385,7 @@ class Html
 	 *
 	 * @access public
 	 * @param array $user User data
-	 * @return 
+	 * @return string an address (<code><address></address></code>) element
 	 */
 	public function location($user = array())
 	{
@@ -394,6 +397,10 @@ class Html
 		if (!empty($user['state'])) 
 		{
 			$return[] = $user['state'];
+		}
+		if (!empty($user['country'])) 
+		{
+			$return[] = $user['country'];
 		}
 		if (count($return)) {
 			return '<address id="profile_location" class="adr">' . implode(', ', $return) . '</address>';
@@ -442,22 +449,24 @@ class Html
 
 	/**
 	 * Output user name 
+	 * 
+	 * If this method is passed a string, it returns the string.
 	 *
 	 * @access public
 	 * @param array $user User data
-	 * @return string
+	 * @return string the name of the user
 	 */
-	public function name($user=array())
+	public function name($user)
 	{
 		if (!is_array($user)) 
 		{
 			return $user;
 		}
-		if (isset($user['realname'])) 
+		if (!empty($user['realname'])) 
 		{
 			return $user['realname'];
 		}
-		if (isset($user['username'])) 
+		if (!empty($user['username'])) 
 		{
 			return $user['username'];
 		}
@@ -468,7 +477,7 @@ class Html
 	 *
 	 * @access public
 	 * @param array $message
-	 * @return 
+	 * @return string
 	 */
 	public function replyLink($message = array(), $dm = false)
 	{
@@ -543,7 +552,7 @@ class Html
 	 * @access public
 	 * @param array $user
 	 * @param string $counter	
-	 * @return int | null
+	 * @return integer|null
 	 */
 	public function unread($user = array(), $counter = null)
 	{
@@ -565,7 +574,7 @@ class Html
 	 * @access public
 	 * @param array $user
 	 * @param array $group	
-	 * @return int | null
+	 * @return integer|null
 	 */
 	public function unreadGroup($user = array(), $group = null)
 	{

@@ -31,17 +31,19 @@ class Util
 
 	/**
 	 * Encode a string to base 64
-	 * @return 
+	 * 
 	 * @param string $input
+	 * @return string base64 encoded string
 	 */
 	public function base64_url_encode($input) {
-    	return strtr(base64_encode($input), '+/=', '-_');
+    		return strtr(base64_encode($input), '+/=', '-_');
     }
 
 	/**
 	 * Decode a string from base 64
-	 * @return 
+	 * 
 	 * @param string $input
+	 * @return string base64 decoded string
 	 */
 	public function base64_url_decode($input) {
 	    return base64_decode(strtr($input, '-_', '+/='));
@@ -49,8 +51,9 @@ class Util
 	
 	/**
 	 * compares a string against the request URI
-	 * @return 
+	 * 
 	 * @param string $string
+	 * @return boolean
 	 */
 	public function isSection($string)
 	{

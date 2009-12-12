@@ -115,7 +115,7 @@ class Net_TokyoTyrant
      * read buffer
      * @access private
      * @param $length readlength
-     * @result string buffer data
+     * @return string buffer data
      */
     private function _read($length)
     {
@@ -204,7 +204,7 @@ class Net_TokyoTyrant
 
     /**
      * get data
-     * @return 
+     * @return boolean
      */
     protected function _getResponse()
     {

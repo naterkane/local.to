@@ -65,7 +65,6 @@ class Admin extends App_controller
 		
 	/**
 	 * Flushes the database
-	 * @return 
 	 * @todo make private method and require authentication
 	 */
 	function flush() 
@@ -83,6 +82,11 @@ class Admin extends App_controller
 		$this->redirect('/admin/stats');
 	}
 
+	/**
+	 * Deletes a key
+	 * 
+	 * @param object $key [optional]
+	 */
 	function delete($key = null) {
 		if (null == $key)
 			$this->redirect('/admin/stats');

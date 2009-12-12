@@ -80,13 +80,13 @@ class Mail
 	 * Get the value of a setting
 	 * 
 	 * @param string $setting
-	 * @return void|mixed
+	 * @return boolean|array
 	 */
 	public function getSetting($setting = null)
 	{
 		if (!$setting) 
 		{
-			return;
+			return false;
 		}
 		$return = null;
 		if (!empty($this->settings[$setting])) 
@@ -105,6 +105,7 @@ class Mail
 	 * @param string $message[optional]	
 	 * @param string $from_email[optional]
 	 * @param string $from_name[optional]
+	 * @return boolean
 	 */
 	private function send($to, $subject = null, $message = null, $from_email = null, $from_name = null)
 	{
@@ -135,6 +136,7 @@ class Mail
 		{			
 			$this->ci->redirect('/', 'Caught exception: ',  $e->getMessage(), "\n");
 		}		
+		return true;
 	}
 
 	/**
@@ -162,7 +164,6 @@ class Mail
 	 * @param array $to
 	 * @param array $from
 	 * @param string $message	
-	 * @return 
 	 */
 	public function sendPrivateMessage($to = array(), $from = array(), $dm)
 	{
@@ -191,7 +192,6 @@ class Mail
 	 * @param array $from
 	 * @param array $group
 	 * @param array $message	
-	 * @return 
 	 */
 	public function sendGroupPrivateMessage($to = array(),$from = array(),$group = array(), $dm)
 	{
@@ -247,7 +247,6 @@ class Mail
 	 * @access public
 	 * @param array $to
 	 * @param array $following	
-	 * @return 
 	 */
 	public function sendFollowingConfirmation($to = array(), $following = array())
 	{
@@ -426,4 +425,3 @@ class Mail
 	}
 	
 }
-?>

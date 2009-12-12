@@ -113,9 +113,9 @@ class Uploader{
 
 	/**
 	 * Set an error
+	 * 
 	 * @access private
 	 * @param $error Description of error
-	 * @return
 	 */	
 	private function setError($error) 
 	{
@@ -125,14 +125,16 @@ class Uploader{
 
 	/**
 	 * Get information about the last upload
+	 * 
 	 * @access public
-	 * @return
+	 * @return array|null
 	 */
 	public function getLastUploadInfo() 
 	{
 		if(!is_array($this->lastUploadData)) 
 		{
 			$this->setError('No upload detected.');
+			return null;
 		} else 
 		{
 			return $this->lastUploadData;
@@ -141,9 +143,10 @@ class Uploader{
 
 	/**
 	 * Get Mime type of file
+	 * 
 	 * @param $file Name of file
 	 * @access public
-	 * @return
+	 * @return string
 	 */
 	public function getMime($file) 
 	{
@@ -287,11 +290,11 @@ class Uploader{
 
 	/**
 	 * Upload a file
+	 * 
 	 * @param $field Field name uploaded
 	 * @param $folder folder name to save
 	 * @param $newName New name for the file
 	 * @access public
-	 * @return 
 	 */
 	public function upload($field, $folder, $newName) 
 	{
@@ -313,5 +316,3 @@ class Uploader{
 	}
 		
 }
-
-?>

@@ -229,7 +229,7 @@ class Form extends Html
 	 * @param string $key
 	 * @param string $value
 	 * @access public
-	 * @return
+	 * @return string
 	 */	
 	public function makeOptionTag($fieldValue, $key, $value)
 	{
@@ -291,4 +291,3 @@ class Form extends Html
 	}
 
 }
-?>

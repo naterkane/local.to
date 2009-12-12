@@ -1,4 +1,9 @@
 <?php
+/**
+ * @package Nomcat
+ * @subpackage	Libraries
+ * @category	Classes
+ */
 class FirePHP_Fake {
   
   const LOG = NULL;
