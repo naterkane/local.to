@@ -44,7 +44,7 @@ class Tests extends App_Controller
 				$this->load->view('tests/' . $this->uri->segments[2]);			
 			}
         } else {
-        	$this->show404();
+        		$this->redirect('/');
         }
 	}
 	
@@ -54,7 +54,11 @@ class Tests extends App_Controller
 	 */
 	public function testme()
 	{
+		if ($this->isTesting()) {
 		$this->redirect('/tests/TestRunner.html?test=/tests/testsuite-app');
+		} else {
+			$this->redirect('/');
+		}
 	}
 	
 	

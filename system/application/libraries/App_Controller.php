@@ -274,7 +274,7 @@ class App_Controller extends Controller {
 	 */
 	public function isTesting()
 	{
-		return ini_get('display_errors');
+		return( $this->config->item('testing') && $this->config->item('debug') && ini_get('display_errors'));
 	}
 
     /**

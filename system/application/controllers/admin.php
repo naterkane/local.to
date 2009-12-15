@@ -38,6 +38,18 @@ class Admin extends App_controller
 		{
 			$this->redirect('/');
 		}
+		$this->redirect('/admin/login');
+	}
+
+	/**
+	 * Show phpinfo content
+	 */
+	function _info(){
+		if ($this->config->item("testing") != true) {
+			return false;
+		}
+		phpinfo();
+		exit();
 	}
 
 	/**
@@ -64,25 +76,6 @@ class Admin extends App_controller
 	}
 		
 	/**
-	 * Flushes the database
-	 * @todo make private method and require authentication
-	 */
-	function flush() 
-	{
-		$this->User->tt->vanish();
-		$this->redirect('/admin/stats');
-	}
-
-	/**
-	 * Syncs in-memory data to disk
-	 */
-	function sync()
-	{
-		$this->User->tt->sync();
-		$this->redirect('/admin/stats');
-	}
-
-	/**
 	 * Deletes a key
 	 * 
 	 * @param object $key [optional]
@@ -102,15 +95,58 @@ class Admin extends App_controller
 			$this->redirect('/admin/stats',"Sorry but we had trouble deleting the record: '.$key.'<br/>".$e,"error");
 		}		
 	$this->redirect('/admin/stats','Successfully deleted: '.$key,"success");
+	}	
+	
+	/**
+	 * Flushes the database
+	 * @todo make private method and require authentication
+	 */
+	function flush() 
+	{
+		if ($this->config->item("testing") != true) {
+			$this->redirect('/admin/stats','no way mister!','error');
+		}
+		$this->User->tt->vanish();
+		$this->redirect('/admin/stats');
 	}
 
 	/**
-	 * Show phpinfo content
+	 * 
+	 * @return void
 	 */
-	function _info(){
-		phpinfo();
-		exit();
+	function login()
+	{
+		
 	}
+
+	/**
+	 * 
+	 * @return void
+	 */
+	function logout()
+	{
+		
+	}
+
+	/**
+	 * Loads the memcache control panel
+	 * 
+	 * @todo rewrite views/admin/memcache.php and make it work with TT/TC
+	 */
+	function memcache()
+	{
+		$this->load->view('/admin/memcache');
+	}
+
+	/**
+	 * Syncs in-memory data to disk
+	 */
+	function sync()
+	{
+		$this->User->tt->sync();
+		$this->redirect('/admin/stats');
+	}
+
 
 	/**
 	 * Show all database values 
@@ -151,16 +187,6 @@ class Admin extends App_controller
 		echo "</pre>";
 		$this->_info();
 		exit;
-	}
-
-	/**
-	 * Loads the memcache control panel
-	 * 
-	 * @todo rewrite views/admin/memcache.php and make it work with TT/TC
-	 */
-	function memcache()
-	{
-		$this->load->view('/admin/memcache');
 	}
 
 	/**
