@@ -34,17 +34,20 @@ class Admin extends App_controller
 	public function __construct()
 	{
 		parent::__construct();
-		if (!$this->testing()) 
-		{
-			$this->redirect('/');
-		}
-		$this->redirect('/admin/login');
+		//if (!$this->testing()) 
+		//{
+		//	$this->redirect('/');
+		//}
+		//$this->redirect('/admin/login');
 	}
+
+	
 
 	/**
 	 * Show phpinfo content
 	 */
 	function _info(){
+		$this->mustBeSignedIn();
 		if ($this->config->item("testing") != true) {
 			return false;
 		}
@@ -60,6 +63,7 @@ class Admin extends App_controller
 	 */
 	public function cookie($type = null)
 	{
+		$this->mustBeSignedIn();
 		if ($type == 'user_agent') 
 		{
 			$cookie = $this->cookie->getAllData();
@@ -81,6 +85,7 @@ class Admin extends App_controller
 	 * @param object $key [optional]
 	 */
 	function delete($key = null) {
+		$this->mustBeSignedIn();
 		if (null == $key)
 			$this->redirect('/admin/stats');
 		
@@ -103,11 +108,16 @@ class Admin extends App_controller
 	 */
 	function flush() 
 	{
+		$this->mustBeSignedIn();
 		if ($this->config->item("testing") != true) {
 			$this->redirect('/admin/stats','no way mister!','error');
 		}
 		$this->User->tt->vanish();
 		$this->redirect('/admin/stats');
+	}
+
+	function mustBeSignedIn() {
+		$this->login();
 	}
 
 	/**
@@ -116,7 +126,7 @@ class Admin extends App_controller
 	 */
 	function login()
 	{
-		
+		$this->redirect('/');
 	}
 
 	/**
@@ -135,6 +145,7 @@ class Admin extends App_controller
 	 */
 	function memcache()
 	{
+		$this->mustBeSignedIn();
 		$this->load->view('/admin/memcache');
 	}
 
@@ -143,6 +154,7 @@ class Admin extends App_controller
 	 */
 	function sync()
 	{
+		$this->mustBeSignedIn();
 		$this->User->tt->sync();
 		$this->redirect('/admin/stats');
 	}
@@ -155,6 +167,7 @@ class Admin extends App_controller
 	 */	
 	function stats()
 	{
+		$this->mustBeSignedIn();
 		$all = array();
 		foreach($this->User->tt->fwmkeys('', 1000) as $key)
 		{
@@ -198,6 +211,7 @@ class Admin extends App_controller
 	 */
     function showdata($prefix = null)
     {
+	    	$this->mustBeSignedIn();
         echo "<a href=\"/admin/flush\">Flush</a> <a href=\"/admin/showdata\">Reloads</a><br>";
         echo '<p><code>@todo</code> append a <code>prefix</code> to the url of this page to filter results</p>';
         echo "<pre>";
@@ -239,8 +253,9 @@ class Admin extends App_controller
 	 */
 	function create_invite()
 	{
-		if (!$this->config->item('testing')) {
-			$this->redirect('/');
+		//echo "poop"; exit;
+		if ($this->config->item('registration_open') == false) {
+			$this->redirect('/', "Sorry, you can't create an account this way",'error');
 		}
 		//$this->load->helper('Util');
 		if ($this->postData){
