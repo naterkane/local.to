@@ -278,17 +278,17 @@ protected function makeSavePrefix($data=array(),$options=array()){
     if( empty($options['prefixValue'])){
         $options['prefixValue']='id';
     }
-    if( empty($options['override'])){
+    if (empty($options['override'])) {
         $value=null;
         if(! empty($data[$options['prefixValue']])){
             $value=$data[$options['prefixValue']];
         }
-        if(!$value) //if value is empty, fail {
+        if(!$value) {//if value is empty, fail 
             return false;
         }
-        $prefix=strtolower($options['prefixName'].$this->prefixSeparator.$options['prefixValue'].$this->prefixSeparator.$value);
-    }else{
-        $prefix=$options['override'];
+        $prefix = strtolower($options['prefixName'].$this->prefixSeparator.$options['prefixValue'].$this->prefixSeparator.$value);
+    } else {
+        $prefix = $options['override'];
     }
     return $prefix;
 }
@@ -512,7 +512,8 @@ public function endTransaction(){
 
 public function find($value=null,$options=array()){
     $key=$this->makeFindPrefix($value,$options);
-    if(!$key) //if false has been returned as the key, return nothing. {
+    if(!$key) //if false has been returned as the key, return nothing. 
+    {
         return null;
     }
     try {
@@ -865,7 +866,8 @@ public function rollbackLog(){
 function save($data,$options=array()){
     $this->key=$this->makeSavePrefix($data,$options);
     if(
-    !$this->key) //if key was returned as false value, fail {
+    !$this->key) //if key was returned as false value, fail 
+    {
         return false;
     }
     if(!isset($options['validate'])){
