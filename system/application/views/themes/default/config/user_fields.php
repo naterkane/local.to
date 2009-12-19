@@ -29,6 +29,11 @@ $fields = array(
 		 * @var string
 		 */
 		'email' => null,
+	    /**
+	     * Does this user receive email updates
+	     * @var boolean
+	     */
+		'email_updates' => true,		
 		/**
 		 * Array of message ids of user's favorite posts
 		 * @var array
@@ -112,6 +117,11 @@ $fields = array(
 		 */
 		'private' => array(),
 		/**
+		 * Array of message ids for user's home page threaded
+		 * @var array
+		 */
+		'private_threaded' => array(),		
+		/**
 		 * Array of messag eids for user's public page
 		 * @var array
 		 */
@@ -145,6 +155,38 @@ $fields = array(
 	     * User's username, handle, screenname
 	     * @var string
 	     */
-	    'username' => null
+	    'username' => null,
+	    'url' => null,	
+		'gender' => null,
+		'hometown' => null,	
+		'birthdate' => null,
+		//'height' => null,
+		//'weight' => null,
+		//'handed_footed' => null,
+		//'athletic' => null,
+		//'academics' => null,
+		'about_me' => null,
+		//'favorite_sports' => null,
+		//'favorite_teams' => null,
+		//'favorite_players' => null,	
+		'phone' => null,
+		'im' => null,
+		//'address' => null,
+		//'address_line2' => null,
+		//'state' => null,
+		//'city' => null,
+		//'postal_code' => null,
+		//'country' => null,		
+		//'college' => null,
+		//'degree' => null,
+		//'high_school' => null,
+		//'employer' => null,
+		//'position' => null,
+		//'employment_description' => null,	
+		//'employment_location' => null,
+		//'employment_time_period' => null,
+		'mentions_read' => 0,
+		'inbox_read' => 0,
+		'private_read' => 0,		
+		'group_messages_read' => array()
 	);
-?>

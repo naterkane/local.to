@@ -1,13 +1,13 @@
 <div class="clear"></div>
-<div class="grid_16" id="site_info">
-	<div class="box">
-		<p><a href="/about">about</a>  ·  <a href="/legal">legal</a>  ·  <a href="/terms">terms &amp; conditions</a>  ·  <a href="/faq">faq</a>  ·  <a href="/contact">contact</a></p>
-		<p><a href="http://wearenom.com/software/nomcat">NomCat</a>, a micropublishing platform, created by <a href="http://wearenom.com">NOM</a>. 
-		<!--<br />This <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/InteractiveResource" rel="dc:type">work</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 United States License</a>.
-		--><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/"><img alt="Creative Commons License" style="border-width:0;float:right;" src="http://i.creativecommons.org/l/by-nc-nd/3.0/us/80x15.png" /></a>
-		</p>
-	</div>
-</div>
+<div class="footer" id="site_info">
+	<ul class="subnav"><li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/faq">FAQ</a></li><li><a href="/contact">Contact</a></li><li><a href="http://getnomcat.com">Developers</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms of Service</a></li><li class="right">&copy; 2009 NOM LLC.</li></ul>
 <div class="clear"></div>
-<script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<!--[if IE 6]>
+	<script type="text/javascript" src="/js/jquery.ie6blocker.js"></script>
+<![endif]-->
 <script type="text/javascript" src="/js/nomcat.js"></script>
+<?php 
+// this is to inject any analytics or crm tool javascript or misc code
+echo $this->config->item("footer_code");
+?>

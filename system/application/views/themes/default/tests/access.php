@@ -10,7 +10,8 @@
 	$selenium->mustBeLoggedIn('/groups/inbox/test');
 	$selenium->mustBeLoggedIn('/groups/members/test');
 	$selenium->mustBeLoggedIn('/settings');
-	$selenium->mustBeLoggedIn('/delete');	
+	$selenium->mustBeLoggedIn('/delete_account');	
+	$selenium->mustBeLoggedIn('/users/delete');		
 	$selenium->mustBeLoggedIn('/users/follow/123');
 	$selenium->mustBeLoggedIn('/users/unfollow/123');	
 	$selenium->mustBeLoggedIn('/confirm/123');
@@ -18,5 +19,6 @@
 	$selenium->mustBeLoggedIn('/inbox');
 	$selenium->mustBeLoggedIn('/sent');
 	$selenium->mustBeLoggedIn('/messages/add');
+	$selenium->mustBeLoggedIn('/groups/remove/1/1');	
 	$selenium->openPage('/admin/flush');
 ?>

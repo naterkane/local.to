@@ -1,52 +1,35 @@
-<div class="box messages">
-	<h2><?php echo $group['name'] ?> </h2>
-	<div class="box">
-		<div class="block">
-			<?php
-			/**
-			 * @todo this should go in the sidebar, not in the main area.
-			 */
-			// start move to sidebar
-			?>
-			<p><a href="/groups/members/<?php echo $group['name'] ?>">Members (<?php echo $group['member_count'] ?>)</a></p>
-			<?php if (!empty($group['url'])){
-				 echo "<p><a href=\""; 
-				 echo (substr($group['url'],0,7) == "http://")?$group['url']:"http://".$group['url'];
-				 echo'">'.$group['url'].'</a></p>'; 
-			}?>
-			<?php if (!empty($group['desc'])) echo "<p>".$group['desc']."</p>"; ?>
-			<?php if (!empty($group['location'])) echo "<p><strong>Location:</strong> ".$group['location']."</p>"; ?>
+<div class="heading">
+	<h2><?php echo $avatar->group($group, "48",true); ?> <span><?php echo $html->groupName($group) ?></span></h2>
+</div>
+<?php if (!empty($group['im_a_member'])): ?>
+<div class="form-share">
+    <form action="/messages/add?redirect=<?php echo $redirect ?>" class="form" method="post" accept-charset="utf-8">
+		<fieldset>
 			<p>
-				<?php if (!$group['is_owner'] && $this->userData): ?>
-					<?php if ($group['im_a_member']): ?>
-							<a href="/groups/unsubscribe/<?php echo $group['id'] ?>" id="unsubscribe" class="toggler">Unsubscribe</a>
-					<?php else: ?>
-							<a href="/groups/subscribe/<?php echo $group['id'] ?>" id="subscribe" class="toggler">Subscribe</a>
-					<?php endif ?>
-				<?php endif ?>
-				
-				<?php if ($group['is_owner']): ?>
-				<a href="/groups/settings/<?php echo $group['name'] ?>" class="toggler">Edit <?php echo (substr($group['name'],-1) == "s")?$group['name']."'":$group['name']."'s"; ?> Profile</a>
-				<?php endif ?>
+				<label for="message" id="message-context" class="group">Share something with <?php echo $html->groupName($group) ?></label>
+				<span class="character-count" id="character-count">&nbsp;</span>
 			</p>
-			<?php
-			// end move to sidebar
-			
-			if (isset($group['im_a_member'])): ?>
-			<?php if ($group['is_owner']): ?>
-				<p><a href="/groups/invites/<?php echo $group['name'] ?>">Invite New Members</a></p>
-			<?php endif ?>			
-			<form action="/messages/add<?php echo $html->sendMeHere() ?>" method="post" accept-charset="utf-8">
-			<h3>Post a message to <?php echo $group['name'] ?></h3>
-				<fieldset>
-				<?php 
-				$messagedata = array();
-				$messagedata['message'] = "!".$group['name'] . " ";
-				echo $this->load->view('messages/postform',$messagedata) ?>
-				</fieldset>
-			</form>
-			<?php endif; ?>
-		</div>
+		</fieldset>
+		<fieldset>
+			<?php echo $this->load->view('messages/postform', array('group_page'=>true)) ?>
+			<dl class="tip">
+				<dt>Tips</dt>
+				<dd>use @username to tag a user in your message, i.e. congrats on the win @charlieperry</dd>
+				<dd>use !teamname to tag a team in your message, i.e. just had a huge win over !ulacrosse</dd>
+			</dl>
+		</fieldset>
+	</form>
+</div>
+<?php endif; ?>
+<div id="content">		
+	<?php $this->load->view("groups/subnav/group_nav"); ?>
+	<?php if (empty($group['im_a_member'])): ?>
+	<div class="inlineMessage">
+		<p>Currently, you are not a member of this team and cannot view its updates.  Instead, you can see mentions of the team made elsewhere on Teamitup.</p>
 	</div>
-	<?php echo $this->load->view('messages/viewlist'); ?>
+	<?php endif; ?>	
+	<?php echo $this->load->view('messages/viewlist', array('group_page'=>true)); ?>
+	<div class="box threading">
+		<?php $this->load->view('users/toggle_threading',array('threading'=>$this->userData['threading'])); ?>
+	</div>
 </div>

@@ -20,41 +20,41 @@
 	$selenium->write('verifyTextPresent', Page::$nextText);	
 	$selenium->write('verifyTextNotPresent', Page::$previousText);
 	for ($i=1; $i < 21; $i++) { 
-		$selenium->write('verifyTextNotPresent', $i);
+		$selenium->write('verifyElementNotPresent', 'message-text-' . $i);
 	}	
-	for ($i=20; $i < 41; $i++) { 
-		$selenium->write('verifyTextPresent', $i);		
+	for ($i=21; $i < 41; $i++) { 
+		$selenium->write('verifyElementPresent', 'message-text-' . $i);
 	}
 	$selenium->openPage('/home/page/2');
 	$selenium->write('verifyTextNotPresent', Page::$nextText);
 	$selenium->write('verifyTextPresent', Page::$previousText);
 	for ($i=1; $i < 21; $i++) { 
-		$selenium->write('verifyTextPresent', $i);		
+		$selenium->write('verifyElementPresent', 'message-text-' . $i);
 	}
-	for ($i=20; $i < 41; $i++) { 
-		$selenium->write('verifyTextNotPresent', $i);		
+	for ($i=21; $i < 41; $i++) { 
+		$selenium->write('verifyElementNotPresent', 'message-text-' . $i);
 	}
 	$selenium->openPage('/public_timeline');	
 	$selenium->write('verifyTextPresent', Page::$nextText);	
 	$selenium->write('verifyTextNotPresent', Page::$previousText);	
 	for ($i=1; $i < 21; $i++) { 
-		$selenium->write('verifyTextNotPresent', $i);		
+		$selenium->write('verifyElementNotPresent', 'message-text-' . $i);
 	}	
-	for ($i=20; $i < 41; $i++) { 
-		$selenium->write('verifyTextPresent', $i);		
+	for ($i=21; $i < 41; $i++) { 
+		$selenium->write('verifyElementPresent', 'message-text-' . $i);
 	}
 	$selenium->openPage('/public_timeline/page/2');
 	$selenium->write('verifyTextNotPresent', Page::$nextText);
 	$selenium->write('verifyTextPresent', Page::$previousText);	
 	for ($i=1; $i < 21; $i++) { 
-		$selenium->write('verifyTextPresent', $i);		
+		$selenium->write('verifyElementPresent', 'message-text-' . $i);
 	}
-	for ($i=20; $i < 41; $i++) { 
-		$selenium->write('verifyTextNotPresent', $i);		
+	for ($i=21; $i < 41; $i++) { 
+		$selenium->write('verifyElementNotPresent', 'message-text-' . $i);
 	}
 	$selenium->write('openAndWait', '/public_timeline/page/3');
 	$selenium->write('verifyTextPresent', $selenium->missingText);		
 	$selenium->write('verifyTextNotPresent', Page::$nextText);
-	$selenium->write('verifyTextNotPresent', Page::$previousText);	
+	$selenium->write('verifyTextNotPresent', Page::$previousText);		
 	$selenium->openPage('/admin/flush');
 ?>

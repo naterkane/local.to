@@ -3,6 +3,7 @@
 	$password = $selenium->randomString(10);
 	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';
 	$too_long_name = $selenium->randomString(16);
+	$too_long_real_name = $selenium->randomString(51);	
 	$too_short_password = $selenium->randomString(5);	
 	$too_long_password = $selenium->randomString(26);	
 	$count = $this->testingData['count'];	
@@ -30,6 +31,7 @@
 	$selenium->write('verifyTextPresent', $error);
 	$selenium->write('verifyTextPresent', 'A username is required');
 	$selenium->write('verifyTextPresent', 'A password is required');
+	$selenium->write('verifyTextPresent', 'Full name is required');	
 	$selenium->write('verifyTextPresent', 'A valid email is required');
 	$selenium->write('verifyValue', 'testing_count', $count);	
 	//try invalid email
@@ -57,7 +59,13 @@
 	$selenium->click('Sign Up');
 	$selenium->write('verifyTextPresent', $error);	
 	$selenium->write('verifyTextPresent', 'A username must be between 1 and 15 characters long');	
-	$selenium->write('verifyValue', 'testing_count', $count + 1);	
+	$selenium->write('verifyValue', 'testing_count', $count + 1);
+	//too long real name
+	$selenium->write('type', 'realname', $too_long_real_name);
+	$selenium->click('Sign Up');
+	$selenium->write('verifyTextPresent', $error);	
+	$selenium->write('verifyTextPresent', 'Full name must be between 1 and 50 characters long');	
+	$selenium->write('verifyValue', 'testing_count', $count + 1);		
 	//too short password
 	$selenium->write('type', 'username', '');
 	$selenium->write('type', 'password', $too_short_password);
@@ -107,6 +115,7 @@
 	$selenium->write('storeValue', 'key', 'invite_key');		
 	$selenium->openPage('/signup/${invite_key}');
 	$selenium->write('type', 'username', $name);
+	$selenium->write('type', 'realname', $name);	
 	$selenium->write('type', 'password', $password);
 	$selenium->write('type', 'passwordconfirm', $password);	
 	$selenium->write('type', 'email', $email);
@@ -118,20 +127,20 @@
 	$selenium->signIn($name, $password);	
 	$selenium->openPage('/admin/delete_invite/${invite_key}');	
 	//try to delete account through illegal actions
-	$selenium->openPage('/delete');
+	$selenium->openPage('/users/delete');
 	$selenium->write('verifyTextPresent', $name);
 	$selenium->openPage('/settings');	
-	$selenium->write('type', 'update_key', '1');
+	//$selenium->write('type', 'update_key', '1');
+	//$selenium->write('clickAndWait', 'delete');
+	//$selenium->write('verifyConfirmationPresent', 'Are you sure you want to delete your account? This cannot be undone.');
+	//$selenium->write('storeConfirmation');
+	//$selenium->write('verifyTextPresent', $name);	
+	$selenium->write('verifyValue', 'testing_count', $count + 4);	
+	//delete account
+	$selenium->openPage('/delete_account');
 	$selenium->write('clickAndWait', 'delete');
 	$selenium->write('verifyConfirmationPresent', 'Are you sure you want to delete your account? This cannot be undone.');
 	$selenium->write('storeConfirmation');
-	$selenium->write('verifyTextPresent', $name);	
-	$selenium->write('verifyValue', 'testing_count', $count + 4);	
-	//delete account
-	$selenium->openPage('/settings');
-	$selenium->write('clickAndWait', 'delete');
-	$selenium->write('verifyConfirmationPresent', 'Are you sure you want to delete your account? This cannot be undone.');
-	$selenium->write('storeConfirmation');	
 	$selenium->write('verifyTextPresent', 'Your account has been deleted.');
 	$selenium->openPage('/signin');
 	$selenium->write('type', 'username', $name);

@@ -1,0 +1,44 @@
+<?php
+	$name = $selenium->randomString(10);
+	$password = $selenium->randomString(10);
+	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
+	$name2 = $selenium->randomString(10);
+	$password2 = $selenium->randomString(10);
+	$email2 = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
+	$group = $selenium->randomString(10);	
+	$selenium->caseTitle('Add Message');
+	$selenium->signOut();	
+	$selenium->signUp($name, $password, $email);
+	$selenium->signIn($name, $password);
+	$selenium->userSbFull('/home', $name);
+	$selenium->userSbFull('/followers', $name);
+	$selenium->userSbFull('/following', $name);
+	$selenium->userSbFull('/favorites', $name);
+	$selenium->userSbFull('/groups', $name);
+	$selenium->userSbProfile('/' . $name);
+	$selenium->userSbProfile('/users/profile/' . $name);	
+	$selenium->signOut();
+	$selenium->userSbProfile('/' . $name, false);
+	$selenium->userSbProfile('/users/followers/' . $name, true, true);
+	$selenium->userSbProfile('/users/following/' . $name, true, true);
+	$selenium->userSbProfile('/users/favorites/' . $name, true, true);
+	$selenium->userSbNone('/groups', true);
+	$selenium->signIn($name, $password);
+	//create a group
+	$selenium->openPage('/groups/add');
+	$selenium->write('type', 'name', $group);
+	$selenium->write('type', 'fullname', $group);	
+	$selenium->click('Add');
+	$selenium->groupSbMember('/group/' . $group);
+	$selenium->groupSbMember('/groups/mentions/' . $group);	
+	$selenium->groupSbMember('/groups/inbox/' . $group);
+	$selenium->groupSbMember('/groups/settings/' . $group);	
+	$selenium->groupSbMember('/groups/avatar/' . $group);
+	$selenium->groupSbMember('/groups/invites/' . $group);	
+	$selenium->signOut();
+	$selenium->signUp($name2, $password2, $email2);	
+	$selenium->groupSbNonMember('/group/' . $group);
+	$selenium->signOut();	
+	$selenium->groupSbNonMember('/group/' . $group);	
+	$selenium->openPage('/admin/flush');	
+?>

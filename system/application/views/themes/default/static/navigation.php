@@ -1,19 +1,25 @@
 			<?php
+			
 			if (!empty($User)) {
 				?>
-				<li><a href="/home">Home</a></li>
-				<li><a href="/<?php echo $User["username"] ?>">Profile</a></li>
-				<li><a href="/groups">Groups</a></li>
-				<li><a href="/settings">Settings</a></li>
-				<li><a href="/public_timeline">Everyone</a></li>
-				<li><a href="/users/signout">Sign Out</a></li>
+				<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>><a href="/home">Home</a></li>
+				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/".$User['username']))?' class="current"':""; ?>><a href="/<?php echo $User["username"] ?>">My Profile</a></li>
+				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/group"))?' class="current"':""; ?>><a href="/groups"><?php echo ucfirst($this->config->item('group'))?>s</a></li>
+				<?php /*<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/settings"))?' class="current"':""; ?>><a href="/settings">Settings</a></li> */ ?>
+				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/public_timeline"))?' class="current"':""; ?>><a href="/public_timeline">Everyone</a></li>
+				<?php /*<li><a href="/users/signout">Sign Out</a></li>*/ ?>
 				<?php
 			} else {
-				?>
+				/*?>
 				<li><a href="/">Home</a></li>
-				<li><a href="/about">About</a></li>
-				<li><a href="/users/signin">Sign In</a></li>
-				<li><a href="/users/signup">Sign Up</a></li>
-				<?php
+				<li<?php echo ($this->util->isSection("/about"))?' class="current"':""; ?>><a href="/about">About</a></li>
+				<li<?php echo ($this->util->isSection("/signin"))?' class="current"':""; ?>>
+					<?php if (!empty($sendMeHere)): ?>
+						<a href="/signin<?php echo $html->sendMeHere(); ?>">Sign In</a>
+					<?php else: ?>
+						<a href="/signin">Sign In</a>
+					<?php endif ?>
+				</li>
+				<li<?php echo ($this->util->isSection("/request_invite"))?' class="current"':""; ?>><a href="/request_invite">Sign Up</a></li>
+				<?php*/
 			}
-			?>

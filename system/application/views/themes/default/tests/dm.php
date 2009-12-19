@@ -23,7 +23,7 @@
 	$selenium->openPage('/' . $name);		
 	$selenium->write('clickAndWait', 'follow');
 	$selenium->write('verifyValue', 'testing_count', $count + 7);
-	$selenium->write('verifyTextPresent', 'Unfollow');
+	$selenium->write('verifyTextPresent', 'Stop Following');
 	//check to see no one appears as second users followers
 	$selenium->openPage('/inbox');
 	$selenium->write('verifyElementNotPresent', 'to');	

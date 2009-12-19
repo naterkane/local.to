@@ -1,6 +1,18 @@
-<div class="box">
-    <div class="block">
-        <h1>Contact</h1>
+<div class="heading">
+	<h2>Contact</h2>
+</div>
+<div id="content">
+	<div class="content">
+		<p>David A. Perry, President and Chairman</p>
+		<p>Charlie Perry, Vice President</p>
+
+		<p>Perry Interactive Media, Inc.<br/>
+			New York, NY</p>
+
+		<p>For any questions, comments, or suggestions, please contact us at <a href="mailto:info@teamitup.com">info@teamitup.com</a></p>
+
+		<p>For advertising and sponsorship inquiries, please contact <a href="mailto:ads@teamitup.com">ads@teamitup.com</a></p>
+		<?php /*
         <div id="" class="vcard">
             <a class="url fn n" href="http://wearenom.com"><span class="given-name"></span><span class="additional-name"></span><span class="family-name"></span></a>
             <div class="org">
@@ -20,5 +32,6 @@
                 +1 (917) 267-7825
             </div>
         </div>
+		*/ ?>
     </div>
 </div>

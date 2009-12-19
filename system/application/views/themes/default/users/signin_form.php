@@ -9,7 +9,7 @@
 		<fieldset class="login">
 		<!--<legend>Login Information</legend>-->
 		<p>
-			<label for="username">User Name</label>
+			<label for="username">Screenname <em>or</em> Email</label>
 			<?php echo $form->input('username') ?>
 		</p>
 		<p>
@@ -22,7 +22,4 @@
 		</fieldset>
 	</form>	
 	<p><a href="/recover_password">Forget your password?</a></p>
-	<?php if ($this->testingData['testing']): ?>
-		<p>Don't have a login yet? <a href="/request_invite">Request an Account</a>!</p>
-	<?php endif ?>
 </div>

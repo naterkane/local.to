@@ -5,6 +5,6 @@
 <?php echo (!empty($user['url']))? '<p id="profile_url"><a href="'.$user['url'].'" rel="me nofollow">'.$user['url'].'</a></p>': "";  ?>
 
 <p>
-	Following: <?php echo count($user['following']) ?> 
-	Followers: <?php echo count($user['followers']) ?>
+	<a href="/following/">Following: <?php echo count($user['following']) ?></a>
+	<a href="/followers/">Followers: <?php echo count($user['followers']) ?></a>
 </p>

@@ -122,7 +122,7 @@
 	$selenium->openPage('/' . $name);		
 	$selenium->write('clickAndWait', 'follow');
 	$selenium->write('verifyValue', 'testing_count', $count + 10);
-	$selenium->write('verifyTextPresent', 'Unfollow');
+	$selenium->write('verifyTextPresent', 'Stop Following');
 	$selenium->openPage('/home');
 	$selenium->write('verifyTextPresent', 'Following: 1 Followers: 0');	
 	//sign out and post from first account

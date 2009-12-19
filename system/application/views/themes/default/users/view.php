@@ -1,27 +1,33 @@
-<div class="messages box">
-	<h3><?php
-		$author = $this->User->getByUsername($username);
-		echo $avatar->user($author, "48"); ?>
-		<?php echo $username; ?></h3>
-	<?php echo $form->input('user_id', array('value'=>$this->userData['id'], 'type'=>'hidden'));
-	if (!empty($this->userData) && $this->userData['username'] != $username) {
-		?><div class="box"><div class="block"><?php
-		if ($friend_status == 'follow') 
-		{
-			echo '<p><a href="/users/follow/' . $username . '" id="follow" class="toggler">Follow</a></p>';
-		} 
-		elseif ($friend_status == 'following') 
-		{
-			echo '<p><a href="/users/unfollow/' . $username . '" id="unfollow" class="toggler">Unfollow</a></p>';
-		}
-		else 
-		{
-			echo '<p>You have a submitted a friend request to '. $username .', it is currently pending.</p>';
-		}
-		?></div></div><?php
+<div class="heading">
+		<h2>
+			<?php echo $avatar->user($view_user, "48",true); ?> 
+			<span<?php 
+					if ($view_user['locked'] == true){ echo ' class="private"';}
+					?>><?php echo $html->name($view_user); ?></span>
+			<?php echo $form->input('user_id', array('value'=>$view_user['id'], 'type'=>'hidden')); ?>
+			<?php 
+			if (!empty($this->userData) && $this->userData['username'] != $username):
+				if ($friend_status == 'follow') :
+					echo '<p class="right"><a href="/users/follow/' . $username . '" id="follow" class="button">Follow @' . $username . '</a></p>';
+				elseif ($friend_status == 'following'):
+					echo '<p class="right"><a href="/users/unfollow/' . $username . '" id="unfollow" class="button">Stop Following</a></p>';
+				else:
+					echo '<p>You have a submitted a follow request to '. $username .', it is currently pending.</p>';
+				endif;
+			endif; ?>
+		</h2>
+</div>
+<div id="content">
+	<?php 
+	if ($isLocked) 
+	{
+		?>
+		<div class="inlineMessage"><p><strong>This user has locked their status updates.</strong></p></div>
+		<?php
+	}
+	else 
+	{
+		$this->load->view('messages/viewlist',array('username'=>$username)); 		
 	}
 	?>
-	<?php $this->load->view('messages/viewlist'); ?>
-	<?php $this->load->view('users/toggle_threading',array('threading'=>0)); ?>
-	<div class="clear"></div>
 </div>

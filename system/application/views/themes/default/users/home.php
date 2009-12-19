@@ -1,19 +1,24 @@
-<div class="box messages">
-	<div class="box">
-	<div class="block form-share">
-      <span class="character-count" id="character-count"></span>
-      <form action="/messages/add" class="form" method="post" accept-charset="utf-8">
+<div class="form-share">
+	<form action="/messages/add?redirect=<?php echo $redirect ?>" class="form" method="post" accept-charset="utf-8">
       	<fieldset>
-          <label for="message" id="message-context">What are you up to?</label>
+        	<p>
+	          	<label for="message" id="message-context">Share something with everyone</label>
+			  	<span class="character-count" id="character-count">&nbsp;</span>
+			</p>
         </fieldset>
 		<fieldset>
-		<?php echo $this->load->view('messages/postform') ?>
+			<?php echo $this->load->view('messages/postform') ?>
+			<dl class="tip">
+				<dt>Tips</dt>
+				<dd>use @username to tag a user in your message, i.e. congrats on the win @charlieperry</dd>
+				<dd>use !teamname to tag a team in your message, i.e. just had a huge win over !ulacrosse</dd>
+			</dl>
 		</fieldset>
 	</form>
-	</div>
-	</div>
+</div>
+<div id="content">
 	<?php echo $this->load->view('messages/viewlist', $this->userData) ?>
-	<div class="box">
+	<div class="box threading">
 		<?php $this->load->view('users/toggle_threading',array('threading'=>$this->userData['threading'])); ?>
 	</div>
 </div>

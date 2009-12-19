@@ -42,8 +42,8 @@
 	$selenium->openPage('/' . $name);
 	$selenium->write('clickAndWait', 'follow');
 	$selenium->write('verifyValue', 'testing_count', $count + 12);
-	$selenium->write('verifyTextPresent', 'You are now following ' . $name);	
-	$selenium->openPage('/home');	
+	$selenium->write('verifyTextPresent', 'You are now following ' . $name);
+	$selenium->openPage('/home');
 	$selenium->write('verifyTextPresent', $message);
 	$selenium->write('verifyTextPresent', $message2);
 	$selenium->write('verifyTextPresent', $message3);		

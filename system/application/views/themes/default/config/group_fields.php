@@ -32,7 +32,12 @@ $fields = array(
 		 * Array of message ids sent to group without DMs
 		 * @var array
 		 */
-		'messages' => array(),	
+		'messages' => array(),
+		/**
+		 * Array of message ids sent to group without DMs, threaded
+		 * @var array
+		 */
+		'messages_threaded' => array(),			
 		/**
 		 * Group's name
 		 * @var string
@@ -54,6 +59,11 @@ $fields = array(
 		 */
 		'time_zone' => null,
 		/**
+		 * Is the group private of public?
+		 * @var string
+		 */
+		'locked' => false,
+		/**
 		 * Timestamp of group's creation date
 		 * @var integer
 		 */
@@ -62,5 +72,27 @@ $fields = array(
 		 * Timestamp of the date when the group's record was last modified
 		 * @var integer
 		 */
-		'modified' => null
+		'fullname' => null,		
+		'modified' => null,
+		//'sport' => null,
+		//'level' => null,
+		'gender' => null,
+		'location' => null,
+		//'home_field' => null,
+		//'league' => null,
+		//'division' => null,
+		//'session_start' => null,
+		//'session_end' => null,
+		//'recent_news' => null,
+		'other_email' => null,
+		'url' => null,
+		'address' => null,
+		'address_line2' => null,
+		'state' => null,
+		'city' => null,
+		'postal_code' => null,
+		'country' => null,
+		'blacklist' => array(),
+		'to_group' => null,
+		'group_mentions' => array()		
 		);

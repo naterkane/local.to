@@ -4,7 +4,7 @@
 	$email = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$count = $this->testingData['count'];		
 	$name_new = $selenium->randomString(10);
-	$long_realname = $selenium->randomString(26);	
+	$long_realname = $selenium->randomString(51);	
 	$email_new = "nomcat+".$selenium->randomString(10) . '@wearenom.com';	
 	$default_time_zone = 'US/Eastern';
 	$time_zone = '(GMT+09:00) Tokyo';
@@ -55,7 +55,7 @@
 	$selenium->click('Update');
 	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);	
-	$selenium->write('verifyTextPresent', 'A name must be fewer than 25 characters');		
+	$selenium->write('verifyTextPresent', 'Full name must be between 1 and 50 characters long');		
 	//too long username
 	$selenium->write('type', 'username', $too_long_name);
 	$selenium->click('Update');
@@ -69,7 +69,7 @@
 	$selenium->write('verifyTextPresent', $error);
 	$selenium->write('verifyTextPresent', 'A username may only be made up of numbers, letters, and underscores');	
 	//too long bio
-	$selenium->write('type', 'bio', $too_long_bio);
+	$selenium->write('type', 'about_me', $too_long_bio);
 	$selenium->click('Update');
 	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyTextPresent', $error);	
@@ -77,9 +77,9 @@
 	//update record
 	$selenium->write('type', 'username', $name_new);
 	$selenium->write('type', 'email', $email_new);	
-	$selenium->write('type', 'bio', $bio);		
+	$selenium->write('type', 'about_me', $bio);		
 	$selenium->write('type', 'realname', $real_name);
-	$selenium->write('type', 'location', $location);	
+	$selenium->write('type', 'address', $location);	
 	$selenium->write('type', 'url', $url);
 	$selenium->write('select', 'time_zone', $time_zone);	
 	$selenium->click('Update');
@@ -89,9 +89,9 @@
 	$selenium->write('verifyValue', 'testing_count', $count + 4);		
 	$selenium->write('verifyValue', 'username', $name_new);
 	$selenium->write('verifyValue', 'email', $email_new);	
-	$selenium->write('verifyValue', 'bio', $bio);		
+	$selenium->write('verifyValue', 'about_me', $bio);		
 	$selenium->write('verifyValue', 'realname', $real_name);
-	$selenium->write('verifyValue', 'location', $location);	
+	$selenium->write('verifyValue', 'address', $location);	
 	$selenium->write('verifyValue', 'url', $url);
 	$selenium->write('verifyValue', 'time_zone', $time_zone_value);		
 	$selenium->openPage('/admin/flush');	

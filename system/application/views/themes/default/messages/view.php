@@ -1,11 +1,15 @@
-<div id="single_post" class="box">
+<div id="heading">
+	<div class="message">
 	<?php $this->load->view('messages/viewpost', array('message'=>$message)); ?>
+	</div>
 </div>
+
+<div id="content">
 <?php if (!empty($messages)): ?>
-	<div class="messages box">
-	<h2>Replies:</h2>
-	<div class="block" id="articles">
-		<?php $this->load->view('messages/viewlist', array('remove_reply_context'=>true)); ?>
-	</div>
-	</div>
-<?php endif ?>
+	<h3>Replies:</h3>
+	
+		<?php //var_dump($messages);echo " threading " ;var_dump($messages['threading']); ?>
+		<?php $this->load->view('messages/viewlist', array('messages'=>$messages)); ?>
+	
+<?php endif; ?>
+</div>
