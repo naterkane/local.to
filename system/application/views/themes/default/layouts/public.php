@@ -8,6 +8,7 @@
 	<link rel="alternate" href="<?php echo $this->config->item('base_url') ?>rss/user/<?php echo $username ?>" title="<?php echo $username ?>'s Updates" type="application/rss+xml" />
 	<?php endif ?>
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
+  <link media="handheld, screen <?php /*?>and (max-device-width: 480px) */?>" href="/assets/css/iPhone.css" type="text/css" rel="stylesheet" />
   <!-- <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print" /> -->
 	<title><?php 
 		if (!empty($page_title)): 
@@ -18,8 +19,8 @@
 	?></title>
 </head>
 <body>
-<div class="outer">
-	<div class="masthead container_12">
+<div class="masthead"><div class="container_16">
+    <div class="grid_16">
 		<?php echo $this->cookie->flashMessage(); ?>
 		<h1><a href="/" title="<?php echo $this->config->item('service_name') ?>"><?php echo $this->config->item('service_name') ?></a></h1>
 		<?php if (!$this->util->isSection("/signin") && !$this->util->isSection("/signup") && !$this->util->isSection("/reset_password") && !$this->util->isSection("/groups/accept")) { ?>
@@ -27,7 +28,8 @@
 		<?php } ?>
 		<div class="clearfix"></div>
 	</div>
-	<div class="clearfix"></div>
+</div></div>
+<div class="outer">
     <div id="bd" class="container_12">
 		<div class="bd full">
 		<?php
@@ -52,14 +54,11 @@
 		} else { 
 		?>
 			<div class="grid_6">
-				<img src="/assets/img/screenshot.png"/>
+				<p class="lead-in">Nomcat is an <a href="http://getnomcat.com">open-source tool</a>, built on open-source technologies, that's a lot like Twitter<sup>&trade;</sup>, but does a whole lot more.
+				{yield}
 			</div>
 			<div class="grid_6">
-				<p class="lead-in">TeamItUp is a sports tool that makes the communication, management, and promotion of sports teams and its members more efficient.
-				<!--TeamItUp (TIU) is a tool for members of sports teams to communicate with teammates, other players, coaches, fans and alumni within their networks.</p>
-				<p>TeamItUp is a free service that levels the playing field and gives participants at every level of sport equal recourses to communicate,
-				manage, and promote their sports lifestyle. We created it to help any team communicate and succeed both on and off the field.--></p>
-					{yield}
+				<img src="/assets/img/screenshot.png"/>
 			</div>
 			<div class="clearfix"></div>		
 		</div>

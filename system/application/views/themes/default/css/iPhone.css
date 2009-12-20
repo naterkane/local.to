@@ -1,0 +1,33 @@
+.grid_16, .grid_12, .grid_4, .masthead {
+	float: none;
+	clear: both;
+	width: auto;
+}
+
+.outer, .container_16, .container_12, #content, #messages, .masthead .nav,.form-share, #sidebar {
+	width: auto;
+}
+.masthead{
+	height: 40px;
+	
+}
+.masthead h1 {
+	margin: 6px 0 0 4px !important;
+}
+.form-share {
+	display:block;
+	float: none;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+.form-share textarea {
+	display: block;
+	width: auto;
+	right: 10px;
+	left: 10px;
+	position: relative;
+}
+#sb_following {
+	display: none;
+}
+

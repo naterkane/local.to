@@ -11,6 +11,7 @@
 	<link rel="alternate" href="<?php echo $this->config->item('base_url') ?>rss/user/<?php echo $username ?>" title="<?php echo $username ?>'s Updates" type="application/rss+xml" />
 	<?php endif ?>
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
+  <link media="handheld, screen <?php /*?>and (max-device-width: 480px) */?>" href="/assets/css/iPhone.css" type="text/css" rel="stylesheet" />
   <!-- <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print" /> -->
 	<title><?php 
 		if (!empty($page_title)): 

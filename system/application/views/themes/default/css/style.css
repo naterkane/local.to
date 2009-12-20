@@ -58,7 +58,7 @@ table {
 
 /* ::::: Document Styles ::::: */
 html, body {
-    background: #fff;/* #ccc url(/assets/img/bg.png) repeat-x;*/
+    background: #f8f8f8;/* #ccc url(/assets/img/bg.png) repeat-x;*/
 }
 
 body {
@@ -122,8 +122,8 @@ a, a:hover, a:active {
  ---------------------------------------------- */
 .masthead {
 	float: left;
-	background: #eee;
-	border-bottom: #333;
+	background: rgb(247, 147, 30);
+	border-bottom: 3px solid #960;
     /*background: #0071b3 url(/assets/img/bg_masthead.png) 0 0 repeat-x;*/
 	height: 37px;
 	margin-bottom: 20px;
@@ -239,13 +239,11 @@ h2 {
 
 /* ::::: Secondary Nav ::::: */
 .masthead .nav .nav-util {
-    background: #eee;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+    
     position: absolute;
-    top: 11px;
+    top: 13px;
     right: 20px;
-    height: 25px;
+    height: 30px;
     overflow: hidden;
 }
 
@@ -259,18 +257,33 @@ h2 {
     padding: 5px 3px 0 5px;
     margin: 0 0 0 -7px;
 }
-
+.masthead .nav .nav-util li.current {
+	border: none;
+	background: #996600;
+	
+	border-top-right-radius: 4px 4px;
+	border-top-left-radius: 4px 4px;
+    -moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+    -webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	z-index: 2;
+	height: 30px;
+	margin-left: 0px;
+	padding-left: 0px;
+}
 .masthead .nav .nav-util li a {
-    border-left: 1px solid #fff;
-    color: gray;
-    font-size: 93%;
+    border-left: 1px solid #960;
+    color: #fff;
+    font-size: 13px;
     padding: 0 8px 0 12px;
     vertical-align: top;
     line-height: 15px;
 }
 
 .masthead .nav .nav-util li.current a {
-	color: #000;
+	border: none;
+	color: #fff;
 }
 
 .masthead .nav .nav-util li a:hover {
@@ -282,15 +295,10 @@ h2 {
 	color: #fff;
 	float: right;
 	
-    margin: 11px 10px 0 0;
 	
 }
 .masthead form {
-	background: #3997cc;
-	border-radius: 5px 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-	padding: 7px 10px 9px 0;
+	padding: 4px 10px 9px 0;
 }
 .masthead fieldset {
 	display: block;
@@ -311,6 +319,7 @@ h2 {
 	text-align: right;
 }
 .masthead .signin-form label {
+	font-size: 12px;
 	display: block;
 	float: left; 
 	text-align: right;
@@ -321,7 +330,7 @@ h2 {
 }
 .masthead .signin-form .button {
 	border: 0;
-	background: url(/assets/img/sprite_buttons.png) -40px -40px no-repeat;
+	background: #960;
 	color: #fff;
 	cursor: pointer;
 	padding: 0 5px;
@@ -342,6 +351,7 @@ h2 {
 	/*border-left: 1px solid #ddd;*/
 	margin-left: 0px;
 }
+#bd,
 #bd.default {
 	/**background-image: url(/assets/img/bg_sidebar.png);
 	
@@ -350,7 +360,7 @@ h2 {
 	background-attachment: scroll;
 	
 	background-position: 0pt 0pt;*/
-	
+	background: #fff;
 }
 #bd p, 
 #bd li {
@@ -841,7 +851,7 @@ h3 + .neutral {
     _width: 720px;
 }
 .bd.full {
-	background: url(/assets/img/bg_gradient_lite.png) 0 0 repeat-x;
+	/*background: url(/assets/img/bg_gradient_lite.png) 0 0 repeat-x;*/
 	width: 960px;
     margin: 0;
     padding: 30px 0 20px;
