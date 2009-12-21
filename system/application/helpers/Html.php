@@ -235,7 +235,7 @@ class Html
 	{
 		if ($isOwner && !$message['deleted_by_user']) 
 		{
-			return $this->link('Delete', '/messages/delete/' . $message['id'] . $this->sendMeHere(), array('id'=>'delete_' . $message['id']), 'Are your sure you want to delete this message? This can not be undone.');
+			return $this->link('Delete', '/messages/delete/' . $message['id'] . $this->sendMeHere(), array('id'=>'delete_' . $message['id'],'title'=>'Delete'), 'Are your sure you want to delete this message? This can not be undone.');
 		}
 	}
 
@@ -257,11 +257,11 @@ class Html
 		$return = "";
 		if (in_array($message['id'], $user['favorites'])) 
 		{
-			$return .= $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'on', 'id'=>'favorite_link_' . $message['id']));
+			$return .= $this->link('Unfavorite', '/messages/unfavorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'on', 'id'=>'favorite_link_' . $message['id'],'title'=>'Unfavorite'));
 		}
 		else 
 		{
-			$return .= $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'off', 'id'=>'favorite_link_' . $message['id']));
+			$return .= $this->link('Favorite', '/messages/favorite/' . $message['id'] . $this->sendMeHere(), array('class'=>'off', 'id'=>'favorite_link_' . $message['id'],'title'=>'Favorite'));
 		}
 		return $return;
 	}
@@ -484,6 +484,7 @@ class Html
 		$options = array();
 		$link = '#top';
 		$options['id'] = 'reply_link_' . $message['id'];
+		$options['title'] = "Reply";
 		if ($message['group_name']) 
 		{
 			if ($dm) 
@@ -591,6 +592,8 @@ class Html
 		return null;
 	}
 	
-	
+	function dropioChat(){
+		
+	}
 }
 ?>

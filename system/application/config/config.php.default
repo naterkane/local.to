@@ -22,7 +22,7 @@ $config['public_timeline'] = "public timeline";
 $config['title_tag_separator'] = "   * ";
 // make sure to replace single quote characters ' referenced in javascript with unescape(%27)
 $config['footer_code'] = "";
-
+$config['dropio_api_key'] = null;
 /**
   *--------------------------------------------------------------------------
   * Index File

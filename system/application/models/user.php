@@ -1087,6 +1087,24 @@ class User extends App_Model
 	}
 	
 	/**
+	 * get the unread message count for a user's various counters
+	 * 
+	 * @access public
+	 * @param array $counter [optional]
+	 * @param array $user [optional]
+	 * @return boolean|integer
+	 */
+	public function getUnread($counter = null, &$user = array())
+	{
+		$read_counter = $counter . '_read';
+		if (!array_key_exists($counter, $user) || !array_key_exists($read_counter, $user)) 
+		{
+			return false;
+		}
+		return count($user[$counter]) - $user[$read_counter];
+	}
+	
+	/**
 	 * Update read messages count
 	 *
 	 * @access public
@@ -1115,6 +1133,24 @@ class User extends App_Model
 		return $this->save($user);
 	}
 	
+	/**
+	 * get the number of unread messages for a group
+	 * @param object $user [optional]
+	 * @param object $group [optional]
+	 * @return boolean|integer
+	 */
+	public function getUnreadGroup(&$user = array(), &$group = array())
+	{
+		if (empty($user)) return false;
+		$counter_array = 'group_messages_read';
+		$group_name = $group['name'];
+		//$message_count = count($group['messages']);	
+		if (!array_key_exists($group_name, $user[$counter_array])) 
+		{
+			return false;
+		}
+		return count($group['messages']) - $user[$counter_array][$group_name];
+	}
 
 	/**
 	 * Update a user's profile

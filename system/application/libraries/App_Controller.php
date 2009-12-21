@@ -68,6 +68,9 @@ class App_Controller extends Controller {
 	 */
 	public $validationErrors = array();
    
+	public $dropio_api_key = null;
+	public $dropio = null;
+	
 	/**
 	 * Constructor
 	 *
@@ -113,6 +116,19 @@ class App_Controller extends Controller {
 		if (!empty($this->userData)) //set threading 
 		{
 			$this->Message->threaded = $this->userData['threading'];
+		}
+		if (file_exists(APPPATH . 'libraries/dropio-php/Dropio/Api.php')){
+			include(APPPATH . 'libraries/dropio-php/Dropio/Api.php');
+			$this->dropio_api_key = $this->config->item('dropio_api_key');
+			try {
+				Dropio_Api::setKey($this->dropio_api_key);
+				$this->dropio = new Dropio_Api();
+				
+			} catch (Dropio_Api_Exception $e) {
+			  	echo "Error:" . $e->getMessage();
+			}
+			//var_dump($this->dropio->instance());
+			//		exit;
 		}
     }
 
@@ -175,7 +191,26 @@ class App_Controller extends Controller {
 		}
 		$this->load->view($type.'s/avatar', $this->data);
 	}
-
+	public function _uploadfiles($id, $name, $type = 'user')
+	{
+		$sizes = (is_array($this->config->item('avatar_sizes'))) ? $this->config->item('avatar_sizes') : array(24,36,48,60);
+		$this->data['avatartype'] = $type;
+		$this->data['avatarid'] = $id;
+		$this->data['name'] = $name;
+		//var_dump($this->data);
+		if (!empty($_FILES)) 
+		{
+			$this->load->library(array('Uploader', 'Avatar'));
+			$this->uploader->upload('avatar', $type . '_' . $id,  $name . '_' . 'original');
+			if (!$this->uploader->isError()) 
+			{
+				$file = $this->uploader->getLastUploadInfo();
+				$this->avatar->makeAll($file['dir'], $this->uploader->getName(), $name, $sizes);
+			}
+			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results());
+		}
+		$this->load->view($type.'s/avatar', $this->data);
+	}
 	/**
 	 * CheckID 
 	 * Make sure an id is present. Used in controller methods that rely on a passed variable.

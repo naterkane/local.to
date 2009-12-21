@@ -47,7 +47,7 @@ class Admin extends App_controller
 	 * Show phpinfo content
 	 */
 	function _info(){
-		$this->mustBeSignedIn();
+		//$this->mustBeSignedIn();
 		if ($this->config->item("testing") != true) {
 			return false;
 		}
@@ -167,7 +167,7 @@ class Admin extends App_controller
 	 */	
 	function stats()
 	{
-		$this->mustBeSignedIn();
+		//$this->mustBeSignedIn();
 		$all = array();
 		foreach($this->User->tt->fwmkeys('', 1000) as $key)
 		{

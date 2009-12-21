@@ -32,6 +32,8 @@ class Groups extends App_Controller
 	 */
 	public $loadGroupSidebar = true;	
 
+	
+	
 	/**
 	 * Accept an invite
 	 *
@@ -114,6 +116,7 @@ class Groups extends App_Controller
 		$this->data['page_title'] = 'Add a ' . $this->config->item('group');
 		if ($this->postData) {
 			if ($this->Group->add($this->postData, $this->userData)) {
+				//$this->dropio->
 				$this->redirect('/groups/settings/' . $this->postData['name'],"Your ".$this->config->item('group')." has been created. Please fill out your ".$this->config->item('group')."'s info.");
 			} else {
 				$this->setErrors(array('Group'));
@@ -168,11 +171,11 @@ class Groups extends App_Controller
 		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Member Blacklist";
 		$this->mustBeOwner($group);
 		$this->data['group'] = $group;
-		$this->data['page_title'] = $group['name'] . ' Blacklist';
-       	$this->data['blacklist'] = Page::make('Group', $group['blacklist'], array('method'=>'getMembers'));
+		$this->data['blacklist'] = Page::make('Group', $group['blacklist'], array('method'=>'getMembers'));
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 		$this->data['group']['member_count'] = count($group['members']);			
 		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+		$this->data['embedchat'] = $this->embedChat($group);
 		$this->load->view('groups/blacklist', $this->data);	
 	}
 
@@ -195,8 +198,220 @@ class Groups extends App_Controller
 			$this->redirect($redirect, 'The invitation could not be deleted.', 'error');	
 		}
 	}
+	private function createDropioDrop($group){
+		if (empty($this->dropio)){
+			return false;
+		}
+		$drop = new Dropio_Drop();
+		$drop->set('name',$this->config->item('service_name')."_".$group['name']);
+		$drop->set('description',"The private drop of " . $group['fullname']);
+		$drop->set('expiration_length','1_YEAR_FROM_LAST_VIEW');
+		$drop->set('guests_can_add',0);
+		$drop->set('guests_can_comment',0);
+		$drop->set('guests_can_delete',0);
+		$drop->save();
+		array_push($group['dropio'],$drop->values);
+		if ($this->Group->save($group)){
+			return $drop;
+		}
+		return false;
+	}
+	/**
+	 * 
+	 * 
+	 * @param string $dropname
+	 */
+	private function loadDropioDrop($dropname = null){
+		if (empty($dropname)){
+			return false;
+		}
+		return Dropio_Drop::load($dropname);
+	}
+	/**
+	 * 
+	 * 
+	 * @param string $groupname
+	 */
+	public function files($groupname = null)
+	{
+		$this->mustBeSignedIn();
+		$group = $this->Group->getByName($groupname);
+		if (!$group){
+				$this->redirect("/groups");
+		}
+		if (empty($group['dropio'])) {
+			$this->redirect('/groups/uploadfiles/'.$group['name']);
+		}
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Files";
+		$this->data['group'] = $group;
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+		$this->data['group']['member_count'] = count($group['members']);			
+		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+		$this->data['User'] = $this->userData;
+		//echo "<pre style='text-align: left;'>";
+		foreach($group['dropio'] as $existingdrop){
+			$drop = $this->loadDropioDrop($existingdrop['name']);
+			if (!$drop) {
+				continue;
+			}
+			
+			$this->data['drop'] = (array)$drop;
+			//var_dump($this->data['drop']);
+			$assets = $drop->getAssets();
+			//$counter = $assets->__get('_attributes:private');//'count'];
+			$this->data['files'] = array();
+			//var_dump($assets);
+			foreach($assets as $asset){
+				//if ($assets[$key] == "_attributes:private"){
+				//	continue;
+				//}
+				//$asset = $assets[$key];//->__get($key);
+				$asset = (array)$asset;
+				//$asset = $asset[0];
+				$this->data['files'][] = $asset;
+			}
+			$this->data['drop'] = (array)$asset['drop'];
+			
+			//var_dump($this->data['drop']);
+		}
+		//echo "</pre>";
+		$this->data['embedchat'] = $this->embedChat($group);
+		
+		$this->load->view('groups/files',$this->data);
+	}
+	
 	
 
+	/**
+	 * 
+	 * 
+	 * @param string $groupname
+	 */
+	public function uploadfiles($groupname = null)
+	{
+		$this->mustBeSignedIn();
+		$group = $this->Group->getByName($groupname);
+		if (!$group){
+				$this->redirect("/groups");
+		}
+		$this->data = $group;
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "File Uploader";
+		$this->data['group'] = $group;
+		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
+		$this->data['group']['member_count'] = count($group['members']);			
+		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+		$this->data['User'] = $this->userData;
+		$message = null;
+		$messagetype = null;
+		if (!empty($_FILES)){
+			//echo "<pre style='text-align:left;'>";
+			//var_dump($_FILES);
+			
+				if(!empty($this->postData['dropname']))
+				{
+					//echo "loading drop <br/>";
+					$drop = $this->loadDropioDrop($this->postData['dropname']);
+				}
+				else {
+					//echo "creating new drop <br/>";
+					$drop = $this->createDropioDrop($group);
+				}
+				//var_dump($drop);
+				//exit;
+				$responses = null;
+				$filenames = array();
+				foreach ($_FILES as $file) { 
+					if ($file['tmp_name'] > '') {
+						//var_dump($file);
+						$asset = $drop->addFile($file['tmp_name']);
+						//var_dump($asset);
+						$asset->set('description',$this->userData['realname']. " <a href='".$this->config->item("base_url"). $this->userData['username']."'>@".$this->userData['username']."</a>");
+						$asset->set('title',$file['name']);
+						//$asset($file['name']);
+						$asset->save();
+						//exec ('rm -f '.$file['tmp_name']);
+						//var_dump($asset);
+						$responses[] = $asset;
+						$filenames[] = $file['name'];
+					}
+				}
+				$filenames = (count($filenames) > 1)?implode(', ',$filenames):$filenames[0];
+				
+				$message = "I just uploaded ".$filenames." to <a href='".$this->config->item('base_url')."groups/files/".$group['name']."'>our fileshare</a>";
+				//foreach($responses as $response){
+					//echo $response->embedCode();
+				//}
+				$this->data['dropname'] = $drop->name;
+				$this->Message->add(array('group_name'=>$group['name'],'message'=>$message), $this->userData);
+				$this->cookie->setFlash("You have successfully uploaded " . count($responses) . " files to http://drop.io/" . $this->data['dropname'],"success");
+				$this->redirect('groups/files/'.$group['name']);
+			//var_dump($this->data['dropname']);
+				
+			//echo "</pre>";
+		}
+		if (!empty($group['dropio'])){
+			foreach($group['dropio'] as $existingdrop){
+				if(!empty($existingdrop['expires_at'])){
+					//echo str_replace('/','-',$existingdrop['expires_at']);
+					//echo date_create(str_replace('/','-',$existingdrop['expires_at']));
+					$expires = date_format(date_create(str_replace('/','-',$existingdrop['expires_at'])),'Y/m/d H:i:s');
+					$now = date('Y/m/d H:i:s',$_SERVER['REQUEST_TIME']);
+					//echo $expires. "<br/>";
+					//echo $now . "<br/>";
+					if($expires > $now){
+						$this->data['drops'][$existingdrop['name']] = $existingdrop['name'] . " which expires at: " . $existingdrop['expires_at'];
+					}
+				$drop = $this->loadDropioDrop($existingdrop['name']);
+				//echo $drop->getEmbedCode();
+				}
+				
+			}
+			
+		}
+		//$this->data['group'] = $group;
+		
+		//
+		$this->data['embedchat'] = $this->embedChat($group);
+		$this->load->view('groups/uploadfiles',$this->data);
+	}
+	/**
+	 * 
+	 * 
+	 * @param string $groupname
+	 */
+	public function deletefiles($groupname = null)
+	{
+		$this->mustBeSignedIn();
+		$group = $this->Group->getByName($groupname);
+		if (!$group){
+				$this->redirect("/groups");
+		}
+		$this->data['page_title'] = ucwords($group['fullname'])  . $this->config->item('title_tag_separator') . "Files";
+		$this->data['group'] = $group;
+	}
+	
+	public function embedChat($group = null){
+		return null;
+		if (!is_array($group)){
+			$group = $this->Group->getByName($group);
+		}
+		if (!$group || !$this->Group->isMember($group['members'], $this->userData['id'])){
+				return false;
+		}
+		$this->data['dropname'] = null;
+		$this->data['chatpassword'] = null;
+		if (!empty($group['dropio'])){
+			$this->data['dropname'] = $group['dropio'][0]['name'];
+			$this->data['chatpassword'] = $group['dropio'][0]['chat_password'];
+		} else {
+			$drop = $this->createDropioDrop($group);
+			$this->data['dropname'] = $drop->name;
+			$this->data['chatpassword'] = (array)$drop['values']['chat_password'];
+		}
+		return '<script type="text/javascript" charset="utf-8" src="http://drop.io/'.$this->data['dropname'].'/remote_chat_bar.js?chat_password='.$this->data['chatpassword'].'"></script>';
+		//$this->load->view('groups/embedChat',array('output'=>$return));
+	}
+	
 	/**
 	 * View a group's inbox
 	 *
@@ -228,6 +443,7 @@ class Groups extends App_Controller
 		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
 		$this->data['to'] = '!' . $group['name'];
 		$this->data['User'] = $user;
+		$this->data['embedchat'] = $this->embedChat($group);
 		$this->load->view('groups/inbox', $this->data);
 	
 	}
@@ -285,6 +501,7 @@ class Groups extends App_Controller
 			$this->redirect($_SERVER['REQUEST_URI'], $this->Group_Invite->message);			
 		}
 		$this->data['invite_list'] = $this->Group_Invite->getMany($this->data['group']['invites']);
+		$this->data['embedchat'] = $this->embedChat($group);
 		$this->load->view('groups/invites', $this->data);
 	}	
 
@@ -315,6 +532,7 @@ class Groups extends App_Controller
     		$this->data['members'] = Page::make('Group', $group, array('method'=>'getMembers'));
 		if (empty($sidebar))
 		{
+			$this->data['embedchat'] = $this->embedChat($group);
 			$this->load->view('groups/members', $this->data);
 		}
 		else{
@@ -339,6 +557,7 @@ class Groups extends App_Controller
 			$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], null, $group['id']);
 			$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
 	        $this->data['messages'] = Page::make('Message', $group['mentions']);
+	        $this->data['embedchat'] = $this->embedChat($group);
 			$this->load->view('groups/mentions', $this->data);
 		} 
 		else 
@@ -407,6 +626,7 @@ class Groups extends App_Controller
 		$this->data['group']['im_a_member'] = in_array($this->userData['id'], $group['members']);	
 		$this->data['User'] = $user;
 		$this->setData($this->data);
+		$this->data['embedchat'] = $this->embedChat($group);
 		$this->load->view('groups/profile', $this->data); 
 	}
 
@@ -449,6 +669,7 @@ class Groups extends App_Controller
 			{
 				$this->setData($this->data);
 			}			
+			$this->data['embedchat'] = $this->embedChat($group);
 			$this->load->view('groups/settings', $this->data); 
 		} 
 		else 
@@ -553,6 +774,8 @@ class Groups extends App_Controller
 		$this->data['group']['is_owner'] = $this->Group->isOwner($this->userData['id'], $group['owner_id']);
 		$this->data['group']['member_count'] = count($group['members']);			
 		$this->data['group']['im_a_member'] = $this->Group->isMember($group['members'], $this->userData['id']);
+		$this->data['embedchat'] = $this->embedChat($group);
+		echo $this->data['embedchat'];
 		if ($this->data['group']['im_a_member']) 
 		{
 			if ($this->userData['threading']) 
@@ -572,7 +795,7 @@ class Groups extends App_Controller
    	 	$this->data['messages'] = Page::make('Message', $messages);			
 		if ($this->data['group']['member_count'] > 0) {
 			$this->User->updateReadGroup($this->userData, $group);
-			$this->data['redirect'] = $this->getRedirect(true,'/group/' . $group['name']);				
+			$this->data['redirect'] = $this->getRedirect(true,'/group/' . $group['name']);	
 			$this->load->view('groups/view', $this->data);
 		} 
 		else {

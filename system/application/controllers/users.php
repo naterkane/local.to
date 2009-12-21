@@ -320,6 +320,77 @@ class Users extends App_Controller
     }
 
 	/**
+	 * 
+	 * @param string $view [optional]
+	 * @return void
+	 */
+	public function get_unread($view,$group = null){
+		if (!$this->userData){
+			echo json_encode(array('redirect'=>$this->config->item('base_url') . "signin"));
+			exit;
+		}
+		if (!empty($group)){
+			$group = $this->Group->getByName($group);
+		}
+		$key = "";
+		$am = null;
+		switch($view){
+			case"home":
+				$key = "private";
+				$am = $this->userData[$key];
+				if ($this->userData['threading']) 
+				{
+					$am = $this->userData[$key.'_threaded'];
+				}
+				break; 
+			case"replies":
+				$key = "mentions";
+				$am = $this->userData[$key];
+				break;
+			case"inbox":
+				$key = "inbox";
+				$am = $this->userData[$key];
+				break;
+			default:
+				$key = $view;
+		} 
+
+		$this->data['message'] = null;
+		if (!empty($group)):
+			$am = $group['messages'];
+			$unreadcount = $this->User->getUnreadGroup($this->userData,$group);
+		else:
+			$unreadcount = $this->User->getUnread($key, $this->userData);
+		endif;
+		
+		$m = array();
+		//echo "<pre>";
+		//echo" unread count " . $unreadcount;
+		//var_dump($am);
+		while ($unreadcount > 0){
+		
+			array_push($m,$this->Message->getOne(array_shift($am)));
+			$c = count($m)-1;
+			//echo $c . "\n";
+			$m[$c]['username'] = $m[$c]['User']['username'];
+			$m[$c]['user_id'] = $m[$c]['User']['id'];
+			$m[$c]['realname'] = $m[$c]['User']['realname'];
+			unset($m[$c]['User']);
+			$unreadcount--;
+		}
+		//var_dump($m);
+		header('Content-Type: application/json; charset=utf-8'); 
+		echo json_encode($m);
+		exit;
+		//$this->data['messages'] = Page::make('Message', $messages);
+		//$this->data['following'] = $this->userData['following'];
+		//$this->data['redirect'] = $this->getRedirect();
+		//$this->User->updateRead('private', $this->data['profile']);		
+        //$this->load->view('messages/messages_json', $this->data);
+		//echo
+	}
+
+	/**
 	 * Show user mentions
 	 *
 	 * @access public

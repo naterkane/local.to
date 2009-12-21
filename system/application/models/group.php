@@ -63,6 +63,20 @@ class Group extends App_Model
 			require_once(APPPATH . 'views/themes/' . $this->ci->config->item('theme') . '/config/group_fields.php');
 			$this->fields = $fields;
 		}
+		/*if (file_exists(APPPATH . 'libraries/dropio-php/Dropio/Api.php')){
+			include(APPPATH . 'libraries/dropio-php/Dropio/Api.php');
+			$this->dropio_api_key = $this->ci->config->item('dropio_api_key');
+			try {
+				Dropio_Api::setKey($this->dropio_api_key);
+				$this->dropio = new Dropio_Api();
+				
+			} catch (Dropio_Api_Exception $e) {
+			  	echo "Error:" . $e->getMessage();
+			}
+			//var_dump($this->dropio->instance());
+			//		exit;
+		}*/
+		//echo $this->ci->config->item('dropio_api_key');
 		unset($this->ci);		
 	}
 	
@@ -88,10 +102,11 @@ class Group extends App_Model
 			//$this->save($group, array('prefixValue'=>'fullname', 'saveOnly'=>'id', 'validate'=>false));
 			$this->save($group, array('prefixValue'=>'name', 'saveOnly'=>'id', 'validate'=>false));
 			$this->addToGroupList($group['name']);			
-			$this->User->addGroup($owner, $group['id']);			
+			$this->User->addGroup($owner, $group['id']);
 		}
 		return $this->endTransaction();
 	}
+	
 	
 	/**
 	 * Add User to a Group
@@ -494,9 +509,23 @@ class Group extends App_Model
 	 */
 	public function isPublic($group = array())
 	{
-		return false;
+		return !$group['locked'];
 	}
 	
+	/**
+	 * Is group private
+	 * 
+	 * For now, groups are never public.
+	 *
+	 * @access public
+	 * @param array $group
+	 * @return boolean 
+	 * @todo Make an actual function when we start using public groups 	
+	 */
+	public function isPrivate($group = array())
+	{
+		return $group['locked'];
+	}
 
 	/**
 	 * function matchGroups
