@@ -3,12 +3,13 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=8" />
 	<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/assets/img/favicon.ico" /> 
+	<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
 	<meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8"/>
 	<?php if (!empty($rss_updates)): ?>
 	<link rel="alternate" href="<?php echo $this->config->item('base_url') ?>rss/user/<?php echo $username ?>" title="<?php echo $username ?>'s Updates" type="application/rss+xml" />
 	<?php endif ?>
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
-  <link media="handheld, screen <?php /*?>and (max-device-width: 480px) */?>" href="/assets/css/iPhone.css" type="text/css" rel="stylesheet" />
+  <link media="handheld, screen and (max-device-width: 480px)" href="/assets/css/iPhone.css" type="text/css" rel="stylesheet" />
   <!-- <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print" /> -->
 	<title><?php 
 		if (!empty($page_title)): 
@@ -54,11 +55,11 @@
 		} else { 
 		?>
 			<div class="grid_6">
-				<p class="lead-in">Nomcat is an <a href="http://getnomcat.com">open-source tool</a>, built on open-source technologies, that's a lot like Twitter<sup>&trade;</sup>, but does a whole lot more.
+				<p class="lead-in">Nomcat is an <a href="http://getnomcat.com">open-source tool</a>, built on open-source technologies. It's a lot like Twitter<sup>&trade;</sup>, but aims to do a whole lot more.
 				{yield}
 			</div>
 			<div class="grid_6">
-				<img src="/assets/img/screenshot.png"/>
+				<img src="/assets/img/nomkat.png" alt="Hello, I'm Nomcat"/>
 			</div>
 			<div class="clearfix"></div>		
 		</div>

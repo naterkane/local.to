@@ -1,33 +1,133 @@
-.grid_16, .grid_12, .grid_4, .masthead {
+
+body {
+	width: 480px;
+}
+.grid_16, .grid_12, .grid_4, .grid_6, .masthead {
 	float: none;
 	clear: both;
-	width: auto;
+	width: 480px;
 }
 
 .outer, .container_16, .container_12, #content, #messages, .masthead .nav,.form-share, #sidebar {
-	width: auto;
+	width: auto !important;
+	padding: 0;
+}
+#messages {
+	overflow-x: hidden;
+	overflow:hidden;
 }
 .masthead{
-	height: 40px;
-	
+	height: 100px !important;
+	overflow: visible;
 }
 .masthead h1 {
 	margin: 6px 0 0 4px !important;
 }
+.nav {
+	background: none !important;
+	left: 0;
+	height: 50px;
+	margin: 0 0 0 0 !important;
+}
+.nav-util {
+	height: 100px !important;
+	margin-top: 50px;
+}
+.nav-util li {
+	height: 
+}
 .form-share {
 	display:block;
 	float: none;
+	padding-top: 5px;
 	padding-left: 10px;
 	padding-right: 10px;
 }
-.form-share textarea {
+.form-share textarea, #message-context, #update-btn {
+	float: none;
 	display: block;
-	width: auto;
-	right: 10px;
-	left: 10px;
-	position: relative;
+	width: 390px
+}
+ #message-context {
+ 	display: none;
+ }
+.form-share textarea {
+	padding-right: 50px;
+	width: 370px;
+}
+.form-share:focus {
+	-webkit-transform: translateY(-20px);
+}
+.form-share textarea:focus {
+	height: 170px;
+}
+.form-share:blur {
+	-webkit-transform:translateX(20px);
+}
+#update-button, #bd input.button {
+	background-color: #fff;
+	background-position-y: -390px;
+	font-size: 30px !important;
+	height: 50px !important;
+	width: 430px !important;
+}
+#character-count {
+	z-index: 3;
+	right: 35px;
+	top: 10px;
 }
 #sb_following {
 	display: none;
 }
-
+dl.tip {
+	display: none;
+}
+#messages .message, #teams .team, #users .user {
+	padding-left: 78px !important;
+}
+#messages .message p {
+	width: auto;
+}
+.message .author,
+.message .message_text {
+	font-size: 20px;
+}
+.message .meta a {
+	color: #666 !important;
+	font-size: 16px !important;
+}
+#sidebar,
+.user-box, .menu {
+	width: 460px !important;
+}
+.post-actions {
+	right: 40px;
+	margin-top: -10px;
+	padding: 0;
+	width: 30px;
+	height: auto;
+}
+.post-actions span {
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#dddddd), color-stop(.3, #dddddd), color-stop(.5, #bbbbbb));
+	background-origin: border-box;
+	background-position-x:5px !important;
+	-webkit-background-size: 150%;
+	border: 1px outset #eeeeee;
+	-webkit-border-radius: 4px;
+    display: inline;
+    width: 15px;
+    height: 15px;
+    text-indent: 0 !important;
+    padding: 3px 3px;
+	margin-bottom: 1px;
+	margin-top: 1px;
+}
+.favorite a {
+	background-position: 5px 0;
+}
+.reply-to a {
+	background-position: 4px -43px;
+} 
+.delete a {
+	background-position: 5px -84px;
+}

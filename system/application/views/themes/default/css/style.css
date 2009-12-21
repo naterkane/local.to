@@ -393,7 +393,7 @@ em {
              serif;
 	font-size: 21px;
 	line-height: 27px;
-	margin: 38px 0 21px 0;
+	margin: 38px 0 21px 35px;
 }
 
 .lead-in + p {
@@ -403,7 +403,7 @@ em {
 #bd .sign-up-form {
 	background: url(/assets/img/bg_signup_form.png) 0 0 no-repeat;
 	height: 225px;
-	margin-left: -29px;
+	margin-left: 0px;
 	margin-top: 21px;
 	padding: 29px 0 0 29px;
 	width: 484px;
@@ -1136,12 +1136,14 @@ ul.subnav li.current a {
 	font-size: 22px;
 }
 #teams,
-#users {
+#users,
+#files {
 	padding-top: 10px;
 }
 #messages .message,
 #teams .team,
-#users .user {
+#users .user,
+#files .file {
     /*background: #fff url(/assets/img/bg_message.png) repeat-x bottom;*/
 	border-bottom: 1px solid #c9cecc;
     padding: 10px 10px 10px 68px;
@@ -1157,12 +1159,18 @@ ul.subnav li.current a {
 	min-height: 38px;
 	padding-left: 56px;
 }
+#files .file {
+	padding: 10px 10px 10px 120px;
+	min-height: 100px;
+	height: 100px;
+}
 #messages .no-avatar {
 	padding-left: 10px;
 }
 .message .avatar,
 .team .avatar,
-.user .avatar {
+.user .avatar,
+.file .thumbnail {
     float: left;
     position: relative;
     margin: 0 10px 0 -58px;
@@ -1172,6 +1180,15 @@ ul.subnav li.current a {
 .team .avatar {
 	margin: 0 0 0 -46px;
 	width: 36px;
+}
+.file .thumbnail {
+	margin: 0 0 0 -110px;
+	width: 100px;
+	padding: 2px;
+	border: 1px solid #ddd;
+}
+.file .thumbnail:hover {
+	background: #eee;
 }
 .avatar img {
 	border-bottom: 1px solid #c9cecc; 
@@ -1243,7 +1260,7 @@ ul.subnav li.current a {
 
 /* actions */
 .post-actions {
-	/*display: none;*/
+	display: none;
 }
 #messages .message:hover .post-actions,
 #messages .hover>.post-actions,

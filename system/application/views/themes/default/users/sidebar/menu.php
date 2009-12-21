@@ -4,9 +4,10 @@ if (!empty($group)){
 	echo "<ul class=\"menu\" id=\"sb_menu_long\">\n";
 	//echo $html->menuItem('Home', '/home', ($this->util->isSection("/home")), $html->unread($user, 'private'));
 	if ($group['im_a_member']): 
-		echo $html->menuItem(ucfirst($this->config->item("group")). " Stream", '/group/'.$group['name'], ($this->util->isSection("/group/".$group['name']))); 
+		echo $html->menuItem("Private Messages", '/group/'.$group['name'], ($this->util->isSection("/group/".$group['name']))); 
+		echo $html->menuItem('Direct Messages','/groups/inbox/'.$group['name'], ($this->util->isSection("/groups/inbox/".$group['name'])));
 		echo $html->menuItem('Mentions', '/groups/mentions/'.$group['name'], ($this->util->isSection("/groups/mentions/".$group['name'])));
-		echo $html->menuItem('Private Messages','/groups/inbox/'.$group['name'], ($this->util->isSection("/groups/inbox/".$group['name'])));
+		echo $html->menuItem('File Sharing','/groups/files/'.$group['name'], (($this->util->isSection("/groups/files/".$group['name'])) || $this->util->isSection("/groups/uploadfiles/".$group['name'])));
 	else: 
 		echo $html->menuItem('Mentions', '/groups/mentions/'.$group['name'], ($this->util->isSection("/groups/mentions/".$group['name'])));
 	endif; 

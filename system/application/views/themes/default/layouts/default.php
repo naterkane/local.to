@@ -5,13 +5,14 @@
 	<meta http-equiv="Expires" content="-1" />
 	<meta name="robots" content="noindex,nofollow" />	
 	<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/assets/img/favicon.ico" /> 
+	<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
 	<meta http-equiv="X-UA-Compatible" content="IE=8" />
 	<meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8"/>
 	<?php if (!empty($rss_updates)): ?>
 	<link rel="alternate" href="<?php echo $this->config->item('base_url') ?>rss/user/<?php echo $username ?>" title="<?php echo $username ?>'s Updates" type="application/rss+xml" />
 	<?php endif ?>
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
-  <link media="handheld, screen <?php /*?>and (max-device-width: 480px) */?>" href="/assets/css/iPhone.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="/assets/css/iPhone.css" type="text/css" rel="stylesheet" />
   <!-- <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print" /> -->
 	<title><?php 
 		if (!empty($page_title)): 
@@ -36,10 +37,9 @@
 			<ul class="nav-util">
 			<?php if ($this->isSignedIn): ?>
 			<?php $this->load->view('static/navigation',array('user'=>$this->userData)); ?>
-				<!--<li><a href="/Search" title="Search">Search</a></li>-->
-				<li><a href="/settings" title="Settings">Settings</a></li>
-				<li><a href="/about" title="About">About</a></li>
-				<li><a href="/users/signout">Sign Out</a></li>
+				<!--<li><a href="/Search" title="Search" id="nav-search">Search</a></li>-->
+				<li><a href="/settings" title="Settings" id="nav-settings">Settings</a></li>
+				<li><a href="/users/signout" id="nav-signout">Sign Out</a></li>
 			<?php else: ?>
 				<li<?php echo ($this->util->isSection("/about"))?' class="current"':""; ?>><a href="/about">About</a></li>
 				<li<?php echo ($this->util->isSection("/signin"))?' class="current"':""; ?>>
@@ -98,6 +98,11 @@
 <script type="text/javascript" src="/assets/js/nomcat.js"></script>
 <?php else: ?>
 <script type="text/javascript" src="/assets/js/nomcat-min.js"></script>
-<?php endif; ?>
+<?php endif; 
+if (!empty($embedchat)){
+	//don't embed the chat until i can figure out how to hijack and control it.
+	//echo $embedchat;
+}
+?>
 </body>
 </html>

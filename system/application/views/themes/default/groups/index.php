@@ -2,13 +2,15 @@
 		<h2>Teams</h2>
 </div>
 <div id="content">
-	<div class="inlineMessage">
-		<p>All of your teams and others on TeamItUp.
-		<?php if ($this->userData): ?>
-		<a href="/groups/add" class="button">Create a profile for <em>your</em> team</a>
-		<?php endif; ?></p>
-	</div>
 	<?php if (!empty($groups)): ?>
+		<?php if ($this->userData): ?>
+		<div class="inlineMessage">
+			<p>
+				Can't find the <?php echo $this->config->item('group')?> you're looking for? <a href="/groups/add" class="button">Create a <?php echo $this->config->item('group')?>!</a>
+			</p>
+		</div>
+		<?php endif; ?>
+	
 	<div id="teams">	
 		<?php foreach ($groups as $group): ?>
 		<div class="team">
@@ -29,9 +31,9 @@
 		<?php echo Page::links($html); ?>
 	</div>
 	<?php else: ?>
-	<div class="message">
-		<div class="inlineMessage"><p>There are no groups yet.</p></div>
-	</div>
+	
+		<div class="inlineMessage neutral"><p>Oh my! It looks like there haven't been any <?php echo $this->config->item('group')?>s created yet. <a href="/groups/add" class="button">Create a <?php echo $this->config->item('group')?>!</a></p></div>
+	
 	<?php endif; ?>
 	
 </div>

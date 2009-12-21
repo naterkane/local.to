@@ -121,10 +121,13 @@ if (empty($group))
 							<span class="favorite">
 								<?php echo $html->favoriteLink($message, $this->userData) ?>
 							</span>
+							<?php if ($this->Message->isOwner($message)):?>
 							<span class="delete">
 							<?php echo $html->deleteMessageLink($message, $this->Message->isOwner($message)); ?>
 							</span>
-						<?php endif; ?>
+						<?php 
+							endif;
+						endif; ?>
 					</div>					
 					<div class="clear"></div>
 				</div>

@@ -44,6 +44,11 @@ $fields = array(
 		 */
 		'name' => null,
 		/**
+		 * Group's descriptive name
+		 * @var string
+		 */
+		'fullname' => null,	
+		/**
 		 * User id of group owner
 		 * @var integer
 		 */
@@ -72,8 +77,12 @@ $fields = array(
 		 * Timestamp of the date when the group's record was last modified
 		 * @var integer
 		 */
-		'fullname' => null,		
 		'modified' => null,
+		/**
+		 * Array of the dropio drops created for this group
+		 * @var array
+		 */
+		'dropio' => array(),
 		//'sport' => null,
 		//'level' => null,
 		'gender' => null,

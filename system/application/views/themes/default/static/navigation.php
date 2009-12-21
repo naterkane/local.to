@@ -2,11 +2,11 @@
 			
 			if (!empty($User)) {
 				?>
-				<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>><a href="/home">Home</a></li>
-				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/".$User['username']))?' class="current"':""; ?>><a href="/<?php echo $User["username"] ?>">My Profile</a></li>
-				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/group"))?' class="current"':""; ?>><a href="/groups"><?php echo ucfirst($this->config->item('group'))?>s</a></li>
+				<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>><a href="/home" id="nav-home">Home</a></li>
+				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/".$User['username']))?' class="current"':""; ?>><a href="/<?php echo $User["username"] ?>" id="nav-profile">My Profile</a></li>
+				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/group"))?' class="current"':""; ?>><a href="/groups" id="nav-groups"><?php echo ucfirst($this->config->item('group'))?>s</a></li>
 				<?php /*<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/settings"))?' class="current"':""; ?>><a href="/settings">Settings</a></li> */ ?>
-				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/public_timeline"))?' class="current"':""; ?>><a href="/public_timeline">Everyone</a></li>
+				<li<?php echo ($this->util->isSection($_SERVER['HTTP_HOST']."/public_timeline"))?' class="current"':""; ?>><a href="/public_timeline" id="nav-everyone">Everyone</a></li>
 				<?php /*<li><a href="/users/signout">Sign Out</a></li>*/ ?>
 				<?php
 			} else {
