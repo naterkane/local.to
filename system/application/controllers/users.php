@@ -178,7 +178,8 @@ class Users extends App_Controller
 	
     /**
      * Follow a user
-     *
+     * 
+     * @todo fix redirect issue that destroys session
      * @param string $username
      * @access public
      */
@@ -186,7 +187,7 @@ class Users extends App_Controller
     {
         $this->mustBeSignedIn();
 		$user = $this->User->getByUsername($username);
-		$redirect = $this->getRedirect(true);
+		$redirect = $this->getRedirect();
 		$type = null;
 		if ($this->User->follow($user, $this->userData))
 		{
