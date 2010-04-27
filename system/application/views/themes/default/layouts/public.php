@@ -55,7 +55,7 @@
 		} else { 
 		?>
 			<div class="grid_6">
-				<p class="lead-in">Nomcat is an <a href="http://getnomcat.com">open-source tool</a>, built on open-source technologies. It's a lot like Twitter<sup>&trade;</sup>, but aims to do a whole lot more.
+				<p class="lead-in">Nomcat is an <a href="http://getnomcat.com">open-source tool</a>, built on open-source technologies. It's a lot like Twitter<sup>&trade;</sup>, but aims to do a whole lot more.</p>
 				{yield}
 			</div>
 			<div class="grid_6">
@@ -81,7 +81,6 @@
 		
 		<?php $this->load->view('layouts/footer'); ?>
 		</div>
-	</div>
 	</div>
 <?php echo $form->testInput('count') ?>
 </body>
