@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -28,7 +28,7 @@
  */
 
 // CI Version
-define('CI_VERSION',	'1.7.1');
+define('CI_VERSION',	'1.7.2');
 
 /*
  * ------------------------------------------------------
@@ -57,15 +57,10 @@ require(APPPATH.'config/constants'.EXT);
  * ------------------------------------------------------
  */
 set_error_handler('_exception_handler');
-set_magic_quotes_runtime(0); // Kill magic quotes
 
-$CFG =& load_class('Config');
-if ($CFG->item('debug') == 1) 
+if ( ! is_php('5.3'))
 {
-	ini_set('display_errors', 1);
-}
-else {
-	ini_set('display_errors', 0);
+	@set_magic_quotes_runtime(0); // Kill magic quotes
 }
 
 /*
@@ -98,6 +93,8 @@ $EXT->_call_hook('pre_system');
  *  Instantiate the base classes
  * ------------------------------------------------------
  */
+
+$CFG =& load_class('Config');
 $URI =& load_class('URI');
 $RTR =& load_class('Router');
 $OUT =& load_class('Output');
@@ -137,7 +134,7 @@ $LANG	=& load_class('Language');
  *  Note: The Loader class needs to be included first
  *
  */
-if (floor(phpversion()) < 5)
+if ( ! is_php('5.0.0'))
 {
 	load_class('Loader', FALSE);
 	require(BASEPATH.'codeigniter/Base4'.EXT);

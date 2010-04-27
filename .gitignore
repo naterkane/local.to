@@ -1,0 +1,8 @@
+.DS_Store
+.buildpath
+.project
+.settings
+system/application/config/config.php
+*/*/config/database.php
+*/*/config/fireignition.php
+system/logs/*
