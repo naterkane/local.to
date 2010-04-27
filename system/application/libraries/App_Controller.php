@@ -188,6 +188,11 @@ class App_Controller extends Controller {
 				$this->avatar->makeAll($file['dir'], $this->uploader->getName(), $name, $sizes);
 			}
 			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results());
+			/**
+			 * override cache-control if an image was uploaded, see if this negates file level cache.
+			 */
+			$headers = array();//array("Cache-Control: no-cache, must-revalidate","Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+			$this->redirect($_SERVER['REQUEST_URI'], $this->uploader->results(),null,$headers);
 		}
 		$this->load->view($type.'s/avatar', $this->data);
 	}
@@ -420,6 +425,11 @@ class App_Controller extends Controller {
     public function redirect($url, $message=null, $type = null) 
 	{
 		$this->cookie->setFlash($message, $type);
+		if (!empty($headers)){
+			foreach ($headers as $h){
+				header($h);
+			}
+		}
         header("Location: http://".$_SERVER['HTTP_HOST'].$url, TRUE, 302);
         exit ;
     }

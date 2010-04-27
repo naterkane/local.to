@@ -17,6 +17,7 @@
 		<p class="submit">
 			<input id="upload_button" class="button" type="submit" value="Upload"/>
 		</p>
+	</fieldset>
 	</form>
 </div>
 <script>

@@ -22,7 +22,7 @@
 				</p>	
 				<div class="inlineMessage">
 					<p class="text"><strong>Note:</strong> Once your <?php echo $this->config->item('group')?> network is created, the admin (you) will be able to invite users via email invitation.
-					Access to the <?php echo $this->config->item('group')?> page and its updates is only available to members of the <?php echo $this->config->item('group')?>.p>
+					Access to the <?php echo $this->config->item('group')?> page and its updates is only available to members of the <?php echo $this->config->item('group')?>.</p>
 				</div>
 			</fieldset>
 		</form>

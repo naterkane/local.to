@@ -40,11 +40,11 @@
 		</li><li>Intentionally or unintentionally violate any applicable local, state, national or international law.
 		</li>
 		</ul>
-		<p>Users who engage in any of the conduct listed above may be subject to suspension or termination from eligibility to use this Site or criminal prosecution. PIM considers any interference with its Site a very serious matter and will prosecute any such individuals to the fullest extent allowable by law. •	
+		<p>Users who engage in any of the conduct listed above may be subject to suspension or termination from eligibility to use this Site or criminal prosecution. PIM considers any interference with its Site a very serious matter and will prosecute any such individuals to the fullest extent allowable by law. </p>
 		
-		<p>Users agree not to use or launch any automated system, including without limitation, "robots," "spiders," "offline readers," etc., that accesses the Site in a manner that sends more request messages to the Site’s servers than a human can reasonably produce in the same period of time by using a conventional on-line web browser. Users agree not to collect or harvest any personally identifiable information, including account names, from the Site or to use the communication systems provided by the Site for any commercial solicitation purposes. Users agree not to use any portion of the Site as a destination linked from any unsolicited bulk messages or unsolicited commercial messages.•	
+		<p>Users agree not to use or launch any automated system, including without limitation, "robots," "spiders," "offline readers," etc., that accesses the Site in a manner that sends more request messages to the Site’s servers than a human can reasonably produce in the same period of time by using a conventional on-line web browser. Users agree not to collect or harvest any personally identifiable information, including account names, from the Site or to use the communication systems provided by the Site for any commercial solicitation purposes. Users agree not to use any portion of the Site as a destination linked from any unsolicited bulk messages or unsolicited commercial messages.</p>
 		
-		<p>PIM reserves the right to offer alternative and/or additional services to certain administrative users that may not be offered to general Users. Users acknowledge that PIM may charge a fee for the use of any services, provided that PIM notifies its Users of any such fee before Users incur it. Subject to the foregoing, Users agree to pay any fees incurred by the User.•	
+		<p>PIM reserves the right to offer alternative and/or additional services to certain administrative users that may not be offered to general Users. Users acknowledge that PIM may charge a fee for the use of any services, provided that PIM notifies its Users of any such fee before Users incur it. Subject to the foregoing, Users agree to pay any fees incurred by the User.</p>
 		
 		<h3>Registration:</h3>
 		

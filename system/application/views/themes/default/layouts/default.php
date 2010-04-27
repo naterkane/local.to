@@ -93,16 +93,12 @@
 		
 		<?php $this->load->view('layouts/footer'); ?>
 	</div>
+</div>
 <?php echo $form->testInput('count') ?>
 <?php if ($this->config->item('testing') == true): ?>
 <script type="text/javascript" src="/assets/js/nomcat.js"></script>
 <?php else: ?>
 <script type="text/javascript" src="/assets/js/nomcat-min.js"></script>
-<?php endif; 
-if (!empty($embedchat)){
-	//don't embed the chat until i can figure out how to hijack and control it.
-	//echo $embedchat;
-}
-?>
+<?php endif; ?>
 </body>
 </html>

@@ -22,7 +22,7 @@
 			</div>
         	<p><span class="author"><a href="/<?php echo $u['username']; ?>" title="<?php echo $u['username']; 
 				if ($u['locked'] == (1 || "1")) { ?>'s updates are protected<?php }
-				?>"><strong><?php echo $u['realname']; ?></strong</a> (<?php echo $u['username']; ?>) </span>
+				?>"><strong><?php echo $u['realname']; ?></strong></a> (<?php echo $u['username']; ?>) </span>
 			
 			<span class="right">
 				<a href="/users/confirm/<?php echo $u['username'] . $html->sendMeHere() ?>" class="button" id="confirm<?php echo $u['username'] ?>"><strong>Accept</strong></a>
