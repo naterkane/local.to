@@ -1,14 +1,12 @@
-== nomcat
-
-Nomcat is an opensource microblogging platform
-
 == Installation
 
-
+todo: needs to be written
 
 == Getting the database setup
 
-Nomcat relies on a few different layers of middleware to ultimately talk to it's data store
+note: the following information is old and needs to be rewritten
+
+localto relies on a few different layers of middleware to ultimately talk to it's data store
 
  application -> memcache -> tokyo_tyrant -> tokyo_cabinet
 

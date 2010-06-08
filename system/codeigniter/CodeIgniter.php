@@ -197,7 +197,9 @@ $EXT->_call_hook('pre_controller');
 
 // Mark a start point so we can benchmark the controller
 $BM->mark('controller_execution_time_( '.$class.' / '.$method.' )_start');
-
+$class = ucfirst($class);
+var_dump($class());
+die();
 $CI = new $class();
 
 // Is this a scaffolding request?

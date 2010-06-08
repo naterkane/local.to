@@ -32,7 +32,10 @@ class Welcome extends App_Controller {
 	 * @var string
 	 */
 	public $layout = 'public';
-	
+  function Welcome()
+  {
+    parent::Controller(); 
+  }
 	/**
 	 * Determine site home page
 	 *

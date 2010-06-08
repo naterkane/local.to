@@ -58,4 +58,3 @@ $hook['post_controller'][] = array(
 );
 /* End of file hooks.php */
 /* Location: ./system/application/config/hooks.php */
-?>

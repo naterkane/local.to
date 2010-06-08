@@ -17,7 +17,7 @@ else
 	// Swap directory separators to Unix style for consistency
 	$system_folder = str_replace("\\", "/", $system_folder); 
 }
-
+echo $system_folder;
 //set path constants
 define('WEBROOT', dirname(__FILE__));
 define('EXT', '.'.pathinfo(__FILE__, PATHINFO_EXTENSION));
