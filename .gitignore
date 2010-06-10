@@ -2,7 +2,7 @@
 .buildpath
 .project
 .settings
-system/application/config/config.php
-*/*/config/database.php
-*/*/config/fireignition.php
+application/config/config.php
+*/config/database.php
+*/config/fireignition.php
 system/logs/*
