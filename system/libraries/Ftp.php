@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -154,13 +154,13 @@ class CI_FTP {
 
 
 	/**
-	 * Change direcotry
+	 * Change directory
 	 *
 	 * The second parameter lets us momentarily turn off debugging so that
-	 * this function can be used to test for the existance of a folder
+	 * this function can be used to test for the existence of a folder
 	 * without throwing an error.  There's no FTP equivalent to is_dir()
 	 * so we do it by trying to change to a particular directory.
-	 * Internally, this paramter is only used by the "mirror" function below.
+	 * Internally, this parameter is only used by the "mirror" function below.
 	 *
 	 * @access	public
 	 * @param	string
@@ -277,6 +277,48 @@ class CI_FTP {
 
 		return TRUE;
 	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Download a file from a remote server to the local server
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	string
+	 * @param	string
+	 * @return	bool
+	 */
+	function download($rempath, $locpath, $mode = 'auto')
+	{
+		if ( ! $this->_is_conn())
+		{
+			return FALSE;
+		}
+       
+		// Set the mode if not specified
+		if ($mode == 'auto')
+		{
+			// Get the file extension so we can set the upload type
+			$ext = $this->_getext($rempath);
+			$mode = $this->_settype($ext);
+		}
+               
+		$mode = ($mode == 'ascii') ? FTP_ASCII : FTP_BINARY;
+               
+		$result = @ftp_get($this->conn_id, $locpath, $rempath, $mode);
+
+		if ($result === FALSE)
+		{
+			if ($this->debug == TRUE)
+			{
+				$this->_error('ftp_unable_to_download');
+			}
+			return FALSE;          
+		}
+               
+		return TRUE;
+    }
 
 	// --------------------------------------------------------------------
 

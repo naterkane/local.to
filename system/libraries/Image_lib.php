@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -350,7 +350,7 @@ class CI_Image_lib {
 	{
 		$protocol = 'image_process_'.$this->image_library;
 
-		if (eregi("gd2$", $protocol))
+		if (preg_match('/gd2$/i', $protocol))
 		{
 			$protocol = 'image_process_gd';
 		}
@@ -373,7 +373,7 @@ class CI_Image_lib {
 	{
 		$protocol = 'image_process_'.$this->image_library;
 
-		if (eregi("gd2$", $protocol))
+		if (preg_match('/gd2$/i', $protocol))
 		{
 			$protocol = 'image_process_gd';
 		}
@@ -459,7 +459,7 @@ class CI_Image_lib {
  				{
 					if (@copy($this->full_src_path, $this->full_dst_path))
 					{
-						@chmod($this->full_dst_path, DIR_WRITE_MODE);
+						@chmod($this->full_dst_path, FILE_WRITE_MODE);
 					}
 				}
 
@@ -534,7 +534,7 @@ class CI_Image_lib {
 		imagedestroy($src_img);
 
 		// Set the file to 777
-		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 
 		return TRUE;
 	}
@@ -559,9 +559,9 @@ class CI_Image_lib {
 			return FALSE;
 		}
 
-		if ( ! eregi("convert$", $this->library_path))
+		if ( ! preg_match("/convert$/i", $this->library_path))
 		{
-			if ( ! eregi("/$", $this->library_path)) $this->library_path .= "/";
+			$this->library_path = rtrim($this->library_path, '/').'/';
 
 			$this->library_path .= 'convert';
 		}
@@ -604,7 +604,7 @@ class CI_Image_lib {
 		}
 
 		// Set the file to 777
-		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 
 		return TRUE;
 	}
@@ -690,7 +690,7 @@ class CI_Image_lib {
 		// we have to rename the temp file.
 		copy ($this->dest_folder.'netpbm.tmp', $this->full_dst_path);
 		unlink ($this->dest_folder.'netpbm.tmp');
-		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 
 		return TRUE;
 	}
@@ -749,7 +749,7 @@ class CI_Image_lib {
 
 		// Set the file to 777
 
-		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 
 		return true;
 	}
@@ -833,7 +833,7 @@ class CI_Image_lib {
 		imagedestroy($src_img);
 
 		// Set the file to 777
-		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 
 		return TRUE;
 	}

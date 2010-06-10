@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -431,7 +431,7 @@ if ( ! function_exists('auto_link'))
 /**
  * Prep URL
  *
- * Simply adds the http:// part if missing
+ * Simply adds the http:// part if no scheme is included
  *
  * @access	public
  * @param	string	the URL
@@ -446,7 +446,7 @@ if ( ! function_exists('prep_url'))
 			return '';
 		}
 
-		if (substr($str, 0, 7) != 'http://' && substr($str, 0, 8) != 'https://')
+		if ( ! parse_url($str, PHP_URL_SCHEME))
 		{
 			$str = 'http://'.$str;
 		}

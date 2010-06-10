@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -97,7 +97,7 @@ if ( ! function_exists('ol'))
  * @param	string
  * @param	mixed
  * @param	mixed
- * @param	intiger
+ * @param	integer
  * @return	string
  */
 if ( ! function_exists('_list'))
@@ -246,7 +246,7 @@ if ( ! function_exists('img'))
  */
 if ( ! function_exists('doctype'))
 {
-	function doctype($type = 'xhtml-strict')
+	function doctype($type = 'xhtml1-strict')
 	{
 		global $_doctypes;
 
@@ -301,11 +301,11 @@ if ( ! function_exists('link_tag'))
 				{
 					if ($index_page === TRUE)
 					{
-						$link .= ' href="'.$CI->config->site_url($v).'" ';
+						$link .= 'href="'.$CI->config->site_url($v).'" ';
 					}
 					else
 					{
-						$link .= ' href="'.$CI->config->slash_item('base_url').$v.'" ';
+						$link .= 'href="'.$CI->config->slash_item('base_url').$v.'" ';
 					}
 				}
 				else
@@ -320,15 +320,15 @@ if ( ! function_exists('link_tag'))
 		{
 			if ( strpos($href, '://') !== FALSE)
 			{
-				$link .= ' href="'.$href.'" ';
+				$link .= 'href="'.$href.'" ';
 			}
 			elseif ($index_page === TRUE)
 			{
-				$link .= ' href="'.$CI->config->site_url($href).'" ';
+				$link .= 'href="'.$CI->config->site_url($href).'" ';
 			}
 			else
 			{
-				$link .= ' href="'.$CI->config->slash_item('base_url').$href.'" ';
+				$link .= 'href="'.$CI->config->slash_item('base_url').$href.'" ';
 			}
 
 			$link .= 'rel="'.$rel.'" type="'.$type.'" ';

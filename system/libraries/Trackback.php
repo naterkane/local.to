@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -128,7 +128,7 @@ class CI_Trackback {
 	 * Receive Trackback  Data
 	 *
 	 * This function simply validates the incoming TB data.
-	 * It returns false on failure and true on success.
+	 * It returns FALSE on failure and TRUE on success.
 	 * If the data is valid it is set to the $this->data array
 	 * so that it can be inserted into a database.
 	 *
@@ -221,7 +221,7 @@ class CI_Trackback {
 	 * Process Trackback
 	 *
 	 * Opens a socket connection and passes the data to
-	 * the server.  Returns true on success, false on failure
+	 * the server.  Returns TRUE on success, FALSE on failure
 	 *
 	 * @access	public
 	 * @param	string
@@ -267,7 +267,8 @@ class CI_Trackback {
 		}
 		@fclose($fp);
 		
-		if ( ! eregi("<error>0</error>", $this->response))
+		
+		if (stristr($this->response, '<error>0</error>') === FALSE)
 		{
 			$message = 'An unknown error was encountered';
 			
@@ -355,7 +356,7 @@ class CI_Trackback {
 	{	
 		$tb_id = "";
 		
-		if (strstr($url, '?'))
+		if (strpos($url, '?') !== FALSE)
 		{
 			$tb_array = explode('/', $url);
 			$tb_end   = $tb_array[count($tb_array)-1];
@@ -370,10 +371,7 @@ class CI_Trackback {
 		}
 		else
 		{
-			if (ereg("/$", $url))
-			{
-				$url = substr($url, 0, -1);
-			}
+			$url = rtrim($url, '/');
 				
 			$tb_array = explode('/', $url);
 			$tb_id	= $tb_array[count($tb_array)-1];
@@ -386,7 +384,7 @@ class CI_Trackback {
 				
 		if ( ! preg_match ("/^([0-9]+)$/", $tb_id))
 		{
-			return false;
+			return FALSE;
 		}
 		else
 		{
@@ -439,7 +437,7 @@ class CI_Trackback {
 		{
 			return $str;
 		}
-
+			
 		$str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
 	
 		if (strlen($str) <= $n)

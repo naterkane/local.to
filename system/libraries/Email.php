@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -1539,6 +1539,12 @@ class CI_Email {
 	{
 		$fp = @popen($this->mailpath . " -oi -f ".$this->clean_email($this->_headers['From'])." -t", 'w');
 
+		if ($fp === FALSE OR $fp === NULL)
+		{
+			// server probably has popen disabled, so nothing we can do to get a verbose error.
+			return FALSE;
+		}
+
 		fputs($fp, $this->_header_str);
 		fputs($fp, $this->_finalbody);
 
@@ -1548,7 +1554,7 @@ class CI_Email {
 		{
 			$status = $status >> 8 & 0xFF;
 	    }
-	
+
 		if ($status != 0)
 		{
 			$this->_set_error_message('email_exit_status', $status);
@@ -1859,7 +1865,7 @@ class CI_Email {
 		elseif ($cip)		$this->_IP = $cip;
 		elseif ($fip)		$this->_IP = $fip;
 
-		if (strstr($this->_IP, ','))
+		if (strpos($this->_IP, ',') !== FALSE)
 		{
 			$x = explode(',', $this->_IP);
 			$this->_IP = end($x);

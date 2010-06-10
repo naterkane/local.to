@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -40,10 +40,10 @@ class CI_Xmlrpcs extends CI_Xmlrpc
 	var $debug_msg		= '';		// Debug Message
 	var $system_methods = array(); // XML RPC Server methods
 	var $controller_obj;
-
+	
 	var $object			= FALSE;
-	
-	
+
+
 	//-------------------------------------
 	//  Constructor, more or less
 	//-------------------------------------
@@ -80,6 +80,11 @@ class CI_Xmlrpcs extends CI_Xmlrpc
 		if (isset($config['object']) && is_object($config['object']))
 		{
 			$this->object = $config['object'];
+		}
+		
+		if (isset($config['xss_clean']))
+		{
+			$this->xss_clean = $config['xss_clean'];
 		}
 	}
 	
@@ -123,7 +128,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc
 		
 		header("Content-Type: text/xml");
 		header("Content-Length: ".strlen($payload));
-		echo $payload;
+		exit($payload);
 	}
 
 	//-------------------------------------
@@ -247,6 +252,11 @@ class CI_Xmlrpcs extends CI_Xmlrpc
 		// Check to see if it is a system call
 		$system_call = (strncmp($methName, 'system', 5) == 0) ? TRUE : FALSE;
 		
+		if ($this->xss_clean == FALSE)
+		{
+			$m->xss_clean = FALSE;
+		}
+
 		//-------------------------------------
 		//  Valid Method
 		//-------------------------------------

@@ -1,35 +1,3 @@
-== Installation
+== Local.to
 
 todo: needs to be written
-
-== Getting the database setup
-
-note: the following information is old and needs to be rewritten
-
-localto relies on a few different layers of middleware to ultimately talk to it's data store
-
- application -> memcache -> tokyo_tyrant -> tokyo_cabinet
-
-First make sure memcached is running
-
- /path/to/memcached -d -u root -m 32 -l 127.0.0.1 -p 11212
-
-if you're developing on osx, there's a good chance you'll find it at /opt/local/bin/ like so
-
- /opt/local/bin/memcached -d -u root -m 32 -l 127.0.0.1 -p 11212
-
-To get a single instance of Tokyo Tyrant (version 1.1.16) started, go to your command line and run
-
- ttserver -port 1978 -thnum 16 -dmn -pid /var/ttserver/1.pid -kl -log /var/ttserver/1.log -ulog /var/ttserver/ulog -uas -sid 1 /var/ttserver/casket.tch;
-
-To get a single instance of Tokyo Tyrant (>1.1.16) started, go to your command line and run
-
- killall ttserver;
- ttserver -port 1978 -thnum 16 -dmn -pid /var/ttserver/1.pid -log /var/ttserver/1.log -ulog /var/ttserver/ulog -uas -sid 1 /var/ttserver/casket.tch;
-
-To get two instances (master/slave) of Tokyo Tyrant started, instead run
-
- ttserver -host localhost -port 1978 -thnum 16 -dmn -pid /var/ttserver/1.pid  -log /var/ttserver/1.log -ulog /var/ttserver/ulog -uas -sid 1 /var/ttserver/casket.tch;
- ttserver -host localhost -port 1979 -thnum 16 -dmn -pid /var/ttserver/2.pid  -log /var/ttserver/2.log -ulog /var/ttserver/ulog -uas -sid 2 -mhost localhost -mport 1978 -rts /var/ttserver/rts/2.rts -rcc /var/ttserver/casket2.tch
- 
-

@@ -90,4 +90,3 @@ foreach ($files as $f) {
 		require($f2);
 }
 ob_end_flush();
-?>

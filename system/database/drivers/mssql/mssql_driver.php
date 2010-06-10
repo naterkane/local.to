@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -260,12 +260,9 @@ class CI_DB_mssql_driver extends CI_DB {
    		
 	   		return $str;
 	   	}
-
-		// Access the CI object
-		$CI =& get_instance();
 		
 		// Escape single quotes
-		$str = str_replace("'", "''", $CI->input->_remove_invisible_characters($str));
+		$str = str_replace("'", "''", remove_invisible_characters($str));
 		
 		// escape LIKE condition wildcards
 		if ($like === TRUE)
@@ -389,7 +386,7 @@ class CI_DB_mssql_driver extends CI_DB {
 		// for future compatibility
 		if ($prefix_limit !== FALSE AND $this->dbprefix != '')
 		{
-			//$sql .= " LIKE '".$this->escape_like_str($this->dbprefix)."%' ".sprintf($this->_like_escape_str, $this->_like_escape_char);
+			//$sql .= " LIKE '".$this->escape_like_str($this->dbprefix)."%' ".sprintf($this->_like_escape_str, $this->_like_escape_chr);
 			return FALSE; // not currently supported
 		}
 		
