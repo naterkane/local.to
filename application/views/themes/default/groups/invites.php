@@ -40,7 +40,7 @@
 			?>
 				<tr<?php echo (is_float(($count+1)/2))? ' class="odd"' : ""; ?>>
 					<td><a href="mailto:<?php echo $invite['email'] ?>?subject=RE: Invite to join <?php echo $group['name'] ?> on <?php echo $this->config->item("service_name"); ?>"><?php echo $invite['email'] ?></a></td>
-					<td><a href="http://microblog.localhost/groups/accept/<?php echo $invite['key']; ?>"><?php echo $invite['key'] ?></a><?php echo $form->input('count-' . $count, array('value'=>$invite['key'], 'type'=>'hidden')) ?></td>
+					<td><a href="<?php echo $this->config->item('base_url')?>groups/accept/<?php echo $invite['key']; ?>"><?php echo $invite['key'] ?></a><?php echo $form->input('count-' . $count, array('value'=>$invite['key'], 'type'=>'hidden')) ?></td>
 					<td><?php echo date('n/j/y g:i a', $invite['created']) ?></td>
 					<td><?php echo $html->link('Delete', '/groups/deleteinvite/' . $invite['key'] . $html->sendMeHere(), array('class'=>'toggler'), 'Are you sure you want to delete this invitation? This cannot be undone.') ?></td>
 				</tr>
