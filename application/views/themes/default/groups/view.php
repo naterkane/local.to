@@ -14,8 +14,8 @@
 			<?php echo $this->load->view('messages/postform', array('group_page'=>true)) ?>
 			<dl class="tip">
 				<dt>Tips</dt>
-				<dd>use @username to tag a user in your message, i.e. congrats on the win @charlieperry</dd>
-				<dd>use !teamname to tag a team in your message, i.e. just had a huge win over !ulacrosse</dd>
+				<dd>use @username to tag a user in your message, i.e. can't wait to buy @naterkane a beer tonight.</dd>
+				<dd>use !<?php echo $this->config->item('group')?>name to tag a <?php echo $this->config->item('group')?> in your message, i.e. can't wait for tonight's !nycphp meetup</dd>
 			</dl>
 		</fieldset>
 	</form>
@@ -25,7 +25,7 @@
 	<?php $this->load->view("groups/subnav/group_nav"); ?>
 	<?php if (empty($group['im_a_member'])): ?>
 	<div class="inlineMessage">
-		<p>Currently, you are not a member of this team and cannot view its updates.  Instead, you can see mentions of the team made elsewhere on Teamitup.</p>
+		<p>Currently, you are not a member of this <?php echo $this->config->item('group')?> and cannot view its updates.  Instead, you can see mentions of the <?php echo $this->config->item('group')?> made elsewhere on <?php echo $this->config->item('service_name')?>.</p>
 	</div>
 	<?php endif; ?>	
 	<?php echo $this->load->view('messages/viewlist', array('group_page'=>true)); ?>

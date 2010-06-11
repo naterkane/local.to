@@ -1,8 +1,8 @@
 <div class="heading">
 	<h2><?php echo $avatar->group($group, "48"); ?> <span><?php echo $html->groupName($group) ?></span></h2>
-	<!--<div class="inlineMessage"><p>Private messages are best used when members of a team must be notified immediately.  
+	<!--<div class="inlineMessage"><p>Private messages are best used when members of a <?php echo $this->config->item('group')?> must be notified immediately.  
 
-These messages are viewed only by team members.
+These messages are viewed only by <?php echo $this->config->item('group')?> members.
 
 Messages are delivered via email notification/text message as well as on the team page feed and in members' message box.
   

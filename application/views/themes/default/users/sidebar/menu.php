@@ -7,7 +7,9 @@ if (!empty($group)){
 		echo $html->menuItem("Private Messages", '/group/'.$group['name'], ($this->util->isSection("/group/".$group['name']))); 
 		echo $html->menuItem('Direct Messages','/groups/inbox/'.$group['name'], ($this->util->isSection("/groups/inbox/".$group['name'])));
 		echo $html->menuItem('Mentions', '/groups/mentions/'.$group['name'], ($this->util->isSection("/groups/mentions/".$group['name'])));
-		echo $html->menuItem('File Sharing','/groups/files/'.$group['name'], (($this->util->isSection("/groups/files/".$group['name'])) || $this->util->isSection("/groups/uploadfiles/".$group['name'])));
+	  if ($this->config->item('dropio_service_enabled') === TRUE):	
+		  echo $html->menuItem('File Sharing','/groups/files/'.$group['name'], (($this->util->isSection("/groups/files/".$group['name'])) || $this->util->isSection("/groups/uploadfiles/".$group['name'])));
+	  endif;
 	else: 
 		echo $html->menuItem('Mentions', '/groups/mentions/'.$group['name'], ($this->util->isSection("/groups/mentions/".$group['name'])));
 	endif; 

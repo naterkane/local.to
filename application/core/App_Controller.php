@@ -117,7 +117,7 @@ class App_Controller extends Controller {
 		{
 			$this->Message->threaded = $this->userData['threading'];
 		}
-		if (file_exists(APPPATH . 'libraries/dropio-php/Dropio/Api.php')){
+		if ($this->config->item('dropio_service_enabled') === TRUE && file_exists(APPPATH . 'libraries/dropio-php/Dropio/Api.php')){
 			include(APPPATH . 'libraries/dropio-php/Dropio/Api.php');
 			$this->dropio_api_key = $this->config->item('dropio_api_key');
 			try {

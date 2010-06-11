@@ -11,9 +11,11 @@
 <p>
 	<?php if (!$group['is_owner'] && $this->userData): ?>
 		<?php if ($group['im_a_member']): ?>
-				<a href="/groups/unsubscribe/<?php echo $group['id']; ?>" id="unsubscribe" class="toggler">Leave Team</a>
-		<?php /*else:  ?>
-				<a href="/groups/subscribe/<?php echo $group['id']; ?>" id="subscribe" class="toggler">Join Team</a>
-		<?php */ endif; ?>
+				<a href="/groups/unsubscribe/<?php echo $group['id']; ?>" id="unsubscribe" class="toggler">Leave <?php echo ucfirst($this->config->item('group'))?></a>
+		<?php elseif (!empty($group['public']) && $group['public'] == true):  ?>
+				<a href="/groups/subscribe/<?php echo $group['id']; ?>" id="subscribe" class="toggler">Join <?php echo ucfirst($this->config->item('group'))?></a>
+		<?php else: ?>
+		    This is a private <?php echo $this->config->item('group')?>. 
+		<?php endif; ?>
 	<?php endif; ?>
 </p>

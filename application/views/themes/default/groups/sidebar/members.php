@@ -19,7 +19,7 @@
 	<div class="clear"></div>
 	<div><!--<?php echo $membercount; ?> Member<?php if ($membercount != 1){ ?>s<?php } ?> | --><a href="/groups/members/<?php echo $group['name']; ?>" class="view-all-link">View all</a>
 	<?php else: ?>
-		<p><?php echo $group['name']; ?> doesn't have anyone on the team yet. If this is your team, why don't you <a href="/groups/invites/<?php echo $group['name']; ?>">invite some teammates</a>?</p>
+		<p><?php echo $group['name']; ?> doesn't have anyone on the <?php echo $this->config->item('group')?> yet. If this is your <?php echo $this->config->item('group')?>, why don't you <a href="/groups/invites/<?php echo $group['name']; ?>">invite some people</a>?</p>
 	<?php endif; ?>
 	</div>
 </div>

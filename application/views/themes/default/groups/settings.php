@@ -54,46 +54,6 @@
 				<?php echo $form->error('time_zone') ?>				
 			</p>
 			<p>
-				<label for="sport">Sport</label>	
-				<?php echo $form->input('sport') ?>
-				<?php echo $form->error('sport') ?>				
-			</p>
-			<p>
-				<label for="level">Level</label>	
-				<?php echo $form->input('level') ?>
-				<?php echo $form->error('level') ?>				
-			</p>
-			<p>
-				<label for="gender">Gender</label>
-				<?php echo $form->select('gender', array(''=>'Select One','Female'=>'Female', 'Male'=>'Male', 'Coed'=>'Coed')) ?>
-				<?php echo $form->error('gender') ?>
-			</p>
-			<p>
-				<label for="home_field">Home Field</label>	
-				<?php echo $form->input('home_field') ?>
-				<?php echo $form->error('home_field') ?>				
-			</p>
-			<p>
-				<label for="league">League</label>	
-				<?php echo $form->input('league') ?>
-				<?php echo $form->error('league') ?>				
-			</p>
-			<p>
-				<label for="division">Division</label>	
-				<?php echo $form->input('division') ?>
-				<?php echo $form->error('division') ?>				
-			</p>
-			<p>
-				<label for="session_start">Season Start Date</label>	
-				<?php echo $form->input('session_start') ?>
-				<?php echo $form->error('session_start') ?>				
-			</p>
-			<p>
-				<label for="session_end">Season End Date</label>	
-				<?php echo $form->input('session_end') ?>
-				<?php echo $form->error('session_end') ?>				
-			</p>
-			<p>
 				<label for="recent_news">Recent News</label>	
 				<?php echo $form->textarea('recent_news') ?>
 				<?php echo $form->error('recent_news') ?>				
