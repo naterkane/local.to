@@ -1682,6 +1682,16 @@ dl.tip, .tip dt, .tip dd {
 	float: left;
 	margin-left: 40px;
 }
+
+.vcard {
+  margin-bottom: 1em;
+  font-size: 14px;
+}
+
+.vcard .hide {
+  display: none;
+}
+
 /*
 	960 Grid System ~ Core CSS.
 	Learn more ~ http://960.gs/

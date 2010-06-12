@@ -11,7 +11,7 @@
 		</strong></p>
 		<p>Local.to is an online service that allows our members to set up unique personal profiles that can be linked together with location, social, and event network(s). Local.to members can syndicate location based check-ins and other location-centric data into their social stream. Local.to members can view each others' profiles, communicate with other members and meet new users on the service, share photos, post journals and comments, and describe their interests. We request and display some personal information to other members and visitors, which allows our users to identify each other and expand their network. Local.to members can change their profile information at any time and can control how other members and service(s) communicate with them.
 		</p>
-		<p>We care deeply about online privacy. If you have any questions concerning this privacy policy, please email us at <a href="mailto:privacy@local.to">privacy@Local.to</a>.
+		<p>We care deeply about online privacy. If you have any questions concerning this privacy policy, please email us at <a href="mailto:privacy@local.to">privacy@local.to</a>.
 		</p>
 		<p><strong>Visitor Private Personal Information and Use by Local.to
 		</strong></p>
@@ -39,7 +39,7 @@
 		</p>
 		<p>Local.to members may also store email addresses of people they know in their internal Local.to address book and may also choose to send invitations and other communications to those addresses.
 		</p>
-		<p>You may prevent Local.to email invitations and other messages from being sent to any email address you control by sending a single email with the subject "BLOCK" to <a href="mailto:privacy@local.to?subject=BLOCK">privacy@Local.to</a>. Please note that the email must come from the account you wish to block. 
+		<p>You may prevent Local.to email invitations and other messages from being sent to any email address you control by sending a single email with the subject "BLOCK" to <a href="mailto:privacy@local.to?subject=BLOCK">privacy@local.to</a>. Please note that the email must come from the account you wish to block. 
 		</p>
 		<p><strong>Cookies and Third Party Advertising 
 		</strong></p>
@@ -59,7 +59,7 @@
 		</p>
 		<p><strong>Security 
 		</strong></p>
-		<p>Local.to member accounts are secured by member-created passwords Local.to takes precautions to insure that member account information is kept private. We use reasonable measures to protect member information that is stored within our database, and we restrict access to member information to those employees who need access to perform their job functions, such as our customer service personnel and technical staff. Please note that we cannot guarantee the security of member account information. Unauthorized entry or use, hardware or software failure, and other factors may compromise the security of member information at any time For any additional information about the security measures we use on Local.to, please contact us at <a href="mailto:privacy@local.to?subject=BLOCK">privacy@Local.to</a>.
+		<p>Local.to member accounts are secured by member-created passwords Local.to takes precautions to insure that member account information is kept private. We use reasonable measures to protect member information that is stored within our database, and we restrict access to member information to those employees who need access to perform their job functions, such as our customer service personnel and technical staff. Please note that we cannot guarantee the security of member account information. Unauthorized entry or use, hardware or software failure, and other factors may compromise the security of member information at any time For any additional information about the security measures we use on Local.to, please contact us at <a href="mailto:privacy@local.to?subject=BLOCK">privacy@local.to</a>.
 		</p>
 		<p><strong>Use of Single-pixel gifs
 		</strong></p>
@@ -88,7 +88,7 @@
 		</strong></p>
 		<p>Local.to is a family oriented site and contains content which we deem suitable for all members of the family. However, certain sections and features of Local.to are open to many members, and posts can be in violation of our Forum Policy contained in our Terms of Service. We make our best efforts to delete offensive posts but cannot always do so in a timely fashion. On the other hand, we cannot censure posts simply because they could be construed as inappropriate to children. Therefore, parents should evaluate the forums and decide whether to permit children to visit. Local.to is not intended for use by children, especially those under age 13. No one under age 13 is allowed to provide any personal information or use our public discussion areas, forums and chats. Minors between the ages of 13 and 17 must get the permission of their parent(s) or legal guardian(s) before making purchases, including subscriptions, on this site. 
 		</p>
-		<p>If your children disclose information about themselves in our public discussion areas, they may get unsolicited messages from other parties. Accordingly, you should tell them not to do so. If you're worried about your children's activities or their privacy on our site, we encourage you to please contact us at <a href="mailto:privacy@local.to">privacy@Local.to</a>
+		<p>If your children disclose information about themselves in our public discussion areas, they may get unsolicited messages from other parties. Accordingly, you should tell them not to do so. If you're worried about your children's activities or their privacy on our site, we encourage you to please contact us at <a href="mailto:privacy@local.to">privacy@local.to</a>
 		</p>
 		<p><strong>Forums
 		</strong></p>
@@ -107,13 +107,13 @@
 		</li><li>Unauthorized publication of addresses, phone numbers, etc. (unlisted or not freely available) 
 		</li><li>Other actions requiring legal action to cease and desist or recovery of damages
 		</li></ul>
-		<p>In any of the above events, and/or if you or your counsel feel you have a legal basis on which you could subpoena Local.to for release of personal information for one or more of Local.to's registered users, please contact us at <a href="mailto:info@local.to">info@Local.to</a>
+		<p>In any of the above events, and/or if you or your counsel feel you have a legal basis on which you could subpoena Local.to for release of personal information for one or more of Local.to's registered users, please contact us at <a href="mailto:info@local.to">info@local.to</a>
 		</p>
 		<p><strong>Your Consent to This Agreement
 		</strong></p>
 		<p>By using this Site, you consent to the collection and use of information by Local.to as specified above. As stated above, we reserve the right to modify this policy. If we decide to change our Privacy Policy, we will post those changes on this page so that you are always aware of what information we collect, how we use it, and under what circumstances we disclose it. 
 		</p>
-		<p>Please send any questions about Local.to's Privacy Policy to: <a href="mailto:privacy@local.to">privacy@Local.to</a> 
+		<p>Please send any questions about Local.to's Privacy Policy to: <a href="mailto:privacy@local.to">privacy@local.to</a> 
 		</p>
 		<p>Please note that your use of Local.to and the services provided therein is governed by our <a href="/terms">Terms of Service</a>.</p>
 	</div>

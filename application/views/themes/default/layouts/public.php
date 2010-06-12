@@ -35,16 +35,16 @@
 		<div class="bd full">
 		<?php
 		if (! empty($static_view)) { ?>
-			<ul class="subnav right" style="padding-right: 20px; margin-top: -10px;">
+			<ul class="subnav right" style="padding-right: 20px;">
 				<li<?php echo ($this->util->isSection("/home"))?' class="current"':""; ?>><a href="/">Home</a></li>
 				<li<?php echo ($this->util->isSection("/about"))?' class="current"':""; ?>><a href="/about">About</a></li>
-				<li<?php echo ($this->util->isSection("/faq"))?' class="current"':""; ?>><a href="/faq">FAQ</a></li>
+				<?php /*?><li<?php echo ($this->util->isSection("/faq"))?' class="current"':""; ?>><a href="/faq">FAQ</a></li><?php */ ?>
 				<li<?php echo ($this->util->isSection("/contact"))?' class="current"':""; ?>><a href="/contact">Contact</a></li>
 				<li><a href="/request_invite">Sign Up</a></li>
-				<!--
+				<?php /*?>
 				<li<?php echo ($this->util->isSection("/privacy"))?' class="current"':""; ?>><a href="/privacy">Privacy Policy</a></li>
 				<li<?php echo ($this->util->isSection("/terms"))?' class="current"':""; ?>><a href="/terms">Terms of Service</a></li>
-				-->
+				<?php */ ?>
 			</ul>
 		<?php	
 			$this->load->view('static/'.$static_view);	
