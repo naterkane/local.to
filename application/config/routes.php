@@ -44,10 +44,10 @@ $route['testme'] =    "tests/testme";
  * @todo need to make this dynamic/flexible in the future
  */
 $route['about'] =   "welcome/page/about";
-$route['legal'] =   "welcome/page/legal";
+//$route['legal'] =   "welcome/page/legal";
 $route['terms'] =   "welcome/page/terms";
 $route['contact'] = "welcome/page/contact";
-$route['faq'] =   "welcome/page/faq";
+//$route['faq'] =   "welcome/page/faq";
 $route['privacy'] = "welcome/page/privacy";
 
 
