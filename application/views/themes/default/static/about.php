@@ -5,15 +5,15 @@
 	<div class="content">
         <h3>What does Local.to do?</h3>
         <p>
-            It doesn't do anything, it's what it lets you do (or saves you from having to do). No matter what<sup><a href="#note1">1</a></sup> geolocation network(s) you prefer to use, Local.to is a service-agnostic platform that makes checking-in to real world locations and the search for something to do, or where to go more efficient.
+            It's more about what it lets you do. Local.to lets you view friends and whats happening nearby no matter what<sup><a href="#note1">1</a></sup> geo-location network(s) you prefer to use. Local.to is a service-agnostic platform that makes checking-in to real world locations, the search for something to do, or where to go more efficient.
         </p>
         <h3>How does Local.to work?</h3>
         <p>
-            Local.to allows users to search for and check-in to venues all around the world<sup><a href="#note2">2</a></sup> as well as view personalized event information with a (we hope) fast-as-all-heck experience. All users can choose how public, or private they want their activities to be.
+            Local.to allows users to search for and check-in to venues all around the world<sup><a href="#note2">2</a></sup> as well as view personalized event information with a fast-as-all-heck experience. All users can finely tune how public, or private they want their activities to be.
         </p>
         <h3>Why use Local.to?</h3>
         <p>
-            Local.to is a free service that levels the playing field and gives users of many location-based networking services equal resources to broadcast, communicate, manage, and digest location-based information that's important to them. We created it to help anyone enhance their success navigating the real world.
+            Local.to is a free service that levels the playing field and gives users of many location-based networking services equal resources to broadcast, communicate, manage, and digest location-based information that's important to them. We created Local.to to help anyone enhance their success navigating the real world.
         </p>
         <h3>Who can use Local.to?</h3>
         <p>
@@ -21,7 +21,7 @@
         </p>
         <h3>Who is Local.to?</h3>
         <p>
-            Local.to was created by Nater Kane and Paul Lewis, two guys who wanted to take the pain out of check-in fatigue. Our passion comes from over two decades of creating user-centric software for the web (between the two of them, of course).
+            Local.to was created by Paul Lewis &amp; Nater Kane, two guys who wanted to take the pain out of check-in fatigue. Our passion comes from over two decades of creating user-centric software for the web (between the two of them, of course).
         </p>
         <p>
           <ol class="notes">
