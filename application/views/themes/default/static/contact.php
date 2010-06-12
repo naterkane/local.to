@@ -14,13 +14,10 @@
 		 <a class="email hide" href="mailto:info@local.to">info@local.to</a>
 		 <div class="adr">
 		  <div class="street-address">2040 Scott St.</div>
-		  <span class="locality">San Francisco</span>
-		, 
-		  <span class="region">CA</span>
-		, 
+		  <span class="locality">San Francisco</span>, 
+		  <span class="region">CA</span>, 
 		  <span class="postal-code">94115</span>
-		
-		  <span class="country-name">United States</span>
+		<div class="country-name">United States</div>
 		
 		 </div>
 		</div>
@@ -34,13 +31,10 @@
 		 <a class="email hide" href="mailto:info@local.to">info@local.to</a>
 		 <div class="adr">
 		  <div class="street-address">964 Flushing Ave</div>
-		  <span class="locality">Brooklyn</span>
-		, 
-		  <span class="region">NY</span>
-		, 
+		  <span class="locality">Brooklyn</span>, 
+		  <span class="region">NY</span>, 
 		  <span class="postal-code">11206</span>
-		
-		  <span class="country-name">United States</span>
+		  <div class="country-name">United States</div>
 		
 		 </div>
 		 <div class="tel">917-267-7825</div>

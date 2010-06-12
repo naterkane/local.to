@@ -1683,11 +1683,14 @@ dl.tip, .tip dt, .tip dd {
 	margin-left: 40px;
 }
 
-.vcard {
+div.vcard {
   margin-bottom: 1em;
+  margin-left: 0;
   font-size: 14px;
 }
-
+div.vcard div {
+  margin-left: 0;
+}
 .vcard .hide {
   display: none;
 }
