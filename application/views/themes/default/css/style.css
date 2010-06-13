@@ -1242,6 +1242,7 @@ ul.subnav li.current a {
 	width: 36px;
 }
 .avatar .to_av {
+  background: #fff;
 	display: block;
 	position: absolute;
 	width: 24px;
