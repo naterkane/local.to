@@ -8,10 +8,10 @@
         </fieldset>
 		<fieldset>
 			<?php echo $this->load->view('messages/postform') ?>
-			<dl class="tip">
+			<dl class="tip hide">
 				<dt>Tips</dt>
-				<dd>use @username to tag a user in your message, i.e. congrats on the win @charlieperry</dd>
-				<dd>use !teamname to tag a team in your message, i.e. just had a huge win over !ulacrosse</dd>
+				<dd>use @username to tag a user in your message, i.e. can't wait to buy @naterkane a beer tonight</dd>
+				<dd>use !groupname to tag a group in your message, i.e. can't wait for tonight's !nycphp meetup</dd>
 			</dl>
 		</fieldset>
 	</form>

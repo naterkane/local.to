@@ -12,7 +12,7 @@
 		</fieldset>
 		<fieldset>
 			<?php echo $this->load->view('messages/postform', array('group_page'=>true)) ?>
-			<dl class="tip">
+			<dl class="tip hide">
 				<dt>Tips</dt>
 				<dd>use @username to tag a user in your message, i.e. can't wait to buy @naterkane a beer tonight.</dd>
 				<dd>use !<?php echo $this->config->item('group')?>name to tag a <?php echo $this->config->item('group')?> in your message, i.e. can't wait for tonight's !nycphp meetup</dd>

@@ -1681,13 +1681,16 @@ dl.tip, .tip dt, .tip dd {
 }
 .tip dd {
 	float: left;
-	margin-left: 40px;
+	margin-left: 0px;
 }
 
 div.vcard {
   margin-bottom: 1em;
   margin-left: 0;
   font-size: 14px;
+}
+.user-box.vcard {
+  margin-bottom: 0;
 }
 div.vcard div {
   margin-left: 0;
