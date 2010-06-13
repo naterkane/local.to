@@ -40,9 +40,11 @@
 				<dt>Gender</dt>
 				<dd><?php echo $user['gender']; ?></dd>		
 			<?php } ?>	
-			<?php if (!empty($user['url'])) { ?>	
+			<?php if (!empty($user['url'])) { 
+			   $url =  (substr($group['url'],0,7) == "http://")?"http://".$user['url']:$user['url'];
+				?>	
 				<dt>Url</dt>
-				<dd><a class="url" href="<?php echo $user['url']; ?>" rel="me nofollow"><?php echo $user['url']; ?></a></dd>
+				<dd><a class="url" href="<?php echo $url; ?>" rel="me nofollow"><?php echo $user['url']; ?></a></dd>
 			<?php } ?>	
 			<?php if (!empty($user['im'])) { ?>	
 				<dt>IM</dt>
@@ -57,25 +59,6 @@
 				<dd class="note"><?php echo $user['about_me']; ?></dd>
 			<?php } ?>	
 			</dl>
-		<?php if (!empty($user['favorite_sports']) || 
-					!empty($user['favorite_teams']) || 
-					!empty($user['favorite_players'])) { ?>	
-		<h3>Favorites</h3>
-			<dl>
-			<?php if (!empty($user['favorite_sports'])) { ?>	
-				<dt>Favorite Sports</dt>
-				<dd><?php echo $user['favorite_sports']; ?></dd>
-			<?php } ?>	
-			<?php if (!empty($user['favorite_teams'])) { ?>	
-				<dt>Favorite Teams</dt>
-				<dd><?php echo $user['favorite_teams']; ?></dd>
-			<?php } ?>	
-			<?php if (!empty($user['favorite_players'])) { ?>	
-				<dt>Favorite Players</dt>
-				<dd><?php echo $user['favorite_players']; ?></dd>
-			<?php } ?>	
-			</dl>
-		<?php } ?>
 		<?php if (!empty($user['college']) || 
 					!empty($user['degree']) || 
 					!empty($user['high_school'])) { ?>	

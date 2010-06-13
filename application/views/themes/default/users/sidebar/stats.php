@@ -3,7 +3,10 @@
 	<?php echo $html->location($user); ?>
 	<?php echo (!empty($user['bio']))? '<p id="profile_bio"><strong>Bio</strong> '.$user['bio'].'</p>': "";  ?>
 
-	<?php echo (!empty($user['url']))? '<p id="profile_url"><a href="'.$user['url'].'" rel="me nofollow">'.$user['url'].'</a></p>': "";  ?>
+	<?php if (!empty($user['url'])){
+  $url =  (substr($group['url'],0,7) == "http://")?"http://".$user['url']:$user['url'];
+  echo '<p id="profile_url"><a href="'.$url.'" rel="me nofollow">'.$user['url'].'</a></p>';  
+}?>
 
 	<ul class="user-stats">
 	    <li>
