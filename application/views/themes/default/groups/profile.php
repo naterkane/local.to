@@ -41,7 +41,7 @@
 						if (!empty($group['country'])) { echo '<span class="country">'. $group['country'] .'</span>'; }	
 					} ?></dd>	
 			<?php if (!empty($group['url'])) { 
-				$url =  (substr($group['url'],0,7) == "http://")?"http://".$group['url']:$group['url'];
+				$url =  (substr($group['url'],0,7) != "http://")?"http://".$group['url']:$group['url'];
 				?>	
 				<dt>Website</dt>
 				<dd><a class="url" href="<?php echo $url; ?>" rel="me nofollow"><?php echo $url; ?></a></dd>

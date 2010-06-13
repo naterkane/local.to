@@ -41,7 +41,7 @@
 				<dd><?php echo $user['gender']; ?></dd>		
 			<?php } ?>	
 			<?php if (!empty($user['url'])) { 
-			   $url =  (substr($group['url'],0,7) == "http://")?"http://".$user['url']:$user['url'];
+			   $url =  (substr($group['url'],0,7) != "http://")?"http://".$user['url']:$user['url'];
 				?>	
 				<dt>Url</dt>
 				<dd><a class="url" href="<?php echo $url; ?>" rel="me nofollow"><?php echo $user['url']; ?></a></dd>

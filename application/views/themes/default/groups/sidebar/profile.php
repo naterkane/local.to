@@ -6,7 +6,7 @@
 	<?php if (!empty($group['desc'])) echo "<p>".$group['desc']."</p>"; ?>
 	<?php if (!empty($group['url'])){
 		 echo "<p><a href=\""; 
-		 echo (substr($group['url'],0,7) == "http://")?$group['url']:"http://".$group['url'];
+		 echo (substr($group['url'],0,7) != "http://")?"http://".$group['url']:$group['url'];
 		 echo'">'.$group['url'].'</a></p>'; 
 	}?>		
 	<ul class="group-stats">

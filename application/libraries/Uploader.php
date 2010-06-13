@@ -91,7 +91,7 @@ class Uploader{
 	 */	
 	public function __construct()
 	{
-		$this->dir = dirname(dirname(dirname(dirname(__FILE__)))) . '/webroot/uploads/';
+		$this->dir = dirname(dirname(dirname((__FILE__)))) . '/webroot/uploads/';
 		//ini_set('upload_tmp_dir',dirname(dirname(dirname(dirname(__FILE__)))).'/system/tmp/'); 
 	}
 	
@@ -267,6 +267,8 @@ class Uploader{
 			return false;
 		}
 		$mime_type = $_FILES[$field]['type'];
+		echo $this->dir;
+		exit;
 		if (!is_dir($this->dir)) {
 			if (!mkdir($this->dir)) {
 				$this->setError('The folder for the file upload could not be created.');

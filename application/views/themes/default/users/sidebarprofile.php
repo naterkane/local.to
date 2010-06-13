@@ -3,7 +3,7 @@
 <?php echo (!empty($user['bio']))? '<p id="profile_bio">'.$user['bio'].'</p>': "";  ?>
 
 <?php if (!empty($user['url'])){
-	$url =  (substr($group['url'],0,7) == "http://")?"http://".$user['url']:$user['url'];
+	$url =  (substr($group['url'],0,7) != "http://")?"http://".$user['url']:$user['url'];
 	echo '<p id="profile_url"><a href="'.$url.'" rel="me nofollow">'.$user['url'].'</a></p>';  
 }?>
 
