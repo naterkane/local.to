@@ -93,7 +93,7 @@ class Admin extends App_controller
 		{
 			// decode base64 encoded key
 			$key = base64_decode($key);
-			$this->User->tt->out($key);
+			$this->User->redis->del($key);
 		}
 		catch (Exception $e)
 		{
@@ -112,7 +112,7 @@ class Admin extends App_controller
 		if ($this->config->item("testing") != true) {
 			$this->redirect('/admin/stats','no way mister!','error');
 		}
-		$this->User->tt->vanish();
+		$this->User->redis->flushdb();
 		$this->redirect('/admin/stats');
 	}
 
@@ -155,10 +155,12 @@ class Admin extends App_controller
 	function sync()
 	{
 		$this->mustBeSignedIn();
-		$this->User->tt->sync();
+		$this->User->redis->bgrewriteaof();
 		$this->redirect('/admin/stats');
 	}
-
+  function bgrewriteaof(){
+    return $this->sync();
+  }
   function clearsessions()
   {
     $keys = $this->User->redis->keys('session:id:*');
@@ -174,6 +176,36 @@ class Admin extends App_controller
     }
     echo '<a href="/admin/stats">view stats</a>';
     exit;
+  }
+  function clearexpiredsessions()
+  {
+  	$this->load->loadHelper('Time_format');
+  	$keys = $this->User->redis->keys('session:id:*');
+	    $c = 0;
+	    echo '<a href="/admin/stats">view stats</a><ol>';
+	    foreach($keys as $key)
+	    {
+	      $record = $this->User->redis->get($key);
+	    	
+	      if ($this->User->isSerialized($record)){
+	       $record = unserialize($record);
+	      }
+	      
+	      
+	      //var_dump($record);
+	    	//echo "<br>";
+	    	//echo time() . " " . date(DATE_RFC822)."<br>";
+	    	//echo $record['last_accessed']. " " . date(DATE_RFC822,$record['last_accessed'])."<br>";
+	    	echo "<li>".$key."<br>created " . strtolower(Time_format::timeAgo($record['last_accessed']))." ago<br>";
+	    	if ((time()-$record['last_accessed']) >= (60*60*24)){
+	    	  echo "so we're deleting ".$key. "</li>";
+	    	  $this->User->redis->del($key);
+	    	} else {
+	    	  echo "so we're keeping it for another " . ((60*60*24)-((time()-$record['last_accessed']))). " seconds</li>";
+	    	}
+	    }
+	    echo '</ol>';
+	    exit;
   }
 	/**
 	 * Show all database values 

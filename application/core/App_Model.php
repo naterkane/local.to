@@ -298,7 +298,7 @@ protected function makeSavePrefix($data=array(),$options=array()){
         if(! empty($data[$options['prefixValue']])){
             $value=$data[$options['prefixValue']];
         }
-        if(! $value) {//if value is empty, fail 
+        if(! $value) {//if value is empty, fail
             return false;
         }
         $prefix = strtolower($options['prefixName'].$this->prefixSeparator.$options['prefixValue'].$this->prefixSeparator.$value);
@@ -530,7 +530,7 @@ public function endTransaction(){
 public function find($value=null,$options=array()){
     $key=$this->makeFindPrefix($value,$options);
     //var_dump($key);
-    if(! $key) //if false has been returned as the key, return nothing. 
+    if(! $key) //if false has been returned as the key, return nothing.
     {
         return null;
     }
@@ -720,7 +720,7 @@ public function isTimeZone(){
  */
 
 public function loadLibrary($files=array()){
-	//$files = (count($files)>0)?$files:array($files); 
+	//$files = (count($files)>0)?$files:array($files);
 	var_dump($files);
     foreach ($files as $file){
         $path=APPPATH.'libraries/'.$file.'.php';
@@ -889,7 +889,7 @@ public function rollbackLog(){
 function save($data,$options=array()){
     $this->key=$this->makeSavePrefix($data,$options);
     if(
-    ! $this->key) //if key was returned as false value, fail 
+    ! $this->key) //if key was returned as false value, fail
     {
         return false;
     }
@@ -1351,7 +1351,7 @@ function validates_quantity_of($fieldName,$options=array()){
 }
 /**
  * Validate
- the uniqueness of a value
+ * the uniqueness of a value
  *
  * @access 	public
  * @param	string $fieldname

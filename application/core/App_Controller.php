@@ -97,8 +97,8 @@ class App_Controller extends Controller {
 			$this->load->library('firephp_fake');
 			$this->firephp =& $this->firephp_fake;
 		}
-    $this->load->library(array('Load_helpers','Util', 'Sanitize', 'Mail'));
-    $this->load->model(array('User', 'Message', 'Group'));
+        $this->load->library(array('Load_helpers','Util', 'Sanitize', 'Mail'));
+        $this->load->model(array('User', 'Message', 'Group'));
 		$_COOKIE = Sanitize::clean($_COOKIE);
 		$this->params = $this->uri->params;
 		$this->params = Sanitize::clean($this->params, array('odd_spaces'=>false, 'encode'=>false));	
