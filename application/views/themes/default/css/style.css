@@ -806,7 +806,7 @@ h3 + .neutral {
 }
 
 .message-stats li.active a {
-    color: #F7931E;
+    color: rgb(153, 102, 0);;
 }
 
 .members,
@@ -1097,7 +1097,25 @@ ul.subnav li.current a {
 	width: 140px;
 	margin-right: 20px;
 }
-
+#content dd form p {
+  line-height: 30px;
+}
+#content dd form label {
+  text-align: left;
+  width: 60px;
+  height: auto;
+}
+#content dd form input[type='text'],#content dd form input[type='password']{
+  width: 200px;
+}
+#content dd form input.button {
+  font-size: 12px;
+  height: 22px;
+  margin-left: 80px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+}
 #content form label:after {
 	content: ":";
 }
@@ -1141,13 +1159,14 @@ ul.subnav li.current a {
 }
 
 #messages .message a {
-    color: #F7931E;
+    color: rgb(153, 102, 0);
 }
 
 #messages .message a:hover {
     text-decoration: underline;
 }
 .message_text {
+  display: block;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -1161,7 +1180,7 @@ ul.subnav li.current a {
 #messages .message .stamp {
     font-style: italic;
     font-weight: bold;
-    color: #F7931E;
+    color: rgb(153, 102, 0);
     font-size: 93%;
     margin: 0 0 0.5em 55px;
 }
@@ -1188,8 +1207,8 @@ ul.subnav li.current a {
 #teams .team,
 #users .user,
 #files .file {
-    /*background: #fff url(/assets/img/bg_message.png) repeat-x bottom;*/
-	border-bottom: 1px solid #c9cecc;
+    background: #fff url(/assets/img/bg_message.png) repeat-x bottom;
+	border-top: 1px solid #c9cecc;
     padding: 10px 10px 10px 68px;
 	position: relative;
     min-height: 50px;
@@ -1235,7 +1254,7 @@ ul.subnav li.current a {
 	background: #eee;
 }
 .avatar img {
-	border-bottom: 1px solid #c9cecc; 
+	/*border-bottom: 1px solid #c9cecc; */
 }
 .reply .avatar {
 	margin-left: -46px;
@@ -1266,7 +1285,13 @@ ul.subnav li.current a {
 
 #messages p.meta,
 #teams p.meta {
-	font-size: 80%;
+	font-size: 11px;
+}
+#messages p.meta a,
+#teams p.meta a {
+  color: gray;
+  
+  font-size: 11px;
 }
 #messages .replies {
     background: #fff;
@@ -1281,13 +1306,13 @@ ul.subnav li.current a {
 	height: 35px;
     _height: 75px;
     position: relative;
-    border-bottom: 1px solid #c9cecc;
+    border-top: 1px solid #c9cecc;
 }
 
 
 
 #messages .reply p {
-    font-size: 93%;
+    font-size: 80%;
     width: 75%;
     line-height: 1.5em;
 }
@@ -1667,6 +1692,13 @@ dt:after {
 
 dd {
 	color: #2a2a2a;
+}
+dl.accounts dt, dl.accounts dd {
+  border-top: 1px solid rgb(221, 221, 221);
+  padding-top: 10px;
+}
+dl.accounts dd {
+  padding-bottom: 5px;
 }
 dl.tip, .tip dt, .tip dd {
 	color: #666;

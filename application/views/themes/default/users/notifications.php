@@ -3,11 +3,11 @@
 </div>
 <div id="content">
 	<?php $this->load->view('users/subnav/settings_nav');?>
-	<form class="grid_9 alpha form" action="/settings/sms" method="post" accept-charset="utf-8">
+	<form class="grid_11 alpha form" action="/settings/sms" method="post" accept-charset="utf-8">
 			<fieldset>
 				<legend>Email Notifications</legend>
 				<p class="checkbox">
-				<?php echo $form->checkbox('email_updates'); ?><label for="email_updates">Receive email updates</label>	
+				<?php echo $form->checkbox('email_updates'); ?><label for="email_updates">Send private messages notifications to me via email</label>	
 				</p>	
 			</fieldset>
 	<?php if ($sms_pending): ?>
@@ -32,8 +32,8 @@
 					<p>If you use your mobile in the United States, the United Kingdom, Canada, India or New Zealand you can receive Private Messages via SMS. If you would like to disable this feature in the future, you will have to return to this page to do so.</p>
 				</div>
 				<p class="checkbox">
-					<?php echo $form->checkbox('device_updates'); ?><label for="device_updates">Enable Device Updates</label>	
-					<span class="note">Enabling your device settings allows you to receive private messages from your followers &amp; teams via text message.</span>
+					<?php echo $form->checkbox('device_updates'); ?><label for="device_updates">Enable private messages notifications of my mobile device</label>	
+					<span class="note">Enabling your device settings allows you to receive private messages from your followers &amp; <?php echo $this->config->item('group')?>s via text message.</span>
 				</p>
 				<p>
 					<label for="carrier">Carriers</label>	

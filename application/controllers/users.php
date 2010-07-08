@@ -581,7 +581,7 @@ class Users extends App_Controller
       
     //echo '$results[\'oauth_token_secret\'] '. $results['oauth_token_secret'].'<br>';
     //echo '$this->userData[\'foursquare_secret\'] '. $this->userData['foursquare_secret'] . '<br>';
-    if (empty($this->userData['foursquare_secret'])){
+    if (empty($this->userData['foursquare_secret']) || empty($this->userData['foursquare_token']) && empty($this->userData['foursquare_token_secret'])){
 	    
       //$_SESSION['secret'] = $results['oauth_token_secret'];
       //echo $_SESSION['secret'] . "<br/>";
@@ -593,7 +593,7 @@ class Users extends App_Controller
       //echo $_SESSION['secret'];
 			
 		}
-		if(!empty($this->userData['foursquare_token']) && !empty($this->userData['foursquare_token'])){
+		if(!empty($this->userData['foursquare_token']) && !empty($this->userData['foursquare_token_secret'])){
 		  try {
 	      //Making a call to the API
 	      
@@ -643,13 +643,15 @@ class Users extends App_Controller
     $foursquareObj = new EpiFoursquare($foursquare_consumer_key, $foursquare_consumer_secret);
     $foursquareObj->setToken($_REQUEST['oauth_token'],$this->userData['foursquare_secret']);
     $token = $foursquareObj->getAccessToken();
+    $foursquareObj->setToken($token->oauth_token, $token->oauth_token_secret);
+    //echo "<pre>";
     //var_dump($token);
-    if (isset($token->oauth_token) && $foursquareObj->setToken($token->oauth_token, $token->oauth_token_secret)){
+    //if (isset($token->oauth_token) && $foursquareObj->setToken($token->oauth_token, $token->oauth_token_secret)){
 		  try {
 		   //Making a call to the API
 		   $foursquareTest = $foursquareObj->get_user();
 		   $this->data['foursquare_response'] = $foursquareTest->response;
-		   //print_r($foursquareTest->response);
+		   print_r($foursquareTest->response);
 			} catch (Exception $e) {
 			  echo "Error: " . $e;
 			}
@@ -658,7 +660,7 @@ class Users extends App_Controller
 	    $this->userData['foursquare_token'] = $token->oauth_token;
 	    $this->userData['foursquare_token_secret'] = $token->oauth_token_secret;
 	    $this->User->save($this->userData, array('ignoreModelFields'=>true));
-    }
+    //}
     //$this->load->view('users/accounts', $this->data);
     $this->redirect('/settings/accounts');
   }

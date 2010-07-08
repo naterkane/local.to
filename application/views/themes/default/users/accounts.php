@@ -3,8 +3,8 @@
 </div>
 <div id="content">
 	<?php $this->load->view('users/subnav/settings_nav');?>
-	<div class="grid_9 alpha">
-	   <dl>
+	<div class="grid_12 alpha">
+	   <dl class="accounts">
 	     <dt>Facebook</dt>
        <dd><a href="#"><img src="/img/facebook-connect.gif"/></a></dd>
 	     <dt>Foursquare</dt>
@@ -28,6 +28,7 @@
 	     <?php else: ?>
 	       <form id="gowalla_form" action="/settings/accounts" method="POST">
 	     <?php endif; ?>
+	        <fieldset>
 		       <p>
 		         <label for="gowalla_user">username</label>
 		         <input id="gowalla_user" name="gowalla_user" type="text"/>
@@ -36,12 +37,14 @@
 	           <label for="gowalla_pass">password</label>
 	           <input id="gowalla_pass" name="gowalla_pass" type="password"/>
 	         </p>
-	         <p class="submit"><input class="button" type="submit" value="Add Gowalla Account" /></p>
+	         <p><input class="button" type="submit" value="Add Gowalla Account" /></p>
+	         </fieldset>
 	       </form>
 	      
 	     </dd>
 	     <dt>Google Latitude</dt>
 	     <dd>
+	       <a class="button" href="/openid?actionType=login&openid_url=https://www.google.com/accounts/o8/id&FormNonce=1148724895360888608&r=%2F"><span style="background:url(/assets/img/FriendConnect.gif) no-repeat;padding-left: 20px;overflow: visible;display: inline-block;height: 20px;">Link your Google Account</span></a>
 	     </dd>
 	   </dl>
 	</div>

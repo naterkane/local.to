@@ -30,6 +30,9 @@ class EpiOAuth
   public function getAccessToken($params = null)
   {
     $resp = $this->httpRequest('POST', $this->getUrl($this->accessTokenUrl), $params);
+    echo ($this->getUrl($this->accessTokenUrl));
+    var_dump($params);
+    var_dump($resp);
     return new EpiOAuthResponse($resp);
   }
 
@@ -333,7 +336,7 @@ class EpiOAuth
 class EpiOAuthResponse
 {
   private $__resp;
-  protected $debug = false;
+  protected $debug = true;
 
   public function __construct($resp)
   {

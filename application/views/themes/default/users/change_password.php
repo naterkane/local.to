@@ -3,7 +3,7 @@
 </div>
 <div id="content">
 	<?php $this->load->view('users/subnav/settings_nav');?>
-	<form class="grid_9 alpha" action="/change_password" method="post" accept-charset="utf-8">
+	<form class="grid_10 alpha" action="/change_password" method="post" accept-charset="utf-8">
 		<fieldset class="login">
 			<legend>Change Password</legend>
 			<p>
