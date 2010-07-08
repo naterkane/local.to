@@ -3,7 +3,7 @@
 </div>
 <div id="content">
 	<?php $this->load->view('users/subnav/settings_nav');?>
-	<form class="grid_9 alpha" action="/settings" method="post" accept-charset="utf-8">
+	<form class="grid_10 alpha" action="/settings" method="post" accept-charset="utf-8">
 		<fieldset>
 			<legend>Edit Your Account &amp; Profile Information</legend>
 			<p>
