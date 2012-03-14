@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="220"
+   name=""
+   committed-date="2006-08-10T01:17:45.379649Z"
+   url="https://svn.sourceforge.net/svnroot/levent/branches/patches-1.1/libevent/WIN32-Code"
+   last-author="nprovos"
+   kind="dir"
+   uuid="ce677c24-8c1a-0410-9497-a30ef3a96221"
+   repos="https://svn.sourceforge.net/svnroot/levent"
+   revision="220"/>
+<entry
+   committed-rev="220"
+   name="misc.h"
+   text-time="2006-08-10T01:01:14.000000Z"
+   committed-date="2006-08-10T01:17:45.379649Z"
+   checksum="bd72a1baf8cba6281bca79b68d54e1e8"
+   last-author="nprovos"
+   kind="file"
+   prop-time="2006-08-10T01:01:13.000000Z"/>
+<entry
+   committed-rev="220"
+   name="win32.c"
+   text-time="2006-08-10T01:01:14.000000Z"
+   committed-date="2006-08-10T01:17:45.379649Z"
+   checksum="56ba86e70b6358f44ef8f85aeac20f1f"
+   last-author="nprovos"
+   kind="file"
+   prop-time="2006-08-10T01:01:14.000000Z"/>
+<entry
+   committed-rev="220"
+   name="config.h"
+   text-time="2006-08-10T01:01:14.000000Z"
+   committed-date="2006-08-10T01:17:45.379649Z"
+   checksum="498932ab1126c111e9cfa2c0eb498b2b"
+   last-author="nprovos"
+   kind="file"
+   prop-time="2006-08-10T01:01:14.000000Z"/>
+<entry
+   committed-rev="220"
+   name="misc.c"
+   text-time="2006-08-10T01:01:14.000000Z"
+   committed-date="2006-08-10T01:17:45.379649Z"
+   checksum="f78b6d5f798dbad206808678b1a6d6b4"
+   last-author="nprovos"
+   kind="file"
+   prop-time="2006-08-10T01:01:14.000000Z"/>
+</wc-entries>
